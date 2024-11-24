@@ -1,0 +1,1 @@
+export { typesenseSearchClient } from "./src/typesense-searchclient"

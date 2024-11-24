@@ -1,0 +1,21 @@
+{
+  "name": "@instapark/payments",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit --pretty"
+  },
+  "devDependencies": {
+    "@instapark/eslint-config": "workspace:^",
+    "@instapark/typescript-config": "workspace:^",
+    "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8"
+  },
+  "dependencies": {
+    "@cashfreepayments/cashfree-js": "^1.0.5",
+    "cashfree-pg": "^4.3.1",
+    "dotenv": "^16.4.5"
+  }
+}

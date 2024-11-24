@@ -1,8 +1,5 @@
 {
-  "extends": "@repo/typescript-config/react-library.json",
-  "compilerOptions": {
-    "outDir": "dist"
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "extends": "@instapark/typescript-config/nextjs.json",
+  "include": ["src", "cashfree.d.ts", "../cashfree/cashfree.d.ts"],
+  "exclude": ["node_modules"]
 }

@@ -1,0 +1,22 @@
+{
+  "name": "@instapark/auth",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit --pretty"
+  },
+  "dependencies": {
+    "next": "^15.0.3",
+    "pg": "^8.13.1",
+    "react": "^18.3.1",
+    "supertokens-auth-react": "^0.48.0",
+    "supertokens-node": "^21.0.0"
+  },
+  "devDependencies": {
+    "@instapark/typescript-config": "workspace:^",
+    "@types/pg": "^8.11.10",
+    "@types/react": "^18.3.12"
+  }
+}

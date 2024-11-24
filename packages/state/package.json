@@ -1,0 +1,22 @@
+{
+  "name": "@instapark/state",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit --pretty"
+  },
+  "dependencies": {
+    "@instapark/types": "workspace:^",
+    "@reduxjs/toolkit": "^2.3.0",
+    "geojson": "^0.5.0",
+    "react": "^18.3.1",
+    "react-redux": "^9.1.2"
+  },
+  "devDependencies": {
+    "@instapark/typescript-config": "workspace:^",
+    "@types/geojson": "^7946.0.14",
+    "@types/react": "^18.3.12"
+  }
+}

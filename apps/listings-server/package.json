@@ -1,0 +1,22 @@
+{
+  "name": "@instapark/listings-server",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "tsx watch src/listings-server.ts",
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit --pretty"
+  },
+  "dependencies": {
+    "@instapark/auth": "workspace:^",
+    "@instapark/listings": "workspace:^",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "tsx": "^4.19.2"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/react-library.json",
+  "extends": "@instapark/typescript-config/react-library.json",
   "compilerOptions": {
     "outDir": "dist"
   },

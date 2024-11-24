@@ -5,15 +5,35 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "test": "turbo test",
+    "format": "prettier \"{apps,packages}/*.{ts,tsx,md}\" --ignore-path .gitignore",
+    "format:write": "pnpm format --write",
+    "format:check": "pnpm format --check",
+    "check-types": "turbo check-types",
+    "validate": "pnpm format:write && pnpm check-types && pnpm lint && pnpm build"
   },
   "devDependencies": {
+    "@types/node": "^22.9.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.6.8",
     "turbo": "^2.2.3",
     "typescript": "5.5.4"
   },
-  "packageManager": "pnpm@8.15.6",
+  "packageManager": "pnpm@9.14.2",
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "overrides": {
+      "glob": "9.0.0",
+      "rimraf": "^4.0.0"
+    },
+    "allowedDeprecatedVersions": {
+      "eslint": "^8.57.1",
+      "@humanwhocodes/config-array": "0.13.0",
+      "@humanwhocodes/object-schema": "2.0.3"
+    }
   }
 }

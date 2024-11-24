@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Listing {
+  listingId         String             @id @default(uuid())
+  place             Place?
+  photos            Photo[]
+  review            Review[]
+  ratings           Rating[]
+  location          Location?
+  notAvailableDates NotAvailableDate[]
+  isOpen            Boolean
+  pricing           Pricing?
+  allowedVehicles   AllowedVehicle[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model Pricing {
+  pricingId String  @id
+  listing   Listing @relation(fields: [pricingId], references: [listingId], onDelete: Cascade)
+  basePrice Float
+  pphbi     Float?
+  pphcy     Float?
+  pphcr     Float?
+  plph      Float?
+}
+
+model Photo {
+  photoId   String   @id @default(uuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [listingId], onDelete: Cascade)
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Place {
+  placeId String    @id
+  type    PlaceType
+  listing Listing   @relation(fields: [placeId], references: [listingId], onDelete: Cascade)
+}
+
+model Review {
+  reviewId      String   @id @default(uuid())
+  listingId     String
+  listing       Listing  @relation(fields: [listingId], references: [listingId], onDelete: Cascade)
+  location      Int?
+  cleanliness   Int?
+  communication Int?
+  value         Int?
+  accuracy      Int?
+  description   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Rating {
+  ratingId  String   @id @default(uuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [listingId], onDelete: Cascade)
+  rating    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Location {
+  locationId String   @id
+  listing    Listing  @relation(fields: [locationId], references: [listingId], onDelete: Cascade)
+  latitude   Float
+  longitude  Float
+  country    String
+  state      String
+  district   String
+  city       String
+  street     String
+  pinocde    Int
+  name       String?
+  landmark   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model NotAvailableDate {
+  id        String   @id @default(uuid())
+  date      DateTime
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [listingId], onDelete: Cascade)
+}
+
+enum PlaceType {
+  House
+  Barn
+  Cabin
+  Castle
+  Hotel
+}
+
+enum AllowedVehicle {
+  Car
+  Bike
+  Cycle
+}

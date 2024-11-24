@@ -1,0 +1,7 @@
+{
+    "extends" : "@instapark/typescript-config/react-library.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "dist"
+    }
+}
