@@ -1,12 +1,11 @@
-"use client";
-
-import { SuperTokensProvider } from "@instapark/auth";
+import { HeaderPublic } from "@instapark/ui";
 
 const PublicLayout = ({ children }: { children: React.ReactNode }): JSX.Element => {
     return (
-        <SuperTokensProvider>
+        <>
+            <HeaderPublic />
             {children}
-        </SuperTokensProvider>
+        </>
     );
 }
 

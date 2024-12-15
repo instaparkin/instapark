@@ -31,7 +31,6 @@ export const Map = ({ id }: MapProps) => {
   });
 
   const [routes, setRoutes] = useState<GeoJSON.FeatureCollection[]>([]);
-  const [routeInfo, setRouteInfo] = useState<{ distance: number; duration: number }[]>([]);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(null);
   const [startPoint, setStartPoint] = useState<[number, number] | null>(null);
   const [endPoint, setEndPoint] = useState<[number, number] | null>(null);
@@ -68,7 +67,6 @@ export const Map = ({ id }: MapProps) => {
       }));
 
       setRoutes(fetchedRoutes);
-      setRouteInfo(fetchedRouteInfo);
       setSelectedRouteIndex(0); // Select the first route by default
     }
   };
@@ -138,25 +136,6 @@ export const Map = ({ id }: MapProps) => {
           />
         </Source>
       ))}
-      {selectedRouteIndex !== null && (
-        <Popup
-          longitude={viewport.longitude}
-          latitude={viewport.latitude}
-          closeButton={true}
-          closeOnClick={false}
-          onClose={() => setSelectedRouteIndex(null)}
-          anchor="top"
-        >
-          <div>
-            <p>
-              <strong>Distance:</strong> {(routeInfo[selectedRouteIndex]?.distance / 1000).toFixed(2)} km
-            </p>
-            <p>
-              <strong>Duration:</strong> {(routeInfo[selectedRouteIndex]?.duration / 60).toFixed(2)} min
-            </p>
-          </div>
-        </Popup>
-      )}
       <NavigationControl position="top-right" />
       <div className="absolute bottom-4 left-4 bg-white p-2 rounded shadow">
         {routes.map((_, index) => (

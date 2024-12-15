@@ -2,14 +2,14 @@
   "name": "instapark",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
     "test": "turbo test",
     "format": "prettier \"{apps,packages}/*.{ts,tsx,md}\" --ignore-path .gitignore",
     "format:write": "pnpm format --write",
     "format:check": "pnpm format --check",
-    "check-types": "turbo check-types",
+    "check-types": "turbo run check-types",
     "validate": "pnpm format:write && pnpm check-types && pnpm lint && pnpm build"
   },
   "devDependencies": {
@@ -21,7 +21,7 @@
     "turbo": "^2.2.3",
     "typescript": "5.5.4"
   },
-  "packageManager": "pnpm@9.14.2",
+  "packageManager": "pnpm@8.15.0",
   "engines": {
     "node": ">=18"
   },

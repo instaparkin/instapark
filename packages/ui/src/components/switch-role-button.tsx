@@ -1,30 +1,23 @@
+"use client"
+
 import React from 'react';
-import { useDispatch, useSelector, setCurrentRole, RootState } from '@instapark/state';
 import { Button } from './button';
-import { Role } from '@instapark/types';
+import { cn } from '../utils/cn';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
-export function SwitchRoleButton() {
+export function SwitchRoleButton({ className }: { className?: string }) {
 
-    const dispatch = useDispatch();
-
-    const { currentRole, roles } = useSelector((state: RootState) => state.user);
-
-    const getNextRole = (current: Role, roles: Role[]): Role => {
-        const currentIndex = roles.indexOf(current);
-        return roles[(currentIndex + 1) % roles.length] as Role;
-    };
-
-    const handleRoleChange = () => {
-        const nextRole = getNextRole(currentRole, roles);
-        dispatch(setCurrentRole(nextRole));
-    };
+    const pathname = usePathname()
 
     return (
         <Button
-            className='hidded md:block w-full md:w-fit'
-            onClick={handleRoleChange}
-            variant={"default"}>
-            Switch to {getNextRole(currentRole, roles)}
+            asChild
+            className={cn(className, "w-full")}
+            variant={"outline"}>
+            <Link href={pathname.includes("hosting") ? "/" : "/hosting"}>
+                Switch to  {pathname.includes("hosting") ? "Buyer" : "Hosting"}
+            </Link>
         </Button>
     );
 }

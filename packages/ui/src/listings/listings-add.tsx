@@ -1,56 +1,108 @@
+"use client"
+
 import React from 'react'
-import { ListingsAddForm } from "@instapark/listings"
-import { Form } from '../components/form';
-import { Button } from '../components/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/card';
-import { StepProps, UseMultiStepForm } from '../hooks/use-multi-step-form';
-import { is } from 'date-fns/locale';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '../components/form'
+import { ListingsAddForm, ListingsAddType } from '@instapark/listings'
+import { Page } from '../components/page'
+import { MultiStepForm } from './multi-step-form'
+import { ListingsAddPlaceType } from './listings-add-place-type'
+import { ListingsAddPhotos } from './listings-add-photos'
+import { ListingsAddLocation } from './listings-add-location'
 
 export const ListingsAdd = () => {
 
-  const steps: StepProps[] = [
-    {
-      title: "Step 1",
-      component: <div>Step 1</div>
-    },
-    {
-      title: "Step 2",
-      component: <div>Step 2</div>
-    },
-    {
-      title: "Step 3",
-      component: <div>Step 3</div>
-    },
-  ]
-
   const form = ListingsAddForm();
 
-  const { next, back, isFirstIndex, isLastIndex } = UseMultiStepForm({ steps });
+  const onSubmit = async (data: ListingsAddType) => {
+    console.log(JSON.stringify(data, null, 2));
+  }
 
   return (
-    <Form {...form}>
-      <form action="">
-        <Card className="flex-grow">
-          <CardHeader>
-            <CardTitle></CardTitle>
-          </CardHeader>
-          <CardContent>
-
-          </CardContent>
-        </Card>
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t">
-          <div className="flex justify-between max-w-md mx-auto">
-            {!isFirstIndex() && (
-              <Button type="button" variant="outline" onClick={back}>
-                Back
-              </Button>
-            )}
-            <Button onClick={next} type="submit">
-              {isLastIndex() ? "Finish" : "Next"}
-            </Button>
-          </div>
-        </div>
-      </form>
-    </Form>
+    <Page>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <MultiStepForm
+            form={form}
+            steps={[{
+              name: "Tell us about your property",
+              substeps: [{
+                name: "What's you place type?",
+                fields: [{
+                  name: "place.type",
+                  render: () => {
+                    return (
+                      <FormItem>
+                        <FormMessage />
+                        <FormControl>
+                          <ListingsAddPlaceType form={form} />
+                        </FormControl>
+                      </FormItem>
+                    )
+                  }
+                }]
+              }, {
+                name: "Location",
+                className: "grid max-w-[630px] mx-auto my-4 [&_Input]:py-8 [&_Input]:my-2",
+                children: <ListingsAddLocation form={form} />,
+                fields: [{ name: "location.city" }, { name: "location.country" }, { name: "location.state" }, { name: "location.district" }, { name: "location.street" }, { name: "location.pincode" }, { name: "location.house" }, { name: "location.landmark" }, { name: "location.latitude", disabled: true }, { name: "location.longitude", disabled: true }],
+              }]
+            },
+            {
+              name: "Photos and Allowed Vehicles",
+              substeps: [{
+                name: "Photos",
+                fields: [{
+                  name: "photos", render: () => {
+                    return (
+                      <FormItem>
+                        <FormMessage />
+                        <FormControl>
+                          <ListingsAddPhotos form={form} />
+                        </FormControl>
+                      </FormItem>
+                    )
+                  }
+                }]
+              }, {
+                name: "Allowed Vehicles",
+                fields: [{
+                  name: "allowedVehicles", render: () => {
+                    return (
+                      <FormItem>
+                        <FormMessage />
+                        <FormControl>
+                        </FormControl>
+                      </FormItem>
+                    )
+                  }
+                }]
+              }]
+            },
+            {
+              name: "Pricing",
+              substeps: [{
+                name: "Is this place open?",
+                fields: [{ name: "isOpen" }]
+              }, {
+                name: "Pricing",
+                fields: [{
+                  name: "pricing.basePrice",
+                }, {
+                  name: "pricing.pphbi",
+                },
+                {
+                  name: "pricing.plph"
+                },
+                {
+                  name: "pricing.pphcr"
+                }, {
+                  name: "pricing.pphcy"
+                }]
+              }]
+            }]}
+          />
+        </form>
+      </Form>
+    </Page>
   )
 }

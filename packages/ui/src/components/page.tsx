@@ -1,29 +1,19 @@
-"use client"
-
 import React from 'react'
-import { Icon } from './icon'
-import { ChevronLeft } from 'lucide-react'
-import { usePathname, useRouter } from "next/navigation";
+import { cn } from '../utils/cn';
 
 interface PageProps {
     children: React.ReactNode
-    title: string
+    title?: string
+    className?: string
 }
 
-export const Page = ({ children, title }: PageProps) => {
-    const router = useRouter();
-    const pathname = usePathname().split("/");
+export const Page = ({ children, title, className }: PageProps) => {
     return (
-        <div className='space-y-6 mb-6'>
-            {
-                pathname.length > 0 && (
-            <Icon>
-                <ChevronLeft className="h-5 w-5" />
-            </Icon>
-                )
-            }
-            <h1 className='font-bold text-2xl mb-4'>{title}</h1>
-            {children}
+        <div className={cn(className, 'absolute top-24 left-0 w-full mx-auto space-y-6')}>
+            <div className='container space-y-4'>
+                <h1 className='font-bold text-2xl'>{title}</h1>
+                {children}
+            </div>
         </div>
     )
 }

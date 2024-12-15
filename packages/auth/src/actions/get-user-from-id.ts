@@ -1,9 +1,9 @@
 import supertokens from "supertokens-node";
+import Session from "supertokens-node/recipe/session";
 
-export async function getUserFromId(userId: string) {
+export async function getUserFromId() {
     try {
-        const userInfo = await supertokens.getUser(userId)
-        return userInfo
+    
     } catch (error) {
         console.log(error);
     }

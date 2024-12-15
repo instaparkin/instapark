@@ -17,7 +17,7 @@ import { Label } from "./label"
 
 const Form: typeof FormProvider = FormProvider
 
-type FormFieldContextValue<
+export type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 > = {

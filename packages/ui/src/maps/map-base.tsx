@@ -48,10 +48,10 @@ export const Map = ({ id }: MapProps) => {
     dispatch(fetchGeoLocations(`https://photon.komoot.io/reverse?lon=${lngLat.lng}&lat=${lngLat.lat}`));
   };
 
-  const onGeoLocate = (e:GeolocateResultEvent) => {
-    dispatch(fetchGeoLocations(`https://photon.komoot.io/reverse?lon=${e.coords.longitude}&lat=${e.coords.latitude}`));
-  }
-
+  const onGeoLocate = (e: GeolocateResultEvent) => {
+    dispatch(fetchGeoLocations(`https://photon.komoot.io/reverse?lon=${e.coords.longitude}&lat=${e.coords.latitude}`))
+      .catch((error) => console.error("Geolocation fetch failed:", error));
+  };
   return (
     <Maplibre
       id={id}
@@ -63,7 +63,7 @@ export const Map = ({ id }: MapProps) => {
         borderRadius: "12px",
       }}
       mapStyle={
-        "https://utfs.io/f/UMgDcGP2ujLzttNyuH0RaI6hWs0JoQclYfXvnANMEm9LGjzy"
+        process.env.MAP_STYLE_URL
       }
     >
       <GeolocateControl onGeolocate={onGeoLocate} />

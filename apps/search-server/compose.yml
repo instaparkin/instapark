@@ -10,4 +10,3 @@ services:
       --data-dir /data 
       --api-key=xyz 
       --enable-cors
-      --cors-domains=http://localhost:3000

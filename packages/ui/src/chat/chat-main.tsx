@@ -9,8 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/card"
 import { ScrollArea } from "../components/scroll-area"
 import { Avatar, AvatarFallback } from "../components/avatar"
 import { Send, UserPlus } from 'lucide-react'
-import { isOnline } from "@instapark/chat"
-import { Session } from "@instapark/auth"
 
 interface Message {
   id: string

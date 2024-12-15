@@ -1,1 +1,1 @@
-export { typesenseSearchClient } from "./src/typesense-searchclient"
+export { typesenseSearchClient } from "./src/typesense/typesense-searchclient"

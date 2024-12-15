@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
+import searchRouter from "./routers/search-router";
 
 config();
 
@@ -14,6 +15,10 @@ async function init() {
     }));
 
     app.use(express.json());
+    
+    app.get("/search", (req, res) => {
+        res.send("Search Server is up and running");
+    })
 
     app.listen(process.env.PORT, () => {
         console.log(`Server running on http://localhost:${process.env.PORT}`);

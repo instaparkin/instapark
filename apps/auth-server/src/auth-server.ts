@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
-import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest } from "@instapark/auth";
+import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest, Session } from "@instapark/auth";
 
 config();
 
@@ -22,15 +22,23 @@ async function init() {
     app.get("/auth", (req, res) => {
         res.send("Auth Server is up and running");
     })
-    
+
     app.get("/auth/sessioninfo", verifySession(), async (req: SessionRequest, res) => {
-        let session = req.session;
+        const session = req.session;
         res.send({
             sessionHandle: session!.getHandle(),
             userId: session!.getUserId(),
             accessTokenPayload: session!.getAccessTokenPayload(),
         });
     });
+
+    app.get("/auth/userdetails", verifySession(), async (req: SessionRequest, res) => {
+        const session = await req.session
+        const info = await supertokens.getUser(session?.getUserId() as string)
+        let accessTokenPayload = await session?.getAccessTokenPayload();
+        let customClaimValue = await accessTokenPayload.customClaim
+        res.send(info)
+    })
 
     app.use(errorHandler());
 

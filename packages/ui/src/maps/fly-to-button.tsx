@@ -1,17 +1,19 @@
 "use client";
 
-import { useMap } from "react-map-gl/maplibre";
+import { MapCollection } from "react-map-gl/dist/esm/components/use-map";
+import { MapInstance, useMap } from "react-map-gl/maplibre";
 
-export type FlyToButtonProps = {
+export type FlyToButtonProps<T extends MapInstance> = {
     children: React.ReactNode
-    flyTo: [number, number]
+    flyTo: [number, number],
+    map? :  MapCollection<T>
 };
 
-export function FlyToButton({ children, flyTo }: FlyToButtonProps) {
-    const { addSpaceMap } = useMap();
+export function FlyToButton <T extends MapInstance>({ children, flyTo, map }: FlyToButtonProps<T>) {
+    const { ListingsAddLocation } = useMap();
     const onClick = () => {
-        if (addSpaceMap) {
-            addSpaceMap.flyTo({ center: flyTo, zoom: 16.5 });
+        if (ListingsAddLocation) {
+            ListingsAddLocation.flyTo({ center: flyTo, zoom: 16.5 });
         } else {
             console.error("Map instance not found.");
         }

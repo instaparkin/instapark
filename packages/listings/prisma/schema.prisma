@@ -9,6 +9,7 @@ datasource db {
 
 model Listing {
   listingId         String             @id @default(uuid())
+  userId            String
   place             Place?
   photos            Photo[]
   review            Review[]
@@ -80,7 +81,7 @@ model Location {
   district   String
   city       String
   street     String
-  pinocde    Int
+  pincode    Int
   name       String?
   landmark   String?
   createdAt  DateTime @default(now())
@@ -100,6 +101,7 @@ enum PlaceType {
   Cabin
   Castle
   Hotel
+  Farm
 }
 
 enum AllowedVehicle {

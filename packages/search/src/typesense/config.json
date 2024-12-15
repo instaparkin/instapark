@@ -1,0 +1,11 @@
+{
+  "schemas": {
+    "LISTING_SCHEMA_NAME": "listings_1",
+    "PLACE_SCHEMA_NAME": "places_1",
+    "PRICING_SCHEMA_NAME": "pricing_1",
+    "NOT_AVAILABLE_DATES_SCHEMA_NAME": "not_available_dates_1",
+    "REVIEW_SCHEMA_NAME": "reviews_1",
+    "RATING_SCHEMA_NAME": "ratings_1",
+    "LOCATION_SCHEMA_NAME": "location_1"
+  }
+}

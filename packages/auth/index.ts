@@ -1,8 +1,9 @@
+export { signOut } from "supertokens-auth-react/recipe/session";
+export * as Session from "supertokens-node/recipe/session";
 export { getApiDomain, getWebsiteDomain } from "./src/config/app-info";
 export { middleware, errorHandler, type SessionRequest } from "supertokens-node/framework/express";
 export * as supertokens from "supertokens-node";
 export { verifySession } from "supertokens-node/recipe/session/framework/express";
-export * as Session from "supertokens-node/recipe/session";
 export { ensureSuperTokensInit } from "./src/config/backend-config";
 export { SuperTokensProvider } from "./src/provider/supertokens-provider";
 export { ThirdPartyPreBuiltUI } from "supertokens-auth-react/recipe/thirdparty/prebuiltui";
@@ -11,5 +12,4 @@ export * as SuperTokensReact from 'supertokens-auth-react/ui';
 export { redirectToAuth } from 'supertokens-auth-react';
 export { SessionAuth } from "supertokens-auth-react/recipe/session";
 export { useSessionContext } from "supertokens-auth-react/recipe/session";
-export { signOut } from "supertokens-auth-react/recipe/session";
 export { getUserFromId } from "./src/actions/get-user-from-id";

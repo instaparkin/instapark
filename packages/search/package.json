@@ -5,13 +5,15 @@
   "scripts": {
     "build": "rm -rf dist && tsc",
     "lint": "eslint .",
-    "check-types": "tsc --noEmit --pretty"
+    "check-types": "tsc --noEmit --pretty",
+    "create:collections": "node scripts/create-collection-script.js"
   },
   "devDependencies": {
     "@instapark/typescript-config": "workspace:^"
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
+    "kafkajs": "^2.2.4",
     "typesense": "^1.8.2",
     "typesense-instantsearch-adapter": "^2.8.0"
   }
