@@ -5,7 +5,7 @@ import { TbDeviceIpadDollar } from "react-icons/tb";
 import { FaRegUser } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 
-export const hamburgerItems = {
+export const HEADER_PROTECTED_ITEMS = {
   data: [
     {
       group: "Menu",
@@ -17,7 +17,7 @@ export const hamburgerItems = {
         },
         {
           icon: <TiThListOutline />,
-          link: "/listings",
+          link: "/hosting/listings",
           name: "Listings"
         },
         {

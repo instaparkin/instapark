@@ -63,7 +63,7 @@ export const Map = ({ id }: MapProps) => {
         borderRadius: "12px",
       }}
       mapStyle={
-        process.env.MAP_STYLE_URL
+        "https://utfs.io/f/UMgDcGP2ujLzttNyuH0RaI6hWs0JoQclYfXvnANMEm9LGjzy"
       }
     >
       <GeolocateControl onGeolocate={onGeoLocate} />

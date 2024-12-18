@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from '../components/form'
+import { Form, FormControl, FormItem, FormMessage } from '../components/form'
 import { ListingsAddForm, ListingsAddType } from '@instapark/listings'
 import { Page } from '../components/page'
 import { MultiStepForm } from './multi-step-form'
@@ -14,7 +14,17 @@ export const ListingsAdd = () => {
   const form = ListingsAddForm();
 
   const onSubmit = async (data: ListingsAddType) => {
-    console.log(JSON.stringify(data, null, 2));
+    try {
+      await fetch("http://localhost:8087/listings/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+    } catch (error) {
+      throw error
+    }
   }
 
   return (
@@ -44,7 +54,7 @@ export const ListingsAdd = () => {
                 name: "Location",
                 className: "grid max-w-[630px] mx-auto my-4 [&_Input]:py-8 [&_Input]:my-2",
                 children: <ListingsAddLocation form={form} />,
-                fields: [{ name: "location.city" }, { name: "location.country" }, { name: "location.state" }, { name: "location.district" }, { name: "location.street" }, { name: "location.pincode" }, { name: "location.house" }, { name: "location.landmark" }, { name: "location.latitude", disabled: true }, { name: "location.longitude", disabled: true }],
+                fields: [{ name: "location.city" }, { name: "location.country" }, { name: "location.state" }, { name: "location.district" }, { name: "location.street" }, { name: "location.pincode" }, { name: "location.name" }, { name: "location.landmark" }, { name: "location.latitude", disabled: true }, { name: "location.longitude", disabled: true }],
               }]
             },
             {

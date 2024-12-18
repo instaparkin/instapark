@@ -23,6 +23,12 @@ model Listing {
   updatedAt         DateTime           @updatedAt
 }
 
+model Place {
+  placeId String    @id
+  type    PlaceType
+  listing Listing   @relation(fields: [placeId], references: [listingId], onDelete: Cascade)
+}
+
 model Pricing {
   pricingId String  @id
   listing   Listing @relation(fields: [pricingId], references: [listingId], onDelete: Cascade)
@@ -40,12 +46,6 @@ model Photo {
   url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Place {
-  placeId String    @id
-  type    PlaceType
-  listing Listing   @relation(fields: [placeId], references: [listingId], onDelete: Cascade)
 }
 
 model Review {

@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../components/dropdown-menu"
-import { hamburgerItems } from "./header-constants"
+import { HEADER_PROTECTED_ITEMS } from "./header-constants"
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { SwitchRoleButton } from '../components/switch-role-button'
@@ -32,7 +32,7 @@ export const HeaderNavigation = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {
-              hamburgerItems.data.map((group) => {
+              HEADER_PROTECTED_ITEMS.data.map((group) => {
                 return (
                   <div>
                     <DropdownMenuLabel>
@@ -67,8 +67,8 @@ export const HeaderNavigation = () => {
           <SheetContent className='h-[100vh] overflow-y-auto' side={"bottom"}>
             <div className='space-y-6'>
               {
-                hamburgerItems.data.map((group) => (
-                  <Card key={group.group} className={`${group == hamburgerItems.data[0] ? "mt-10" : ""}`}>
+                HEADER_PROTECTED_ITEMS.data.map((group) => (
+                  <Card key={group.group} className={`${group == HEADER_PROTECTED_ITEMS.data[0] ? "mt-10" : ""}`}>
                     <CardHeader>
                       <CardTitle>
                         {group.group.toUpperCase()}

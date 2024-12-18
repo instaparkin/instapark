@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
+import { cn } from '../utils/cn'
 
-export const Icon = ({ children }: { children: React.ReactNode }) => {
+interface IconProps {
+    children: ReactNode
+    className?: string
+}
+
+export const Icon = ({ children, className }: IconProps) => {
     return (
-        <div className='rounded-full border p-2 w-fit'>
+        <div className={cn('rounded-full border p-2 w-fit', className)}>
             {children}
         </div>
     )

@@ -12,6 +12,11 @@ export const addListingToDB = async (formData: ListingsAddType) => {
     await listingsDb.listing.create({
         data: {
             userId: formData.userId,
+            place: {
+                create: {
+                    type: formData.place.type
+                }
+            },
             isOpen: formData.isOpen,
             location: {
                 create: {
@@ -23,7 +28,7 @@ export const addListingToDB = async (formData: ListingsAddType) => {
                     city: formData.location.city,
                     street: formData.location.street,
                     pincode: formData.location.pincode,
-                    name: formData.location.house,
+                    name: formData.location.name,
                     landmark: formData.location.landmark
                 },
             },
@@ -41,11 +46,6 @@ export const addListingToDB = async (formData: ListingsAddType) => {
                     pphcy: formData.pricing.pphcy,
                     plph: formData.pricing.plph,
                     basePrice: formData.pricing.basePrice
-                }
-            },
-            place: {
-                create: {
-                    type: formData.place.type
                 }
             },
             allowedVehicles: formData.allowedVehicles

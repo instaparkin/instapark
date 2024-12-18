@@ -1,28 +1,46 @@
-import { Kafka } from "kafkajs";
+"use server"
 
-const kafka = new Kafka({
-    clientId: 'listings-add-client',
-    brokers: ['kafka://localhost:9092']
-})
+import { Kafka, Producer } from "kafkajs";
 
-export async function initProducer() {
-    try {
-        const producer = kafka.producer();
-        await producer.connect();
-        await producer.send({
-            topic: 'listings-add-topic',
-
-            
-            messages: [{
-                value: 'hello world'
-            }]
-        })
-        console.log("done");
-        
-        await producer.disconnect();
-    } catch (error) {
-        console.error(error);
-    }
+interface IProduceMessage {
+    topic: string
+    value: string
+    partition: number
 }
 
-initProducer()
+let kafkaProducer: Producer | null = null
+
+export async function initProducer() {
+    if (kafkaProducer) {
+        return kafkaProducer;
+    }
+
+    const kafka = new Kafka({
+        clientId: 'listings-add-client',
+        brokers: ['localhost:9092']
+    })
+
+    const producer = kafka.producer();
+
+    await producer.connect();
+
+    kafkaProducer = producer;
+
+    return kafkaProducer;
+
+}
+
+export async function addListingToKafka({ topic, value, partition }: IProduceMessage) {
+    try {
+        const producer = await initProducer();
+        await producer.send({
+            topic: topic,
+            messages: [{
+                value: value,
+                partition: partition
+            }]
+        });
+    } catch (error) {
+        throw error;
+    }
+}

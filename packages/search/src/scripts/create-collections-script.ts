@@ -5,6 +5,11 @@
 import { createCollection } from "../typesense/create-collection";
 import { ListingSchema, LocationSchema, NotAvailableDatesSchema, PlaceSchema, PricingSchema, RatingSchema, ReviewSchema } from "../typesense/typesense-schema";
 import config from "../typesense/config.json";
+import { typesenseClient } from "../typesense/typesense-client";
+
+interface IcreateCollectionScript {
+    deleteAllCollections: Boolean
+}
 
 const collections = [
     {
@@ -37,8 +42,20 @@ const collections = [
     }
 ]
 
-async function createCollectionScript() {
-    collections.map((collection) => createCollection(collection));
+async function createCollectionScript({ deleteAllCollections }: IcreateCollectionScript) {
+
+    collections.map(async (collection) => {
+        /**
+         * Use this only when you want to delete all the collections and recreate them all
+         */
+        if(deleteAllCollections){
+            await typesenseClient.collections(collection.name).delete()
+        }
+        await createCollection(collection);
+    }
+    )
 }
 
-createCollectionScript();
+createCollectionScript({
+    deleteAllCollections: false
+});

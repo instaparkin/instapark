@@ -7,7 +7,6 @@ import { LuAlignJustify } from 'react-icons/lu';
 import { HEADER_PUBLIC_ITEMS } from './header-constants';
 import { BRAND_LOGO, BRAND_NAME } from '../brand/brand-constants';
 
-
 export const HeaderPublic = () => {
     return (
         <header className="fixed top-0 right-0 z-20 bg-background w-full mx-auto border-b">

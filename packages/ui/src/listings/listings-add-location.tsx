@@ -1,9 +1,7 @@
 import { ListingsAddType } from '@instapark/listings'
 import React from 'react'
 import { Path, UseFormReturn } from 'react-hook-form'
-import { Input } from '../components/input';
 import { Map } from '../maps/map-base';
-import { FormControl, FormItem, FormLabel } from '../components/form';
 import { RootState, useSelector } from '@instapark/state';
 import { SearchSpace } from '../maps/search-space';
 
@@ -20,7 +18,7 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingsAddT
         form.setValue("location.city", location.properties?.city);
         form.setValue("location.street", location.properties?.street);
         form.setValue("location.pincode", location.properties?.pincode);
-        form.setValue("location.house", location.properties?.house);
+        form.setValue("location.name", location.properties?.house);
         form.setValue("location.landmark", location.properties?.landmark);
     })
 

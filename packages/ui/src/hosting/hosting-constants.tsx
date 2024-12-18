@@ -1,12 +1,12 @@
 export const HOSTING_NAVIGATION_ITEMS = [{
     value: "Earnings",
-    link: "/earnings",
+    link: "/hosting/earnings",
 }, {
     value: "Listings",
-    link: "/listings",
+    link: "/hosting/listings",
 }, {
     value: "Today",
-    link: "/today",
+    link: "/hosting/today",
 }, {
     value: "Messages",
     link: "/messages",

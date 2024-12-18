@@ -15,7 +15,7 @@ export const listingsAddSchema = z.object({
         city: z.string(),
         street: z.string(),
         pincode: z.coerce.number().int(),
-        house: z.string().nullish(),
+        name: z.string().nullish(),
         landmark: z.string().nullish(),
     }),
     photos: z.array(z.object({
@@ -25,10 +25,10 @@ export const listingsAddSchema = z.object({
     isOpen: z.boolean(),
     pricing: z.object({
         basePrice: z.coerce.number().min(10.00),
-        plph: z.coerce.number().min(60.00),
         pphbi: z.coerce.number().min(10.00),
-        pphcr: z.coerce.number().min(20.00),
         pphcy: z.coerce.number().min(5.00),
+        pphcr: z.coerce.number().min(20.00),
+        plph: z.coerce.number().min(60.00),
     }),
 
 })
