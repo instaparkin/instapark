@@ -14,7 +14,7 @@ export const listingsAddSchema = z.object({
         district: z.string(),
         city: z.string(),
         street: z.string(),
-        pincode: z.coerce.number().int(),
+        pincode: z.coerce.number({ message: "Pincode is required" }).int(),
         name: z.string().nullish(),
         landmark: z.string().nullish(),
     }),
@@ -30,5 +30,19 @@ export const listingsAddSchema = z.object({
         pphcr: z.coerce.number().min(20.00),
         plph: z.coerce.number().min(60.00),
     }),
+})
 
+export const listingsAddStepOneSchema = listingsAddSchema.pick({
+    place: true,
+    location: true,
+})
+
+export const listingsAddStepTwoSchema = listingsAddSchema.pick({
+    photos: true,
+    allowedVehicles: true
+})
+
+export const listingsAddStepThreeSchema = listingsAddSchema.pick({
+    isOpen: true,
+    pricing: true
 })

@@ -1,19 +1,18 @@
 "use client";
 
 import React from "react";
-import { RadioGroup, RadioGroupItem } from "../components/radio-group";
-import { Label } from "../components/label";
 import { ListingsAddType, PlaceType } from "@instapark/listings";
 import { LuHotel } from "react-icons/lu";
 import { PiCastleTurret } from "react-icons/pi";
 import { MdOutlineCabin } from "react-icons/md";
 import { PiBarn } from "react-icons/pi";
 import { BsHouseDoor } from "react-icons/bs";
-import { Checkbox } from "../components/checkbox";
 import { UseFormReturn } from "react-hook-form";
-import { Card, CardDescription, CardHeader, CardTitle } from "../components/card";
 import { PiFarm } from "react-icons/pi";
-import { UploadThingButton } from "./uploadthing";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../components/form";
+import { fieldName } from "../utils/field-name";
+import { RadioGroup, RadioGroupItem } from "../components/radio-group";
+import { useIsFirstRender } from "@mantine/hooks";
 
 export type PlaceTypeWithIcon = {
   type: PlaceType;
@@ -48,30 +47,42 @@ const placetypes: PlaceTypeWithIcon[] = [
 ];
 
 export const ListingsAddPlaceType = ({ form }: { form: UseFormReturn<ListingsAddType> }) => {
-
-  const onPlaceTypeChange = (placeType: PlaceTypeWithIcon) => {
-    form.setValue("place.type", placeType.type);
-  };
-
   return (
-    <div className="grid grid-cols-2 gap-2 w-fit mx-auto">
-      {
-        placetypes.map((placeType) => (
-          <Card
-            onClick={() => onPlaceTypeChange(placeType)}
-            key={placeType.type}
-            className={`cursor-pointer h-36 w-32 sm:w-36 border flex flex-col gap-2 items-center justify-center rounded-md ${form.getValues("place.type") === placeType.type ? " border-2 border-black bg-neutral-100" : "border-2 hover:border-black"}`}>
-            <CardHeader>
-              <CardTitle>
-                {placeType.icon}
-              </CardTitle>
-              <CardDescription className="text-base text-accent-foreground font-semibold">
-                {placeType.type}
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        ))
-      }
-    </div>
+    <FormField
+      control={form.control}
+      name="place.type"
+      render={({ field }) => (
+        <FormItem>
+          <FormControl className='w-full'>
+            <RadioGroup
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              className="grid grid-cols-2 w-fit max-w-[630px] mx-auto"
+            >
+              {placetypes.map((p) => (
+                <FormItem key={p.type} className="flex mx-auto items-center">
+                  <FormControl>
+                    <RadioGroupItem value={p.type} className='sr-only' />
+                  </FormControl>
+                  <FormLabel
+                    className={`flex items-center justify-between p-10 rounded-xl border-2 transition-colors cursor-pointer
+                                                    ${field.value === p.type
+                        ? "border-primary bg-muted"
+                        : "border-muted hover:border-primary/50"
+                      }`}
+                  >
+                    <div className="flex flex-col gap-2 items-center">
+                      <span>{p.type}</span>
+                      <span>{p.icon}</span>
+                    </div>
+                  </FormLabel>
+                </FormItem>
+              ))}
+            </RadioGroup>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   )
 };

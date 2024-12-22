@@ -13,7 +13,7 @@ export function SwitchRoleButton({ className }: { className?: string }) {
     return (
         <Button
             asChild
-            className={cn(className, "w-full")}
+            className={cn(className, "w-full hidden md:flex")}
             variant={"outline"}>
             <Link href={pathname.includes("hosting") ? "/" : "/hosting"}>
                 Switch to  {pathname.includes("hosting") ? "Buyer" : "Hosting"}

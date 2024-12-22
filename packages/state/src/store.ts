@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import searchSpaceReducer from './slices/search-space'
+import mapsReducer from "./slices/maps-slice"
 
 export const store = configureStore({
   reducer: {
-    maps: searchSpaceReducer,
+    maps: mapsReducer,
   },
 })
 

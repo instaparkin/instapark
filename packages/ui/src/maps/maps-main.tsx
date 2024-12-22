@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect, useState } from 'react';
 import {
   GeolocateControl,
   GeolocateResultEvent,
@@ -11,27 +12,32 @@ import {
 import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
 import { CiMapPin } from "react-icons/ci";
-import { AppDispatch, fetchGeoLocations, RootState, useDispatch, useSelector } from "@instapark/state";
-import { useEffect, useState } from "react";
-import { MapProps } from "./maps-types";
+import { AppDispatch, reverseGeocodeLocation, RootState, useDispatch, useSelector } from "@instapark/state";
 
-export const Map = ({ id }: MapProps) => {
+export type MapProps = {
+  id: string;
+  initialLat?: number;
+  initialLng?: number;
+};
 
+export const MapsMain = ({ id }: MapProps) => {
   const dispatch = useDispatch<AppDispatch>();
-
-  const { geoLocations: locations } = useSelector((state: RootState) => state.maps);
+  const { autocomplete: locations } = useSelector((state: RootState) => state.maps);
 
   const [viewport, setViewport] = useState({
     latitude: 0,
     longitude: 0,
+    zoom: 0,
   });
 
   useEffect(() => {
     if (locations.length > 0) {
+      const location = locations[0];
       setViewport({
-        latitude: locations[0]?.geometry.coordinates[1] as number,
-        longitude: locations[0]?.geometry.coordinates[0] as number,
-      })
+        latitude: location?.lat as number,
+        longitude: location?.lng as number,
+        zoom: 16.5,
+      });
     }
   }, [locations]);
 
@@ -42,12 +48,11 @@ export const Map = ({ id }: MapProps) => {
       latitude: lngLat.lat,
       longitude: lngLat.lng,
     }));
-    dispatch(fetchGeoLocations(`https://photon.komoot.io/reverse?lon=${lngLat.lng}&lat=${lngLat.lat}`));
+    dispatch(reverseGeocodeLocation([lngLat.lat, lngLat.lng]));
   };
 
   const onGeoLocate = (e: GeolocateResultEvent) => {
-    dispatch(fetchGeoLocations(`https://photon.komoot.io/reverse?lon=${e.coords.longitude}&lat=${e.coords.latitude}`))
-      .catch((error) => console.error("Geolocation fetch failed:", error));
+    dispatch(reverseGeocodeLocation([viewport.latitude, viewport.longitude]));
   };
 
   return (
@@ -61,22 +66,23 @@ export const Map = ({ id }: MapProps) => {
         borderRadius: "12px",
       }}
       mapStyle={
-        process.env.MAP_STYLE_URL
+        "https://utfs.io/f/UMgDcGP2ujLzttNyuH0RaI6hWs0JoQclYfXvnANMEm9LGjzy"
       }
+      zoom={viewport.zoom}
+      latitude={viewport.latitude}
+      longitude={viewport.longitude}
     >
       <GeolocateControl onGeolocate={onGeoLocate} />
-      {
-        locations.length > 0 && (
-          <Marker
-            onDragEnd={onDragEnd}
-            draggable
-            longitude={viewport.longitude as number}
-            latitude={viewport.latitude as number}
-          >
-            <CiMapPin size={40} className="text-black " />
-          </Marker>
-        )
-      }
+      {locations.length > 0 && (
+        <Marker
+          onDragEnd={onDragEnd}
+          draggable
+          longitude={viewport.longitude}
+          latitude={viewport.latitude}
+        >
+          <CiMapPin size={40} className="text-black" />
+        </Marker>
+      )}
       <NavigationControl position="top-right" />
     </Maplibre>
   );

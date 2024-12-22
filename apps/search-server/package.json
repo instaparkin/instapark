@@ -8,6 +8,7 @@
     "check-types": "tsc --noEmit --pretty"
   },
   "dependencies": {
+    "@instapark/auth": "workspace:^",
     "@instapark/search": "workspace:^",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

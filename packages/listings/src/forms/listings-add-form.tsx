@@ -9,4 +9,9 @@ export type ListingsAddType = z.infer<typeof listingsAddSchema>
 
 export const ListingsAddForm = () => useForm<ListingsAddType>({
     resolver: zodResolver(listingsAddSchema),
+    defaultValues: {
+        place: {
+            type: "House"
+        }
+    }
 })

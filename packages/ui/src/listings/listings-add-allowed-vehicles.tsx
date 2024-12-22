@@ -24,7 +24,7 @@ export const ListingsAddAllowedVehicles = ({ form }: { form: UseFormReturn<Listi
         <div className="space-y-4">
             <MultiSelector
                 values={form.getValues("allowedVehicles")}
-                onValuesChange={handleValuesChange}
+                onValuesChange={() => handleValuesChange}
                 loop
                 className="max-w-xs"
             >

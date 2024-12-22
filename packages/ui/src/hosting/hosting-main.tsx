@@ -1,36 +1,33 @@
-import React from 'react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/tabs"
 import { Page } from '../components/page'
-import { HOSTING_NAVIGATION_ITEMS } from './hosting-constants'
-import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    navigationMenuTriggerStyle,
-} from "../components/navigation-menu"
-import Link from 'next/link'
-import { cn } from '../utils/cn'
+import { HOSTING_MAIN_TABS_LIST } from "./hosting-constants"
 
 export const HostingMain = () => {
     return (
-        <Page title='Hosting'>
-            <NavigationMenu>
-                <NavigationMenuList className='flex gap-2'>
+        <Page title="Hosting">
+            <Tabs defaultValue={HOSTING_MAIN_TABS_LIST.data[0]?.value} className="w-full overflow-x-auto">
+                <TabsList className='space-x-2 mb-6'>
                     {
-                        HOSTING_NAVIGATION_ITEMS.map((hosting) => {
+                        HOSTING_MAIN_TABS_LIST.data.map((tab, index) => {
                             return (
-                                <NavigationMenuItem key={hosting.value}>
-                                    <Link href={hosting.link} legacyBehavior passHref>
-                                        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "border border-foreground")}>
-                                            {hosting.value}
-                                        </NavigationMenuLink>
-                                    </Link>
-                                </NavigationMenuItem>
+                                <TabsTrigger
+                                    className="rounded-full font-light px-4 border-2 "
+                                    key={index}
+                                    value={tab.value}>
+                                    {tab.name}
+                                </TabsTrigger>
                             )
                         })
                     }
-                </NavigationMenuList>
-            </NavigationMenu>
+                </TabsList>
+                {
+                    HOSTING_MAIN_TABS_LIST.data.map((tab, index) => {
+                        return (
+                            <TabsContent key={index} value={tab.value}>{tab.content}</TabsContent>
+                        )
+                    })
+                }
+            </Tabs>
         </Page>
     )
 }

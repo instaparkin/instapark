@@ -6,11 +6,13 @@ import { ListingsDetails } from './listings-details'
 import { useEffect, useState } from 'react'
 
 export const ListingsMain = () => {
-  const [data, setData] = useState()
+  const [data, setData] = useState([{}])
   useEffect(()=>{
     async function fetchData(){
-      const response = await fetch("http://localhost:8086/search/listingId")
+      const response = await fetch("http://localhost:8086/search/*")
       const data = await response.json();
+      console.log(data);
+      
       setData(data);
     }
     fetchData()
@@ -18,7 +20,6 @@ export const ListingsMain = () => {
 
   return (
     <Page title='Listings'>
-      {data?.map(r => r.hits.map(h => h.document.listingId))}
       <ListingsTools />
       <ListingsDetails />
     </Page>

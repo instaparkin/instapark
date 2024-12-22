@@ -90,7 +90,7 @@ export const HeaderNavigation = () => {
                   </Card>
                 ))
               }
-              <SwitchRoleButton />
+              <SwitchRoleButton className='flex md:hidden' />
               <SignOutButton />
             </div>
           </SheetContent>

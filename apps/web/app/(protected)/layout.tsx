@@ -1,6 +1,6 @@
 "use client"
 
-import { HeaderMain, MapProvider } from "@instapark/ui";
+import { HeaderMain, MapsProvider } from "@instapark/ui";
 import { SessionAuth, SuperTokensProvider } from "@instapark/auth";
 import { StoreProvider } from "@instapark/state";
 
@@ -9,12 +9,12 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
     <SuperTokensProvider>
       <SessionAuth>
         <StoreProvider>
-          <MapProvider>
+          <MapsProvider>
             <main>
               <HeaderMain />
               {children}
             </main>
-          </MapProvider>
+          </MapsProvider>
         </StoreProvider>
       </SessionAuth>
     </SuperTokensProvider>

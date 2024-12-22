@@ -1,6 +1,7 @@
 import { Page } from '../components/page'
 import { SearchListingsComponent } from '../search/search-listings-component'
 import { SearchListingsFilter } from '../search/search-listings-filter'
+import { HomeListingsResults } from './home-listings-results'
 
 export const HomeMain = () => {
     return (
@@ -9,6 +10,7 @@ export const HomeMain = () => {
                 <SearchListingsComponent children={undefined} />
                 <SearchListingsFilter />
             </div>
+            <HomeListingsResults />
         </Page>
     )
 }

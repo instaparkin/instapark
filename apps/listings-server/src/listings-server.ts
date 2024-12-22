@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
-import { errorHandler, middleware, supertokens, ensureSuperTokensInit } from "@instapark/auth";
+import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import listingsRouter from "./routers/listings-router";
-import { uploadthingExpress } from "@instapark/listings";
+import { createRouteHandler } from "uploadthing/express";
+import { uploadRouter } from "./uploadthing/uploadthing";
 
 config();
 
@@ -26,7 +27,9 @@ async function init() {
 
     app.use("/listings", listingsRouter);
 
-    app.use("/listings/uploadthing", uploadthingExpress)
+    app.use("/listings/uploadthing", verifySession(), createRouteHandler({
+        router: uploadRouter,
+    }))
 
     app.use(errorHandler());
 
