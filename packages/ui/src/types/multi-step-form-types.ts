@@ -1,3 +1,4 @@
+import { BlobOptions } from "buffer";
 import { Path, UseFormReturn } from "react-hook-form";
 
 export type Field<T extends Record<string, unknown>> = {
@@ -18,11 +19,15 @@ export type Step<T extends Record<string, unknown>> = {
 export type MultiStepFormType<T extends Record<string, unknown>> = {
     form: UseFormReturn<T>;
     steps: Step<T>[];
+    onSubmit?: ({ data }: { data: T }) => void
+    redisPrefix: string
+    redisSuffix: string
 };
 
 export interface MultiStepNavigationProps<T extends Record<string, unknown>> {
     isFirstStep: boolean;
     isLastStep: boolean;
+    isLastSecondStep : boolean
     currentSubStepIndex: number;
     steps: Step<T>[];
     back: () => void;

@@ -104,7 +104,14 @@ enum PlaceType {
   Farm
 }
 
-enum AllowedVehicle {
+model AllowedVehicle {
+  id        String  @id @default(uuid())
+  listingId String
+  listing   Listing @relation(fields: [listingId], references: [listingId], onDelete: Cascade)
+  vehicle   Vehicle
+}
+
+enum Vehicle {
   Car
   Bike
   Cycle

@@ -3,9 +3,7 @@
 import { Kafka, Producer } from "kafkajs";
 
 interface IProduceMessage {
-    topic: string
-    value: string
-    partition: number
+    listingData: Record<string,unknown>
 }
 
 let kafkaProducer: Producer | null = null
@@ -20,7 +18,10 @@ export async function initProducer() {
         brokers: ['localhost:9092']
     })
 
-    const producer = kafka.producer();
+    const producer = kafka.producer({
+        allowAutoTopicCreation: false,
+        transactionTimeout: 30000
+    });
 
     await producer.connect();
 
@@ -30,17 +31,22 @@ export async function initProducer() {
 
 }
 
-export async function addListingToKafka({ topic, value, partition }: IProduceMessage) {
+export async function addListingToKafka({ listingData }: IProduceMessage) {
     try {
         const producer = await initProducer();
         await producer.send({
-            topic: topic,
+            topic: "listings-add-topic",
             messages: [{
-                value: value,
-                partition: partition
-            }]
+                key : "POST",
+                value : JSON.stringify({data: listingData, type: "POST"}),
+                partition: 0
+            }],
         });
+
+        console.log("Message produced successfully");
     } catch (error) {
+        console.error("Error producing message:", error);
         throw error;
     }
 }
+

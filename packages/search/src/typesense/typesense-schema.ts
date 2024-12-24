@@ -7,7 +7,6 @@ export const ListingSchema: CollectionCreateSchema = {
         { name: "listingId", type: "string" },
         { name: "userId", type: "string" },
         { name: "isOpen", type: "bool", facet: true, "sort": true },
-        { name: "allowedVehicles", type: "string[]", facet: true },
         { name: "createdAt", type: "int64", "sort": true },
         { name: "updatedAt", type: "int64", "sort": true },
     ]
@@ -16,9 +15,8 @@ export const ListingSchema: CollectionCreateSchema = {
 export const PlaceSchema: CollectionCreateSchema = {
     name: config.schemas.PLACE_SCHEMA_NAME,
     fields: [
-        { name: "placeId", type: "string" },
+        { name: "placeId", type: "string","reference": `${config.schemas.LISTING_SCHEMA_NAME}.listingId` },
         { name: "type", type: "string" },
-        { name: "listingId", type: "string", "reference": `${config.schemas.LISTING_SCHEMA_NAME}.listingId` }
     ]
 }
 
@@ -59,6 +57,8 @@ export const LocationSchema: CollectionCreateSchema = {
         { name: "city", type: "string", facet: true, sort: true },
         { name: "street", type: "string" },
         { name: "pincode", type: "int32" },
+        { name: "latitude", type: "float" },
+        { name: "longitude", type: "float" },
         { name: "name", type: "string" },
         { name: "landmark", type: "string" },
         { name: "createdAt", type: "int64", "sort": true },
@@ -84,6 +84,15 @@ export const PricingSchema: CollectionCreateSchema = {
         { name: "pphcy", type: "float" },
         { name: "pphcr", type: "float" },
         { name: "plph", type: "float" },
+    ]
+}
+
+export const AllowedVehiclesSchema: CollectionCreateSchema = {
+    name: config.schemas.ALLOWED_VEHICLES_SCHEMA_NAME,
+    fields: [
+        { name: "id", type: "string" },
+        { name: "listingId", type: "string", "reference": `${config.schemas.LISTING_SCHEMA_NAME}.listingId` },
+        { name: "vehicle", type: "string", facet: true, sort: true },
     ]
 }
 

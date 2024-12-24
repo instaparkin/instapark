@@ -73,16 +73,18 @@ const MultiSelector = ({
 
   const onValueChangeHandler = useCallback(
     (val: string) => {
-      if (value.includes(val)) {
-        onValueChange(value.filter((item) => item !== val));
-      } else {
-        onValueChange([...value, val]);
-      }
+        if (Array.isArray(value)) {
+            if (value.includes(val)) {
+                onValueChange(value.filter((item) => item !== val));
+            } else {
+                onValueChange([...value, val]);
+            }
+        } else {
+            console.error("Expected 'value' to be an array, got:", value);
+        }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [value],
-  );
-
+);
   const handleSelect = React.useCallback(
     (e: React.SyntheticEvent<HTMLInputElement>) => {
       e.preventDefault();
@@ -238,7 +240,7 @@ const MultiSelectorTrigger = forwardRef<
       )}
       {...props}
     >
-      {value.map((item, index) => (
+      {value?.map((item, index) => (
         <Badge
           key={item}
           className={cn(
@@ -352,7 +354,7 @@ const MultiSelectorItem = forwardRef<
     e.stopPropagation();
   }, []);
 
-  const isIncluded = Options.includes(value);
+  const isIncluded = Options?.includes(value);
   return (
     <CommandItem
       ref={ref}

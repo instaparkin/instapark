@@ -28,7 +28,7 @@ export const HeaderMain = () => {
                         <div className='hidden sm:flex text-lg font-semibold text-[#010080]'>Instapark</div>
                     </Link>
                     <div className='flex gap-4 items-center'>
-                        <SwitchRoleButton />
+                        <SwitchRoleButton variant={"header"} />
                         <Link href={"/messages"}>
                             <NotificationIcon hasNotifications={true} />
                         </Link>

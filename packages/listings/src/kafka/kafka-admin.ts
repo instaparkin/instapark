@@ -15,7 +15,9 @@ async function createTopicUsingAdmin(){
     try {
         await admin.createTopics({
             topics: [{
-                topic : "listings-add-topic"
+                topic : "listings-add-topic",
+                numPartitions : 1,
+                replicationFactor : 1
             }]
         })
 

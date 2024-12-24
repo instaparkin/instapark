@@ -5,6 +5,7 @@ import { ListingsAddAllowedVehicles } from "./listings-add-allowed-vehicles";
 import { ListingsAddType } from "@instapark/listings";
 import { Step } from "../types/multi-step-form-types";
 import { ListingsStepInfo } from "./listings-step-info";
+import { Success } from "../components/success";
 
 export const listingsAddSteps: Step<ListingsAddType>[] = [
     {
@@ -69,14 +70,6 @@ export const listingsAddSteps: Step<ListingsAddType>[] = [
                     />,
             },
             {
-                name: "Is this place open?",
-                fields: [
-                    {
-                        name: "isOpen",
-                    },
-                ],
-            },
-            {
                 name: "Pricing",
                 fields: [
                     { name: "pricing.basePrice" },
@@ -86,6 +79,16 @@ export const listingsAddSteps: Step<ListingsAddType>[] = [
                     { name: "pricing.pphcy" },
                 ],
             },
+            {
+                name: "",
+                fields: [],
+                component: () =>
+                    <Success
+                        timeout={10000}
+                        text="Listing details added successfully"
+                        redirectPath="/hosting/listings"
+                    />,
+            }
         ],
-    },
+    }
 ];

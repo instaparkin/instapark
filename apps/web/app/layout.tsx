@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.className}`}>
-        <Toaster />
+        <Toaster position="top-right" />
         {children}
       </body>
     </html>

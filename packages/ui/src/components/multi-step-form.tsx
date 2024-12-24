@@ -1,9 +1,12 @@
+"use client"
+
 import React from "react";
 import {
     Form,
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage,
 } from "./form";
 import { Button } from "./button";
@@ -11,22 +14,22 @@ import { Progress } from "./progress";
 import { useMultiStepForm } from "../hooks/use-multi-step-form";
 import { MultiStepFormType, MultiStepNavigationProps, MultiStepProgressProps, Step } from "../types/multi-step-form-types";
 import { Input } from "./input";
+import { fieldName } from "../utils/field-name";
+import toast from "react-hot-toast";
 
 const MultiStepNavigation = <T extends Record<string, unknown>>({
-    isFirstStep,
     isLastStep,
-    currentSubStepIndex,
-    steps,
     back,
     next,
+    isLastSecondStep
 }: MultiStepNavigationProps<T>) => (
     <div className="flex justify-between">
-        {
+        {!isLastStep &&
             <Button size="lg" onClick={back}>
-                Back
+                {"Back"}
             </Button>
         }
-        {!isLastStep && <Button
+        {!isLastStep && !isLastSecondStep && <Button
             size="lg"
             className="ml-auto"
             onClick={next}
@@ -34,7 +37,7 @@ const MultiStepNavigation = <T extends Record<string, unknown>>({
             {"Next"}
         </Button>
         }
-        {isLastStep && <Button
+        {isLastSecondStep && <Button
             size="lg"
             type="submit"
         >
@@ -57,6 +60,9 @@ const MultiStepProgress = ({ calculateProgress }: MultiStepProgressProps) => (
 export const MultiStepForm = <T extends Record<string, unknown>>({
     form,
     steps,
+    redisPrefix,
+    redisSuffix,
+    onSubmit = () => { }
 }: MultiStepFormType<T>) => {
     const {
         calculateProgress,
@@ -65,26 +71,31 @@ export const MultiStepForm = <T extends Record<string, unknown>>({
         isFirstStep,
         isLastStep,
         currentSubStepIndex,
-        currentStep,
-        currentSubStep
-    } = useMultiStepForm({ steps, form });
+        currentSubStep,
+        isLastSecondStep,
+        setSubmitted
+    } = useMultiStepForm({ steps, form, redisPrefix, redisSuffix });
 
-    const onSubmit = async (data: T) => {
+    const handleSubmit = async (data: T) => {
+        setSubmitted();
         try {
-            await fetch("http://localhost:8087/listings/add", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
+            onSubmit({ data });
+            const deleteResponse = await fetch(`http://localhost:8087/listings/redis/del/${redisPrefix}-${redisSuffix}`, {
+                method: "DELETE",
             });
+
+            if (!deleteResponse.ok) {
+                throw new Error(`Error deleting Redis entry: ${deleteResponse.status} - ${deleteResponse.statusText}`);
+            }
+            next();
         } catch (error) {
-            console.error("Submission failed:", error);
-            alert("An error occurred during submission. Please try again.");
+            toast.error("Error: " + error)
         }
-    };
+    }
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(handleSubmit)}>
                 {currentSubStepIndex === 0 ? null :
                     <div className="text-center text-3xl font-semibold mb-6">{currentSubStep.name}</div>}
                 {currentSubStep.component ?
@@ -96,6 +107,7 @@ export const MultiStepForm = <T extends Record<string, unknown>>({
                                 name={field.name}
                                 render={({ field: formField }) => (
                                     <FormItem>
+                                        <FormLabel>{fieldName(field.name)}</FormLabel>
                                         <FormControl>
                                             <Input {...formField} value={formField.value as string} />
                                         </FormControl>
@@ -111,10 +123,11 @@ export const MultiStepForm = <T extends Record<string, unknown>>({
                         <MultiStepNavigation
                             isFirstStep={isFirstStep}
                             isLastStep={isLastStep}
+                            isLastSecondStep={isLastSecondStep}
                             next={next}
                             back={back}
                             steps={steps}
-                            currentSubStepIndex={currentSubStepIndex}
+                            currentSubStepIndex={currentSubStepIndex as number}
                         />
                     </div>
                 </div>

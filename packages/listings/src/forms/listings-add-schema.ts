@@ -1,12 +1,16 @@
 import z from "zod";
-import { AllowedVehicle, PlaceType } from "@prisma/client"
+import { Vehicle, PlaceType } from "@prisma/client"
 
 export const listingsAddSchema = z.object({
-    userId: z.string().uuid(),
+    listingId: z.string().uuid().optional(),
+    userId: z.string(),
+    isOpen: z.boolean(),
     place: z.object({
+        placeId: z.string().uuid().optional(),
         type: z.nativeEnum(PlaceType, { message: "Place type is required" }),
     }),
     location: z.object({
+        locationId: z.string().uuid().optional(),
         latitude: z.coerce.number(),
         longitude: z.coerce.number(),
         country: z.string(),
@@ -17,32 +21,29 @@ export const listingsAddSchema = z.object({
         pincode: z.coerce.number({ message: "Pincode is required" }).int(),
         name: z.string().nullish(),
         landmark: z.string().nullish(),
+        createdAt: z.coerce.date().optional(),
+        updatedAt: z.coerce.date().optional()
     }),
     photos: z.array(z.object({
+        photoId: z.string().uuid().optional(),
+        listingId: z.string().uuid().optional(),
         url: z.string(),
+        createdAt: z.coerce.date().optional(),
+        updatedAt: z.coerce.date().optional()
     })).min(4).max(8),
-    allowedVehicles: z.array(z.nativeEnum(AllowedVehicle)).max(3),
-    isOpen: z.boolean(),
+    allowedVehicles: z.array(z.object({
+        id: z.string().uuid().optional(),
+        listingId: z.string().uuid().optional(),
+        vehicle: z.nativeEnum(Vehicle)
+    })).max(3),
     pricing: z.object({
+        pricingId: z.string().uuid().optional(),
         basePrice: z.coerce.number().min(10.00),
         pphbi: z.coerce.number().min(10.00),
         pphcy: z.coerce.number().min(5.00),
         pphcr: z.coerce.number().min(20.00),
         plph: z.coerce.number().min(60.00),
     }),
-})
-
-export const listingsAddStepOneSchema = listingsAddSchema.pick({
-    place: true,
-    location: true,
-})
-
-export const listingsAddStepTwoSchema = listingsAddSchema.pick({
-    photos: true,
-    allowedVehicles: true
-})
-
-export const listingsAddStepThreeSchema = listingsAddSchema.pick({
-    isOpen: true,
-    pricing: true
+    createdAt: z.coerce.date().optional(),
+    updatedAt: z.coerce.date().optional()
 })

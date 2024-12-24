@@ -1,29 +1,29 @@
 "use client"
 
-import { ListingsAddType, OurFileRouter } from "@instapark/listings";
-import { generateUploadButton, generateUploadDropzone } from "@uploadthing/react";
+import { ListingsAddType } from "@instapark/listings";
+import { generateUploadDropzone } from "@uploadthing/react";
 import { UseFormReturn } from "react-hook-form";
-import { toast } from "react-hot-toast"
+import { toast } from "react-hot-toast";
+import { OurFileRouter } from "@instapark/listings";
 
-export const UploadButton = generateUploadButton<OurFileRouter>({
-    url: "http://localhost:8087/listings/uploadthing",
+export const UploadDropzone = generateUploadDropzone<OurFileRouter>({
+    url: "http://localhost:8087/listings/uploadthing"
 });
 
 export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingsAddType> }) => {
-
-    console.log(form.getValues("photos"));
     return (
-        <>
-            <UploadButton
-                endpoint="imageUploader"
-                onClientUploadComplete={(res) => {
-                    res.map((file) => form.setValue("photos", [...form.getValues("photos"), { url: file.url }]));
-                    toast.success("Upload Complete")
-                }}
-                onUploadError={(error: Error) => {
-                    toast.error(`${error.message}`)
-                }}
-            />
-        </>
-    )
-}
+        <UploadDropzone
+            endpoint="imageUploader"
+            onClientUploadComplete={(res) => {
+                console.log(res)
+                    const currentPhotos = form.getValues("photos") || [];
+                    const newPhotos = res?.map((file) => ({ url: file.url }));
+                    form.setValue("photos", [...currentPhotos, ...newPhotos]);
+                toast.success("Upload Complete")
+            }}
+            onUploadError={(error) => {
+                toast.error(`${error.message}`)
+            }}
+        />
+    );
+};

@@ -1,0 +1,17 @@
+{
+  "name": "@instapark/kafka",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit --pretty"
+  },
+  "dependencies": {
+    "kafkajs": "^2.2.4",
+    "typesense": "^1.8.2"
+  },
+  "devDependencies": {
+    "@instapark/typescript-config": "workspace:^"
+  }
+}

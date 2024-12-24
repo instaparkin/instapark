@@ -19,7 +19,8 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "supertokens-auth-react": "^0.48.0",
-    "tailwindcss": "^3.4.14"
+    "tailwindcss": "^3.4.14",
+    "uploadthing": "^7.3.0"
   },
   "devDependencies": {
     "@instapark/eslint-config": "workspace:*",

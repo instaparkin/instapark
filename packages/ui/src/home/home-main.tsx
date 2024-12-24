@@ -1,3 +1,5 @@
+"use client"
+
 import { Page } from '../components/page'
 import { SearchListingsComponent } from '../search/search-listings-component'
 import { SearchListingsFilter } from '../search/search-listings-filter'

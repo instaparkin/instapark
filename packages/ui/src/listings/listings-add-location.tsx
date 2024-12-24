@@ -6,8 +6,10 @@ import { Path, UseFormReturn } from 'react-hook-form';
 import { RootState, useSelector } from '@instapark/state';
 import { MapsSearch } from '../maps/maps-search';
 import { ListingsFormField } from './listings-form-field';
-import dynamic from "next/dynamic"
+import dynamic from "next/dynamic";
 import { Skeleton } from '../components/skeleton';
+import path from 'path';
+import { MapData } from '@instapark/state/src/slices/maps-slice';
 
 const MapDynamic = dynamic(() =>
     import('../maps/maps-main').then((mod) => mod.MapsMain), {
@@ -15,48 +17,62 @@ const MapDynamic = dynamic(() =>
         <Skeleton className='w-full h-[90vh]' />
     )
 }
-)
+);
+
 interface FieldsToUpdateProps {
-    path: Path<ListingsAddType>
-    value: string | number
+    path: Path<ListingsAddType>;
+    value: string | number;
 }
 
 export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingsAddType> }) => {
     const { autocomplete } = useSelector((state: RootState) => state.maps);
 
-    const location = autocomplete[0];
-    const fieldsToUpdate: FieldsToUpdateProps[] = [
-        { path: "location.latitude", value: location?.lat as number },
-        { path: "location.longitude", value: location?.lng as number },
-        { path: "location.country", value: location?.country as string },
-        { path: "location.state", value: location?.state as string },
-        { path: "location.district", value: location?.district as string },
-        { path: "location.city", value: location?.taluk as string },
-        { path: "location.street", value: location?.street as string },
-        { path: "location.pincode", value: location?.pincode as string },
-    ];
-
     useEffect(() => {
         async function trigger() {
-            await form.watch(fieldsToUpdate.map((field) => field.path))
-            await form.trigger(fieldsToUpdate.map((field) => field.path));
+            const paths: Path<ListingsAddType>[] = [
+                "location.latitude",
+                "location.longitude",
+                "location.country",
+                "location.state",
+                "location.district",
+                "location.city",
+                "location.street",
+                "location.pincode",
+                "location.name",
+                "location.landmark"
+            ];
+            await form.watch(paths);
+            await form.trigger(paths);
         }
-        trigger()
+        trigger();
     }, [autocomplete, form.getValues]);
+
+    const handleLocationUpdate = (location: MapData) => {
+        const fieldsToUpdate: FieldsToUpdateProps[] = [
+            { path: "location.latitude", value: location?.lat as number },
+            { path: "location.longitude", value: location?.lng as number },
+            { path: "location.country", value: location?.country as string },
+            { path: "location.state", value: location?.state as string },
+            { path: "location.district", value: location?.district as string },
+            { path: "location.city", value: location?.taluk as string },
+            { path: "location.street", value: location?.street as string },
+            { path: "location.pincode", value: location?.pincode as string },
+        ];
+
+        for (const field of fieldsToUpdate) {
+            form.setValue(field.path, field.value, {
+                shouldDirty: true,
+                shouldValidate: true,
+                shouldTouch: true,
+            });
+        }
+    };
 
     return (
         <div className='space-y-4 max-w-[630px] mx-auto'>
-            <MapsSearch onLocationClick={(location, lat, lng) => {
-                if (autocomplete?.length > 1) {
-                    for (const field of fieldsToUpdate) {
-                        form.setValue(field.path, field.value, {
-                            shouldDirty: true,
-                            shouldValidate: true,
-                            shouldTouch: true
-                        });
-                    }
-                }
-            }} />
+            <MapsSearch
+                onLocationClick={handleLocationUpdate}
+            />
             <MapDynamic id="ListingsAddLocation" />
             <ListingsFormField
                 form={form}
@@ -68,7 +84,7 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingsAddT
                 name="location.state"
                 value={form.getValues("location.state")}
             />
-                  <ListingsFormField
+            <ListingsFormField
                 form={form}
                 name="location.district"
                 value={form.getValues("location.district")}
@@ -88,7 +104,7 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingsAddT
                 name="location.pincode"
                 value={form.getValues("location.pincode") as number}
             />
-              <ListingsFormField
+            <ListingsFormField
                 form={form}
                 name="location.name"
                 value={form.getValues("location.name") as string}

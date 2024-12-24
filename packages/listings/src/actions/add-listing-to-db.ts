@@ -9,12 +9,16 @@ export const addListingToDB = async (formData: ListingsAddType) => {
         throw new Error(result.error.message)
     }
 
+    /**
+     * Here the references to listingIds are removed because it is done by prisma
+     */
     await listingsDb.listing.create({
         data: {
             userId: formData.userId,
+            listingId: formData.listingId,
             place: {
                 create: {
-                    type: formData.place.type
+                    type: formData.place.type,
                 }
             },
             isOpen: formData.isOpen,
@@ -29,13 +33,18 @@ export const addListingToDB = async (formData: ListingsAddType) => {
                     street: formData.location.street,
                     pincode: formData.location.pincode,
                     name: formData.location.name,
-                    landmark: formData.location.landmark
+                    landmark: formData.location.landmark,
+                    createdAt: formData.createdAt,
+                    updatedAt: formData.updatedAt
                 },
             },
             photos: {
                 createMany: {
                     data: formData.photos.map((photo) => ({
+                        photoId: photo.photoId,
                         url: photo.url,
+                        createdAt: photo.createdAt,
+                        updatedAt: photo.updatedAt
                     }))
                 }
             },
@@ -48,7 +57,16 @@ export const addListingToDB = async (formData: ListingsAddType) => {
                     basePrice: formData.pricing.basePrice
                 }
             },
-            allowedVehicles: formData.allowedVehicles
+            allowedVehicles: {
+                createMany: {
+                    data: formData.allowedVehicles.map((v) => ({
+                        id: v.id,
+                        vehicle: v.vehicle
+                    }))
+                }
+            },
+            createdAt: formData.createdAt,
+            updatedAt: formData.updatedAt
         }
     })
 }

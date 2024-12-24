@@ -3,7 +3,7 @@
  */
 
 import { createCollection } from "../typesense/create-collection";
-import { ListingSchema, LocationSchema, NotAvailableDatesSchema, PlaceSchema, PricingSchema, RatingSchema, ReviewSchema } from "../typesense/typesense-schema";
+import { AllowedVehiclesSchema, ListingSchema, LocationSchema, NotAvailableDatesSchema, PlaceSchema, PricingSchema, RatingSchema, ReviewSchema } from "../typesense/typesense-schema";
 import config from "../typesense/config.json";
 import { typesenseClient } from "../typesense/typesense-client";
 
@@ -39,6 +39,10 @@ const collections = [
     {
         name: config.schemas.LOCATION_SCHEMA_NAME,
         schema: LocationSchema
+    },
+    {
+        name: config.schemas.ALLOWED_VEHICLES_SCHEMA_NAME,
+        schema: AllowedVehiclesSchema
     }
 ]
 
@@ -48,7 +52,7 @@ async function createCollectionScript({ deleteAllCollections }: IcreateCollectio
         /**
          * Use this only when you want to delete all the collections and recreate them all
          */
-        if(deleteAllCollections){
+        if (deleteAllCollections) {
             await typesenseClient.collections(collection.name).delete()
         }
         await createCollection(collection);

@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { cn } from '../utils/cn';
 
 interface PageProps {
     children: React.ReactNode
     title?: string
     className?: string
+}
+
+interface PageHeaderProps {
+    children: ReactNode
+}
+
+export const PageHeader = ({ children }: PageHeaderProps) => {
+    return (
+        <div className=''>
+            {children}
+        </div>
+    )
 }
 
 export const Page = ({ children, title, className }: PageProps) => {

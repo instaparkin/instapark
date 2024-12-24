@@ -23,15 +23,16 @@ import { NoResults } from "../components/no-results";
 import { LocateIcon } from "lucide-react";
 import { Text } from "../components/text";
 import { CiLocationOn } from "react-icons/ci";
+import { MapData } from "@instapark/state/src/slices/maps-slice";
 
 interface MapsSearchProps {
   initialCoordinates?: [number, number];
-  onLocationClick?: (location: string, latitude: number, longitude: number) => void;
+  onLocationClick?: (location: MapData) => void;
 }
 
 export const MapsSearch: React.FC<MapsSearchProps> = ({
   initialCoordinates,
-  onLocationClick = () => {},
+  onLocationClick = () => { },
 }) => {
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
@@ -49,11 +50,11 @@ export const MapsSearch: React.FC<MapsSearchProps> = ({
     setValue(e.target.value);
   };
 
-  const handleLocationClick = (location: string, latitude: number, longitude: number) => {
+  const handleLocationClick = (location: MapData) => {
     if (location) {
-      setValue(location);
+      setValue(location.location as string);
       setOpen(false);
-      onLocationClick(location, latitude, longitude);
+      onLocationClick(location);
     }
   };
 
@@ -80,9 +81,7 @@ export const MapsSearch: React.FC<MapsSearchProps> = ({
                 <Card
                   onClick={() =>
                     handleLocationClick(
-                      location?.location as string,
-                      location.lat as number,
-                      location.lng as number
+                      location
                     )
                   }
                   className="p-0 cursor-pointer"
