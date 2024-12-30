@@ -8,10 +8,14 @@
     "check-types": "tsc --noEmit --pretty"
   },
   "dependencies": {
+    "@instapark/listings": "workspace:^",
+    "@instapark/search": "workspace:^",
+    "ioredis": "^5.4.1",
     "kafkajs": "^2.2.4",
-    "typesense": "^1.8.2"
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
+    "@instapark/types": "workspace:^",
     "@instapark/typescript-config": "workspace:^"
   }
 }

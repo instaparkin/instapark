@@ -1,12 +1,11 @@
-import { kafka } from "./client"
-import { LISTINGS_ADD_TOPIC } from "./kafka-constants";
+import { kafka } from "./kafka";
 
 interface CreateTopicsUsingAdminProps {
     topic: string
     numPartitions: number
 }
 
-export async function createTopicsUsingAdmin({ topic, numPartitions }: CreateTopicsUsingAdminProps) {
+export async function createTopic({ topic, numPartitions }: CreateTopicsUsingAdminProps) {
     const admin = kafka.admin();
 
     console.log("Connecting admin to kafka...");
@@ -20,13 +19,15 @@ export async function createTopicsUsingAdmin({ topic, numPartitions }: CreateTop
     console.log("Topics in kafka", topicsInKafka);
 
     await admin.createTopics({
-         topics: [{
-             topic: topic,
-             numPartitions: numPartitions
-         }]
-     })
+        topics: [{
+            topic: topic,
+            numPartitions: numPartitions
+        }]
+    }).then(() => {
+        console.log("Created Topic", topic, "successfully");
+    }).catch(() => {
+        console.log("Failed to create Topic", topic);
+    })
 
-    console.log("Created Topic", topic, "successfully");
-    
     await admin.disconnect();
 }
