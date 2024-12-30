@@ -1,0 +1,9 @@
+{
+    "LISTING_SERVER_URL" : "http://localhost:8087/listings",
+    "CHAT_SERVER_URL" : "http://localhost:8084",
+    "routes" : {
+        "LISTING_ADD_ROUTE" : "http://localhost:8087/listings/add",
+        "LISTING_ADD_IMAGE_ROUTE" : "http://localhost:8087/listings/uploadthing",
+        "LISTINGS_SEARCH_ROUTE" : "http://localhost:8086/search"
+    }
+}

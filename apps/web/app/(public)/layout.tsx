@@ -1,14 +1,23 @@
+"use client"
+
+import { SuperTokensProvider } from "@instapark/auth";
 import { StoreProvider } from "@instapark/state";
-import { HeaderPublic } from "@instapark/ui";
+import { HeaderSkeleton } from "@instapark/ui";
+import dynamic from "next/dynamic";
+
+const HeaderMainDynamic = dynamic(() =>
+    import("@instapark/ui").then(mod => mod.HeaderMain), {
+    loading: () => <HeaderSkeleton />
+})
 
 const PublicLayout = ({ children }: { children: React.ReactNode }): JSX.Element => {
     return (
-        <div>
+        <SuperTokensProvider>
             <StoreProvider>
-                <HeaderPublic />
+                <HeaderMainDynamic />
                 {children}
             </StoreProvider>
-        </div>
+        </SuperTokensProvider>
     );
 }
 

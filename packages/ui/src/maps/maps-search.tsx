@@ -7,11 +7,9 @@ import {
   DialogTrigger,
 } from "../components/dialog";
 import { Card, CardDescription } from "../components/card";
-import { MapsFlyToButton } from "./maps-fly-to-button";
 import {
   AppDispatch,
   autoCompleteLocations,
-  reverseGeocodeLocation,
   RootState,
   useDispatch,
   useSelector,
@@ -20,7 +18,6 @@ import { SearchInput } from "../components/search-input";
 import { IoLocationOutline } from "react-icons/io5";
 import { useDebouncedValue } from "@mantine/hooks";
 import { NoResults } from "../components/no-results";
-import { LocateIcon } from "lucide-react";
 import { Text } from "../components/text";
 import { CiLocationOn } from "react-icons/ci";
 import { MapData } from "@instapark/state/src/slices/maps-slice";

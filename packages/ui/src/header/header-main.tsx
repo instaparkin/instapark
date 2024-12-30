@@ -10,10 +10,9 @@ import { HeaderPublic } from './header-public';
 
 export const HeaderMain = () => {
     const session = useSessionContext();
+
     if (session.loading) {
-        return (
-            <HeaderPublic />
-        )
+        return null
     }
 
     if (session.userId) {
@@ -29,13 +28,15 @@ export const HeaderMain = () => {
                     </Link>
                     <div className='flex gap-4 items-center'>
                         <SwitchRoleButton variant={"header"} />
-                        <Link href={"/messages"}>
-                            <NotificationIcon hasNotifications={true} />
-                        </Link>
+                        <NotificationIcon userId={session.userId} />
                         <HeaderNavigation />
                     </div>
                 </div>
             </header>
         )
     }
+
+    return (
+        <HeaderPublic />
+    )
 }

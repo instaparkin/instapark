@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest, Session } from "@instapark/auth";
+import metadataRouter from "./routes/metadata.route";
 
 config();
 
@@ -9,6 +10,8 @@ async function init() {
     ensureSuperTokensInit();
 
     const app = express();
+
+    app.use(express.json());
 
     app.use(cors({
         origin: process.env.FRONTEND_URL,
@@ -34,11 +37,9 @@ async function init() {
 
     app.get("/auth/userdetails", verifySession(), async (req: SessionRequest, res) => {
         const session = await req.session
-        const info = await supertokens.getUser(session?.getUserId() as string)
-        let accessTokenPayload = await session?.getAccessTokenPayload();
-        let customClaimValue = await accessTokenPayload.customClaim
-        res.send(info)
     })
+
+    app.use("/auth/metadata", verifySession(), metadataRouter)
 
     app.use(errorHandler());
 

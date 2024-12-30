@@ -1,13 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images : {
-        remotePatterns : [
-            {
-                protocol : "https",
-                hostname : "g-33ra03svqjy.vusercontent.net",
-            }
-        ]
-    }
+  reactStrictMode: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'utfs.io',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

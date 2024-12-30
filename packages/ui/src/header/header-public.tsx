@@ -6,6 +6,7 @@ import { Icon } from '../components/icon';
 import { LuAlignJustify } from 'react-icons/lu';
 import { HEADER_PUBLIC_ITEMS } from './header-constants';
 import { BRAND_LOGO, BRAND_NAME } from '../brand/brand-constants';
+import { UserButton } from '../auth/user-button';
 
 export const HeaderPublic = () => {
     return (
@@ -21,9 +22,10 @@ export const HeaderPublic = () => {
                 <div className='flex gap-4 items-center'>
                     <SwitchRoleButton />
                     <DropdownMenu>
-                        <DropdownMenuTrigger>
-                            <Icon>
+                        <DropdownMenuTrigger className='rounded-md '>
+                            <Icon className='rounded-md flex items-center gap-2'>
                                 <LuAlignJustify className="h-5 w-5" />
+                                <UserButton />
                             </Icon>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>

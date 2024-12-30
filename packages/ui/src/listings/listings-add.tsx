@@ -8,6 +8,8 @@ import { listingsAddSteps } from './listings-add-steps'
 import { useSessionContext } from '@instapark/auth'
 import { LISTINGS_ADD_FORM_KEY } from '../utils/global-constants'
 import toast from 'react-hot-toast'
+import uiConfig from "../../ui-config.json"
+import { v4 as uuid } from "uuid"
 
 export const ListingsAdd = () => {
   const form = ListingsAddForm();
@@ -18,15 +20,46 @@ export const ListingsAdd = () => {
   }
 
   const handleSubmit = async (data: ListingsAddType) => {
+    const listingId = uuid();
     try {
-      const modifiedData: ListingsAddType = { ...data, userId: session.userId }
-      const response = await fetch("http://localhost:8087/listings/add", {
+      const dataWithUUIDs: ListingsAddType = {
+        ...data,
+        listingId,
+        userId: session.userId,
+        place: {
+          ...data.place,
+          placeId: listingId,
+        },
+        location: {
+          ...data.location,
+          locationId: listingId,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        pricing: {
+          ...data.pricing,
+          pricingId: listingId,
+        },
+        photos: data.photos.map(photo => ({
+          ...photo,
+          listingId
+        })),
+        allowedVehicles: data.allowedVehicles.map(vehicle => ({
+          ...vehicle,
+          listingId,
+        })),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      const response = await fetch(uiConfig.routes.LISTING_ADD_ROUTE, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(modifiedData)
+        body: JSON.stringify(dataWithUUIDs),
       });
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -34,6 +67,7 @@ export const ListingsAdd = () => {
       toast.error(`Error adding listing: ${error instanceof Error ? error.message : String(error)}`);
     }
   };
+
 
   return (
     <Page className='pb-32'>

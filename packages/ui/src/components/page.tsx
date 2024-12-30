@@ -13,19 +13,25 @@ interface PageHeaderProps {
 
 export const PageHeader = ({ children }: PageHeaderProps) => {
     return (
-        <div className=''>
+        <div>
             {children}
         </div>
     )
 }
 
-export const Page = ({ children, title, className }: PageProps) => {
+export const Page: React.FC<PageProps> = ({
+    children,
+    title,
+    className,
+}) => {
     return (
-        <div className={cn(className, 'absolute top-28 w-full mx-auto space-y-6')}>
-            <div className='container space-y-6'>
-                <h1 className='font-bold text-2xl'>{title}</h1>
+        <main className={cn('relative top-16 w-full mx-auto space-y-6 pb-12', className)}>
+            <div className={cn('container space-y-6')}>
+                {title && (
+                        <h1 className="font-semibold text-lg md:text-xl lg:text-2xl">{title}</h1>
+                )}
                 {children}
             </div>
-        </div>
+        </main>
     )
 }

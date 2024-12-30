@@ -1,5 +1,5 @@
-import { produceMessage } from "@instapark/kafka"
-import { addListingToDB } from "@instapark/listings";
+import { searchProducer } from "@instapark/kafka"
+import { getListingFromDb } from "@instapark/listings";
 
 export const listingsAddForm = async (req, res) => {
     try {
@@ -7,22 +7,24 @@ export const listingsAddForm = async (req, res) => {
 
         console.log(listingData);
 
-        produceMessage({
-            topic: "listings-add-topic",
+        await searchProducer({
             key: "form-data",
             data: listingData,
             partition: 0
         })
 
-        await addListingToDB(listingData).then(() => {
-            console.log("Added to listings DB");
-        }).catch((error) => {
-            console.log("Failed to add to listings Db" + error);
-        });
-
         res.status(200).send("Listing added successfully");
     } catch (error) {
-        console.error("Error in /add route:", error);
         res.status(500).json({ error: "Failed to add listing", details: error.message });
     }
 };
+
+export const getListing = async (req, res) => {
+    try {
+        const { listingId } = req.params;
+        const response = await getListingFromDb({ listingId });
+        res.status(200).send(response)
+    } catch (error) {
+        res.status(500).json({ error: "Failed to Get listing", details: error.message });
+    }
+}

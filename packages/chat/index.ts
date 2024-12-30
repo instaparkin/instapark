@@ -1,2 +1,3 @@
-export { SocketService } from "./src/socker-service"
-export { isOnline } from "./src/is-online"
+export * from "socket.io"
+export { SocketBackend } from "./src/socket-backend"
+export { Socket } from "socket.io"

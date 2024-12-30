@@ -36,6 +36,8 @@ export const ListingsAddForm = () =>
                 pincode: 0,
                 name: "",
                 landmark: "",
+                createdAt : new Date(),
+                updatedAt : new Date()
             },
             allowedVehicles: [
                 {

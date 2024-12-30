@@ -1,3 +1,5 @@
+"use server"
+
 import { listingsDb } from "../db/listings-db"
 import { ListingsAddType } from "../forms/listings-add-form"
 import { listingsAddSchema } from "../forms/listings-add-schema"

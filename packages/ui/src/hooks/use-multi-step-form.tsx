@@ -61,7 +61,7 @@ export const useMultiStepForm = <T extends Record<string, unknown>>({
     if (!isLoading) {
       saveToRedis();
     }
-  }, [currentStepIndex, currentSubStepIndex, form, redisPrefix, redisSuffix, isLoading, isSubmitted]);
+  }, [currentStepIndex, currentSubStepIndex, form.getValues(), redisPrefix, redisSuffix, isLoading, isSubmitted]);
 
   const next = async () => {
     const currentStep = steps[currentStepIndex] as Step<T>;

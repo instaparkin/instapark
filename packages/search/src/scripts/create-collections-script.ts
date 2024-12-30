@@ -2,31 +2,20 @@
  * In order to create a collection first change the schema accordinly and then change the name and run this script
  */
 
-import { createCollection } from "../typesense/create-collection";
-import { AllowedVehiclesSchema, ListingSchema, LocationSchema, NotAvailableDatesSchema, PlaceSchema, PricingSchema, RatingSchema, ReviewSchema } from "../typesense/typesense-schema";
-import config from "../typesense/config.json";
+import { createCollection } from "../actions/create-collection";
+import { ListingSchema, RatingSchema, ReviewSchema } from "../schemas/typesense-schema";
+import config from "../../search-config.json";
 import { typesenseClient } from "../typesense/typesense-client";
 
 interface IcreateCollectionScript {
-    deleteAllCollections: Boolean
+    deleteAllCollections: Boolean,
+    collectionsToDelete?: string[]
 }
 
 const collections = [
     {
         name: config.schemas.LISTING_SCHEMA_NAME,
         schema: ListingSchema
-    },
-    {
-        name: config.schemas.PLACE_SCHEMA_NAME,
-        schema: PlaceSchema
-    },
-    {
-        name: config.schemas.PRICING_SCHEMA_NAME,
-        schema: PricingSchema
-    },
-    {
-        name: config.schemas.NOT_AVAILABLE_DATES_SCHEMA_NAME,
-        schema: NotAvailableDatesSchema
     },
     {
         name: config.schemas.REVIEW_SCHEMA_NAME,
@@ -36,17 +25,9 @@ const collections = [
         name: config.schemas.RATING_SCHEMA_NAME,
         schema: RatingSchema
     },
-    {
-        name: config.schemas.LOCATION_SCHEMA_NAME,
-        schema: LocationSchema
-    },
-    {
-        name: config.schemas.ALLOWED_VEHICLES_SCHEMA_NAME,
-        schema: AllowedVehiclesSchema
-    }
 ]
 
-async function createCollectionScript({ deleteAllCollections }: IcreateCollectionScript) {
+async function createCollectionScript({ deleteAllCollections, collectionsToDelete }: IcreateCollectionScript) {
 
     collections.map(async (collection) => {
         /**
@@ -55,11 +36,19 @@ async function createCollectionScript({ deleteAllCollections }: IcreateCollectio
         if (deleteAllCollections) {
             await typesenseClient.collections(collection.name).delete()
         }
+
+        if (collectionsToDelete) {
+            collectionsToDelete.map(async (ctd) => {
+                if (ctd === collection.name) {
+                    await typesenseClient.collections(collection.name).delete()
+                }
+            })
+        }
         await createCollection(collection);
     }
     )
 }
 
 createCollectionScript({
-    deleteAllCollections: false
+    deleteAllCollections: true
 });

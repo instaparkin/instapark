@@ -47,7 +47,6 @@ export const autoComplete = async (req, res) => {
                 name: parts.slice(0, parts.length - 8)
             }
         });
-
         return res.status(200).json(formattedData);
     } catch (error) {
         return res.status(500).json({ error: "Internal server error.", details: error.message });

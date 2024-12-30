@@ -16,7 +16,6 @@ import { ChevronRight } from 'lucide-react'
 import { SwitchRoleButton } from '../components/switch-role-button'
 import { SignOutButton } from '../auth/sign-out-button'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/card'
-import { Avatar, AvatarImage } from '../components/avatar'
 import { UserButton } from '../auth/user-button'
 
 export const HeaderNavigation = () => {
@@ -24,25 +23,25 @@ export const HeaderNavigation = () => {
     <div>
       <div className='hidden md:block'>
         <DropdownMenu>
-          <DropdownMenuTrigger className='flex items-center justify-center border rounded-lg'>
+          <DropdownMenuTrigger className='flex items-center justify-center rounded-md'>
             <UserButton />
-            <Icon>
+            <Icon className='rounded-md'>
               <LuAlignJustify className="h-5 w-5" />
             </Icon>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {
-              HEADER_PROTECTED_ITEMS.data.map((group) => {
+              HEADER_PROTECTED_ITEMS.data.map((group, index) => {
                 return (
-                  <div>
+                  <div key={index}>
                     <DropdownMenuLabel>
                       {group.group}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {
-                      group.items.map(item => {
+                      group.items.map((item, index) => {
                         return (
-                          <DropdownMenuItem className='cursor-pointer my-2 font-normal'>
+                          <DropdownMenuItem key={index} className='cursor-pointer my-2 font-normal'>
                             <Link href={item.link}>
                               {item.name}
                             </Link>

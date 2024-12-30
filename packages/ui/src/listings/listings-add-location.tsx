@@ -8,7 +8,6 @@ import { MapsSearch } from '../maps/maps-search';
 import { ListingsFormField } from './listings-form-field';
 import dynamic from "next/dynamic";
 import { Skeleton } from '../components/skeleton';
-import path from 'path';
 import { MapData } from '@instapark/state/src/slices/maps-slice';
 
 const MapDynamic = dynamic(() =>
@@ -41,6 +40,8 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingsAddT
                 "location.name",
                 "location.landmark"
             ];
+            form.setValue("location.createdAt", new Date())
+            form.setValue("location.updatedAt", new Date())
             await form.watch(paths);
             await form.trigger(paths);
         }
@@ -71,9 +72,13 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingsAddT
     return (
         <div className='space-y-4 max-w-[630px] mx-auto'>
             <MapsSearch
+                
                 onLocationClick={handleLocationUpdate}
             />
-            <MapDynamic id="ListingsAddLocation" />
+            <MapDynamic
+                initialLat={form.getValues("location.latitude")}
+                initialLng={form.getValues('location.longitude')}
+                id="ListingsAddLocation" />
             <ListingsFormField
                 form={form}
                 name="location.country"

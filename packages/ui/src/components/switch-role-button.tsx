@@ -27,7 +27,7 @@ export function SwitchRoleButton({ className, variant }: SwitchRoleButtonProps) 
     <Button
       asChild
       className={cn(switchRoleButtonVariants({ variant }), className, "w-full")}
-      variant={"outline"}
+      variant={"ghost"}
     >
       <Link href={pathname.includes("hosting") ? "/" : "/hosting"}>
         Switch to {pathname.includes("hosting") ? "Buyer" : "Hosting"}

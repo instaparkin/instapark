@@ -1,14 +1,14 @@
+import { HomeListingDetail } from '@instapark/ui'
 import React from 'react'
 
 interface ParkingInterface {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }
 
 const ParkingsPage = async ({ params }: ParkingInterface) => {
+  const listingId = (await params).id;
   return (
-    <div>{params.id}</div>
+    <HomeListingDetail listingId={listingId} />
   )
 }
 

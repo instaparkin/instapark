@@ -1,5 +1,9 @@
 {
   "extends": "@instapark/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+  },
   "include": ["src", "cashfree.d.ts", "../cashfree/cashfree.d.ts"],
   "exclude": ["node_modules"]
 }

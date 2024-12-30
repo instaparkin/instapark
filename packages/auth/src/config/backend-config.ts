@@ -7,6 +7,7 @@ import UserRoles from "supertokens-node/recipe/userroles";
 import { appInfo } from "./app-info";
 import SuperTokens from "supertokens-node/lib/build/supertokens";
 import { addRoleToUser } from "../actions/add-role-to-user";
+import UserMetadata from "supertokens-node/recipe/usermetadata";
 
 const backendConfig = (): TypeInput => {
     return {
@@ -60,27 +61,18 @@ const backendConfig = (): TypeInput => {
 
                                 const response = await originalImplementation.signInUp(input);
 
-                                if (response.status === "OK") {
-                                    let { id } = response.user;
-
-                                    if (input.session === undefined) {
-                                        if (response.createdNewRecipeUser && response.user.loginMethods.length === 1) {
-                                            await addRoleToUser(id, "Seller");
-                                            await addRoleToUser(id, "Buyer");
-                                        } else {
-                                            // TODO: Post sign in logic
-                                        }
-                                    }
-                                }
                                 return response;
                             }
                         }
                     }
                 }
             }),
-            Session.init(),
+            Session.init({
+                exposeAccessTokenToFrontendInCookieBasedAuth: true
+            }),
             Dashboard.init(),
             UserRoles.init(),
+            UserMetadata.init()
         ],
     };
 }

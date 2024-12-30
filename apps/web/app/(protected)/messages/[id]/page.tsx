@@ -1,10 +1,14 @@
-import { ProfileMain } from '@instapark/ui'
-import React from 'react'
+import { MessagesChat } from '@instapark/ui'
 
-const ProfilePage = () => {
+interface MessageChatPageProps {
+    params: Promise<{ id: string }>
+}
+
+const MessageChatPage = async ({ params }: MessageChatPageProps) => {
+    const receiverId = (await params).id;
     return (
-        <ProfileMain />
+        <MessagesChat receiverId={receiverId} />
     )
 }
 
-export default ProfilePage
+export default MessageChatPage

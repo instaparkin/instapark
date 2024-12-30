@@ -1,3 +1,4 @@
+import UserMetadata from "supertokens-node/recipe/usermetadata";
 export { signOut } from "supertokens-auth-react/recipe/session";
 export * as Session from "supertokens-node/recipe/session";
 export { getApiDomain, getWebsiteDomain } from "./src/config/app-info";
@@ -10,6 +11,7 @@ export { ThirdPartyPreBuiltUI } from "supertokens-auth-react/recipe/thirdparty/p
 export { EmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/emailpassword/prebuiltui";
 export * as SuperTokensReact from 'supertokens-auth-react/ui';
 export { redirectToAuth } from 'supertokens-auth-react';
-export { SessionAuth } from "supertokens-auth-react/recipe/session";
+export { SessionAuth, getAccessToken, getUserId, getAccessTokenPayloadSecurely } from "supertokens-auth-react/recipe/session";
 export { useSessionContext } from "supertokens-auth-react/recipe/session";
 export { getUserFromId } from "./src/actions/get-user-from-id";
+export { UserMetadata }

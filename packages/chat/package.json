@@ -9,12 +9,14 @@
   },
   "dependencies": {
     "@instapark/auth": "workspace:^",
+    "@prisma/client": "^5.22.0",
     "@socket.io/redis-adapter": "^8.3.0",
+    "@socket.io/redis-streams-adapter": "^0.2.2",
     "ioredis": "^5.4.1",
-    "nanoid": "^5.0.8",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "@instapark/typescript-config": "workspace:^"
+    "@instapark/typescript-config": "workspace:^",
+    "prisma": "^5.22.0"
   }
 }

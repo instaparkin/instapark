@@ -1,0 +1,11 @@
+export const GLOBAL_CONFIG = {
+  CHAT_SERVER: {
+    CONNECTION_EVENT: "connect",
+    DISCONNECTION_EVENT: "disconnect",
+    MESSAGE_EVENT: "MESSAGE",
+    PSTATUS_EVENT: "PSTATUS",
+    UNREAD_EVENT: "UNREAD",
+    READ_EVENT: "READ",
+    CONNECT_TO_EVENT : "CONNECT_TO",
+  }
+}

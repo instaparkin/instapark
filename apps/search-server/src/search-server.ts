@@ -5,8 +5,7 @@ import searchRoute from "./routes/search.route";
 import kafkaRoute from "./routes/kafka.route";
 import olaMapsRoute from "./routes/olamaps.route";
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest, Session } from "@instapark/auth";
-import { consumeMessages } from "@instapark/kafka"
-import { consumeMessage } from "@instapark/search";
+import { searchConsumer } from "@instapark/kafka";
 
 config();
 
@@ -39,11 +38,7 @@ async function init() {
 
     app.use(errorHandler());
 
-    consumeMessages({
-        groupId: "listings-add-group",
-        topics: ["listings-add-topic"],
-        fromBeginning: true
-    });
+    searchConsumer({ fromBeginning: true });
 
     app.listen(process.env.PORT, () => {
         console.log(`Server running on http://localhost:${process.env.PORT}`);

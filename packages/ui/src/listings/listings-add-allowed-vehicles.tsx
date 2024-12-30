@@ -7,16 +7,17 @@ import {
     FormItem,
     FormMessage,
 } from "../components/form";
-import { Vehicle, ListingsAddType } from "@instapark/listings";
+import { ListingsAddType } from "@instapark/listings";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/select";
 import { Button } from "../components/button";
-import { Car, BikeIcon } from 'lucide-react';
-import { PiCurrencyCircleDollar } from "react-icons/pi";
+import { Car, BikeIcon, LucideProps, Cylinder } from 'lucide-react';
+import { type Vehicle } from "@instapark/types";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
 
-const vehicleIcons = {
-    [Vehicle.Car]: Car,
-    [Vehicle.Bike]: BikeIcon,
-    [Vehicle.Cycle]: PiCurrencyCircleDollar,
+const vehicleIcons: Record<Vehicle, ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>> = {
+    Car: Car,
+    Bike: BikeIcon,
+    Cycle: Cylinder,
 };
 
 export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<ListingsAddType> }) {
@@ -40,10 +41,10 @@ export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<Listi
                                         <SelectValue placeholder="Select a vehicle" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {Object.values(Vehicle).map((vehicle) => {
+                                        {Object.keys(vehicleIcons).map((vehicle) => {
                                             const Icon = vehicleIcons[vehicle];
                                             return (
-                                                <SelectItem key={vehicle} value={vehicle}>
+                                                <SelectItem key={vehicle} value={vehicle as string}>
                                                     <div className="flex items-center">
                                                         <Icon className="mr-2 h-4 w-4" />
                                                         {vehicle}
@@ -71,7 +72,7 @@ export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<Listi
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => append({ vehicle: Vehicle.Car })}
+                    onClick={() => append({ vehicle: Car })}
                 >
                     Add Vehicle
                 </Button>
@@ -79,4 +80,3 @@ export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<Listi
         </div>
     );
 }
-
