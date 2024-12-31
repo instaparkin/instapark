@@ -22,11 +22,11 @@ export const HeaderPublic = () => {
                 <div className='flex gap-4 items-center'>
                     <SwitchRoleButton />
                     <DropdownMenu>
-                        <DropdownMenuTrigger className='rounded-md '>
-                            <Icon className='rounded-md flex items-center gap-2'>
-                                <LuAlignJustify className="h-5 w-5" />
-                                <UserButton />
+                        <DropdownMenuTrigger className='flex items-center gap-2 rounded-full border p-1.5'>
+                            <Icon className='border-none'>
+                                <LuAlignJustify />
                             </Icon>
+                            <UserButton />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                             {

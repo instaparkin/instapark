@@ -2,10 +2,8 @@ import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import { createServer } from "http";
-import { ensureSuperTokensInit, errorHandler, middleware, supertokens } from "@instapark/auth";
+import { ensureSuperTokensInit, errorHandler, getKey, jwt, middleware, supertokens } from "@instapark/auth";
 import { SocketBackend } from "@instapark/chat";
-import jwt, { JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
-import jwksClient from 'jwks-rsa';
 import contactsRouter from "./routes/contacts.route"
 import { connect } from "mongoose";
 import messageRouter from "./routes/message.route"
@@ -13,17 +11,6 @@ import { GLOBAL_CONFIG } from "@instapark/utils"
 import { messageConsumer } from "@instapark/kafka";
 import { handleConnection, handleDisconnection, handleOnMessage, handleOnRead } from "./socket/socket-actions";
 import { Contact, Message } from "@instapark/types";
-
-const client = jwksClient({
-    jwksUri: 'http://localhost:8080/auth/jwt/jwks.json'
-});
-
-function getKey(header: JwtHeader, callback: SigningKeyCallback) {
-    client.getSigningKey(header.kid, function (err, key) {
-        var signingKey = key!.getPublicKey();
-        callback(err, signingKey);
-    });
-}
 
 config();
 
@@ -86,7 +73,7 @@ async function init() {
 
         socket.on(GLOBAL_CONFIG.CHAT_SERVER.READ_EVENT, async (messages: Message[]) => await handleOnRead(messages, socket));
 
-        socket.on(GLOBAL_CONFIG.CHAT_SERVER.DISCONNECTION_EVENT, async () => await handleDisconnection(socket));
+        socket.on(GLOBAL_CONFIG.CHAT_SERVER.DISCONNECTION_EVENT, async () => await handleDisconnection(socket, io));
     });
 
     app.get('/chat', (req, res) => {
@@ -99,7 +86,7 @@ async function init() {
         console.log(`Server running on http://localhost:${process.env.PORT}`);
     });
     await messageConsumer({
-        socket: io,
+        io,
         fromBeginning: false,
     });
 }

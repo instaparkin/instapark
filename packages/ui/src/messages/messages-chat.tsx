@@ -18,13 +18,20 @@ interface MessagesChatProps {
     receiverId: string;
 }
 
+interface OnlineStatus {
+    userId: string
+    status: boolean
+}
+
 export function MessagesChat({ receiverId }: MessagesChatProps) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [unreadMessages, setUnreadMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState("");
-    const [online, setOnline] = useState<boolean>(false);
+    const [online, setOnline] = useState<OnlineStatus>();
     const [socket, setSocket] = useState<Socket | null>(null);
 
+    console.log(online);
+    
     const session = useSessionContext();
 
     if (session.loading) {
@@ -37,10 +44,9 @@ export function MessagesChat({ receiverId }: MessagesChatProps) {
         socket.on(GLOBAL_CONFIG.CHAT_SERVER.UNREAD_EVENT, (message) => {
             setUnreadMessages((prev) => [...prev, message]);
         });
-
-        socket!.on(GLOBAL_CONFIG.CHAT_SERVER.READ_EVENT, async (messages) => {
-            setMessages(messages);
-        })
+        socket.on(GLOBAL_CONFIG.CHAT_SERVER.READ_EVENT, (messages) => {
+            setMessages(prev => [...prev, messages]);
+        });
         return () => {
             socket.disconnect();
         };
@@ -83,6 +89,9 @@ export function MessagesChat({ receiverId }: MessagesChatProps) {
         setNewMessage("");
     };
 
+    /**
+     * Refreshes the page for the receiver after an unreadmessage is received
+     */
     useEffect(() => {
         if (unreadMessages.length === 0 || !socket) return;
         socket.emit(GLOBAL_CONFIG.CHAT_SERVER.READ_EVENT, unreadMessages);
@@ -106,8 +115,8 @@ export function MessagesChat({ receiverId }: MessagesChatProps) {
                         </Avatar>
                         <div className="flex flex-col">
                             <h2 className="text-lg font-semibold">{receiverId}</h2>
-                            <span className={`text-sm ${online ? "text-green-500" : "text-gray-500"}`}>
-                                {online ? "Online" : "Offline"}
+                            <span className={`text-sm ${online?.status ? "text-green-500" : "text-gray-500"}`}>
+                                {online?.status ? "Online" : "Offline"}
                             </span>
                         </div>
                     </div>

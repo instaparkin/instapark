@@ -168,7 +168,7 @@ function ListingHostInfo({
                         <p>Responds {responseTime}</p>
                     </div>
                     <Button variant="default" className="w-full" asChild onClick={() => handleCreateContact()}>
-                        <Link href={`/messages/${userId}`}>
+                        <Link href={`/messages/${HostUserId}`}>
                             Message Host
                         </Link>
                     </Button>

@@ -33,7 +33,7 @@ export const NotificationIcon = ({ userId }: { userId: string }) => {
                 const response = await fetch(`http://localhost:8084/messages/get/unread/${userId}`)
                 const data: Message[] = await response.json();
                 console.log(data);
-                setUnreadMessages(prev => [...prev, ...data])
+                setUnreadMessages(data)
             })
             return () => {
                 socket?.disconnect();

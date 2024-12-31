@@ -3,6 +3,9 @@
 import { useSessionContext } from "@instapark/auth"
 import { User } from "lucide-react";
 import { useEffect } from "react"
+import { Icon } from "../components/icon";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/avatar"
+
 
 export const UserButton = () => {
     const session = useSessionContext();
@@ -23,13 +26,16 @@ export const UserButton = () => {
 
     if (session.userId) {
         return (
-            <div>
-                
-            </div>
+            <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
         )
     }
 
     return (
-        <User />
+        <Icon>
+            <User className="h-5 w-5 text-muted-foreground" />
+        </Icon>
     )
 }

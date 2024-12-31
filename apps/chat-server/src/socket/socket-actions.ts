@@ -1,7 +1,6 @@
-import { Socket } from "socket.io";
-import { redis } from "../redis/redis-server";
+import { Server, Socket } from "socket.io";
 import { GLOBAL_CONFIG } from "@instapark/utils";
-import { Contact, Message } from "@instapark/types";
+import { Message } from "@instapark/types";
 import { messageProducer } from "@instapark/kafka";
 import { Message as MessageModel } from "../models/messages.model";
 
@@ -18,17 +17,18 @@ import { Message as MessageModel } from "../models/messages.model";
 export const handleConnection = async (socket: Socket) => {
     try {
         const userId: string = socket.decoded.sub;
-        socket.join(socket.decoded.sub);
-        await redis.sadd(userId, socket.id);
-        socket.emit(GLOBAL_CONFIG.CHAT_SERVER.PSTATUS_EVENT, true);
-        const receiverRooms = await redis.smembers(userId);
-        receiverRooms.forEach(async r => {
-            const unreadMessages = await MessageModel.find({ receiverId: userId, status: { $ne: "Read" } });
-            unreadMessages.forEach(m => {
-                socket.to(r).emit("UNREAD", m);
-            })
+        socket.join(userId);
+        socket.broadcast.emit(GLOBAL_CONFIG.CHAT_SERVER.PSTATUS_EVENT, {
+            userId,
+            status: true
+        });
+        const unreadMessages = await MessageModel.find({ receiverId: userId, status: { $ne: "Read" } });
+        console.log(unreadMessages);
+
+        unreadMessages.forEach(m => {
+            socket.to(userId).emit(GLOBAL_CONFIG.CHAT_SERVER.UNREAD_EVENT, m);
         })
-        console.log(socket.id + "Client connected");
+        console.log(socket.rooms);
     } catch (error) {
         throw new Error("Failed to create socket connection: " + error);
     }
@@ -42,13 +42,20 @@ export const handleConnection = async (socket: Socket) => {
  * 
  * @param {Socket} socket - The socket object representing the disconnected client.
  */
-export const handleDisconnection = async (socket: Socket) => {
+export const handleDisconnection = async (socket: Socket, io: Server) => {
     try {
-        await redis.srem(socket.decoded.sub, socket.id);
-        if (await redis.scard(socket.decoded.sub) === 0) {
-            socket.emit(GLOBAL_CONFIG.CHAT_SERVER.PSTATUS_EVENT, false);
+        const matchingSockets = await io.in(socket.decoded.sub).fetchSockets();
+        const isDisconnected = matchingSockets.length === 0;
+        if (isDisconnected) {
+            socket.emit(GLOBAL_CONFIG.CHAT_SERVER.PSTATUS_EVENT, {
+                userId: socket.decoded.sub,
+                status: false
+            });
         }
-        socket.emit(GLOBAL_CONFIG.CHAT_SERVER.PSTATUS_EVENT, true);
+        socket.emit(GLOBAL_CONFIG.CHAT_SERVER.PSTATUS_EVENT, {
+            userId: socket.decoded.sub,
+            status: true
+        });
         console.log(socket.id + "Client disconnected");
     } catch (error) {
         console.error("Failed to handle socket disconnection:", error);
@@ -82,36 +89,38 @@ export const handleOnMessage = async (message: Message) => {
  * Handles the 'READ' event for received messages.
  * 
  * Updates the status of the given messages in the database to "Read".
- * This is typically triggered when a message has been seen by the recipient.
+ * Notifies the sender about the updated message status.
  * 
  * @param {Message[]} messages - An array of message objects to be updated to "Read".
+ * @param {Socket} socket - The socket instance for communication.
  * @throws {Error} Logs any errors encountered while updating the message status.
  */
 export const handleOnRead = async (messages: Message[], socket: Socket) => {
     try {
-           await Promise.all(
+        // Update the status of all provided messages in the database
+        await Promise.all(
             messages.map((message) =>
                 MessageModel.updateMany(
-                    { senderId: message.senderId, receiverId: message.receiverId },
+                    { senderId: message.senderId, receiverId: message.receiverId }, // Update by unique message ID
                     { $set: { status: "Read" } }
                 )
             )
         );
 
-        const m = messages[0]
-        const data =  await MessageModel.find({
-            $or: [
-              { senderId: m?.senderId, receiverId: m?.receiverId },
-              { senderId: m?.senderId, receiverId: m?.receiverId }
-            ]
-          }).sort({ createdAt: 1 });
+        // Notify the sender that the messages have been read
+        const firstMessage = messages[0]; // Assume messages are from the same sender
+        if (!firstMessage) throw new Error("No messages provided for read event.");
 
-        const receiverRooms = await redis.smembers(m!.senderId);
-        receiverRooms.forEach((room) => {
-            socket.to(room).emit(GLOBAL_CONFIG.CHAT_SERVER.READ_EVENT, data);
-        });
+        const updatedMessages = messages.map((m) => ({ ...m, status: "Read" }));
+        socket.to(firstMessage.senderId).emit(
+            GLOBAL_CONFIG.CHAT_SERVER.READ_EVENT,
+            updatedMessages
+        );
+
+        console.log(`Updated ${messages.length} messages to "Read" for senderId: ${firstMessage.senderId}`);
     } catch (error) {
-        throw new Error(`Failed to update message status for senderId: ${messages[0]?.senderId}`);
+        console.error("Failed to update message status to 'Read':", error);
+        throw new Error("Failed to update message status.");
     }
 };
 

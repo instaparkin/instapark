@@ -23,11 +23,11 @@ export const HeaderNavigation = () => {
     <div>
       <div className='hidden md:block'>
         <DropdownMenu>
-          <DropdownMenuTrigger className='flex items-center justify-center rounded-md'>
-            <UserButton />
-            <Icon className='rounded-md'>
-              <LuAlignJustify className="h-5 w-5" />
+          <DropdownMenuTrigger className='flex items-center gap-2 rounded-full border p-1.5'>
+            <Icon className='border-none'>
+              <LuAlignJustify />
             </Icon>
+            <UserButton />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {

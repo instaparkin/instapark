@@ -6,7 +6,7 @@ interface IconProps {
     className?: string;
 }
 
-export const Icon = ({ children, className }: IconProps) => {
+export const Icon: React.FC<IconProps> = ({ children, className }) => {
     return (
         <div
             className={cn(

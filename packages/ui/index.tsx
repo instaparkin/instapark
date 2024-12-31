@@ -24,3 +24,5 @@ export { Success } from "./src/components/success"
 export { HomeListingDetail } from "./src/home/home-listing-detail"
 export { HeaderSkeleton } from "./src/header/header-skeleton"
 export { MessagesChat } from "./src/messages/messages-chat";
+export * from "./src/components/sidebar";
+export { AppSidebar } from "./src/components/app-sidebar";

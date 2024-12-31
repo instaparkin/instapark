@@ -7,6 +7,15 @@ import { Label } from "../components/label"
 import { Card, CardContent } from "../components/card"
 import { useSessionContext } from '@instapark/auth'
 import { getDate } from 'date-fns'
+import { UseFormReturn } from 'react-hook-form'
+import { FullnameType, fullnameForm } from "@instapark/forms"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../components/accordion"
+import { Form, FormControl, FormField, FormItem, FormLabel } from '../components/form'
 
 interface ProfileField {
   key: string
@@ -30,14 +39,21 @@ export function ProfilePersonalInfo() {
     lastName: 'Rao P'
   })
 
-  useEffect(()=>{
-    async function getdata(){
+  useEffect(() => {
+    async function getdata() {
       const response = await fetch("http://localhost:8081/auth/userdetails")
       const data = await response.json()
       console.log(data);
     }
     getdata()
-  },[])
+  }, [])
+
+  type MiniForm<T extends Record<string, unknown>> = {
+    formType: UseFormReturn<T>
+    fields: T[]
+  }
+
+  const form = fullnameForm()
 
   const fields: ProfileField[] = [
     { key: 'legalName', label: 'Legal name', value: `${formData.firstName} ${formData.lastName}`, action: 'edit' },
@@ -59,9 +75,82 @@ export function ProfilePersonalInfo() {
     setEditingField(null)
   }
 
+  const onSubmit = async (values: FullnameType) => {
+    await fetch("http://localhost:8088/profile/fullname/upsert", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(values),
+    })
+  }
+
   return (
     <Card className="max-w-2xl mx-auto">
       <CardContent className="p-6">
+        <Accordion type="multiple">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>
+              <div>
+                <h2 className="text-lg font-medium">Legal name</h2>
+                <div>{"Hitish Rao P"}</div>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                  <FormField
+                    control={form.control}
+                    name="firstname"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {field.name}
+                        </FormLabel>
+                        <FormControl>
+                          <Input type="text" {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="lastname"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {field.name}
+                        </FormLabel>
+                        <FormControl>
+                          <Input type="text" {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit">Save</Button>
+                </form>
+              </Form>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First name on ID</Label>
+                  <Input
+                    id="firstName"
+                    value={formData.firstName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last name on ID</Label>
+                  <Input
+                    id="lastName"
+                    value={formData.lastName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                  />
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
         <h1 className="text-2xl font-semibold mb-6">Personal info</h1>
         <div className="space-y-6">
           {fields.map((field) => (

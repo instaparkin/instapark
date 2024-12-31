@@ -19,6 +19,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@instapark/types": "workspace:^",
     "@instapark/typescript-config": "workspace:^",
     "@types/react": "^18.3.12"
   }

@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken"
 import UserMetadata from "supertokens-node/recipe/usermetadata";
 export { signOut } from "supertokens-auth-react/recipe/session";
 export * as Session from "supertokens-node/recipe/session";
@@ -15,3 +16,5 @@ export { SessionAuth, getAccessToken, getUserId, getAccessTokenPayloadSecurely }
 export { useSessionContext } from "supertokens-auth-react/recipe/session";
 export { getUserFromId } from "./src/actions/get-user-from-id";
 export { UserMetadata }
+export { jwt }
+export { getKey, jwks } from "./src/actions/websocket-auth"

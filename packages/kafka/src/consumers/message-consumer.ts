@@ -5,13 +5,13 @@ import { Server } from "socket.io";
 import { Message } from "@instapark/types";
 
 interface MessageConsumerProps {
-    socket: Server
+    io: Server
     fromBeginning?: boolean;
 }
 
 const redis = new Redis();
 
-export const messageConsumer = async ({ fromBeginning = false, socket }: MessageConsumerProps) => {
+export const messageConsumer = async ({ fromBeginning = false, io }: MessageConsumerProps) => {
     const consumer = kafka.consumer({ groupId: kafkaConfig.MESSAGE_CONSUMER_GROUP });
 
     try {
@@ -35,13 +35,10 @@ export const messageConsumer = async ({ fromBeginning = false, socket }: Message
                     return;
                 }
                 try {
-                    const connectedSockets = await redis.scard(payload!.receiverId);
-                    if (connectedSockets > 0) {
-                        const receiverRooms = await redis.smembers(payload!.receiverId);
-                        receiverRooms.forEach((room) => {
-                            console.log(room);
-                            socket.to(room).emit("UNREAD", { ...payload, status: "Delivered" });
-                        });
+                    const connectedSockets = await io.in(payload!.receiverId).fetchSockets();
+                    console.log(connectedSockets.forEach(s => s.rooms));
+                    if (connectedSockets.length > 0) {
+                        io.to(payload!.receiverId).emit("UNREAD", { ...payload, status: "Delivered" });
                         await fetch("http://localhost:8084/messages/create", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },

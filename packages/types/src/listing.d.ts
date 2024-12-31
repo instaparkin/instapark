@@ -1,14 +1,5 @@
 export type Vehicle = "Car" | "Cycle" | "Bike"
 
-enum PlaceType {
-    House,
-    Barn,
-    Cabin,
-    Castle,
-    Hotel,
-    Farm
-  }
-
 export interface Listing {
     listingId: string;
     userId: string;
