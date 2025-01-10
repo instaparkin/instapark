@@ -2,26 +2,39 @@
 
 import { Page } from '../components/page'
 import { ListingsTools } from './listings-tools'
-import { ListingsDetails } from './listings-details'
 import { useEffect, useState } from 'react'
+import { ListingsView } from './listings-view-hosting'
+import { RootState, useSelector } from '@instapark/state'
+import { axios, logger } from '@instapark/utils'
+import { Listing } from '@instapark/types'
 
 export const ListingsMain = () => {
-  const [data, setData] = useState([{}])
-  useEffect(()=>{
-    async function fetchData(){
-      const response = await fetch("http://localhost:8086/search/*")
-      const data = await response.json();
-      console.log(data);
-      
-      setData(data);
-    }
-    fetchData()
-  },[]);
+
+  const [data, setData] = useState<Listing[]>([])
+
+
+  useEffect(() => {
+    axios.post(`http://localhost:8080/search/*`, {
+        "searches": [
+          {
+            "collection": "listing_1",
+            "q": "*"
+          }
+        ]
+    })
+      .then(res => {
+        console.log(res.data);
+        setData(res.data.results[0]?.hits?.map((hit: any) => hit.document) || [])
+      })
+      .catch((error) => {
+        logger.error(error)
+      })
+  }, [])
 
   return (
     <Page title='Listings'>
       <ListingsTools />
-      <ListingsDetails />
+      <ListingsView data={data} />
     </Page>
   )
 }

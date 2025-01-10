@@ -26,15 +26,15 @@ async function init() {
 
     app.use(middleware());
 
-    app.get("/", (req, res) => {
+    app.get("/search", (req, res) => {
         res.send("Search Server is up and running");
     })
 
     app.use("/search", searchRoute);
 
-    app.use("/kafka", kafkaRoute);
+    app.use("/search/kafka", kafkaRoute);
 
-    app.use("/olamaps", verifySession(), olaMapsRoute);
+    app.use("/search/olamaps", verifySession(), olaMapsRoute);
 
     app.use(errorHandler());
 

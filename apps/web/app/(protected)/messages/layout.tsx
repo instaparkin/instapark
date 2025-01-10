@@ -4,13 +4,13 @@ import React, { ReactNode } from 'react'
 
 const MessageLayout = ({ children }: { children: ReactNode }) => {
     return (
-        <SidebarProvider>
-            <AppSidebar />
+        // <SidebarProvider>
+            // <AppSidebar />
             <main>
                 {children}
-                <SidebarTrigger />
+                {/* <SidebarTrigger /> */}
             </main>
-        </SidebarProvider>
+        // </SidebarProvider>
     )
 }
 

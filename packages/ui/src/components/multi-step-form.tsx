@@ -80,7 +80,7 @@ export const MultiStepForm = <T extends Record<string, unknown>>({
         setSubmitted();
         try {
             onSubmit({ data });
-            const deleteResponse = await fetch(`http://localhost:8087/listings/redis/del/${redisPrefix}-${redisSuffix}`, {
+            const deleteResponse = await fetch(`http://localhost:8080/listings/redis/del/${redisPrefix}-${redisSuffix}`, {
                 method: "DELETE",
             });
 

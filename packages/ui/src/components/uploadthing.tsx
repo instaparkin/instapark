@@ -4,7 +4,7 @@ import { OurFileRouter } from "@instapark/listings";
 import { generateUploadButton } from "@uploadthing/react";
 
 export const UploadButton = generateUploadButton<OurFileRouter>({
-    url: "http://localhost:8087/listings/uploadthing",
+    url: "http://localhost:8080/listings/uploadthing",
 });
 
 export const UploadThingButton = () => {

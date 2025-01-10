@@ -47,9 +47,7 @@ export const searchListings = createAsyncThunk<Listing[], SearchListingsProps, {
                 const errorText = await response.text();
                 throw new Error(`API Error: ${response.status} - ${errorText}`);
             }
-
             const result = await response.json();
-            console.log(result);
             const listings: Listing[] = result?.results[0]?.hits?.map((hit: any) => hit.document) || [];
             return listings;
         } catch (error) {

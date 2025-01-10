@@ -25,6 +25,10 @@ async function init() {
     
     app.use(middleware());
     
+    app.get("/listings", (req, res) => {
+        res.send("Listings server is up and Running")
+    })
+
     app.use("/listings", listingsRouter);
     
     app.use("/listings/uploadthing", uploadthingExpress);

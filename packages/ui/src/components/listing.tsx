@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter } from './card'
 import { Button } from './button'
 import { GraduationCap, Grid2X2, Heart, Share, Shield, Star } from 'lucide-react'
 import Link from 'next/link'
-import { Listing as ListingType } from "@instapark/types"
+import { Fullname, Listing as ListingType } from "@instapark/types"
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
 import Image from 'next/image'
@@ -13,6 +13,8 @@ import 'swiper/css/pagination'
 import { PricingCalculator } from '../listings/pricing-calculator'
 import { PricingDrawer } from '../listings/pricing-drawer'
 import { useSessionContext } from '@instapark/auth'
+import { useEffect, useState } from 'react'
+import { axios, logger } from '@instapark/utils'
 
 interface ImageSwiperProps {
     content: string[]
@@ -65,18 +67,28 @@ const ListingHeader: React.FC<ListingHeaderProps> = ({ title, onShare, onSave })
 
 const ListingPhotoGrid: React.FC<PhotoGridProps> = ({ photos, onShowAllPhotos }) => {
     return (
-        <div className="grid grid-cols-4 gap-2 mb-8 relative">
-            {photos?.slice(0, 5).map((photo, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-8 relative h-[300px] md:h-[400px]">
+            <div className="relative md:col-span-2 md:row-span-2 h-full">
+                <Image
+                    src={photos?.[0] || '/placeholder.svg'}
+                    alt="Main property photo"
+                    fill
+                    className="rounded-lg object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    priority
+                />
+            </div>
+            {photos?.slice(1, 5).map((photo, index) => (
                 <div
                     key={index}
-                    className={`relative ${index === 0 ? 'col-span-2 row-span-2' : ''}`}
+                    className="relative hidden md:block h-[198px]"
                 >
                     <Image
                         src={photo}
-                        alt={`Property photo ${index + 1}`}
-                        width={index === 0 ? 800 : 400}
-                        height={index === 0 ? 200 : 100}
-                        className="rounded-lg object-cover w-full h-full"
+                        alt={`Property photo ${index + 2}`}
+                        fill
+                        className="rounded-lg object-cover"
+                        sizes="25vw"
                     />
                 </div>
             ))}
@@ -92,6 +104,8 @@ const ListingPhotoGrid: React.FC<PhotoGridProps> = ({ photos, onShowAllPhotos })
     )
 }
 
+
+
 function ListingHostInfo({
     userId: HostUserId,
     name,
@@ -104,6 +118,8 @@ function ListingHostInfo({
     responseTime = "within an hour"
 }: HostInfoProps) {
     const session = useSessionContext();
+
+    const [fullname, setFullname] = useState<Fullname>();
 
     if (session.loading) {
         return null
@@ -123,6 +139,17 @@ function ListingHostInfo({
         })
     }
 
+    useEffect(() => {
+        axios.get<Fullname>(`http://localhost:8088/profile/fullname/get/${userId}`)
+            .then(res => {
+                console.log(res.data)
+                setFullname(res.data)
+            })
+            .catch((error) => {
+                logger.error(error)
+            })
+    }, [])
+
     return (
         <div className="space-y-6">
             <h2 className="text-2xl font-semibold">Meet your Host</h2>
@@ -138,8 +165,8 @@ function ListingHostInfo({
                             </div>
                         </div>
                         <div>
-                            <h3 className="text-xl font-semibold">{name}</h3>
-                            <p className="text-sm text-muted-foreground">Host</p>
+                            <h3 className="text-xl font-semibold">{fullname?.fullname}</h3>
+                            <p className="text-sm text-muted-foreground">{fullname?.fullname}</p>
                         </div>
                     </div>
 

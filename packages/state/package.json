@@ -8,6 +8,7 @@
     "check-types": "tsc --noEmit --pretty"
   },
   "dependencies": {
+    "@instapark/utils": "workspace:^",
     "@reduxjs/toolkit": "^2.3.0",
     "geojson": "^0.5.0",
     "react": "^18.3.1",

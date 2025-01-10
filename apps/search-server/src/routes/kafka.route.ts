@@ -1,5 +1,4 @@
 import express from "express";
-import { consumeMessage } from "@instapark/search";
 
 const router = express.Router();
 

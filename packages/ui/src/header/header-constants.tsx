@@ -12,7 +12,7 @@ export const HEADER_PROTECTED_ITEMS = {
       items: [
         {
           icon: <IoTodayOutline />,
-          link: "/today",
+          link: "/hosting/today",
           name: "Today"
         },
         {
@@ -27,7 +27,7 @@ export const HEADER_PROTECTED_ITEMS = {
         },
         {
           icon: <TbDeviceIpadDollar />,
-          link: "/earnings",
+          link: "/hosting/earnings",
           name: "Earnings"
         },
       ]
@@ -52,11 +52,49 @@ export const HEADER_PROTECTED_ITEMS = {
 
 export const HEADER_PUBLIC_ITEMS = [
   {
-    name : "Sign Up",
-    link : "/auth"
+    name: "Sign Up",
+    link: "/auth"
   },
   {
-    name : "Sign In",
-    link : "/auth"
+    name: "Sign In",
+    link: "/auth"
   }
 ]
+
+
+type HasPermissionType = {
+  authed: boolean
+  hostingPage: boolean
+}
+
+export const hasPermission = ({ authed, hostingPage }: HasPermissionType) => {
+  return HEADER_CONFIG.some(
+    (config) => config.authed === authed && config.hostingPage === hostingPage
+  );
+};
+
+export const HEADER_CONFIG = [
+  {
+    authed: true,
+    hostingPage: true
+  },
+  {
+    authed: true,
+    hostingPage: false
+  },
+  {
+    authed: false,
+    hostingPage: false
+  }
+]
+
+export const trying = {
+  authed: {
+    hostingPage: {
+      view: true
+    }
+  },
+  unauthed:{
+    
+  }
+}

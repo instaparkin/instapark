@@ -6,10 +6,10 @@ import { Button } from "../components/button";
 import { Input } from "../components/input";
 import { Send } from 'lucide-react';
 import { useSessionContext } from "@instapark/auth";
-import { initSocketConnection } from "../components/socket";
+import { useSocket } from "../components/socket";
 import { MessagesSidebar } from "./messages-sidebar";
 import { Page } from "../components/page";
-import { GLOBAL_CONFIG } from "@instapark/utils";
+import { axios, GLOBAL_CONFIG, logger } from "@instapark/utils";
 import { Socket } from "socket.io-client";
 import { MessagesScroll } from "./messages-scroll"
 import { Message } from "@instapark/types";
@@ -28,10 +28,10 @@ export function MessagesChat({ receiverId }: MessagesChatProps) {
     const [unreadMessages, setUnreadMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState("");
     const [online, setOnline] = useState<OnlineStatus>();
-    const [socket, setSocket] = useState<Socket | null>(null);
+    const { socket } = useSocket()
 
     console.log(online);
-    
+
     const session = useSessionContext();
 
     if (session.loading) {
@@ -48,30 +48,21 @@ export function MessagesChat({ receiverId }: MessagesChatProps) {
             setMessages(prev => [...prev, messages]);
         });
         return () => {
-            socket.disconnect();
-        };
+            socket.disconnect()
+        }
     }, [socket, userId, receiverId]);
 
     useEffect(() => {
-        async function makeConnection() {
-            try {
-                const socketInstance = await initSocketConnection();
-                setSocket(socketInstance);
-                const response = await fetch(`http://localhost:8084/messages/get/${userId}/${receiverId}`)
-                const data = await response.json();
-                setMessages((prev) => [...prev, ...data]);
-                socketInstance.on(GLOBAL_CONFIG.CHAT_SERVER.PSTATUS_EVENT, (status) => {
-                    setOnline(status);
-                });
-
-            } catch (error) {
-                console.error("Socket connection failed:", error);
+        axios.get(`http://localhost:8084/messages/get/${userId}/${receiverId}`)
+            .then((res) => {
+                setMessages((prev) => [...prev, ...res.data]);
+            })
+            .catch((error) => {
+                logger.error(error)
+            })
+            return () => {
+                socket.disconnect()
             }
-        }
-        makeConnection();
-        return () => {
-            socket?.disconnect();
-        };
     }, [socket, receiverId]);
 
     const handleSendMessage = async () => {
@@ -102,6 +93,9 @@ export function MessagesChat({ receiverId }: MessagesChatProps) {
             setMessages(data);
         }
         fetchUpdatedMessages();
+        return () => {
+            socket.disconnect()
+        }
     }, [unreadMessages, socket, userId, receiverId]);
 
     return (

@@ -1,64 +1,62 @@
 import kafkaConfig from "../../kafka-config.json";
 import { kafka } from "../kafka/kafka";
-import { Redis } from "ioredis"
 import { Server } from "socket.io";
 import { Message } from "@instapark/types";
+import { axios, GLOBAL_CONFIG } from "@instapark/utils";
+import { logger } from "@instapark/utils";
 
 interface MessageConsumerProps {
-    io: Server
+    io: Server;
     fromBeginning?: boolean;
 }
 
-const redis = new Redis();
+/**
+ * Function used in both message read and unread event
+ * @param payload 
+ */
+const createMessage = async (payload: Message) => {
+    try {
+        const response = await axios.post("http://localhost:8084/messages/create", payload);
+        logger.info("Message persisted:", response.data);
+    } catch (error) {
+        logger.error("Error persisting message:", error);
+    }
+};
 
+/**
+ * Kafka Consumer to process chat messages.
+ * For each message it checks if the users has any other tabs/sockets opened then it will emit the message to all the sockets.
+ * First the message is created in the database.
+ * @param param0 
+ */
 export const messageConsumer = async ({ fromBeginning = false, io }: MessageConsumerProps) => {
     const consumer = kafka.consumer({ groupId: kafkaConfig.MESSAGE_CONSUMER_GROUP });
 
-    try {
-        await consumer.connect();
+    await consumer.connect();
 
-        await consumer.subscribe({ topic: /^chat-.*/, fromBeginning });
-        /**
-         * Emit the received message from the sender to all the connected sockets of the receiver
-         */
-        await consumer.run({
-            eachMessage: async ({ message }) => {
-                let payload: Message | null = null;
-                try {
-                    const messageValue = message.value?.toString();
-                    if (messageValue) {
-                        payload = await JSON.parse(JSON.parse(messageValue).data);
-                        console.log("Kafka payload:", payload);
-                    }
-                } catch (error) {
-                    console.error("Error parsing Kafka message payload:", error);
-                    return;
-                }
-                try {
-                    const connectedSockets = await io.in(payload!.receiverId).fetchSockets();
-                    console.log(connectedSockets.forEach(s => s.rooms));
-                    if (connectedSockets.length > 0) {
-                        io.to(payload!.receiverId).emit("UNREAD", { ...payload, status: "Delivered" });
-                        await fetch("http://localhost:8084/messages/create", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ ...payload, status: "Delivered" }),
-                        });
-                    } else {
-                        console.log("User not online");
+    await consumer.subscribe({ topic: /^chat-.*/, fromBeginning });
 
-                        await fetch("http://localhost:8084/messages/create", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(payload),
-                        });
-                    }
-                } catch (error) {
-                    console.error("Error processing Kafka message:", error);
-                }
-            },
-        });
-    } catch (error) {
-        console.error("Kafka consumer error:", error);
-    }
-};
+    await consumer.run({
+        eachMessage: async ({ message }) => {
+
+            const messageValue = message.value?.toString() as string;
+
+            const payload = JSON.parse(JSON.parse(messageValue).data) as Message;
+
+            logger.info("Kafka Payload", payload);
+
+            const receiverSockets = await io.in(payload.receiverId).fetchSockets();
+
+            if (receiverSockets) {
+                payload.status = "Delivered";
+                await createMessage(payload)
+                    .then(() => {
+                        io.to(payload.receiverId).emit(GLOBAL_CONFIG.CHAT_SERVER.UNREAD_EVENT, payload);
+                    });
+            } else {
+                payload.status = "Sent"
+                createMessage(payload);
+            }
+        }
+    })
+}

@@ -14,16 +14,6 @@ export const UserButton = () => {
         return null;
     }
 
-    useEffect(() => {
-        const fetchSomething = async () => {
-            try {
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        fetchSomething();
-    }, [])
-
     if (session.userId) {
         return (
             <Avatar>

@@ -1,17 +1,24 @@
+"use client"
+
 import { Message } from "@instapark/types"
 import { MessageStatus } from "./messages-status"
 import { cn } from "../utils/cn"
 import dayjs from 'dayjs'
+import { useAuth } from "../hooks/use-auth"
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 
 dayjs.extend(localizedFormat);
 
 interface MessageBubbleProps {
     message: Message
-    isCurrentUser: boolean
 }
 
-export function MessageBubble({ message, isCurrentUser }: MessageBubbleProps) {
+export function MessageBubble({ message }: MessageBubbleProps) {
+
+    const { userId } = useAuth()!
+
+    const isCurrentUser = message.senderId === userId;
+
     const date = dayjs(message.createdAt).format("LT");
     return (
         <div className={cn("flex", isCurrentUser ? "justify-end" : "justify-start")}>

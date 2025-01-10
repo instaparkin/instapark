@@ -8,11 +8,15 @@
     "check-types": "tsc --noEmit --pretty"
   },
   "devDependencies": {
-    "@instapark/typescript-config": "workspace:^"
+    "@instapark/types": "workspace:^",
+    "@instapark/typescript-config": "workspace:^",
+    "@types/react": "^19.0.2"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
     "@instapark/auth": "workspace:^",
+    "@instapark/utils": "workspace:^",
+    "react": "^19.0.0",
     "react-hook-form": "^7.53.2",
     "zod": "^3.23.8"
   }

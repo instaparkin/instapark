@@ -2,6 +2,7 @@
   "name": "@instapark/listings-server",
   "version": "1.0.0",
   "scripts": {
+    "start" : "node dist/src/listings-server",
     "dev": "tsx watch src/listings-server.ts",
     "build": "rm -rf dist && tsc",
     "lint": "eslint .",
@@ -17,8 +18,10 @@
     "ioredis": "^5.4.1"
   },
   "devDependencies": {
+    "@instapark/typescript-config": "workspace:^",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "tsx": "^4.19.2"
-  }
+  },
+  "packageManager": "pnpm@8.15.0"
 }

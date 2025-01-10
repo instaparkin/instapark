@@ -26,3 +26,4 @@ export { HeaderSkeleton } from "./src/header/header-skeleton"
 export { MessagesChat } from "./src/messages/messages-chat";
 export * from "./src/components/sidebar";
 export { AppSidebar } from "./src/components/app-sidebar";
+export { WhatsAppInterface } from "./src/messages/messages-new"

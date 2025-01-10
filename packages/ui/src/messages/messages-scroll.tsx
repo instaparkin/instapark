@@ -41,7 +41,6 @@ export function MessagesScroll({ messages, userId, unreadMessages = [] }: Messag
                   <MessageBubble
                     key={index}
                     message={message}
-                    isCurrentUser={message.senderId === userId}
                   />
                 ))}
               </div>
@@ -61,7 +60,6 @@ export function MessagesScroll({ messages, userId, unreadMessages = [] }: Messag
               <MessageBubble
                 key={index}
                 message={message}
-                isCurrentUser={message.senderId === userId}
               />
             ))}
           </div>

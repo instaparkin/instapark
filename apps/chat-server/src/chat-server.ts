@@ -3,7 +3,6 @@ import cors from "cors";
 import { config } from "dotenv";
 import { createServer } from "http";
 import { ensureSuperTokensInit, errorHandler, getKey, jwt, middleware, supertokens } from "@instapark/auth";
-import { SocketBackend } from "@instapark/chat";
 import contactsRouter from "./routes/contacts.route"
 import { connect } from "mongoose";
 import messageRouter from "./routes/message.route"
@@ -11,6 +10,7 @@ import { GLOBAL_CONFIG } from "@instapark/utils"
 import { messageConsumer } from "@instapark/kafka";
 import { handleConnection, handleDisconnection, handleOnMessage, handleOnRead } from "./socket/socket-actions";
 import { Contact, Message } from "@instapark/types";
+import { SocketBackend } from "./socket/socket-backend";
 
 config();
 
@@ -73,8 +73,9 @@ async function init() {
 
         socket.on(GLOBAL_CONFIG.CHAT_SERVER.READ_EVENT, async (messages: Message[]) => await handleOnRead(messages, socket));
 
-        socket.on(GLOBAL_CONFIG.CHAT_SERVER.DISCONNECTION_EVENT, async () => await handleDisconnection(socket, io));
     });
+
+    io.on(GLOBAL_CONFIG.CHAT_SERVER.DISCONNECTION_EVENT, async (socket) => await handleDisconnection(socket, io))
 
     app.get('/chat', (req, res) => {
         res.send('Chat Server is up and running');

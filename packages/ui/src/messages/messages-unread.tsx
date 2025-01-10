@@ -18,10 +18,6 @@ export function UnreadMessages({ userId, socket }: UnreadMessagesProps) {
         socket.on(GLOBAL_CONFIG.CHAT_SERVER.UNREAD_EVENT, (message) => {
             setUnreadMessages((prev) => [...prev, message]);
         });
-
-        return () => {
-            socket.disconnect();
-        };
     }, [socket, userId]);
 
     if (unreadMessages.length === 0) {

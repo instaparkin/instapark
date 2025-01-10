@@ -1,8 +1,0 @@
-{
-    "extends" : "@instapark/typescript-config/packages.json",
-    "compilerOptions": {
-        "rootDir": ".",
-        "outDir": "dist"
-    },
-    "include": ["socket.d.ts"]
-}

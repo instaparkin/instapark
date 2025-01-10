@@ -10,7 +10,7 @@ import { Contact } from '@instapark/types'
 import { Avatar, AvatarFallback } from '../components/avatar'
 import { useRouter, redirect } from "next/navigation";
 import { NoResults } from '../components/no-results'
-import { initSocketConnection } from '../components/socket'
+import { useSocket } from '../components/socket'
 import { GLOBAL_CONFIG } from '@instapark/utils'
 
 interface MessagesSidebarProps {
@@ -20,11 +20,11 @@ interface MessagesSidebarProps {
 export const MessagesSidebar = ({ userId }: MessagesSidebarProps) => {
     const [contacts, setContacts] = useState<Contact[]>([]);
     const router = useRouter();
+    const { socket } = useSocket();
 
     useEffect(() => {
         async function fetchContacts() {
             try {
-                const socket = await initSocketConnection();
                 socket?.on(GLOBAL_CONFIG.CHAT_SERVER.UNREAD_EVENT, async (message) => {
                     const response = await fetch(`http://localhost:8084/contacts/get/${userId}`);
                     const data = await response.json();
@@ -32,7 +32,7 @@ export const MessagesSidebar = ({ userId }: MessagesSidebarProps) => {
                 })
                 const response = await fetch(`http://localhost:8084/contacts/get/${userId}`);
                 const data = await response.json();
-                
+
                 setContacts(data.contacts);
             } catch (error) {
                 throw new Error("Failed to fetch contacts: " + error);

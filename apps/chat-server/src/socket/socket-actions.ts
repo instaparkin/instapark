@@ -1,8 +1,9 @@
 import { Server, Socket } from "socket.io";
-import { GLOBAL_CONFIG } from "@instapark/utils";
+import { GLOBAL_CONFIG, logger } from "@instapark/utils";
 import { Message } from "@instapark/types";
 import { messageProducer } from "@instapark/kafka";
 import { Message as MessageModel } from "../models/messages.model";
+import { redis } from "../redis/redis-server";
 
 /**
  * Handles a new socket connection event.
@@ -10,25 +11,34 @@ import { Message as MessageModel } from "../models/messages.model";
  * Upon successful authentication, the user's ID is retrieved from the decoded JWT token,
  * and the socket ID is associated with the user ID in Redis.
  * The user's connection status is updated to "online".
+ * Fetch the unread messages for the user.
  * 
  * @param {Socket} socket - The socket object representing the current connection.
  * @throws {Error} Throws an error if the connection setup fails.
  */
 export const handleConnection = async (socket: Socket) => {
     try {
+
+        console.log("Client connected " + socket.id);
+
         const userId: string = socket.decoded.sub;
         socket.join(userId);
+        /**
+         * Whenver a user connects it is emitted so that status can be seen in real time.
+         */
         socket.broadcast.emit(GLOBAL_CONFIG.CHAT_SERVER.PSTATUS_EVENT, {
             userId,
-            status: true
+            status: "Online"
         });
-        const unreadMessages = await MessageModel.find({ receiverId: userId, status: { $ne: "Read" } });
-        console.log(unreadMessages);
+        /**
+         * Add the userId to redis set.
+         * This is used to retriever online users whenever two users are chatting.
+         */
+        await redis.sadd("INSTAPARK_ONLINE_USERS", userId);
 
-        unreadMessages.forEach(m => {
-            socket.to(userId).emit(GLOBAL_CONFIG.CHAT_SERVER.UNREAD_EVENT, m);
-        })
-        console.log(socket.rooms);
+        //Fetch the unread messages upon connection.
+        const unreadMessages = await MessageModel.find({ receiverId: userId, status: { $ne: "Read" } });
+        const count = unreadMessages.length
     } catch (error) {
         throw new Error("Failed to create socket connection: " + error);
     }
@@ -49,16 +59,16 @@ export const handleDisconnection = async (socket: Socket, io: Server) => {
         if (isDisconnected) {
             socket.emit(GLOBAL_CONFIG.CHAT_SERVER.PSTATUS_EVENT, {
                 userId: socket.decoded.sub,
-                status: false
+                status: "Offline"
             });
         }
         socket.emit(GLOBAL_CONFIG.CHAT_SERVER.PSTATUS_EVENT, {
             userId: socket.decoded.sub,
-            status: true
+            status: "Online"
         });
-        console.log(socket.id + "Client disconnected");
+        logger.info(socket.id + "Client disconnected");
     } catch (error) {
-        console.error("Failed to handle socket disconnection:", error);
+        logger.error("Failed to handle socket disconnection:", error);
     }
 }
 
@@ -96,34 +106,31 @@ export const handleOnMessage = async (message: Message) => {
  * @throws {Error} Logs any errors encountered while updating the message status.
  */
 export const handleOnRead = async (messages: Message[], socket: Socket) => {
+
     try {
-        // Update the status of all provided messages in the database
-        await Promise.all(
-            messages.map((message) =>
-                MessageModel.updateMany(
-                    { senderId: message.senderId, receiverId: message.receiverId }, // Update by unique message ID
-                    { $set: { status: "Read" } }
+        if (messages.length > 0) {
+            // Update the status of all provided messages in the database
+            await Promise.all(
+                messages.map((message) =>
+                    MessageModel.updateMany(
+                        { senderId: message.senderId, receiverId: message.receiverId }, // Update by unique message ID
+                        { $set: { status: "Read" } }
+                    )
                 )
-            )
-        );
+            );
 
-        // Notify the sender that the messages have been read
-        const firstMessage = messages[0]; // Assume messages are from the same sender
-        if (!firstMessage) throw new Error("No messages provided for read event.");
+            // Notify the sender that the messages have been read
+            const firstMessage = messages[0]; // Assume messages are from the same sender
+            if (!firstMessage) throw new Error("No messages provided for read event.");
 
-        const updatedMessages = messages.map((m) => ({ ...m, status: "Read" }));
-        socket.to(firstMessage.senderId).emit(
-            GLOBAL_CONFIG.CHAT_SERVER.READ_EVENT,
-            updatedMessages
-        );
-
-        console.log(`Updated ${messages.length} messages to "Read" for senderId: ${firstMessage.senderId}`);
+            const updatedMessages = messages.map((m) => ({ ...m, status: "Read" }));
+            socket.to(firstMessage.senderId).emit(
+                GLOBAL_CONFIG.CHAT_SERVER.READ_EVENT,
+                updatedMessages[updatedMessages.length -1]
+            );
+            console.log("Read event sent to the client");
+        }
     } catch (error) {
-        console.error("Failed to update message status to 'Read':", error);
-        throw new Error("Failed to update message status.");
+        throw new Error("Failed to update message status." + error);
     }
 };
-
-export const handleRefetchData = async () => {
-
-}

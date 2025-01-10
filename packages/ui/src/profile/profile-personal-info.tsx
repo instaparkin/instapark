@@ -16,6 +16,7 @@ import {
   AccordionTrigger,
 } from "../components/accordion"
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../components/form'
+import { axios, logger } from '@instapark/utils'
 
 interface ProfileField {
   key: string
@@ -30,6 +31,8 @@ export function ProfilePersonalInfo() {
   if (session.loading) {
     return null
   }
+
+  const userId = session.userId
   const email = session.accessTokenPayload;
   console.log(session);
 
@@ -39,6 +42,11 @@ export function ProfilePersonalInfo() {
     lastName: 'Rao P'
   })
 
+  const [fullname, setFullname] = useState<FullnameType>();
+
+  console.log(fullname);
+  
+
   useEffect(() => {
     async function getdata() {
       const response = await fetch("http://localhost:8081/auth/userdetails")
@@ -46,6 +54,16 @@ export function ProfilePersonalInfo() {
       console.log(data);
     }
     getdata()
+  }, []);
+
+  useEffect(() => {
+    axios.get(`http://localhost:8088/profile/fullname/get/${userId}`)
+      .then(res => {
+        setFullname(res.data)
+      })
+      .catch((error) => {
+        logger.error(error);
+      })
   }, [])
 
   type MiniForm<T extends Record<string, unknown>> = {
@@ -53,7 +71,8 @@ export function ProfilePersonalInfo() {
     fields: T[]
   }
 
-  const form = fullnameForm()
+  const form = fullnameForm() as UseFormReturn<FullnameType>
+
 
   const fields: ProfileField[] = [
     { key: 'legalName', label: 'Legal name', value: `${formData.firstName} ${formData.lastName}`, action: 'edit' },
@@ -157,40 +176,6 @@ export function ProfilePersonalInfo() {
             <div key={field.key} className="border-b border-gray-200 pb-6 last:border-0">
               {editingField === 'legalName' && field.key === 'legalName' ? (
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-lg font-medium">Legal name</h2>
-                    <Button
-                      variant="ghost"
-                      className="text-gray-600"
-                      onClick={() => setEditingField(null)}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                  <p className="text-sm text-gray-500">
-                    Make sure this matches the name on your government ID.
-                  </p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First name on ID</Label>
-                      <Input
-                        id="firstName"
-                        value={formData.firstName}
-                        onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last name on ID</Label>
-                      <Input
-                        id="lastName"
-                        value={formData.lastName}
-                        onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
-                      />
-                    </div>
-                  </div>
-                  <Button onClick={handleSave} className="mt-2">
-                    Save
-                  </Button>
                 </div>
               ) : (
                 <div className="flex justify-between items-start">

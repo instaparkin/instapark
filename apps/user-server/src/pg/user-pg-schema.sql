@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS profile {
+    userId VARCHAR(255) PRIMARY KEY,
+    firstName VARCHAR(100) NOT NULL,
+    lastName VARCHAR(100) NOT NULL
+}

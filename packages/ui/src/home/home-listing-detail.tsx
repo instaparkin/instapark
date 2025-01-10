@@ -15,7 +15,7 @@ export function HomeListingDetail({ listingId }: ListingDetailProps) {
 
   useEffect(() => {
     async function fetchListing() {
-      const response = await fetch(`http://localhost:8087/listings/get/${listingId}`);
+      const response = await fetch(`http://localhost:8080/listings/get/${listingId}`);
       const data = await response.json()
       setListing(data);
     }

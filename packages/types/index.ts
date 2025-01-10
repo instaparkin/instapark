@@ -4,9 +4,13 @@ export {
     type ApiResponse,
     type Query,
     type UseSearchProps,
-    type Vehicle
+    PlaceType,
+    Vehicle
 } from "./src/listing";
 export {
     type Message,
     type Contact
 } from "./src/chat"
+export {
+    type Fullname
+} from "./src/profile"

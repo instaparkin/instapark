@@ -1,0 +1,10 @@
+{"content":"kkn","createdAt":"2025-01-04T16:13:03.798Z","level":"info","message":"Kafka Payload","receiverId":"2ead0956-d926-4551-a16b-6288a02ed9e4","senderId":"4fbd9713-16e4-4715-b7d4-a4290b9a5681","status":"Sending","updatedAt":"2025-01-04T16:13:03.798Z"}
+{"level":"info","message":"Message persisted:"}
+{"content":"lkn","createdAt":"2025-01-04T16:16:21.785Z","level":"info","message":"Kafka Payload","receiverId":"4fbd9713-16e4-4715-b7d4-a4290b9a5681","senderId":"2ead0956-d926-4551-a16b-6288a02ed9e4","status":"Sending","updatedAt":"2025-01-04T16:16:21.785Z"}
+{"level":"info","message":"Message persisted:"}
+{"content":"asdad","createdAt":"2025-01-04T16:16:29.684Z","level":"info","message":"Kafka Payload","receiverId":"4fbd9713-16e4-4715-b7d4-a4290b9a5681","senderId":"2ead0956-d926-4551-a16b-6288a02ed9e4","status":"Sending","updatedAt":"2025-01-04T16:16:29.684Z"}
+{"level":"info","message":"Message persisted:"}
+{"content":"sdad","createdAt":"2025-01-04T16:16:57.390Z","level":"info","message":"Kafka Payload","receiverId":"4fbd9713-16e4-4715-b7d4-a4290b9a5681","senderId":"2ead0956-d926-4551-a16b-6288a02ed9e4","status":"Sending","updatedAt":"2025-01-04T16:16:57.390Z"}
+{"level":"info","message":"Message persisted:"}
+{"content":"hi","createdAt":"2025-01-04T16:19:27.321Z","level":"info","message":"Kafka Payload","receiverId":"4fbd9713-16e4-4715-b7d4-a4290b9a5681","senderId":"2ead0956-d926-4551-a16b-6288a02ed9e4","status":"Sending","updatedAt":"2025-01-04T16:19:27.321Z"}
+{"level":"info","message":"Message persisted:"}

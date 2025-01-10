@@ -10,6 +10,7 @@
   "dependencies": {
     "@instapark/listings": "workspace:^",
     "@instapark/search": "workspace:^",
+    "@instapark/utils": "workspace:^",
     "ioredis": "^5.4.1",
     "kafkajs": "^2.2.4",
     "socket.io": "^4.8.1"

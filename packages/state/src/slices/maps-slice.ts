@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8086/olamaps';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/search/olamaps';
 
 export interface MapData {
     [key: string]: unknown;

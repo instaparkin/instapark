@@ -1,5 +1,5 @@
 import React from 'react'
-import { Check } from 'lucide-react'
+import { Check, Timer } from 'lucide-react'
 import { Message } from "@instapark/types"
 
 interface DoubleTickProps {
@@ -9,6 +9,9 @@ interface DoubleTickProps {
 export const MessageStatus: React.FC<DoubleTickProps> = ({ status }) => {
     return (
         <div className="inline-flex">
+            {status === "Sending" && (
+                <Timer size={16} />
+            )}
             {status === 'Sent' && (
                 <Check size={16} className="text-gray-500" />
             )}

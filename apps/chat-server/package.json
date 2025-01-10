@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@instapark/auth": "workspace:^",
-    "@instapark/chat": "workspace:^",
     "@instapark/kafka": "workspace:^",
     "@instapark/utils": "workspace:^",
     "@types/jsonwebtoken": "^9.0.7",

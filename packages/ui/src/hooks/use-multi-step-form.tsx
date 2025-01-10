@@ -42,7 +42,7 @@ export const useMultiStepForm = <T extends Record<string, unknown>>({
       if (isSubmitted) return; 
       try {
         const formDataString = JSON.stringify(form.getValues());
-        await fetch(`http://localhost:8087/listings/redis/set`, {
+        await fetch(`http://localhost:8080/listings/redis/set`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

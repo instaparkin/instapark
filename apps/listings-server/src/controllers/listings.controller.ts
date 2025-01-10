@@ -28,3 +28,11 @@ export const getListing = async (req, res) => {
         res.status(500).json({ error: "Failed to Get listing", details: error.message });
     }
 }
+
+export const getAllListingsForUserId = async (req , res) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+} 

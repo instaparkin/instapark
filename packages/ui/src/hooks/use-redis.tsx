@@ -19,7 +19,7 @@ export const useRedis = (redisPrefix: string, redisSuffix: string) => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:8087/listings/redis/get/${redisPrefix}-${redisSuffix}`
+          `http://localhost:8080/listings/redis/get/${redisPrefix}-${redisSuffix}`
         );
         if (response.ok) {
           const jsonData = await response.json();

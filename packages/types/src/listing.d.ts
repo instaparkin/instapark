@@ -1,4 +1,10 @@
-export type Vehicle = "Car" | "Cycle" | "Bike"
+export enum PlaceType { "House", "Barn", "Cabin", "Castle", "Hotel", "Farm" }
+
+export enum Vehicle {
+    "Car",
+    "Cycle",
+    "Bike"
+}
 
 export interface Listing {
     listingId: string;

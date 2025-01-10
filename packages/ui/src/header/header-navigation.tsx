@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../components/dropdown-menu"
-import { HEADER_PROTECTED_ITEMS } from "./header-constants"
+import { HEADER_PROTECTED_ITEMS, HEADER_PUBLIC_ITEMS } from "./header-constants"
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { SwitchRoleButton } from '../components/switch-role-button'
@@ -18,9 +18,40 @@ import { SignOutButton } from '../auth/sign-out-button'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/card'
 import { UserButton } from '../auth/user-button'
 
-export const HeaderNavigation = () => {
+interface HeaderNavigationProps {
+  hasPermission: boolean
+}
+
+export const HeaderNavigation = ({ hasPermission }: HeaderNavigationProps) => {
+
+  if (!hasPermission) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger className='flex items-center gap-2 rounded-full border p-1.5'>
+          <Icon className='border-none'>
+            <LuAlignJustify />
+          </Icon>
+          <UserButton />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {
+            HEADER_PUBLIC_ITEMS.map((item) => {
+              return (
+                <Link key={item.name} href={item.link}>
+                  <DropdownMenuItem>
+                    {item.name}
+                  </DropdownMenuItem>
+                </Link>
+              )
+            })
+          }
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }
+
   return (
-    <div>
+    <>
       <div className='hidden md:block'>
         <DropdownMenu>
           <DropdownMenuTrigger className='flex items-center gap-2 rounded-full border p-1.5'>
@@ -29,7 +60,7 @@ export const HeaderNavigation = () => {
             </Icon>
             <UserButton />
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className='w-44'>
             {
               HEADER_PROTECTED_ITEMS.data.map((group, index) => {
                 return (
@@ -95,6 +126,6 @@ export const HeaderNavigation = () => {
           </SheetContent>
         </Sheet>
       </div>
-    </div>
+    </>
   )
 }

@@ -35,7 +35,16 @@ export const getUnreadMessages = async (req: Request, res: Response) => {
     if (!userId) {
       res.status(400).send("UserId is required");
     }
-    const unreadMessages = await Message.find({ receiverId: userId, status: { $ne: "Read" } }).sort({ createdAt: 1 });
+    const unreadMessages = await Message.find({
+      receiverId: userId,
+      $or: [
+        { status: { $exists: false } },
+        { status: { $ne: "Read" } }
+      ]
+    }).sort({ createdAt: 1 });
+    
+    console.log(unreadMessages);
+    
     res.status(200).json(unreadMessages);
   } catch (error) {
     res.status(500).json({ error: error });
