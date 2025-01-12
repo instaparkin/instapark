@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, VideoHTMLAttributes } from 'react'
+import React, { useState } from 'react'
 import { Button } from "../components/button"
 import { Card, CardContent, CardFooter } from "../components/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/select"
@@ -154,7 +154,7 @@ export function PricingCalculator({
                     Reserve Now
                 </Button>
                 <p className="text-center text-sm text-muted-foreground mt-2">
-                    You won't be charged yet
+                    {"You won't be charged yet"}
                 </p>
             </CardFooter>
         </Card>

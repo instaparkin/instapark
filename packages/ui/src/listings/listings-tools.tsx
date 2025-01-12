@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { AppDispatch, RootState, searchListings, useDispatch, useSelector } from '@instapark/state';
-import { Icon } from '../components/icon';
+import React, { useEffect, useState } from 'react';
+import { AppDispatch, searchListings, useDispatch } from '@instapark/state';
 import { AiOutlinePlus } from "react-icons/ai";
 import { SearchInput } from '../components/search-input';
 import Link from 'next/link';

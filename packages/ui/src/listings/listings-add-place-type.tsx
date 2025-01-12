@@ -10,9 +10,7 @@ import { BsHouseDoor } from "react-icons/bs";
 import { UseFormReturn } from "react-hook-form";
 import { PiFarm } from "react-icons/pi";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../components/form";
-import { fieldName } from "../utils/field-name";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
-import { useIsFirstRender } from "@mantine/hooks";
 
 export type PlaceTypeWithIcon = {
   type: PlaceType;

@@ -1,12 +1,12 @@
 "use client"
 
+import React from 'react'
 import { Page } from '../components/page'
 import { ListingsTools } from './listings-tools'
 import { useEffect, useState } from 'react'
 import { ListingsView } from './listings-view-hosting'
-import { RootState, useSelector } from '@instapark/state'
-import { axios, logger } from '@instapark/utils'
 import { Listing } from '@instapark/types'
+import axios from 'axios'
 
 export const ListingsMain = () => {
 
@@ -15,19 +15,20 @@ export const ListingsMain = () => {
 
   useEffect(() => {
     axios.post(`http://localhost:8080/search/*`, {
-        "searches": [
-          {
-            "collection": "listing_1",
-            "q": "*"
-          }
-        ]
+      "searches": [
+        {
+          "collection": "listing_1",
+          "q": "*"
+        }
+      ]
     })
       .then(res => {
         console.log(res.data);
-        setData(res.data.results[0]?.hits?.map((hit: any) => hit.document) || [])
+        setData(res.data.results[0]?.hits?.map((hit: { document: Listing }) => hit.document) || []);
       })
       .catch((error) => {
-        logger.error(error)
+        console.log(error);
+
       })
   }, [])
 

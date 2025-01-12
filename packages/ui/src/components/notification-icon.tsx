@@ -1,20 +1,16 @@
 "use client"
 
-import { IoNotificationsOutline } from 'react-icons/io5';
+import React from 'react';
 import { Card, CardContent } from './card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 import { Button } from './button';
-import { AlertTriangle, Archive, Bell, Settings, X } from 'lucide-react';
+import { Archive, Bell, Settings} from 'lucide-react';
 import { ScrollArea } from './scroll-area';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { useEffect, useState } from 'react';
-import { useSocket } from './socket';
-import { MessageStatus } from '../messages/messages-status';
-import { axios, GLOBAL_CONFIG, logger } from '@instapark/utils';
-import { useSessionContext } from '@instapark/auth';
 import { Icon } from './icon';
 import { apiEndpoint } from '../utils/format-endpoint';
-
+import axios from 'axios';
 
 interface Message {
     senderId: string
@@ -27,10 +23,7 @@ export const NotificationIcon = ({ userId }: { userId: string }) => {
 
     console.log(userId);
 
-
     const [unreadMessages, setUnreadMessages] = useState<Message[]>([]);
-    const [count, setCount] = useState<number>();
-    const { socket } = useSocket();
 
     useEffect(() => {
         axios.get(apiEndpoint({
@@ -44,7 +37,7 @@ export const NotificationIcon = ({ userId }: { userId: string }) => {
             console.log(res.data);
             setUnreadMessages(res.data)
         }).catch((error) => {
-            logger.error(error);
+            console.log(error);
         })
     }, [])
 
@@ -54,9 +47,9 @@ export const NotificationIcon = ({ userId }: { userId: string }) => {
                 <Icon className="relative">
                     <Bell className="h-4 w-4" />
                     {
-                        count ?
+                        "as" ?
                             <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
-                                {count}
+                                {123}
                             </span> : null
                     }
                 </Icon>

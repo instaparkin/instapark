@@ -7,12 +7,12 @@ export const useAuth = () => {
     const session = useSessionContext();
 
     if (session.loading) {
-        return null;
+        return {
+            userId: ""
+        };
     }
 
-    const userId = session.userId;
-
     return {
-        userId
+        userId: session.userId
     }
 }

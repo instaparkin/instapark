@@ -1,3 +1,4 @@
+import React from "react"
 import { IoTodayOutline } from "react-icons/io5";
 import { BsBuildingCheck } from "react-icons/bs";
 import { TiThListOutline } from "react-icons/ti";
@@ -5,96 +6,25 @@ import { TbDeviceIpadDollar } from "react-icons/tb";
 import { FaRegUser } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 
-export const HEADER_PROTECTED_ITEMS = {
-  data: [
-    {
-      group: "Menu",
-      items: [
-        {
-          icon: <IoTodayOutline />,
-          link: "/hosting/today",
-          name: "Today"
-        },
-        {
-          icon: <TiThListOutline />,
-          link: "/hosting/listings",
-          name: "Listings"
-        },
-        {
-          icon: <BsBuildingCheck />,
-          link: "/bookings",
-          name: "Bookings"
-        },
-        {
-          icon: <TbDeviceIpadDollar />,
-          link: "/hosting/earnings",
-          name: "Earnings"
-        },
-      ]
-    },
-    {
-      group: "Account",
-      items: [
-        {
-          icon: <FaRegUser />,
-          link: "/profile",
-          name: "Profile"
-        },
-        {
-          icon: <IoSettingsOutline />,
-          link: "/settings",
-          name: "Settings"
-        }
-      ]
-    }
+export const HEADER_NAVIGATION_ITEMS = {
+  BUYER: [
+      {
+          group: "Menu",
+          items: [
+              { icon: <IoTodayOutline />, link: "/hosting/today", name: "Trips" },
+              { icon: <TiThListOutline />, link: "/hosting/listings", name: "Wishlists" }
+          ]
+      }
+  ],
+  HOSTING: [
+      {
+          group: "Menu",
+          items: [
+              { icon: <IoTodayOutline />, link: "/hosting/today", name: "Today" },
+              { icon: <TiThListOutline />, link: "/hosting/listings", name: "Listings" },
+              { icon: <BsBuildingCheck />, link: "/bookings", name: "Bookings" },
+              { icon: <TbDeviceIpadDollar />, link: "/hosting/earnings", name: "Earnings" }
+          ]
+      },
   ]
-}
-
-export const HEADER_PUBLIC_ITEMS = [
-  {
-    name: "Sign Up",
-    link: "/auth"
-  },
-  {
-    name: "Sign In",
-    link: "/auth"
-  }
-]
-
-
-type HasPermissionType = {
-  authed: boolean
-  hostingPage: boolean
-}
-
-export const hasPermission = ({ authed, hostingPage }: HasPermissionType) => {
-  return HEADER_CONFIG.some(
-    (config) => config.authed === authed && config.hostingPage === hostingPage
-  );
 };
-
-export const HEADER_CONFIG = [
-  {
-    authed: true,
-    hostingPage: true
-  },
-  {
-    authed: true,
-    hostingPage: false
-  },
-  {
-    authed: false,
-    hostingPage: false
-  }
-]
-
-export const trying = {
-  authed: {
-    hostingPage: {
-      view: true
-    }
-  },
-  unauthed:{
-    
-  }
-}

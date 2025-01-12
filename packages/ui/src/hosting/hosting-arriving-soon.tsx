@@ -1,3 +1,4 @@
+import React from "react"
 import { CiCircleCheck } from "react-icons/ci"
 import { NoResults } from "../components/no-results"
 

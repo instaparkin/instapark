@@ -1,3 +1,4 @@
+import React from "react";
 import { HostingArrivingSoon } from "./hosting-arriving-soon";
 import { HostingCheckingOut } from "./hosting-checking-out";
 import { HostingPendingReview } from "./hosting-pending-review";

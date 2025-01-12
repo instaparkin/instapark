@@ -1,5 +1,3 @@
-import { ListingsAddType } from "@instapark/listings";
-
 export interface Listing {
     listingId: string;
     userId: string;

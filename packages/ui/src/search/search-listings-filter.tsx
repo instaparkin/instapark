@@ -6,9 +6,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "../components/dialog"
-import { TbFilterSearch } from "react-icons/tb";
 import { ScrollArea } from '../components/scroll-area';
-import { SearchFilter } from './search-filter';
 import { Button } from '../components/button';
 import { SearchFilterPrice } from './search-filter-price';
 import { SearchFilterVehicle } from './search-filter-vehicle';

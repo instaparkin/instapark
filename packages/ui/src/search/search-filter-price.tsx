@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import React from "react"
 import { Bar, BarChart } from "recharts"
 import { Slider } from "../components/slider"
 import { ChartContainer } from "../components/chart"
@@ -13,11 +13,6 @@ interface SearchFilterPriceData {
     price: number
     count: number
 }
-
-interface SearchFilterPriceProps {
-    data: SearchFilterPriceData[]
-}
-
 
 const chartConfig = {
     count: {
@@ -61,7 +56,7 @@ export function SearchFilterPrice() {
                             fill="currentColor"
                             className="opacity-70"
                             isAnimationActive={false}
-                            shape={(props: any) => {
+                            shape={(props) => {
                                 const { x, y, width, height, price } = props
                                 return (
                                     <rect

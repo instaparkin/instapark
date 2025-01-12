@@ -1,3 +1,4 @@
+import React from "react"
 import { Heart } from "lucide-react"
 import { Button } from "../components/button"
 import {
@@ -12,11 +13,7 @@ import {
 import { Input } from "../components/input"
 import { Label } from "../components/label"
 
-interface ListingsWishlistProps {
-  listingId: string
-}
-
-export function ListingsWishlist({ listingId }: ListingsWishlistProps) {
+export function ListingsWishlist() {
   return (
     <Dialog>
       <DialogTrigger>
@@ -27,7 +24,7 @@ export function ListingsWishlist({ listingId }: ListingsWishlistProps) {
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            {"Make changes to your profile here. Click save when you're done."}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

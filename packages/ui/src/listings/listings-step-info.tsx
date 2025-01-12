@@ -1,4 +1,5 @@
-import { Card, CardContent, CardDescription, CardTitle } from "../components//card"
+import React from "react"
+import { Card, CardDescription, CardTitle } from "../components//card"
 import { Separator } from "../components/separator"
 import { Text } from '../components/text'
 
@@ -12,7 +13,7 @@ export function ListingsStepInfo({
   stepNumber,
   title,
   description,
-}: ListingsStepInfoProps) { 
+}: ListingsStepInfoProps) {
   return (
     <Card className="border-none shadow-none h-96 grid lg:grid-cols-2">
       <div className="flex flex-col space-y-4 justify-end">

@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
-import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest, Session } from "@instapark/auth";
+import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest } from "@instapark/auth";
 import metadataRouter from "./routes/metadata.route";
 
 config();
@@ -34,10 +34,6 @@ async function init() {
             accessTokenPayload: session!.getAccessTokenPayload(),
         });
     });
-
-    app.get("/auth/userdetails", verifySession(), async (req: SessionRequest, res) => {
-        const session = await req.session
-    })
 
     app.use("/auth/metadata", verifySession(), metadataRouter)
 

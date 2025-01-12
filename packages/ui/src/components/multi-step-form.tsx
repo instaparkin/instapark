@@ -12,7 +12,7 @@ import {
 import { Button } from "./button";
 import { Progress } from "./progress";
 import { useMultiStepForm } from "../hooks/use-multi-step-form";
-import { MultiStepFormType, MultiStepNavigationProps, MultiStepProgressProps, Step } from "../types/multi-step-form-types";
+import { MultiStepFormType, MultiStepNavigationProps, MultiStepProgressProps } from "../types/multi-step-form-types";
 import { Input } from "./input";
 import { fieldName } from "../utils/field-name";
 import toast from "react-hot-toast";

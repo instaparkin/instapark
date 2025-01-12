@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { MapCollection } from "react-map-gl/dist/esm/components/use-map";
 import { MapInstance, useMap } from "react-map-gl/maplibre";
 
@@ -9,7 +10,7 @@ export type FlyToButtonProps<T extends MapInstance> = {
     map? :  MapCollection<T>
 };
 
-export function MapsFlyToButton <T extends MapInstance>({ children, flyTo, map }: FlyToButtonProps<T>) {
+export function MapsFlyToButton <T extends MapInstance>({ children, flyTo }: FlyToButtonProps<T>) {
     const { ListingsAddLocation } = useMap();
     const onClick = () => {
         if (ListingsAddLocation) {

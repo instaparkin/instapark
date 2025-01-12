@@ -7,7 +7,6 @@ export const upsertFullname = async (req: Request, res: Response) => {
 
         console.log(req.body);
 
-
         if (!userId || !firstname || !lastname) {
             res.status(400).send({ error: "Missing required fields" });
             return;
@@ -27,7 +26,7 @@ export const upsertFullname = async (req: Request, res: Response) => {
         const response = await userDb.query(query, values);
         res.status(201).send({ message: "User record upserted successfully", data: response });
     } catch (error) {
-        res.status(500).send({ error: "Internal Server Error" });
+        res.status(500).send({ error: "Internal Server Error" + error });
     }
 };
 
@@ -66,6 +65,6 @@ export const getFullname = async (req: Request, res: Response) => {
             lastname
         });
     } catch (error) {
-        res.status(500).send({ error: "Internal Server Error" });
+        res.status(500).send({ error: "Internal Server Error" + error });
     }
 };

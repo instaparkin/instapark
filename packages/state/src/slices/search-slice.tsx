@@ -48,10 +48,10 @@ export const searchListings = createAsyncThunk<Listing[], SearchListingsProps, {
                 throw new Error(`API Error: ${response.status} - ${errorText}`);
             }
             const result = await response.json();
-            const listings: Listing[] = result?.results[0]?.hits?.map((hit: any) => hit.document) || [];
+            const listings: Listing[] = result?.results[0]?.hits?.map((hit: { document: Listing; }) => hit.document) || [];
             return listings;
         } catch (error) {
-            return rejectWithValue((error as Error)?.message || "Unknown error occurred");
+            return rejectWithValue('Unknown error occurred: ' + error);
         }
     }
 );

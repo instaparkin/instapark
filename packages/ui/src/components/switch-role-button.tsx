@@ -12,6 +12,7 @@ const switchRoleButtonVariants = cva("", {
     variant: {
       header: "hidden md:flex",
       sheet: "flex md:hidden",
+      dropdown: "flex md:hidden border-none justify-start font-normal w-fit pl-2"
     },
   },
 });
@@ -27,7 +28,7 @@ export function SwitchRoleButton({ className, variant }: SwitchRoleButtonProps) 
     <Button
       asChild
       className={cn(switchRoleButtonVariants({ variant }), className, "w-full")}
-      variant={"ghost"}
+      variant={"outline"}
     >
       <Link href={pathname.includes("hosting") ? "/" : "/hosting"}>
         Switch to {pathname.includes("hosting") ? "Buyer" : "Hosting"}

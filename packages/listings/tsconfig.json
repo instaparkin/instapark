@@ -1,7 +1,7 @@
 {
   "extends": "@instapark/typescript-config/packages.json",
   "compilerOptions": {
-    "jsx": "react",
+    "jsx": "react-jsx",
     "rootDir": ".",
     "outDir": "dist"
   }

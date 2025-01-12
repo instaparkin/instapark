@@ -1,3 +1,4 @@
+import React from "react"
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
 
 import {

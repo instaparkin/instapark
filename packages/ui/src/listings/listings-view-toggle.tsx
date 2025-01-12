@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { LayoutGrid, List } from 'lucide-react'
 import { Button } from '../components/button'
 

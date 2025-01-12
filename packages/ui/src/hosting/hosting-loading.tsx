@@ -1,3 +1,4 @@
+import React from "react"
 import { Page } from "../components/page"
 import { Skeleton } from "../components/skeleton"
 

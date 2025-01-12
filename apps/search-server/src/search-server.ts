@@ -2,9 +2,9 @@ import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import searchRoute from "./routes/search.route";
-import kafkaRoute from "./routes/kafka.route";
 import olaMapsRoute from "./routes/olamaps.route";
-import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest, Session } from "@instapark/auth";
+import TypesenseRoute from "./routes/typesense.route";
+import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import { searchConsumer } from "@instapark/kafka";
 
 config();
@@ -32,7 +32,7 @@ async function init() {
 
     app.use("/search", searchRoute);
 
-    app.use("/search/kafka", kafkaRoute);
+    app.use("/search/typesense", verifySession(), TypesenseRoute);
 
     app.use("/search/olamaps", verifySession(), olaMapsRoute);
 

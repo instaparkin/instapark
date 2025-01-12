@@ -1,7 +1,7 @@
 import { kafka } from "../kafka/kafka";
-import { addDocumentToTypesense } from "@instapark/search";
 import kafkaConfig from "../../kafka-config.json";
 import { addListingToDB, listingsAddSchema, type ListingsAddType } from "@instapark/listings";
+import { axios } from "@instapark/utils";
 
 interface SearchConsumerProps {
     fromBeginning?: boolean;
@@ -79,7 +79,10 @@ export async function searchConsumer({ fromBeginning = false }: SearchConsumerPr
                             }).catch((error) => {
                                 console.log("Failed to add to listings Db" + error);
                             }),
-                            await addDocumentToTypesense({ collection: "listing_1", data: listingTypesenseData }),
+                            axios.post("http://localhost:8080/search/typesense/documents/add", {
+                                collection: "listing_1",
+                                data: listingTypesenseData
+                            })
                         ]);
                     } catch (error) {
                         console.error("Error adding documents to Typesense:", error);

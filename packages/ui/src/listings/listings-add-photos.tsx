@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react";
 import { ListingsAddType } from "@instapark/listings";
 import { generateUploadDropzone } from "@uploadthing/react";
 import { UseFormReturn } from "react-hook-form";

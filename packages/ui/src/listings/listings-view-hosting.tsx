@@ -1,18 +1,16 @@
 'use client'
 
-import { ReactNode, useState, useTransition } from "react"
+import React, { ReactNode, useState, useTransition } from "react"
 import { Listing } from "@instapark/types"
 import { Card, CardContent, CardFooter } from "../components/card"
 import { ListingsImageSwiper } from "./listings-image-swiper"
 import { Button } from "../components/button"
-import { BikeIcon, Car, LucideProps } from 'lucide-react'
+import { BikeIcon, Car } from 'lucide-react'
 import Link from "next/link"
 import { ListingsWishlist } from "./listings-wishlist"
 import { MdCyclone } from "react-icons/md"
 import { Badge } from "../components/badge"
-import { ForwardRefExoticComponent, RefAttributes } from "react"
 import { ListingsViewToggle } from "./listings-view-toggle"
-import Image from "next/image"
 import { DataTable } from "../components/data-table"
 import { columns } from "./listings-hosting-columns"
 

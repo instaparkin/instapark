@@ -1,7 +1,8 @@
 import { searchProducer } from "@instapark/kafka"
 import { getListingFromDb } from "@instapark/listings";
+import { Request, Response } from "express";
 
-export const listingsAddForm = async (req, res) => {
+export const listingsAddForm = async (req: Request, res: Response) => {
     try {
         const listingData = req.body
 
@@ -15,24 +16,16 @@ export const listingsAddForm = async (req, res) => {
 
         res.status(200).send("Listing added successfully");
     } catch (error) {
-        res.status(500).json({ error: "Failed to add listing", details: error.message });
+        res.status(500).json({ error: "Failed to add listing", details: error });
     }
 };
 
-export const getListing = async (req, res) => {
+export const getListing = async (req: Request, res: Response) => {
     try {
         const { listingId } = req.params;
-        const response = await getListingFromDb({ listingId });
+        const response = await getListingFromDb({ listingId: listingId as string });
         res.status(200).send(response)
     } catch (error) {
-        res.status(500).json({ error: "Failed to Get listing", details: error.message });
+        res.status(500).json({ error: "Failed to Get listing", details: error });
     }
 }
-
-export const getAllListingsForUserId = async (req , res) => {
-    try {
-        
-    } catch (error) {
-        
-    }
-} 

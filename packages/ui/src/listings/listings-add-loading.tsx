@@ -1,6 +1,6 @@
 import React from 'react'
 import { Page } from '../components/page'
-import { Card, CardContent, CardDescription, CardTitle } from '../components/card'
+import { Card, CardDescription, CardTitle } from '../components/card'
 import { Skeleton } from '../components/skeleton'
 import { Separator } from '../components/separator'
 

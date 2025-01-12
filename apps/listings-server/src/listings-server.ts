@@ -13,27 +13,27 @@ async function init() {
     ensureSuperTokensInit();
 
     const app = express();
-    
+
     app.use(express.json());
-    
+
     app.use(cors({
         origin: [process.env.FRONTEND_URL!],
         allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders(), "x-uploadthing-package", "x-uploadthing-version"],
         methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
         credentials: true,
     }));
-    
+
     app.use(middleware());
-    
+
     app.get("/listings", (req, res) => {
         res.send("Listings server is up and Running")
     })
 
     app.use("/listings", listingsRouter);
-    
-    app.use("/listings/uploadthing", uploadthingExpress);
 
-    app.use("/listings/redis", redisRouter)
+    app.use("/listings/uploadthing", verifySession(), uploadthingExpress);
+
+    app.use("/listings/redis", verifySession(), redisRouter)
 
     app.use(errorHandler());
 

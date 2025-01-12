@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { AppDispatch, searchListings, useDispatch } from '@instapark/state'
 import { Page } from '../components/page'
 import { SearchListingsComponent } from '../search/search-listings-component'

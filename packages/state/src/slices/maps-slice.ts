@@ -36,8 +36,8 @@ export const autoCompleteLocations = createAsyncThunk<MapData[], string, ThunkAp
             }
             const data: MapData[] = await response.json();
             return data;
-        } catch (error: any) {
-            return rejectWithValue(error.message || 'Unknown error occurred');
+        } catch (error) {
+            return rejectWithValue('Unknown error occurred: ' + error);
         }
     }
 );
@@ -52,8 +52,8 @@ export const directions = createAsyncThunk<MapData[], { origin: number[]; destin
             }
             const data: MapData[] = await response.json();
             return data;
-        } catch (error: any) {
-            return rejectWithValue(error.message || 'Unknown error occurred');
+        } catch (error) {
+            return rejectWithValue('Unknown error occurred: ' + error);
         }
     }
 );
@@ -68,8 +68,8 @@ export const reverseGeocodeLocation = createAsyncThunk<MapData[], number[], Thun
             }
             const data: MapData[] = await response.json();
             return data;
-        } catch (error: any) {
-            return rejectWithValue(error.message || 'Unknown error occurred');
+        } catch (error) {
+            return rejectWithValue('Unknown error occurred: ' + error);
         }
     }
 );
@@ -84,8 +84,8 @@ export const geocodeLocation = createAsyncThunk<MapData[], string, ThunkApiConfi
             }
             const data: MapData[] = await response.json();
             return data;
-        } catch (error: any) {
-            return rejectWithValue(error.message || 'Unknown error occurred');
+        } catch (error) {
+            return rejectWithValue('Unknown error occurred: ' + error);
         }
     }
 );

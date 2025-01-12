@@ -1,11 +1,10 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardFooter } from "../components/card";
 import { Button } from "../components/button";
 import { Heart, Star } from 'lucide-react';
 import Link from "next/link";
-import { useSearch } from '../hooks/use-search';
 import { useSessionContext } from '@instapark/auth';
 import { RootState, useSelector } from '@instapark/state';
 
@@ -15,8 +14,6 @@ export const ListingsDetails = () => {
   if (session.loading) {
     return null
   }
-
-  const userId = session.userId
 
   const data = useSelector((state: RootState) => state.search.listingData)
 
@@ -38,7 +35,7 @@ export const ListingsDetails = () => {
               </div>
               <CardContent className="p-4">
                 <h2 className="font-semibold text-lg mb-1">
-                {item.city}, {item.state}
+                  {item.city}, {item.state}
                 </h2>
                 <p className="text-muted-foreground text-sm mb-2">
                   {item.city}, {item.state}

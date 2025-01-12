@@ -1,11 +1,11 @@
 "use client";
 
+import React from "react";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
 import {
     FormControl,
     FormField,
     FormItem,
-    FormMessage,
 } from "../components/form";
 import { ListingsAddType } from "@instapark/listings";
 import {
@@ -17,13 +17,12 @@ import {
 } from "../components/select";
 import { Button } from "../components/button";
 import { Car, BikeIcon, Cylinder } from "lucide-react";
-import { Vehicle } from "@instapark/types";
-import { ReactNode } from "react";
+import { type Vehicle } from "@instapark/types";
 
 const vehicleIcons: Record<Vehicle, unknown> = {
-    [Vehicle.Car]: <Car className="w-4 h-4 mr-2" />,
-    [Vehicle.Bike]: <BikeIcon className="w-4 h-4 mr-2" />,
-    [Vehicle.Cycle]: <Cylinder className="w-4 h-4 mr-2" />,
+    "Car": <Car className="w-4 h-4 mr-2" />,
+    "Bike": <BikeIcon className="w-4 h-4 mr-2" />,
+    "Cycle": <Cylinder className="w-4 h-4 mr-2" />,
 };
 
 export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<ListingsAddType> }) {

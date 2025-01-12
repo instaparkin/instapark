@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import React from "react"
 import { cn } from "../utils/cn"
 import { AppDispatch, searchListings, useDispatch } from "@instapark/state"
 import { useDebouncedValue } from "@mantine/hooks"
@@ -10,11 +10,10 @@ import { Separator } from "../components/separator"
 
 interface SearchListingsProps {
   children: React.ReactNode
-  placeholder?: string
   onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
 
-export function SearchListingsComponent({ children, placeholder, onChange }: SearchListingsProps) {
+export function SearchListingsComponent({ children, onChange }: SearchListingsProps) {
   const [isContentVisible, setIsContentVisible] = React.useState(false)
   const [activeSection, setActiveSection] = React.useState<string | null>(null)
   const inputRef = React.useRef<HTMLInputElement>(null)

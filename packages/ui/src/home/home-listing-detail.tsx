@@ -1,10 +1,9 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Page } from '../components/page';
-import { Listing } from '../components/listing';
+import { ListingDetailed } from './home-listing-detailed';
 import { Listing as ListingType } from '@instapark/types';
-import { getListingFromDb } from '@instapark/listings';
 
 interface ListingDetailProps {
   listingId: string;
@@ -25,8 +24,7 @@ export function HomeListingDetail({ listingId }: ListingDetailProps) {
   return (
     <Page>
       {listing ? (
-        <Listing
-          view="detailed"
+        <ListingDetailed
           {...listing}
         />
       ) : (

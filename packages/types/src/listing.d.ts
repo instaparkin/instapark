@@ -1,9 +1,16 @@
-export enum PlaceType { "House", "Barn", "Cabin", "Castle", "Hotel", "Farm" }
+export enum PlaceType {
+    "House" = "House",
+    "Barn" = "Barn",
+    "Cabin" = "Cabin",
+    "Castle" = "Castle",
+    "Hotel" = "Hotel",
+    "Farm" = "Farm"
+}
 
 export enum Vehicle {
-    "Car",
-    "Cycle",
-    "Bike"
+    "Car" = "Car",
+    "Cycle" = "Cycle",
+    "Bike" = "Bike"
 }
 
 export interface Listing {

@@ -23,18 +23,16 @@ import { CiLocationOn } from "react-icons/ci";
 import { MapData } from "@instapark/state/src/slices/maps-slice";
 
 interface MapsSearchProps {
-  initialCoordinates?: [number, number];
   onLocationClick?: (location: MapData) => void;
 }
 
 export const MapsSearch: React.FC<MapsSearchProps> = ({
-  initialCoordinates,
   onLocationClick = () => { },
 }) => {
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const { autocomplete, error } = useSelector((state: RootState) => state.maps);
+  const { autocomplete } = useSelector((state: RootState) => state.maps);
   const [debouncedValue] = useDebouncedValue(value, 1000);
 
   useEffect(() => {

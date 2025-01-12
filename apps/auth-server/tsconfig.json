@@ -1,3 +1,6 @@
 {
     "extends" : "@instapark/typescript-config/packages.json",
+    "compilerOptions": {
+        "rootDir": "src"
+    }
 }

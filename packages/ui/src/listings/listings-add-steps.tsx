@@ -1,3 +1,4 @@
+import React from "react";
 import { ListingsAddPlaceType } from "./listings-add-place-type";
 import { ListingsAddLocation } from "./listings-add-location";
 import { ListingsAddPhotos } from "./listings-add-photos";

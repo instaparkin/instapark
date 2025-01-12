@@ -14,7 +14,6 @@ export * as SuperTokensReact from 'supertokens-auth-react/ui';
 export { redirectToAuth } from 'supertokens-auth-react';
 export { SessionAuth, getAccessToken, getUserId, getAccessTokenPayloadSecurely } from "supertokens-auth-react/recipe/session";
 export { useSessionContext } from "supertokens-auth-react/recipe/session";
-export { getUserFromId } from "./src/actions/get-user-from-id";
 export { UserMetadata }
 export { jwt }
 export { getKey, jwks } from "./src/actions/websocket-auth"

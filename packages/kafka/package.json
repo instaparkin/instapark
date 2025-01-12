@@ -9,14 +9,17 @@
   },
   "dependencies": {
     "@instapark/listings": "workspace:^",
-    "@instapark/search": "workspace:^",
     "@instapark/utils": "workspace:^",
     "ioredis": "^5.4.1",
     "kafkajs": "^2.2.4",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
     "@instapark/types": "workspace:^",
-    "@instapark/typescript-config": "workspace:^"
+    "@instapark/typescript-config": "workspace:^",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
+    "typescript-eslint": "^8.19.0"
   }
 }

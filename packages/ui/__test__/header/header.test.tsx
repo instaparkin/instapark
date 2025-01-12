@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, expect, test, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { Header } from "./header-main";

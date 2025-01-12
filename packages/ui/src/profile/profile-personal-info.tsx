@@ -1,12 +1,12 @@
 'use client'
 
+import React from 'react'
 import { useEffect, useState } from 'react'
 import { Button } from "../components/button"
 import { Input } from "../components/input"
 import { Label } from "../components/label"
 import { Card, CardContent } from "../components/card"
 import { useSessionContext } from '@instapark/auth'
-import { getDate } from 'date-fns'
 import { UseFormReturn } from 'react-hook-form'
 import { FullnameType, fullnameForm } from "@instapark/forms"
 import {
@@ -16,7 +16,7 @@ import {
   AccordionTrigger,
 } from "../components/accordion"
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../components/form'
-import { axios, logger } from '@instapark/utils'
+import axios from 'axios'
 
 interface ProfileField {
   key: string
@@ -33,7 +33,6 @@ export function ProfilePersonalInfo() {
   }
 
   const userId = session.userId
-  const email = session.accessTokenPayload;
   console.log(session);
 
   const [editingField, setEditingField] = useState<string | null>(null)
@@ -45,7 +44,7 @@ export function ProfilePersonalInfo() {
   const [fullname, setFullname] = useState<FullnameType>();
 
   console.log(fullname);
-  
+
 
   useEffect(() => {
     async function getdata() {
@@ -62,14 +61,9 @@ export function ProfilePersonalInfo() {
         setFullname(res.data)
       })
       .catch((error) => {
-        logger.error(error);
+        throw error
       })
   }, [])
-
-  type MiniForm<T extends Record<string, unknown>> = {
-    formType: UseFormReturn<T>
-    fields: T[]
-  }
 
   const form = fullnameForm() as UseFormReturn<FullnameType>
 
@@ -89,10 +83,6 @@ export function ProfilePersonalInfo() {
     { key: 'address', label: 'Address', value: 'Not provided', action: 'edit' },
     { key: 'emergency', label: 'Emergency contact', value: 'Not provided', action: 'add' },
   ]
-
-  const handleSave = () => {
-    setEditingField(null)
-  }
 
   const onSubmit = async (values: FullnameType) => {
     await fetch("http://localhost:8088/profile/fullname/upsert", {

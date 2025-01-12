@@ -3,70 +3,18 @@
 import React, { useState } from 'react'
 import { Label } from "../components/label"
 import { RadioGroup, RadioGroupItem } from "../components/radio-group"
-import { Button } from "../components/button"
-import { Switch } from "../components/switch"
-import { Umbrella, ImagesIcon as Icons, Trees, BedDouble, Sparkles, Mountain, MountainIcon as Mountain2, Warehouse, Waves, ChevronRight, SlidersHorizontal, House } from 'lucide-react'
 import { PlaceType } from '@instapark/listings'
-import { BsHouseDoor } from 'react-icons/bs'
 import { LuHotel } from 'react-icons/lu'
 import { PiBarn, PiCastleTurret, PiFarm } from 'react-icons/pi'
 import { MdOutlineCabin } from 'react-icons/md'
-import { SearchListingsFilter } from '../search/search-listings-filter'
 import { AppDispatch, searchListings, useDispatch } from '@instapark/state'
+import { House } from 'lucide-react'
 
 export type CategoryType = {
     id: string
     label: string
     icon: React.ReactNode
 }
-
-const categories: CategoryType[] = [
-    {
-        id: "beach",
-        label: "Beach",
-        icon: <Umbrella className="h-6 w-6" />,
-    },
-    {
-        id: "icons",
-        label: "Icons",
-        icon: <Icons className="h-6 w-6" />,
-    },
-    {
-        id: "countryside",
-        label: "Countryside",
-        icon: <Trees className="h-6 w-6" />,
-    },
-    {
-        id: "rooms",
-        label: "Rooms",
-        icon: <BedDouble className="h-6 w-6" />,
-    },
-    {
-        id: "new",
-        label: "New",
-        icon: <Sparkles className="h-6 w-6" />,
-    },
-    {
-        id: "national-parks",
-        label: "National parks",
-        icon: <Mountain className="h-6 w-6" />,
-    },
-    {
-        id: "amazing-views",
-        label: "Amazing views",
-        icon: <Mountain2 className="h-6 w-6" />,
-    },
-    {
-        id: "farms",
-        label: "Farms",
-        icon: <Warehouse className="h-6 w-6" />,
-    },
-    {
-        id: "amazing-pools",
-        label: "Amazing pools",
-        icon: <Waves className="h-6 w-6" />,
-    },
-]
 
 export type PlaceTypeWithIcon = {
     type: PlaceType;

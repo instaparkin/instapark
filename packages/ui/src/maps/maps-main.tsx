@@ -52,7 +52,7 @@ export const MapsMain = ({ id }: MapProps) => {
   };
 
   const onGeoLocate = (e: GeolocateResultEvent) => {
-    dispatch(reverseGeocodeLocation([viewport.latitude, viewport.longitude]));
+    dispatch(reverseGeocodeLocation([e.coords.latitude, e.coords.longitude]));
   };
 
   return (

@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/tabs"
+import { Tabs, TabsList, TabsTrigger } from "../components/tabs"
 import { SearchFilter } from './search-filter'
 import { Vehicle } from '@instapark/listings'
 import { AppDispatch, searchListings, useDispatch } from '@instapark/state'
@@ -13,8 +13,9 @@ export const SearchFilterVehicle = () => {
             <Tabs>
                 <TabsList className='grid grid-cols-3 gap-1'>
                     {
-                        Object.keys(Vehicle).map(v => (
+                        Object.keys(Vehicle).map((v, index) => (
                             <TabsTrigger
+                                key={index}
                                 onClick={() => {
                                     dispatch(searchListings({
                                         query_by: ["*"],

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ListingsAddForm, ListingsAddType } from '@instapark/listings'
 import { Page } from '../components/page'
 import { MultiStepForm } from '../components/multi-step-form'

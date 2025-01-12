@@ -1,8 +1,8 @@
-import { Palmtree, Building, Building2 } from 'lucide-react'
+import React from "react"
+import { Building2 } from 'lucide-react'
 import { Button } from "../components/button"
 import { Icon } from '../components/icon'
 import { AppDispatch, searchListings, useDispatch } from '@instapark/state'
-import { MouseEventHandler } from 'react'
 
 interface Destination {
     name: string

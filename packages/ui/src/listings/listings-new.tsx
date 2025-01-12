@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { Card, CardContent, CardFooter } from '../components/card'
 import { Button } from '../components/button'
 import { GraduationCap, Grid2X2, Heart, Share, Shield, Star } from 'lucide-react'
@@ -162,7 +163,7 @@ function ListingHostInfo({
 
             {location && (
                 <div>
-                    <p className="text-muted-foreground">I'm {name} from {location}.</p>
+                    <p className="text-muted-foreground">{`I'm ${name} from ${location}.`}</p>
                     <button className="mt-2 font-medium underline">Show more</button>
                 </div>
             )}
@@ -235,7 +236,7 @@ export const Listing: React.FC<ListingProps> = ({
                     </div>
                     <CardContent className="p-4">
                         <h2 className="font-semibold text-lg mb-1">
-                            {city}, {state}
+                            {city}, {state}, {district}
                         </h2>
                         <p className="text-muted-foreground text-sm mb-2">
                             {city}, {state}
