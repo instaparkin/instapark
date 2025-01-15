@@ -1,1 +1,2 @@
-export { SEARCH_SERVER_CONSTANTS } from "./src/search-server-constants"
+export { API_ENDPOINTS } from "./src/api-endpoints";
+export { GLOBAL_CONSTANTS } from "./src/global-constants";

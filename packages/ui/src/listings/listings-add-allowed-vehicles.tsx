@@ -7,7 +7,6 @@ import {
     FormField,
     FormItem,
 } from "../components/form";
-import { ListingsAddType } from "@instapark/listings";
 import {
     Select,
     SelectContent,
@@ -17,15 +16,15 @@ import {
 } from "../components/select";
 import { Button } from "../components/button";
 import { Car, BikeIcon, Cylinder } from "lucide-react";
-import { type Vehicle } from "@instapark/types";
+import { Listing, Vehicle } from "@instapark/types";
 
-const vehicleIcons: Record<Vehicle, unknown> = {
+const vehicleIcons: Record<Vehicle, React.ReactNode> = {
     "Car": <Car className="w-4 h-4 mr-2" />,
     "Bike": <BikeIcon className="w-4 h-4 mr-2" />,
     "Cycle": <Cylinder className="w-4 h-4 mr-2" />,
 };
 
-export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<ListingsAddType> }) {
+export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<Listing> }) {
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: "allowedVehicles",
@@ -41,16 +40,19 @@ export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<Listi
                     render={({ field }) => (
                         <FormItem className="flex items-center space-x-2 mt-2">
                             <FormControl>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value} // Ensure the value is controlled
+                                >
                                     <SelectTrigger className="w-[180px]">
                                         <SelectValue placeholder="Select a vehicle" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {Object.values(Vehicle).map((vehicle) => (
-                                            <SelectItem key={vehicle} value={vehicle}>
+                                        {Object.keys(vehicleIcons).map((vehicleKey) => (
+                                            <SelectItem key={vehicleKey} value={vehicleKey}>
                                                 <div className="flex items-center">
-                                                    {vehicleIcons[vehicle as Vehicle]}
-                                                    {vehicle}
+                                                    {vehicleIcons[vehicleKey as Vehicle]}
+                                                    {vehicleKey}
                                                 </div>
                                             </SelectItem>
                                         ))}
@@ -74,7 +76,7 @@ export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<Listi
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => append({ vehicle: Vehicle.Car })}
+                    onClick={() => append({ listingId: "", vehicle: "Car" })} // Default to "Car"
                 >
                     Add Vehicle
                 </Button>

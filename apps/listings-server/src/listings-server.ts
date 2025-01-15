@@ -1,10 +1,10 @@
-import express from "express";
-import cors from "cors";
-import { config } from "dotenv";
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
-import listingsRouter from "./routes/listings.router";
-import { uploadthingExpress } from "@instapark/listings"
-import redisRouter from "./routes/redis.router";
+import listingsRouter from "./routes/listings.route";
+import redisRouter from "./routes/redis.route";
+import kafkaRouter from "./routes/kafka.route";
+import { API_ENDPOINTS } from "@instapark/constants";
+import { uploadthingExpress } from "./uploadthing/uploadthing-express";
+import { config, cors, express } from "@instapark/utils";
 
 config();
 
@@ -25,15 +25,29 @@ async function init() {
 
     app.use(middleware());
 
-    app.get("/listings", (req, res) => {
-        res.send("Listings server is up and Running")
-    })
+    app.get(
+        API_ENDPOINTS.LISTINGS_SERVER.PREFIX,
+        (req, res) => {
+            res.send("Listings server is up and Running")
+        })
 
-    app.use("/listings", listingsRouter);
+    app.use(
+        API_ENDPOINTS.LISTINGS_SERVER.ROUTES.LISTING.PREFIX,
+        listingsRouter);
 
-    app.use("/listings/uploadthing", verifySession(), uploadthingExpress);
+    app.use(
+        API_ENDPOINTS.LISTINGS_SERVER.ROUTES.KAFKA.PREFIX,
+        kafkaRouter)
 
-    app.use("/listings/redis", verifySession(), redisRouter)
+    app.use(
+        API_ENDPOINTS.LISTINGS_SERVER.ROUTES.UPLOADTHING.PREFIX,
+        verifySession(),
+        uploadthingExpress);
+
+    app.use(
+        API_ENDPOINTS.LISTINGS_SERVER.ROUTES.REDIS.PREFIX,
+        verifySession(),
+        redisRouter)
 
     app.use(errorHandler());
 

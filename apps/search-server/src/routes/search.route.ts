@@ -1,7 +1,7 @@
-import express from "express";
+import { Router } from "@instapark/utils";
 import { handleQuery } from "../controllers/search.controller";
 
-const router = express.Router();
+const router = Router();
 
 router.post("/:query_by", handleQuery);
 

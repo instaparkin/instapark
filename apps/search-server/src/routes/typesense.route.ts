@@ -1,8 +1,10 @@
-import { Router } from "express"
-import { addDocumentsToTypesense } from "../controllers/typesense.controller";
+import { Router } from "@instapark/utils";
+import { deleteListing, upsertListing } from "../controllers/typesense.controller";
 
 const router = Router();
 
-router.post("/documents/add", addDocumentsToTypesense)
+router.post("/listing/upsert", upsertListing)
+
+router.delete("/listing/delete/:id", deleteListing)
 
 export default router

@@ -1,9 +1,7 @@
-import React from 'react'
+"use client"
 
-const MessagesPage = () => {
-    return (
-        <div></div>
-    )
+import dynamic from "next/dynamic";
+
+export default function CometChat() {
+    return <div></div>;
 }
-
-export default MessagesPage

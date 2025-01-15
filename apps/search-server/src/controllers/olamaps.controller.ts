@@ -1,36 +1,23 @@
-interface Prediction extends Record<string, unknown> {
-    description: string;
-    geometry: {
-        location: {
-            lat: number;
-            lng: number;
-        };
-    };
-}
+import { OlaMapsApiResponse } from "@instapark/types";
+import { axios, Request, Response } from "@instapark/utils"
 
-interface ApiResponse {
-    predictions: Prediction[];
-}
+const apiKey = "4txhcXV6VGU9Onf5RCWGlAr8Gru7grfrIrsRvE36";
 
-export const autoComplete = async (req, res) => {
+export const autoComplete = async (req: Request, res: Response) => {
     const { q } = req.params;
 
     if (!q || typeof q !== "string") {
-        return res.status(400).json({ error: "Invalid or missing query parameter 'q'." });
+        res.status(400).json({ error: "Invalid or missing query parameter 'q'." });
+        return;
     }
 
     try {
-        const response = await fetch(
-            `https://api.olamaps.io/places/v1/autocomplete?input=${encodeURIComponent(q)}&api_key=4txhcXV6VGU9Onf5RCWGlAr8Gru7grfrIrsRvE36`
+        const response = await axios.get<OlaMapsApiResponse>(
+            `https://api.olamaps.io/places/v1/autocomplete`,
+            { params: { input: q, api_key: apiKey } }
         );
 
-        if (!response.ok) {
-            return res.status(response.status).json({ error: `API error: ${response.statusText}` });
-        }
-
-        const data: ApiResponse = await response.json();
-
-        const formattedData = data.predictions.map((p) => {
+        const formattedData = response.data.predictions.map((p) => {
             const parts = p.description.split(",");
             return {
                 location: p.description,
@@ -45,76 +32,29 @@ export const autoComplete = async (req, res) => {
                 "sub-locality": parts.at(parts.length - 7),
                 street: parts.at(parts.length - 8),
                 name: parts.slice(0, parts.length - 8)
-            }
+            };
         });
-        return res.status(200).json(formattedData);
+        res.status(200).json(formattedData);
     } catch (error) {
-        return res.status(500).json({ error: "Internal server error.", details: error.message });
+        res.status(500).json({ error: "Internal server error.", details: error });
     }
 };
 
-export const geoCode = async (req, res) => {
+export const geoCode = async (req: Request, res: Response) => {
     const { q } = req.params;
 
     if (!q || typeof q !== "string") {
-        return res.status(400).json({ error: "Invalid or missing query parameter 'q'." });
+        res.status(400).json({ error: "Invalid or missing query parameter 'q'." });
+        return;
     }
 
     try {
-        const response = await fetch(
-            `https://api.olamaps.io/places/v1/geocode?address=${encodeURIComponent(q)}&language=hi&api_key=4txhcXV6VGU9Onf5RCWGlAr8Gru7grfrIrsRvE36`
+        const response = await axios.get(
+            `https://api.olamaps.io/places/v1/geocode`,
+            { params: { address: q, language: "hi", api_key: apiKey } }
         );
 
-        if (!response.ok) {
-            return res.status(response.status).json({ error: `API error: ${response.statusText}` });
-        }
-
-        const data = await response.json();
-
-        const formattedData = await data.geocodingResults.map(r => {
-            const parts = r?.formatted_address.split(",");
-            return {
-                location: r.formatted_address,
-                lat: r.geometry.location.lat,
-                lng: r.geometry.location.lng,
-                country: parts.at(parts.length - 1),
-                pincode: parts.at(parts.length - 2),
-                state: parts.at(parts.length - 3),
-                district: parts.at(parts.length - 4),
-                taluk: parts.at(parts.length - 5),
-                locality: parts.at(parts.length - 6),
-                "sub-locality": parts.at(parts.length - 7),
-                street: parts.at(parts.length - 8),
-                name: r.name
-            }
-        })
-
-        return res.status(200).json(formattedData);
-    } catch (error) {
-        return res.status(500).json({ error: "Internal server error.", details: error.message });
-
-    }
-}
-
-export const reverseGeoCode = async (req, res) => {
-    const { latlng } = req.params;
-
-    if (!latlng) {
-        return res.status(400).json({ error: "Invalid or missing query parameter 'q'." });
-    }
-
-    try {
-        const response = await fetch(
-            `https://api.olamaps.io/places/v1/reverse-geocode?latlng=${latlng}&api_key=4txhcXV6VGU9Onf5RCWGlAr8Gru7grfrIrsRvE36`
-        );
-
-        if (!response.ok) {
-            return res.status(response.status).json({ error: `API error: ${response.statusText}` });
-        }
-
-        const data = await response.json();
-
-        const formattedData = await data.results.map(r => {
+        const formattedData = response.data.geocodingResults.map((r: any) => {
             const parts = r.formatted_address.split(",");
             return {
                 location: r.formatted_address,
@@ -129,37 +69,72 @@ export const reverseGeoCode = async (req, res) => {
                 "sub-locality": parts.at(parts.length - 7),
                 street: parts.at(parts.length - 8),
                 name: r.name
-            }
-        })
+            };
+        });
 
-        return res.status(200).json(formattedData);
+        res.status(200).json(formattedData);
     } catch (error) {
-        return res.status(500).json({ error: "Internal server error.", details: error.message });
-
+        res.status(500).json({ error: "Internal server error.", details: error });
     }
-}
+};
 
-export const directions = async (req, res) => {
-    const { origin, destination } = req.params;
+export const reverseGeoCode = async (req: Request, res: Response) => {
+    const { latlng } = req.params;
 
-    if (!origin && !destination) {
-        return res.status(400).json({ error: "Origin and Destination are required" });
+    if (!latlng) {
+        res.status(400).json({ error: "Invalid or missing query parameter 'latlng'." });
+        return;
     }
 
     try {
-        const response = await fetch("https://api.olamaps.io/routing/v1/directions?origin=18.76029027465273,73.3814242364375&destination=18.73354223011708,73.44587966939002&api_key=4txhcXV6VGU9Onf5RCWGlAr8Gru7grfrIrsRvE36",{
-            method : "POST"
-        })
-        if (!response.ok) {
-            return res.status(response.status).json({ error: `API error: ${response.statusText}` });
-        }
+        const response = await axios.get(
+            `https://api.olamaps.io/places/v1/reverse-geocode`,
+            { params: { latlng, api_key: apiKey } }
+        );
 
-        const data = await response.json();
+        const formattedData = response.data.results.map((r: any) => {
+            const parts = r.formatted_address.split(",");
+            return {
+                location: r.formatted_address,
+                lat: r.geometry.location.lat,
+                lng: r.geometry.location.lng,
+                country: parts.at(parts.length - 1),
+                pincode: parts.at(parts.length - 2),
+                state: parts.at(parts.length - 3),
+                district: parts.at(parts.length - 4),
+                taluk: parts.at(parts.length - 5),
+                locality: parts.at(parts.length - 6),
+                "sub-locality": parts.at(parts.length - 7),
+                street: parts.at(parts.length - 8),
+                name: r.name
+            };
+        });
 
-        const formattedData = data.routes[0].legs[0].steps
-
-        return res.status(200).json(formattedData);
+        res.status(200).json(formattedData);
     } catch (error) {
-        return res.status(500).json({ error: "Internal server error.", details: error.message });
+        res.status(500).json({ error: "Internal server error.", details: error });
     }
-}
+};
+
+export const directions = async (req: Request, res: Response) => {
+    const { origin, destination } = req.params;
+
+    if (!origin || !destination) {
+        res.status(400).json({ error: "Origin and Destination are required." });
+        return;
+    }
+
+    try {
+        const response = await axios.post(
+            `https://api.olamaps.io/routing/v1/directions`,
+            null,
+            { params: { origin, destination, api_key: apiKey } }
+        );
+
+        const formattedData = response.data.routes[0].legs[0].steps;
+
+        res.status(200).json(formattedData);
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error.", details: error });
+    }
+};

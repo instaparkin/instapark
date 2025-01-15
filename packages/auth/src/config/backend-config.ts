@@ -3,19 +3,25 @@ import EmailPassword from "supertokens-node/recipe/emailpassword";
 import Session from "supertokens-node/recipe/session";
 import { TypeInput } from "supertokens-node/types";
 import Dashboard from "supertokens-node/recipe/dashboard";
-import UserRoles from "supertokens-node/recipe/userroles";
-import { appInfo } from "./app-info";
 import SuperTokens from "supertokens-node/lib/build/supertokens";
-import { addRoleToUser } from "../actions/add-role-to-user";
-import UserMetadata from "supertokens-node/recipe/usermetadata";
+import { AUTH_CONSTANTS } from "../constants/auth-constants";
+import { GLOBAL_CONSTANTS } from "@instapark/constants";
+
+console.log(AUTH_CONSTANTS.SUPERTOKENS_API_KEY);
 
 const backendConfig = (): TypeInput => {
     return {
         supertokens: {
-            connectionURI: "http://localhost:3567",
-            apiKey: "FrZi04J9cC3Rub5TLr8YSikLMWpWLpjcioMMwxGeR4dWxmSWhwyaL93TqTe7ADcg"
+            connectionURI: AUTH_CONSTANTS.SUPERTOKENS_CONNECTION_URL,
+            apiKey: AUTH_CONSTANTS.SUPERTOKENS_API_KEY as string
         },
-        appInfo: appInfo,
+        appInfo: {
+            appName: GLOBAL_CONSTANTS.SUPERTOKENS.APP_NAME,
+            apiDomain: GLOBAL_CONSTANTS.SUPERTOKENS.API_DOMAIN,
+            websiteDomain: GLOBAL_CONSTANTS.SUPERTOKENS.WEBSITE_DOMAIN,
+            apiBasePath: GLOBAL_CONSTANTS.SUPERTOKENS.API_BASE_PATH,
+            websiteBasePath: GLOBAL_CONSTANTS.SUPERTOKENS.WEBSITE_BASE_PATH,
+        },
         recipeList: [
             EmailPassword.init({
                 override: {
@@ -24,12 +30,6 @@ const backendConfig = (): TypeInput => {
                             ...originalImplementation,
                             signUp: async function (input) {
                                 const response = await originalImplementation.signUp(input);
-
-                                if (response.status === "OK" && response.user.loginMethods.length === 1 && input.session === undefined) {
-                                    const { id } = response.user;
-                                    await addRoleToUser(id, "Seller");
-                                    await addRoleToUser(id, "Buyer");
-                                }
                                 return response;
                             }
                         }
@@ -41,12 +41,12 @@ const backendConfig = (): TypeInput => {
                     providers: [
                         {
                             config: {
-                                thirdPartyId: "google",
+                                thirdPartyId: AUTH_CONSTANTS.GOOGLE_ID,
                                 clients: [
                                     {
                                         clientId:
-                                            "1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com",
-                                        clientSecret: "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",
+                                            AUTH_CONSTANTS.GOOGLE_CLIENT_ID,
+                                        clientSecret: AUTH_CONSTANTS.GOOGLE_CLIENT_SECRET,
                                     },
                                 ],
                             },
@@ -71,8 +71,6 @@ const backendConfig = (): TypeInput => {
                 exposeAccessTokenToFrontendInCookieBasedAuth: true
             }),
             Dashboard.init(),
-            UserRoles.init(),
-            UserMetadata.init()
         ],
     };
 }

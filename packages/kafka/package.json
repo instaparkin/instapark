@@ -8,7 +8,6 @@
     "check-types": "tsc --noEmit --pretty"
   },
   "dependencies": {
-    "@instapark/listings": "workspace:^",
     "@instapark/utils": "workspace:^",
     "ioredis": "^5.4.1",
     "kafkajs": "^2.2.4",

@@ -1,8 +1,6 @@
-import express from "express";
-import cors from "cors";
-import { config } from "dotenv";
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest } from "@instapark/auth";
-import metadataRouter from "./routes/metadata.route";
+import { API_ENDPOINTS } from "@instapark/constants";
+import { config, cors, express } from "@instapark/utils";
 
 config();
 
@@ -22,9 +20,11 @@ async function init() {
 
     app.use(middleware());
 
-    app.get("/auth", (req, res) => {
-        res.send("Auth Server is up and running");
-    })
+    app.get(
+        API_ENDPOINTS.AUTH_SERVER.PREFIX,
+        (req, res) => {
+            res.send("Auth Server is up and running");
+        })
 
     app.get("/auth/sessioninfo", verifySession(), async (req: SessionRequest, res) => {
         const session = req.session;
@@ -34,8 +34,6 @@ async function init() {
             accessTokenPayload: session!.getAccessTokenPayload(),
         });
     });
-
-    app.use("/auth/metadata", verifySession(), metadataRouter)
 
     app.use(errorHandler());
 

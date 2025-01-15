@@ -5,23 +5,23 @@ import { FormControl, FormField, FormItem, FormMessage } from '../components/for
 import { Label } from '../components/label';
 import { Input } from '../components/input';
 import { fieldName } from '../utils/field-name';
-import { ListingsAddType } from '@instapark/listings';
 import { Path, UseFormReturn } from 'react-hook-form';
+import { Listing } from '@instapark/types';
 
 interface IListingsFormField {
-  form: UseFormReturn<ListingsAddType>;
-  name: Path<ListingsAddType>;
+  form: UseFormReturn<Listing>;
+  name: Path<Listing>;
   value?: string | number
 }
 
 export const ListingsFormField = ({ form, name, value }: IListingsFormField) => {
   useEffect(() => {
     async function trigger() {
-      await form.watch("location")
-      await form.trigger("location");
+      await form.watch()
+      await form.trigger();
     }
     trigger()
-  }, [form.getValues("location")]);
+  }, [form.getValues()]);
 
   return (
     <FormField

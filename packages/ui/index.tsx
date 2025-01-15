@@ -18,7 +18,9 @@ export { ourFileRouter, type OurFileRouter } from "./src/uploadthing/core"
 export { UploadDropzone } from "./src/listings/listings-add-photos"
 export { HostingLoading } from "./src/hosting/hosting-loading"
 export { Success } from "./src/components/success"
-export { HomeListingDetail } from "./src/home/home-listing-detail"
 export { HeaderSkeleton } from "./src/header/header-skeleton"
 export * from "./src/components/sidebar";
 export { AppSidebar } from "./src/components/app-sidebar";
+export { HomeListingsDetailed } from "./src/home/home-listings-detailed"
+export { AuthProvider } from "./src/providers/auth-provider";
+export { StoreProvider } from "./src/providers/store-provider";

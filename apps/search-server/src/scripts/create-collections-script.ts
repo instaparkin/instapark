@@ -2,7 +2,7 @@
  * In order to create a collection first change the schema accordinly and then change the name and run this script
  */
 
-import { SEARCH_SERVER_CONSTANTS } from "@instapark/constants";
+import { SEARCH_SERVER_CONSTANTS } from "../constants/search-server-constants";
 import { createCollection } from "../actions/create-collection";
 import { ListingSchema, RatingSchema, ReviewSchema } from "../schemas/typesense-schema";
 import { typesenseClient } from "../typesense/typesense-client";
@@ -14,15 +14,15 @@ interface IcreateCollectionScript {
 
 const collections = [
     {
-        name: SEARCH_SERVER_CONSTANTS.schemas.LISTING_SCHEMA_NAME,
+        name: SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME,
         schema: ListingSchema
     },
     {
-        name: SEARCH_SERVER_CONSTANTS.schemas.REVIEW_SCHEMA_NAME,
+        name: SEARCH_SERVER_CONSTANTS.SCHEMAS.REVIEW_SCHEMA_NAME,
         schema: ReviewSchema
     },
     {
-        name: SEARCH_SERVER_CONSTANTS.schemas.RATING_SCHEMA_NAME,
+        name: SEARCH_SERVER_CONSTANTS.SCHEMAS.RATING_SCHEMA_NAME,
         schema: RatingSchema
     },
 ]

@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Button } from '../components/button'
-import { signOut } from "@instapark/auth";
 import { redirect } from 'next/navigation';
+import { signOut } from 'supertokens-auth-react/recipe/session';
 
 interface SignOutButtonProps {
   text?: string

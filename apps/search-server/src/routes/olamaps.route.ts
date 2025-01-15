@@ -1,14 +1,23 @@
-import express from "express"
+import { Router } from "@instapark/utils";
 import { autoComplete, directions, geoCode, reverseGeoCode } from "../controllers/olamaps.controller";
+import { API_ENDPOINTS } from "@instapark/constants";
 
-const router = express.Router();
+const router = Router();
 
-router.get("/autocomplete/:q", autoComplete);
+router.get(
+    API_ENDPOINTS.SEARCH_SERVER.ROUTES.OLAMAPS.AUTOCOMPLETE,
+    autoComplete);
 
-router.get("/geocode/:q", geoCode);
+router.get(
+    API_ENDPOINTS.SEARCH_SERVER.ROUTES.OLAMAPS.GEOCODE,
+    geoCode);
 
-router.get("/reverse-geocode/:latlng", reverseGeoCode);
+router.get(
+    API_ENDPOINTS.SEARCH_SERVER.ROUTES.OLAMAPS.REVERSE_GEOCODE,
+    reverseGeoCode);
 
-router.get("/directions/:origin/:destination", directions)
+router.get(
+    API_ENDPOINTS.SEARCH_SERVER.ROUTES.OLAMAPS.DIRECTIONS,
+    directions)
 
 export default router

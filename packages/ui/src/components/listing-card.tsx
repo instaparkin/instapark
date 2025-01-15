@@ -1,16 +1,12 @@
 "use client"
 
 import { Listing } from '@instapark/types'
-import React, { useState } from 'react'
+import React from 'react'
 import { Card, CardContent, CardFooter } from '../components/card'
 import { ImageSwiper } from '../components/image-swiper'
-import { Button } from '../components/button'
-import { Heart } from 'lucide-react'
+import { Star } from 'lucide-react'
 import Link from 'next/link'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './dialog'
-import { Input } from './input'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from './form'
-import { WishListForm } from '@instapark/forms'
+import { ListingWishlist } from './listing-wishlist'
 
 interface ListingsCard {
     listing: Listing
@@ -48,7 +44,7 @@ const ListingCardImages: React.FC<ListingCardImagesProps> =
         return (
             <div className="relative aspect-[4/3]">
                 {children}
-                <div onClick={(e) => e.stopPropagation()}>
+                <div className='absolute top-2 right-2 z-10 bg-accent rounded-full' onClick={(e) => e.stopPropagation()}>
                     <ListingWishlist />
                 </div>
             </div>
@@ -59,16 +55,22 @@ const ListingCardDescription: React.FC<ListingCardDescriptionProps> =
     ({ state, city, allowedVehicles, basePrice }) => {
         return (
             <>
-                <CardContent className="p-4">
-                    <h2 className="font-semibold text-lg mb-1">
-                        {city}, {state}
-                    </h2>
-                    <p className="text-muted-foreground text-sm mb-2">
-                        {city}, {state}
-                    </p>
-                    <p className="text-sm mt-2">
-                        {allowedVehicles.join(", ")}
-                    </p>
+                <CardContent className="p-4 flex-col">
+                    <div className='flex justify-between items-center'>
+                        <div className="font-semibold mb-1">
+                            {city}, {state}
+                        </div>
+                        <div className='flex gap-1 items-center'>
+                            <Star className='w-4 h-4 fill-current' />
+                            <span className='text-sm'>{4.96}</span>
+                        </div>
+                    </div>
+                    <div className="text-muted-foreground text-sm">
+                        {"123 KMs away"}
+                    </div>
+                    <div className="text-muted-foreground text-sm">
+                        {"24- 29May"}
+                    </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0 flex justify-between listings-center">
                     <div>
@@ -79,62 +81,9 @@ const ListingCardDescription: React.FC<ListingCardDescriptionProps> =
         )
     }
 
-const ListingWishlist = () => {
-    const [open, setOpen] = useState<boolean>(false);
-
-    const handleButtonClick = (event: React.MouseEvent) => {
-        setOpen(true);
-        event.preventDefault();
-        event.stopPropagation();
-    };
-
-    const form = WishListForm();
-
-    return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button
-                    variant="secondary"
-                    size="icon"
-                    className="absolute top-2 right-2 rounded-full z-10"
-                    onClick={handleButtonClick}
-                >
-                    <Heart className="h-4 w-4" />
-                </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle className='text-center my-2'>Add To Wishlist</DialogTitle>
-                </DialogHeader>
-                <Form {...form}>
-                    <form>
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Username</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="shadcn" {...field} />
-                                    </FormControl>
-                                    <FormDescription>This is your public display name.</FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </form>
-                </Form>
-                <DialogFooter>
-                    <Button type="submit">Save changes</Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    );
-}
-
 export const ListingCard: React.FC<ListingsCard> = ({ listing }) => {
     return (
-        <ListingCardContent listingId={listing.listingId}>
+        <ListingCardContent listingId={listing.id}>
             <ListingCardImages>
                 <ImageSwiper content={listing.photos} />
             </ListingCardImages>

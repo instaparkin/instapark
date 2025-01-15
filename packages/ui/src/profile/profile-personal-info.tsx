@@ -6,7 +6,6 @@ import { Button } from "../components/button"
 import { Input } from "../components/input"
 import { Label } from "../components/label"
 import { Card, CardContent } from "../components/card"
-import { useSessionContext } from '@instapark/auth'
 import { UseFormReturn } from 'react-hook-form'
 import { FullnameType, fullnameForm } from "@instapark/forms"
 import {
@@ -17,6 +16,7 @@ import {
 } from "../components/accordion"
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../components/form'
 import axios from 'axios'
+import { useSessionContext } from 'supertokens-auth-react/recipe/session'
 
 interface ProfileField {
   key: string

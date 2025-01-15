@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { ListingsAddType, PlaceType } from "@instapark/listings";
 import { LuHotel } from "react-icons/lu";
 import { PiCastleTurret } from "react-icons/pi";
 import { MdOutlineCabin } from "react-icons/md";
@@ -11,6 +10,7 @@ import { UseFormReturn } from "react-hook-form";
 import { PiFarm } from "react-icons/pi";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../components/form";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
+import { Listing, PlaceType } from "@instapark/types";
 
 export type PlaceTypeWithIcon = {
   type: PlaceType;
@@ -44,11 +44,11 @@ const placetypes: PlaceTypeWithIcon[] = [
   },
 ];
 
-export const ListingsAddPlaceType = ({ form }: { form: UseFormReturn<ListingsAddType> }) => {
+export const ListingsAddPlaceType = ({ form }: { form: UseFormReturn<Listing> }) => {
   return (
     <FormField
       control={form.control}
-      name="place.type"
+      name="type"
       render={({ field }) => (
         <FormItem>
           <FormControl className='w-full'>

@@ -3,16 +3,16 @@
 import React, { ReactNode, useState, useTransition } from "react"
 import { Listing } from "@instapark/types"
 import { Card, CardContent, CardFooter } from "../components/card"
-import { ListingsImageSwiper } from "./listings-image-swiper"
 import { Button } from "../components/button"
 import { BikeIcon, Car } from 'lucide-react'
 import Link from "next/link"
-import { ListingsWishlist } from "./listings-wishlist"
 import { MdCyclone } from "react-icons/md"
 import { Badge } from "../components/badge"
 import { ListingsViewToggle } from "./listings-view-toggle"
 import { DataTable } from "../components/data-table"
 import { columns } from "./listings-hosting-columns"
+import { ListingWishlist } from "../components/listing-wishlist"
+import { ImageSwiper } from "../components/image-swiper"
 
 interface ListingsViewProps {
   data: Listing[]
@@ -51,13 +51,13 @@ export function ListingsView({ data, title = "Listings" }: ListingsViewProps) {
             {data?.map((item) => (
               <Card key={item?.listingId} className="overflow-hidden">
                 <div className="relative aspect-[4/3]">
-                  <ListingsImageSwiper content={item.photos} />
+                  <ImageSwiper content={item.photos} />
                   <Button
                     variant="secondary"
                     size="icon"
                     className="absolute top-2 right-2 rounded-full"
                   >
-                    <ListingsWishlist listingId={item.listingId} />
+                    <ListingWishlist />
                   </Button>
                 </div>
                 <CardContent className="p-4">

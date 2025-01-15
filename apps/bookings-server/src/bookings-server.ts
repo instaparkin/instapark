@@ -1,7 +1,9 @@
-import express from "express";
-import cors from "cors";
-import { config } from "dotenv";
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
+import { API_ENDPOINTS } from "@instapark/constants";
+import { config, cors, express } from "@instapark/utils";
+import mongoose from "mongoose"
+import { BOOKINGS_SERVER_CONSTANTS } from "./constants/bookings-server-constants";
+import bookingsRouter from "./routes/booking.route";
 
 config();
 
@@ -22,13 +24,16 @@ async function init() {
 
     app.use(middleware());
 
-    app.get("/bookings", (req, res) => {
+    /**MongoDB Connection */
+    await mongoose.connect(BOOKINGS_SERVER_CONSTANTS.MONGODB.URI);
+
+    app.get(API_ENDPOINTS.BOOKINGS_SERVER.PREFIX, (req, res) => {
         res.send("Booking Server is up and running");
     })
 
-    app.get("/bookings/auth", verifySession(), (req, res) => {
-        res.send("Bookings auth working")
-    })
+    app.use("/bookings",
+        bookingsRouter
+    )
 
     app.use(errorHandler());
 

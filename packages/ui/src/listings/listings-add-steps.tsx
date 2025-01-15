@@ -3,12 +3,12 @@ import { ListingsAddPlaceType } from "./listings-add-place-type";
 import { ListingsAddLocation } from "./listings-add-location";
 import { ListingsAddPhotos } from "./listings-add-photos";
 import { ListingsAddAllowedVehicles } from "./listings-add-allowed-vehicles";
-import { ListingsAddType } from "@instapark/listings";
 import { Step } from "../types/multi-step-form-types";
 import { ListingsStepInfo } from "./listings-step-info";
 import { Success } from "../components/success";
+import { Listing } from "@instapark/types";
 
-export const listingsAddSteps: Step<ListingsAddType>[] = [
+export const listingsAddSteps: Step<Listing>[] = [
     {
         substeps: [
             {
@@ -24,12 +24,12 @@ export const listingsAddSteps: Step<ListingsAddType>[] = [
             },
             {
                 name: "What's your place type?",
-                fields: [{ name: "place.type" }],
+                fields: [{ name: "type" }],
                 component: ({ form }) => <ListingsAddPlaceType form={form} />
             },
             {
                 name: "Add your location",
-                fields: [{ name: "location.city" }, { name: "location.country" }, { name: "location.state" }, { name: "location.district" }, { name: "location.street" }, { name: "location.pincode" }, { name: "location.name" }, { name: "location.landmark" }, { name: "location.latitude", disabled: true }, { name: "location.longitude", disabled: true }],
+                fields: [{ name: "city" }, { name: "country" }, { name: "state" }, { name: "district" }, { name: "street" }, { name: "pincode" }, { name: "name" }, { name: "landmark" }, { name: "latitude", disabled: true }, { name: "longitude", disabled: true }],
                 component: ({ form }) => <ListingsAddLocation form={form} />,
             },
         ],
@@ -73,11 +73,11 @@ export const listingsAddSteps: Step<ListingsAddType>[] = [
             {
                 name: "Pricing",
                 fields: [
-                    { name: "pricing.basePrice" },
-                    { name: "pricing.pphbi" },
-                    { name: "pricing.plph" },
-                    { name: "pricing.pphcr" },
-                    { name: "pricing.pphcy" },
+                    { name: "basePrice" },
+                    { name: "pphbi" },
+                    { name: "plph" },
+                    { name: "pphcr" },
+                    { name: "pphcy" },
                 ],
             },
             {

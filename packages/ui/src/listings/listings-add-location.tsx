@@ -1,6 +1,5 @@
 "use client";
 
-import { ListingsAddType } from '@instapark/listings';
 import React, { useEffect } from 'react';
 import { Path, UseFormReturn } from 'react-hook-form';
 import { RootState, useSelector } from '@instapark/state';
@@ -9,6 +8,7 @@ import { ListingsFormField } from './listings-form-field';
 import dynamic from "next/dynamic";
 import { Skeleton } from '../components/skeleton';
 import { MapData } from '@instapark/state/src/slices/maps-slice';
+import { Listing } from '@instapark/types';
 
 const MapDynamic = dynamic(() =>
     import('../maps/maps-main').then((mod) => mod.MapsMain), {
@@ -19,29 +19,29 @@ const MapDynamic = dynamic(() =>
 );
 
 interface FieldsToUpdateProps {
-    path: Path<ListingsAddType>;
+    path: Path<Listing>;
     value: string | number;
 }
 
-export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingsAddType> }) => {
+export const ListingsAddLocation = ({ form }: { form: UseFormReturn<Listing> }) => {
     const { autocomplete } = useSelector((state: RootState) => state.maps);
 
     useEffect(() => {
         async function trigger() {
-            const paths: Path<ListingsAddType>[] = [
-                "location.latitude",
-                "location.longitude",
-                "location.country",
-                "location.state",
-                "location.district",
-                "location.city",
-                "location.street",
-                "location.pincode",
-                "location.name",
-                "location.landmark"
+            const paths: Path<Listing>[] = [
+                "latitude",
+                "longitude",
+                "country",
+                "state",
+                "district",
+                "city",
+                "street",
+                "pincode",
+                "name",
+                "landmark"
             ];
-            form.setValue("location.createdAt", new Date())
-            form.setValue("location.updatedAt", new Date())
+            form.setValue("createdAt", new Date())
+            form.setValue("updatedAt", new Date())
             await form.watch(paths);
             await form.trigger(paths);
         }
@@ -50,14 +50,14 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingsAddT
 
     const handleLocationUpdate = (location: MapData) => {
         const fieldsToUpdate: FieldsToUpdateProps[] = [
-            { path: "location.latitude", value: location?.lat as number },
-            { path: "location.longitude", value: location?.lng as number },
-            { path: "location.country", value: location?.country as string },
-            { path: "location.state", value: location?.state as string },
-            { path: "location.district", value: location?.district as string },
-            { path: "location.city", value: location?.taluk as string },
-            { path: "location.street", value: location?.street as string },
-            { path: "location.pincode", value: location?.pincode as string },
+            { path: "latitude", value: location?.lat as number },
+            { path: "longitude", value: location?.lng as number },
+            { path: "country", value: location?.country as string },
+            { path: "state", value: location?.state as string },
+            { path: "district", value: location?.district as string },
+            { path: "city", value: location?.taluk as string },
+            { path: "street", value: location?.street as string },
+            { path: "pincode", value: location?.pincode as string },
         ];
 
         for (const field of fieldsToUpdate) {
@@ -76,58 +76,58 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingsAddT
                 onLocationClick={handleLocationUpdate}
             />
             <MapDynamic
-                initialLat={form.getValues("location.latitude")}
-                initialLng={form.getValues('location.longitude')}
+                initialLat={form.getValues("latitude")}
+                initialLng={form.getValues('longitude')}
                 id="ListingsAddLocation" />
             <ListingsFormField
                 form={form}
-                name="location.country"
-                value={form.getValues("location.country")}
+                name="country"
+                value={form.getValues("country")}
             />
             <ListingsFormField
                 form={form}
-                name="location.state"
-                value={form.getValues("location.state")}
+                name="state"
+                value={form.getValues("state")}
             />
             <ListingsFormField
                 form={form}
-                name="location.district"
-                value={form.getValues("location.district")}
+                name="district"
+                value={form.getValues("district")}
             />
             <ListingsFormField
                 form={form}
-                name="location.city"
-                value={form.getValues("location.city")}
+                name="city"
+                value={form.getValues("city")}
             />
             <ListingsFormField
                 form={form}
-                name="location.street"
-                value={form.getValues("location.street")}
+                name="street"
+                value={form.getValues("street")}
             />
             <ListingsFormField
                 form={form}
-                name="location.pincode"
-                value={form.getValues("location.pincode") as number}
+                name="pincode"
+                value={form.getValues("pincode") as number}
             />
             <ListingsFormField
                 form={form}
-                name="location.name"
-                value={form.getValues("location.name") as string}
+                name="name"
+                value={form.getValues("name") as string}
             />
             <ListingsFormField
                 form={form}
-                name="location.landmark"
-                value={form.getValues("location.landmark") as string}
+                name="landmark"
+                value={form.getValues("landmark") as string}
             />
             <ListingsFormField
                 form={form}
-                name="location.latitude"
-                value={form.getValues("location.latitude")?.toString()}
+                name="latitude"
+                value={form.getValues("latitude")?.toString()}
             />
             <ListingsFormField
                 form={form}
-                name="location.longitude"
-                value={form.getValues("location.longitude")?.toString()}
+                name="longitude"
+                value={form.getValues("longitude")?.toString()}
             />
         </div>
     );

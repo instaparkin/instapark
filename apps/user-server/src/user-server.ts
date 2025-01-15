@@ -1,9 +1,10 @@
-import express from "express";
-import cors from "cors";
-import { config } from "dotenv";
 import { userDb } from "./pg/user-pg-client";
-import profileRouter from "./routes/profile.route";
-import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest } from "@instapark/auth";
+import userNameRoute from "./routes/userName.route";
+import userProofRoute from "./routes/userProof.route";
+import userAddressRoute from "./routes/userAddress.route";
+import userPhoneNumberRoute from "./routes/userPhoneNumber.route";
+import { errorHandler, middleware, ensureSuperTokensInit, verifySession } from "@instapark/auth";
+import { config, cors, express } from "@instapark/utils";
 
 config();
 
@@ -24,7 +25,17 @@ async function init() {
 
     await userDb.connect();
 
-    app.use("/profile", profileRouter);
+    app.get("/user", (req, res) => {
+        res.send("User Server is Up and Running")
+    })
+
+    app.use("/user/user-name", verifySession(), userNameRoute);
+
+    app.use("/user/user-proof", verifySession(), userProofRoute);
+
+    app.use("/user/user-address", verifySession(), userAddressRoute);
+
+    app.use("/user/user-phoneNumber", verifySession(), userPhoneNumberRoute);
 
     app.use(errorHandler());
 

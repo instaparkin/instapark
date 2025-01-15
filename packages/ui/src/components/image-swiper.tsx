@@ -7,9 +7,10 @@ import Image from 'next/image';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { Photo } from '@instapark/types';
 
 interface SwiperMainProps {
-  content: string[]
+  content: Photo[]
 }
 
 export function ImageSwiper({ content }: SwiperMainProps) {
@@ -23,11 +24,11 @@ export function ImageSwiper({ content }: SwiperMainProps) {
       modules={[Pagination]}
       className="w-full h-full"
     >
-      {content.map((imageUrl, index) => (
+      {content.map((photo, index) => (
         <SwiperSlide key={index}>
           <div className="relative w-full h-full">
             <Image
-              src={imageUrl}
+              src={photo.url}
               alt={`Parking space image ${index + 1}`}
               fill
               className="object-cover"

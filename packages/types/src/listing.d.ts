@@ -1,25 +1,35 @@
-export enum PlaceType {
-    "House" = "House",
-    "Barn" = "Barn",
-    "Cabin" = "Cabin",
-    "Castle" = "Castle",
-    "Hotel" = "Hotel",
-    "Farm" = "Farm"
+/**
+ * These types are used in both the frontend and backend of the project.
+ * These are defined directly from the database.
+ * These should be changed accordingly whenever the database is changed.
+ */
+
+export type PlaceType = 'House' | 'Barn' | 'Cabin' | 'Castle' | 'Hotel' | 'Farm';
+
+export type Vehicle = "Car" | "Bike" | "Cycle"
+
+export interface Photo {
+    listingId: string
+    url: string
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-export enum Vehicle {
-    "Car" = "Car",
-    "Cycle" = "Cycle",
-    "Bike" = "Bike"
+export interface AllowedVehicle {
+    listingId: string
+    vehicle: Vehicle
+}
+
+export interface NotAvailableDate {
+    listingId: string;
+    startDate: Date;
+    endDate: Date
 }
 
 export interface Listing {
-    listingId: string;
+    id: string;
     userId: string;
-    isOpen: boolean;
-    createdAt: number;
-    updatedAt: number;
-    type: string;
+    type: PlaceType;
     country: string;
     state: string;
     district: string;
@@ -28,52 +38,16 @@ export interface Listing {
     pincode: number;
     latitude: number;
     longitude: number;
-    name: string;
-    landmark: string;
-    allowedVehicles: Vehicle[];
+    name?: string;
+    landmark?: string;
+    allowedVehicles: AllowedVehicle[];
     basePrice: number;
     pphbi: number;
     pphcy: number;
     pphcr: number;
     plph: number;
-    photos: string[]
-}
-
-export interface SearchResult<T> {
-    facet_counts: unknown[];
-    found: number;
-    hits: Array<{
-        document: T;
-        highlight: Record<string, unknown>;
-        highlights: unknown[];
-    }>;
-    out_of: number;
-    page: number;
-    request_params: {
-        collection_name: string;
-        first_q: string;
-        per_page: number;
-        q: string;
-    };
-    search_cutoff: boolean;
-    search_time_ms: number;
-}
-
-export interface ApiResponse {
-    results: [
-        SearchResult<Listing>,
-    ];
-}
-export interface Query {
-    listing: string
-    queryBy: string[]
-}
-
-export interface UseSearchProps {
-    query_by: string[]
-    collections: {
-        name: string
-        q: string
-        filter_by?: string
-    }[]
+    photos: Photo[]
+    notAvailableDates?: NotAvailableDate[]
+    createdAt: Date;
+    updatedAt: Date;
 }

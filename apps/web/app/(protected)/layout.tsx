@@ -1,18 +1,17 @@
 "use client"
 
-import { HeaderMain, HeaderSkeleton, MapsProvider } from "@instapark/ui";
-import { SessionAuth, SuperTokensProvider } from "@instapark/auth";
-import { StoreProvider } from "@instapark/state";
+import { HeaderSkeleton, MapsProvider, AuthProvider,StoreProvider } from "@instapark/ui";
+import { SessionAuth } from "@instapark/auth";
 import dynamic from "next/dynamic";
 
 const HeaderMainDynamic = dynamic(() =>
-    import("@instapark/ui").then(mod => mod.HeaderMain), {
-    loading: () => <HeaderSkeleton />
+  import("@instapark/ui").then(mod => mod.HeaderMain), {
+  loading: () => <HeaderSkeleton />
 })
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }): JSX.Element {
   return (
-    <SuperTokensProvider>
+    <AuthProvider>
       <SessionAuth>
         <StoreProvider>
           <MapsProvider>
@@ -23,6 +22,6 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
           </MapsProvider>
         </StoreProvider>
       </SessionAuth>
-    </SuperTokensProvider>
+    </AuthProvider>
   );
 }

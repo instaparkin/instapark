@@ -1,6 +1,9 @@
 export const GLOBAL_CONSTANTS = {
-    SERVERS : {
-        AUTH_SERVER: "http://localhost:8080/auth",
-        BOOKINGS_SERVER: "http://localhost:8080/auth",
+    SUPERTOKENS: {
+        APP_NAME: "instapark",
+        API_DOMAIN: "http://localhost:8080",
+        WEBSITE_DOMAIN: "http://localhost:3000",
+        API_BASE_PATH: "/auth",
+        WEBSITE_BASE_PATH: '/auth'
     }
-}
+};

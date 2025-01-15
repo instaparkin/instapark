@@ -1,39 +1,28 @@
-export const handleQuery = async (req, res) => {
+import { axios, logger, Request, Response } from "@instapark/utils";
+
+export const handleQuery = async (req: Request, res: Response) => {
     const { query_by } = req.params;
 
-    console.log(query_by);
-    
-    console.log(req.body);
-    
+    logger.info(query_by);
+
     if (!query_by) {
-        return res.status(400).json({ message: "query_by parameter is required" });
+        res.status(400).json({ message: "query_by parameter is required" });
+        return;
     }
 
-    try {
-        const response = await fetch(
-            `http://localhost:8108/multi_search?query_by=${query_by}`,
-            {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-typesense-api-key': "xyz",
-                },
-                body: JSON.stringify(req.body),
-            }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(`Error ${response.status}: ${data.message || response.statusText}`);
+    axios.post(
+        `http://localhost:8108/multi_search?query_by=${query_by}`,
+        req.body, {
+        headers: {
+            'x-typesense-api-key': "xyz",
         }
-
-        res.status(200).json(data);
-    } catch (error) {
-        console.error("Error during handleQuery:", error.message);
+    }).then((response) => {
+        res.status(200).json(response.data);
+    }).catch((error) => {
         res.status(502).json({
             message: "Failed to fetch data",
-            error: error.message,
+            error: error,
         });
-    }
+    })
+
 };

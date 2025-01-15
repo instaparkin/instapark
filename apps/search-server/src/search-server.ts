@@ -1,11 +1,10 @@
-import express from "express";
-import cors from "cors";
-import { config } from "dotenv";
 import searchRoute from "./routes/search.route";
 import olaMapsRoute from "./routes/olamaps.route";
 import TypesenseRoute from "./routes/typesense.route";
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import { searchConsumer } from "@instapark/kafka";
+import { API_ENDPOINTS } from "@instapark/constants";
+import { config, cors, express } from "@instapark/utils";
 
 config();
 
@@ -26,15 +25,25 @@ async function init() {
 
     app.use(middleware());
 
-    app.get("/search", (req, res) => {
-        res.send("Search Server is up and running");
-    })
+    app.get(
+        API_ENDPOINTS.SEARCH_SERVER.PREFIX,
+        (req, res) => {
+            res.send("Search Server is up and running");
+        })
 
-    app.use("/search", searchRoute);
+    app.use(
+        API_ENDPOINTS.SEARCH_SERVER.ROUTES.SEARCH.PREFIX,
+        searchRoute);
 
-    app.use("/search/typesense", verifySession(), TypesenseRoute);
+    app.use(
+        API_ENDPOINTS.SEARCH_SERVER.ROUTES.TYPESENSE.PREFIX,
+        verifySession(),
+        TypesenseRoute);
 
-    app.use("/search/olamaps", verifySession(), olaMapsRoute);
+    app.use(
+        API_ENDPOINTS.SEARCH_SERVER.ROUTES.OLAMAPS.PREFIX,
+        verifySession(),
+        olaMapsRoute);
 
     app.use(errorHandler());
 

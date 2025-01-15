@@ -1,7 +1,6 @@
 "use client"
 
 import React from 'react'
-import { ListingsAddForm, ListingsAddType } from '@instapark/listings'
 import { Page } from '../components/page'
 import { MultiStepForm } from '../components/multi-step-form'
 import { listingsAddSteps } from './listings-add-steps'
@@ -10,6 +9,9 @@ import { LISTINGS_ADD_FORM_KEY } from '../utils/global-constants'
 import toast from 'react-hot-toast'
 import uiConfig from "../../ui-config.json"
 import { v4 as uuid } from "uuid"
+import axios from 'axios'
+import { Listing } from '@instapark/types'
+import { ListingsAddForm } from '@instapark/forms'
 
 export const ListingsAdd = () => {
   const form = ListingsAddForm();
@@ -19,27 +21,13 @@ export const ListingsAdd = () => {
     return null;
   }
 
-  const handleSubmit = async (data: ListingsAddType) => {
+  const handleSubmit = async (data: Listing) => {
     const listingId = uuid();
     try {
-      const dataWithUUIDs: ListingsAddType = {
+      const dataWithUUIDs: Listing = {
         ...data,
         listingId,
         userId: session.userId,
-        place: {
-          ...data.place,
-          placeId: listingId,
-        },
-        location: {
-          ...data.location,
-          locationId: listingId,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        pricing: {
-          ...data.pricing,
-          pricingId: listingId,
-        },
         photos: data.photos.map(photo => ({
           ...photo,
           listingId
@@ -52,17 +40,14 @@ export const ListingsAdd = () => {
         updatedAt: new Date(),
       };
 
-      const response = await fetch(uiConfig.routes.LISTING_ADD_ROUTE, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataWithUUIDs),
-      });
+      axios.post(uiConfig.routes.LISTING_ADD_ROUTE, dataWithUUIDs)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          throw new Error(`HTTP error! status: ${error}`);
+        })
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
     } catch (error) {
       toast.error(`Error adding listing: ${error instanceof Error ? error.message : String(error)}`);
     }

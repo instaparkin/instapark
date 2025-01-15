@@ -1,6 +1,6 @@
 "use client"
 
-import { useSessionContext } from '@instapark/auth'
+import { useSessionContext } from "supertokens-auth-react/recipe/session";
 
 export const useAuth = () => {
 

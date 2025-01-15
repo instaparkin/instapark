@@ -1,5 +1,5 @@
+import { KAFKA_CONSTANTS } from "../constants/kafka-constants";
 import { kafka } from "../kafka/kafka";
-import kafkaConfig from "../../kafka-config.json";
 
 interface ProduceMessageProps {
     key: string
@@ -14,7 +14,7 @@ export async function searchProducer({ key, data, partition }: ProduceMessagePro
     await producer.connect();
 
     await producer.send({
-        topic: kafkaConfig.SEARCH_TOPIC,
+        topic: KAFKA_CONSTANTS.SEARCH_TOPIC,
         messages: [
             {
                 key: key,

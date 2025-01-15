@@ -3,12 +3,12 @@
 import React, { useState } from 'react'
 import { Label } from "../components/label"
 import { RadioGroup, RadioGroupItem } from "../components/radio-group"
-import { PlaceType } from '@instapark/listings'
 import { LuHotel } from 'react-icons/lu'
 import { PiBarn, PiCastleTurret, PiFarm } from 'react-icons/pi'
 import { MdOutlineCabin } from 'react-icons/md'
 import { AppDispatch, searchListings, useDispatch } from '@instapark/state'
 import { House } from 'lucide-react'
+import { PlaceType } from '@instapark/types'
 
 export type CategoryType = {
     id: string
