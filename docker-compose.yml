@@ -1,14 +1,4 @@
 services:
-  auth-server:
-    container_name: auth-server
-    build:
-      context: .
-      dockerfile: ./apps/auth-server/Dockerfile
-    restart: always
-    ports:
-      - 8081:8081
-    networks:
-      - instapark_network
   zookeeper:
     image: wurstmeister/zookeeper:latest
     ports:

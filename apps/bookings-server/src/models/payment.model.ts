@@ -1,5 +1,5 @@
 import { Payment, PaymentType } from "@instapark/types";
-import { model, Schema } from "@instapark/utils";
+import { model, Schema } from "mongoose";
 
 export const paymentSchema = new Schema<Payment>(
     {

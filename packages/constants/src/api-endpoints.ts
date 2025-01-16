@@ -24,12 +24,10 @@ export const API_ENDPOINTS = {
         ROUTES: {
             LISTING: {
                 PREFIX: "/listings",
-                UPSERT: "/upsert",
-                GET: "/get/:listingId",
-                DELETE: "/delete/:listingId"
-            },
-            KAFKA: {
-                PREFIX: "/listings/kafka"
+                CREATE: "/create",
+                UPDATE: "/update/:id",
+                GET: "/get/:id",
+                DELETE: "/delete/:id",
             },
             UPLOADTHING: {
                 PREFIX: "/listings/uploadthing"
@@ -50,12 +48,13 @@ export const API_ENDPOINTS = {
         URL: "http://localhost:8080/bookings",
         PREFIX: "/bookings",
         ROUTES: {
-
+            BOOKINGS : {
+                PREFIX : "/bookings",
+                LOCK : "/lock",
+                CREATE : "/create",
+                COMPLETE : "/complete"
+            }
         }
-    },
-    PAYMENTS_SERVER: {
-        URL: "http://localhost:8080/payments",
-        PREFIX: "/payments"
     },
     SEARCH_SERVER: {
         URL: "http://localhost:8080/search",
@@ -65,7 +64,10 @@ export const API_ENDPOINTS = {
                 PREFIX: "/search"
             },
             TYPESENSE: {
-                PREFIX: "/search/typesense"
+                PREFIX: "/search/typesense",
+                CREATE: "/create",
+                UPDATE : "/update",
+                DELETE : "/delete"
             },
             OLAMAPS: {
                 PREFIX: "/search/olamaps",

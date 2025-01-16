@@ -1,10 +1,10 @@
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import listingsRouter from "./routes/listings.route";
 import redisRouter from "./routes/redis.route";
-import kafkaRouter from "./routes/kafka.route";
 import { API_ENDPOINTS } from "@instapark/constants";
 import { uploadthingExpress } from "./uploadthing/uploadthing-express";
 import { config, cors, express } from "@instapark/utils";
+import mongoose from "mongoose";
 
 config();
 
@@ -25,6 +25,8 @@ async function init() {
 
     app.use(middleware());
 
+    await mongoose.connect("mongodb://localhost:27017/instapark-listings")
+
     app.get(
         API_ENDPOINTS.LISTINGS_SERVER.PREFIX,
         (req, res) => {
@@ -34,10 +36,6 @@ async function init() {
     app.use(
         API_ENDPOINTS.LISTINGS_SERVER.ROUTES.LISTING.PREFIX,
         listingsRouter);
-
-    app.use(
-        API_ENDPOINTS.LISTINGS_SERVER.ROUTES.KAFKA.PREFIX,
-        kafkaRouter)
 
     app.use(
         API_ENDPOINTS.LISTINGS_SERVER.ROUTES.UPLOADTHING.PREFIX,

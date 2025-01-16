@@ -12,9 +12,12 @@
     "@instapark/auth": "workspace:^",
     "@instapark/constants": "workspace:^",
     "@instapark/kafka": "workspace:^",
+    "@instapark/schemas": "workspace:^",
     "@instapark/utils": "workspace:^",
     "@prisma/client": "^6.2.1",
     "ioredis": "^5.4.1",
+    "mongoose": "^8.9.5",
+    "postgres": "^3.4.5",
     "uploadthing": "^7.3.0"
   },
   "devDependencies": {

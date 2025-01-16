@@ -3,7 +3,6 @@ interface MessageChatPageProps {
 }
 
 const MessageChatPage = async ({ params }: MessageChatPageProps) => {
-    const receiverId = (await params).id;
     return (
         <div></div>
     )

@@ -24,3 +24,5 @@ export { AppSidebar } from "./src/components/app-sidebar";
 export { HomeListingsDetailed } from "./src/home/home-listings-detailed"
 export { AuthProvider } from "./src/providers/auth-provider";
 export { StoreProvider } from "./src/providers/store-provider";
+export { AuthPage } from "./src/auth/auth-page"
+export { SessionAuthProvider } from "./src/providers/session-auth-provider"

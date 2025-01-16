@@ -1,8 +1,8 @@
 import axios from "axios";
 import express from "express"
 import cors from "cors"
-import mongoose from "mongoose";
 export { axios }
+import postgres from "postgres";
 export { express }
 export { sendResponse } from './src/send-response'
 export { cors };
@@ -11,5 +11,6 @@ export { config } from "dotenv";
 export { Router, type Request, type Response } from "express";
 export { getInterval } from "./src/functions";
 export { Client } from "pg"
-export { model, Schema } from "mongoose"
-export { mongoose }
+export { postgres }
+export { v4 as uuid } from "uuid"
+export { addUUID } from "./src/functions";

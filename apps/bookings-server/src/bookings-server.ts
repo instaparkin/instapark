@@ -1,4 +1,4 @@
-import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
+import { errorHandler, middleware, supertokens, ensureSuperTokensInit } from "@instapark/auth";
 import { API_ENDPOINTS } from "@instapark/constants";
 import { config, cors, express } from "@instapark/utils";
 import mongoose from "mongoose"
@@ -31,7 +31,7 @@ async function init() {
         res.send("Booking Server is up and running");
     })
 
-    app.use("/bookings",
+    app.use(API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.PREFIX,
         bookingsRouter
     )
 

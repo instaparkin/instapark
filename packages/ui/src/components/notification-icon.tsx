@@ -21,26 +21,6 @@ interface Message {
 
 export const NotificationIcon = ({ userId }: { userId: string }) => {
 
-    console.log(userId);
-
-    const [unreadMessages, setUnreadMessages] = useState<Message[]>([]);
-
-    useEffect(() => {
-        axios.get(apiEndpoint({
-            url: "http://localhost:8084/messages/get/unread/${userId}",
-            params: {
-                userId
-            }
-        })).then((res) => {
-            console.log(res.data);
-
-            console.log(res.data);
-            setUnreadMessages(res.data)
-        }).catch((error) => {
-            console.log(error);
-        })
-    }, [])
-
     return (
         <Popover>
             <PopoverTrigger>
@@ -77,16 +57,7 @@ export const NotificationIcon = ({ userId }: { userId: string }) => {
                         <TabsContent value="inbox" className="m-0">
                             <ScrollArea className="h-[min(calc(100vh-8rem),400px)]">
                                 <CardContent className="p-0">
-                                    {unreadMessages.map((message, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex gap-3 p-4 border-b hover:bg-accent transition-colors"
-                                        >
-                                            <div className="space-y-1">
-                                                <p className="text-sm">{message.content}</p>
-                                            </div>
-                                        </div>
-                                    ))}
+                               
                                 </CardContent>
                             </ScrollArea>
                             <div className="p-4 border-t">

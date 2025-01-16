@@ -1,8 +1,18 @@
 export {
+    BookingStatus,
+    PaymentType,
+    Vehicle,
+    PlaceType,
+} from "./src/enums"
+export {
     type Listing,
-    type Vehicle,
-    type PlaceType,
-    type Photo
+    type Photo,
+    type ListingRequest,
+    type AvailableDateRequest,
+    type AllowedVehicleRequest,
+    type PhotoRequest,
+    type Review,
+    type Rating
 } from "./src/Listing";
 export {
     type SearchResult,
@@ -25,6 +35,6 @@ export {
     type Payment,
 } from "./src/Booking"
 export {
-    BookingStatus,
-    PaymentType,
-} from "./src/enums"
+    type SearchProducerType,
+    type SearchConsumerType
+} from "./src/Kafka"

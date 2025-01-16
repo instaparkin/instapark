@@ -1,84 +1,60 @@
-import { Request, Response } from "@instapark/utils";
-import { listingsDb } from "../db/listings-db-client";
-import { Listing } from "@instapark/types";
+import { addUUID, Request, Response, sendResponse } from "@instapark/utils";
+import { ListingModel, AllowedVehicleModel, PhotoModel } from "../models/listing.models";
+import { ListingRequest } from "@instapark/types";
+import { listingsCreateSchema } from "@instapark/schemas"
+import { searchProducer } from "@instapark/kafka";
 
-export const upsertListing = async (req: Request, res: Response) => {
+export const createListing = async (req: Request, res: Response) => {
+    const session = await ListingModel.startSession();
+
     try {
-        const listing: Listing = req.body;
+        const listing = req.body as ListingRequest;
+        const result = listingsCreateSchema.safeParse(listing);
 
-        // Begin transaction
-        await listingsDb.query('BEGIN');
+        if (!result.success) {
+            return sendResponse(res, 400, "Some fields are missing", "FAILURE", result.error);
+        }
 
-        // Upsert Listing
-        const upsertListingQuery = `
-            INSERT INTO "Listing" (
-                "id", "userId", "type", "basePrice", "pphbi", "pphcy", "pphcr", "plph",
-                "latitude", "longitude", "country", "state", "district", "city", "street",
-                "pincode", "name", "landmark", "naStartDate", "naEndDate"
-            ) VALUES (
-                $1, $2, $3, $4, $5, $6, $7, $8,
-                $9, $10, $11, $12, $13, $14, $15, $16,
-                $17, $18, $19, $20
-            )
-            ON CONFLICT ("id") DO UPDATE SET
-                "userId" = EXCLUDED."userId",
-                "type" = EXCLUDED."type",
-                "basePrice" = EXCLUDED."basePrice",
-                "pphbi" = EXCLUDED."pphbi",
-                "pphcy" = EXCLUDED."pphcy",
-                "pphcr" = EXCLUDED."pphcr",
-                "plph" = EXCLUDED."plph",
-                "latitude" = EXCLUDED."latitude",
-                "longitude" = EXCLUDED."longitude",
-                "country" = EXCLUDED."country",
-                "state" = EXCLUDED."state",
-                "district" = EXCLUDED."district",
-                "city" = EXCLUDED."city",
-                "street" = EXCLUDED."street",
-                "pincode" = EXCLUDED."pincode",
-                "name" = EXCLUDED."name",
-                "landmark" = EXCLUDED."landmark",
-                "naStartDate" = EXCLUDED."na_start_date",
-                "naEndDate" = EXCLUDED."na_end_date",
-                "updatedAt" = CURRENT_TIMESTAMP;
-        `;
-        await listingsDb.query(upsertListingQuery, Object.values(listing));
+        session.startTransaction();
+        const a = await ListingModel.findOne({ latitude: listing.latitude, longitude: listing.longitude }).select('-_id -__v');
+        if (a) {
+            return sendResponse(res, 200, "A Listing already exists on this location", "FAILURE", a);
+        }
+        const newListing = await ListingModel.create([addUUID(listing)], { session });
+        if (!newListing || !newListing[0]) {
+            return sendResponse(res, 400, "Failed to create Listing", "FAILURE");
+        }
+        const allowedVehicles = await AllowedVehicleModel.create(
+            listing.allowedVehicles.map(vehicle =>
+                addUUID(vehicle, newListing[0]?.id, "listingId")
+            ), { session });
 
-        // Upsert Photos
-        const upsertPhotosQuery = `
-            INSERT INTO "Photos" ("listingId", "url")
-            VALUES ($1, unnest($2::text[]))
-            ON CONFLICT ("url") DO NOTHING;
-        `;
-        await listingsDb.query(upsertPhotosQuery, [listing.id, listing.photos]);
+        const photos = await PhotoModel.create(listing.photos.map(photo =>
+            addUUID(photo, newListing[0]?.id, "listingId")
+        ), { session });
 
-        // Delete photos not in the new list
-        const deletePhotosQuery = `
-            DELETE FROM "Photos"
-            WHERE "listingId" = $1 AND "url" != ALL($2::text[]);
-        `;
-        await listingsDb.query(deletePhotosQuery, [listing.id, listing.photos]);
+            console.log(newListing[0]);
+        await session.commitTransaction();
+        const data = {
+            ...newListing[0]._doc, // Spread all fields of newListing[0]
+            allowedVehicles,
+            photos
+        };
 
-        // Upsert AllowedVehicles
-        const upsertAllowedVehiclesQuery = `
-            INSERT INTO "AllowedVehicles" ("listingId", "vehicle")
-            VALUES ($1, unnest($2::"VehicleType"[]))
-            ON CONFLICT ("listingId", "vehicle") DO NOTHING;
-        `;
-        await listingsDb.query(upsertAllowedVehiclesQuery, [listing.id, listing.allowedVehicles]);
-
-        // Delete vehicles not in the new list
-        const deleteAllowedVehiclesQuery = `
-            DELETE FROM "AllowedVehicles"
-            WHERE "listingId" = $1 AND "vehicle" != ALL($2::"VehicleType"[]);
-        `;
-        await listingsDb.query(deleteAllowedVehiclesQuery, [listing.id, listing.allowedVehicles]);
-
-        await listingsDb.query('COMMIT');
-        res.status(200).json({ message: 'Listing created or updated successfully.' });
+        console.log(data);
+        
+        /**Produce the message to kafka to add it to Typesense */
+        await searchProducer({
+            type: "POST",
+            data: data,
+            partition: 0
+        });
+        return sendResponse(res, 201, "Listing created successfully.", "SUCCESS", data);
     } catch (error) {
-        await listingsDb.query('ROLLBACK');
-        res.status(500).json({ error: 'An error occurred while processing the request.' });
+        await session.abortTransaction();
+        return sendResponse(res, 500, "An unexpected error occurred while creating the listing.", "FAILURE", error);
+    } finally {
+        session.endSession();
     }
 };
 
@@ -86,82 +62,72 @@ export const getListing = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
-        // Fetch the listing details
-        const listingQuery = `
-            SELECT *
-            FROM "Listing"
-            WHERE "id" = $1;
-        `;
-        const listingResult = await listingsDb.query(listingQuery, [id]);
+        const listing = await ListingModel.find({ id }).select('-_id -__v');
 
-        if (listingResult.rowCount === 0) {
+        if (!listing || listing.length === 0) {
             res.status(404).json({ error: "Listing not found." });
             return;
         }
 
-        const listing = listingResult.rows[0];
-
-        // Fetch the photos for the listing
-        const photosQuery = `
-            SELECT *
-            FROM "Photos"
-            WHERE "listingId" = $1;
-        `;
-        const photosResult = await listingsDb.query(photosQuery, [id]);
-        const photos = photosResult.rows.map(row => row.url);
-
-        // Fetch the allowed vehicles for the listing
-        const allowedVehiclesQuery = `
-            SELECT *
-            FROM "AllowedVehicles"
-            WHERE "listingId" = $1;
-        `;
-        const allowedVehiclesResult = await listingsDb.query(allowedVehiclesQuery, [id]);
-        const allowedVehicles = allowedVehiclesResult.rows.map(row => row.vehicle);
-
-        // Combine the data into a single response
-        const response = {
-            ...listing,
-            photos,
-            allowedVehicles,
-        };
-
-        res.status(200).json(response);
+        sendResponse(res, 200, "Listing fetched successfully.", "SUCCESS", listing);
     } catch (error) {
-        res.status(500).json({ error: "Failed to get listing.", details: error });
+        return sendResponse(res, 500, "An unexpected error occurred while fetching the listing.", "FAILURE", error);
     }
 };
 
+export const updateListing = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body as ListingRequest;
+
+        const updatedListing = await ListingModel.findOneAndUpdate({ id }, updates, { new: true });
+
+        if (!updatedListing) {
+            res.status(404).json({ error: "Listing not found." });
+            return;
+        }
+
+        await searchProducer({
+            type: "PUT",
+            data: updatedListing,
+            partition: 0
+        });
+        sendResponse(res, 200, "Listing updated successfully.", "SUCCESS", updatedListing);
+    } catch (error) {
+        return sendResponse(res, 500, "An unexpected error occurred while Updating the listing.", "FAILURE", error);
+    }
+};
 
 export const deleteListing = async (req: Request, res: Response) => {
+    const session = await ListingModel.startSession();
+    session.startTransaction();
+
     try {
         const { id } = req.params;
 
-        // Begin transaction
-        await listingsDb.query('BEGIN');
+        await AllowedVehicleModel.deleteMany({ listingId: id }, { session });
 
-        // Delete from Listing
-        const deleteListingQuery = `
-            DELETE FROM "Listing"
-            WHERE "listingId" = $1
-            RETURNING *;
-        `;
-        const result = await listingsDb.query(deleteListingQuery, [id]);
+        await PhotoModel.deleteMany({ listingId: id }, { session });
 
-        // If no rows were deleted, listingId does not exist
-        if (result.rowCount === 0) {
-            throw new Error('Listing not found.');
+        const deletedListing = await ListingModel.findOneAndDelete({ id }, { session });
+
+        await searchProducer({
+            type: "DELETE",
+            data: id as string,
+            partition: 0
+        });
+
+        if (!deletedListing) {
+            throw new Error("Listing not found.");
         }
 
-        // Commit transaction
-        await listingsDb.query('COMMIT');
+        await session.commitTransaction();
 
-        res.status(200).json({ message: 'Listing and related records deleted successfully.' });
+        sendResponse(res, 200, "Listing deleted successfully.", "SUCCESS", deletedListing);
     } catch (error) {
-        // Rollback transaction in case of an error
-        await listingsDb.query('ROLLBACK');
-        console.error('Error deleting listing:', error);
-        res.status(500).json({ error: error || 'An error occurred while deleting the listing.' });
+        await session.abortTransaction();
+        return sendResponse(res, 500, "An unexpected error occurred while Deleting the listing.", "FAILURE", error);
+    } finally {
+        session.endSession();
     }
 };
-

@@ -1,13 +1,3 @@
-/**
- * These types are used in both the frontend and backend of the project.
- * These are defined directly from the database.
- * These should be changed accordingly whenever the database is changed.
- */
-
-export type PlaceType = 'House' | 'Barn' | 'Cabin' | 'Castle' | 'Hotel' | 'Farm';
-
-export type Vehicle = "Car" | "Bike" | "Cycle"
-
 export interface Photo {
     listingId: string
     url: string
@@ -20,7 +10,7 @@ export interface AllowedVehicle {
     vehicle: Vehicle
 }
 
-export interface NotAvailableDate {
+export interface AvailableDate {
     listingId: string;
     startDate: Date;
     endDate: Date
@@ -47,7 +37,45 @@ export interface Listing {
     pphcr: number;
     plph: number;
     photos: Photo[]
-    notAvailableDates?: NotAvailableDate[]
+    availableDates?: AvailableDate[];
+    isOpen: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface Review {
+    id: string
+    listingId: string;
+    location: number;
+    cleanliness: number;
+    communication: number;
+    value: number;
+    accuracy: number;
+    description?: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface Rating {
+    id: string;
+    listingId: string;
+    rating: number;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export type PhotoRequest =
+    Omit<Photo,
+        "listingId" | "createdAt" | "updatedAt">;
+
+export type AllowedVehicleRequest = Omit<AllowedVehicle, "listingId">;
+
+export type AvailableDateRequest = Omit<AvailableDate, "listingId">;
+
+export type ListingRequest =
+    Omit<Listing,
+        "id" | "createdAt" | "updatedAt" | "allowedVehicles" | "photos" | "availableDates" | "isOpen"> &
+    {
+        photos: PhotoRequest[];
+        allowedVehicles: AllowedVehicleRequest[];
+    };

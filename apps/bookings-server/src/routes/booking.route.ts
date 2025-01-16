@@ -1,13 +1,20 @@
 import { Router } from "@instapark/utils";
 import { createLock } from "../controllers/booking.controller";
 import { completeBooking, createBooking } from "../controllers/payment.controller";
+import { API_ENDPOINTS } from "@instapark/constants";
 
 const router = Router();
 
-router.post("/lock", createLock);
+router.post(
+    API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.LOCK,
+    createLock);
 
-router.post("/create", createBooking);
+router.post(
+    API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.CREATE,
+    createBooking);
 
-router.post("/complete", completeBooking);
+router.post(
+    API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.COMPLETE,
+    completeBooking);
 
 export default router;

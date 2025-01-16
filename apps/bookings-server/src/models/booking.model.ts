@@ -1,4 +1,4 @@
-import { Schema, model } from "@instapark/utils";
+import { Schema, model } from "mongoose";
 import { Booking } from "@instapark/types";
 
 const bookingSchema = new Schema<Booking>(

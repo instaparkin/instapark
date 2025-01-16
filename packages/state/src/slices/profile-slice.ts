@@ -1,4 +1,4 @@
-import { axios, logger } from "@instapark/utils";
+import axios from "axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type Fullname = {
@@ -18,8 +18,7 @@ export const profileFullname = createAsyncThunk<Fullname, string, ThunkApiConfig
             const response = await axios.get<Fullname>(`http://localhost:8088/profile/fullname/get/${userId}`);
             return response.data;
         } catch (error) {
-            logger.error(error);
-            return rejectWithValue("Failed to fetch profile fullname.");
+            return rejectWithValue("Failed to fetch profile fullname." + error);
         }
     }
 );

@@ -1,9 +1,11 @@
 import { Router } from "@instapark/utils";
-import { deleteListing, upsertListing } from "../controllers/typesense.controller";
+import { deleteListing, createListing, updateListing } from "../controllers/typesense.controller";
 
 const router = Router();
 
-router.post("/listing/upsert", upsertListing)
+router.post("/listing/create", createListing)
+
+router.put("/listing/update", updateListing)
 
 router.delete("/listing/delete/:id", deleteListing)
 

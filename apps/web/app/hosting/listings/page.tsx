@@ -1,6 +1,6 @@
 "use client"
 
-import { ListingsLoading, ListingsMain } from '@instapark/ui'
+import { ListingsLoading } from '@instapark/ui'
 import React from 'react'
 import dynamic from "next/dynamic"
 

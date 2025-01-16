@@ -37,7 +37,6 @@ async function init() {
 
     app.use(
         API_ENDPOINTS.SEARCH_SERVER.ROUTES.TYPESENSE.PREFIX,
-        verifySession(),
         TypesenseRoute);
 
     app.use(

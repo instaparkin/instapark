@@ -1,12 +1,16 @@
 import { Router } from "@instapark/utils";
-import { deleteListing, getListing, upsertListing } from "../controllers/listings.controller";
+import { deleteListing, getListing, createListing, updateListing } from "../controllers/listings.controller";
 import { API_ENDPOINTS } from "@instapark/constants";
 
 const router = Router();
 
 router.post(
-    API_ENDPOINTS.LISTINGS_SERVER.ROUTES.LISTING.UPSERT,
-    upsertListing);
+    API_ENDPOINTS.LISTINGS_SERVER.ROUTES.LISTING.CREATE,
+    createListing);
+
+router.put(
+    API_ENDPOINTS.LISTINGS_SERVER.ROUTES.LISTING.UPDATE,
+    updateListing);
 
 router.get(
     API_ENDPOINTS.LISTINGS_SERVER.ROUTES.LISTING.GET,
