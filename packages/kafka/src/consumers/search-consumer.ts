@@ -1,7 +1,8 @@
 import { kafka } from "../kafka/kafka";
 import { axios, logger } from "@instapark/utils";
 import { KAFKA_CONSTANTS } from "../constants/kafka-constants";
-import { Listing } from "@instapark/types"
+import { Listing, SearchConsumerType } from "@instapark/types"
+
 
 interface SearchConsumerProps {
     fromBeginning?: boolean;
@@ -22,18 +23,24 @@ export async function searchConsumer({ fromBeginning = false }: SearchConsumerPr
         await consumer.run({
             eachMessage: async ({ message }) => {
                 try {
-                    const formData: Listing = JSON.parse(message.value?.toString() || '{}').data;
+                    const messageValue: SearchConsumerType = JSON.parse(message.value?.toString() || '{}');
 
-                    logger.info("Form Data:", formData);
+                    logger.info("Form Data:", messageValue.data);
 
                     try {
-                        await Promise.all([
-                            axios.post("http://localhost:8080/listings/upsert", formData),
-                            axios.post("http://localhost:8080/search/typesense/documents/add", {
-                                collection: "listing_1",
-                                data: formData
-                            })
-                        ]);
+                        if (messageValue.type === "POST") {
+                            axios.post("http://localhost:8080/search/typesense/listing/create",
+                                messageValue.data
+                            )
+                        }
+                        else if (messageValue.type === "PUT") {
+                            axios.put("http://localhost:8080/search/typesense/listing/update",
+                                messageValue.data
+                            )
+                        } else if (messageValue.type === "DELETE") {
+                            axios.delete(`http://localhost:8080/search/typesense/listing/delete/${messageValue.data}`,
+                            )
+                        }
                     } catch (error) {
                         console.error("Error adding documents to Typesense:", error);
                     }

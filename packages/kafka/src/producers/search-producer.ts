@@ -1,13 +1,8 @@
+import { SearchProducerType } from "@instapark/types";
 import { KAFKA_CONSTANTS } from "../constants/kafka-constants";
 import { kafka } from "../kafka/kafka";
 
-interface ProduceMessageProps {
-    key: string
-    data: Record<string, unknown> | string
-    partition: number
-}
-
-export async function searchProducer({ key, data, partition }: ProduceMessageProps) {
+export async function searchProducer({ type, data, partition }: SearchProducerType) {
 
     const producer = kafka.producer();
 
@@ -17,9 +12,8 @@ export async function searchProducer({ key, data, partition }: ProduceMessagePro
         topic: KAFKA_CONSTANTS.SEARCH_TOPIC,
         messages: [
             {
-                key: key,
-                value: JSON.stringify({ data }),
-                partition: partition
+                value: JSON.stringify({ type, data }),
+                partition: partition,
             }
         ]
     })
