@@ -126,17 +126,6 @@ export function SearchListingsComponent({ children, onChange }: SearchListingsPr
             <div className="text-sm font-medium">Check out</div>
             <div className="text-sm text-gray-400">Add dates</div>
           </button>
-
-          {/* Search Button */}
-          <div className="w-full sm:w-auto px-4 sm:px-2 py-2 sm:py-0">
-            <Button
-              size="icon"
-              className="w-full sm:w-12 h-12 rounded-full bg-pink-500 hover:bg-pink-600 text-white shadow-md"
-            >
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Search</span>
-            </Button>
-          </div>
         </div>
 
         {/* Dropdown Content */}

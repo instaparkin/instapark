@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        instapark: "bg-blue-400 hover:bg-blue-500 hover:text-accent-foreground",
+        instapark: "bg-instapark text-background dark:bg-background dark:text-foreground hover:text-accent-foreground",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import { FaRegUser } from "react-icons/fa";
-import { IoSettingsOutline } from "react-icons/io5";
 import { LuAlignJustify } from "react-icons/lu";
 import Link from "next/link";
 
@@ -26,6 +24,7 @@ import { SwitchRoleButton } from "../components/switch-role-button";
 import { USER_BUTTON_DEFAULT_PROTECTED_ITEMS, USER_BUTTON_PUBLIC_ITEMS } from "./auth-constants";
 
 interface UserButtonProps {
+    first_name: string
     userId: string;
     navigationItems: {
         group: string;
@@ -60,6 +59,7 @@ const DropdownItems = (
 };
 
 export const UserButton: React.FC<UserButtonProps> = ({
+    first_name,
     userId,
     navigationItems,
 }) => {
@@ -76,8 +76,7 @@ export const UserButton: React.FC<UserButtonProps> = ({
                 <span className="hidden sm:block">
                     {userId ? (
                         <Avatar>
-                            <AvatarImage src="/instapark.svg" />
-                            <AvatarFallback>P</AvatarFallback>
+                            <AvatarFallback>{first_name.at(0)}</AvatarFallback>
                         </Avatar>
                     ) : (
                         <Icon>

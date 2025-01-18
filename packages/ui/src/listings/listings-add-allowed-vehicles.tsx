@@ -16,7 +16,7 @@ import {
 } from "../components/select";
 import { Button } from "../components/button";
 import { Car, BikeIcon, Cylinder } from "lucide-react";
-import { Listing, Vehicle } from "@instapark/types";
+import { Listing, ListingRequest, Vehicle } from "@instapark/types";
 
 const vehicleIcons: Record<Vehicle, React.ReactNode> = {
     "Car": <Car className="w-4 h-4 mr-2" />,
@@ -24,7 +24,7 @@ const vehicleIcons: Record<Vehicle, React.ReactNode> = {
     "Cycle": <Cylinder className="w-4 h-4 mr-2" />,
 };
 
-export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<Listing> }) {
+export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<ListingRequest> }) {
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: "allowedVehicles",
@@ -76,7 +76,7 @@ export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<Listi
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => append({ listingId: "", vehicle: "Car" })} // Default to "Car"
+                    onClick={() => append({ vehicle: "Car" })} 
                 >
                     Add Vehicle
                 </Button>

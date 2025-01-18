@@ -24,25 +24,16 @@ const chartConfig = {
 export function SearchFilterPrice() {
     const [range, setRange] = React.useState<[number, number]>([1150, 7521]);
 
-    const data = useSelector((state: RootState) => state.search.listingData);
-
-    const searchFilterPriceData: SearchFilterPriceData[] = data.map(listing => {
-        return {
-            price: listing.pphbi,
-            count: 1
-        }
-    })
-
     const isInRange = (price: number) => {
         return price >= range[0] && price <= range[1]
     }
+    
 
     return (
-        <SearchFilter title="Pricing">
+        <SearchFilter title="Price Range">
             <div className="relative mt-6">
                 <ChartContainer config={chartConfig} className="">
                     <BarChart
-                        data={searchFilterPriceData}
                         margin={{
                             top: 0,
                             right: 24,

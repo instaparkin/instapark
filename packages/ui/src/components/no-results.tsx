@@ -4,7 +4,7 @@ import { Icon } from "./icon"
 
 interface INoResults {
   text: string
-  icon: React.ReactNode
+  icon?: React.ReactNode
 }
 
 export const NoResults = ({ text, icon }: INoResults) => {

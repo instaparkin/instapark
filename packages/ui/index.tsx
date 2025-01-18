@@ -26,3 +26,4 @@ export { AuthProvider } from "./src/providers/auth-provider";
 export { StoreProvider } from "./src/providers/store-provider";
 export { AuthPage } from "./src/auth/auth-page"
 export { SessionAuthProvider } from "./src/providers/session-auth-provider"
+export { SearchMain } from "./src/search/search-main"

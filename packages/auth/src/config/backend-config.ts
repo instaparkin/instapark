@@ -6,6 +6,7 @@ import Dashboard from "supertokens-node/recipe/dashboard";
 import SuperTokens from "supertokens-node/lib/build/supertokens";
 import { AUTH_CONSTANTS } from "../constants/auth-constants";
 import { GLOBAL_CONSTANTS } from "@instapark/constants";
+import UserMetadata from "supertokens-node/recipe/usermetadata";
 
 console.log(AUTH_CONSTANTS.SUPERTOKENS_API_KEY);
 
@@ -70,6 +71,7 @@ const backendConfig = (): TypeInput => {
             Session.init({
                 exposeAccessTokenToFrontendInCookieBasedAuth: true
             }),
+            UserMetadata.init(),
             Dashboard.init(),
         ],
     };

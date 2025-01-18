@@ -1,12 +1,12 @@
 "use client"
 
-import { WishListForm } from "@instapark/forms";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./dialog";
 import { Button } from "./button";
 import { Heart } from "lucide-react";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./form";
 import { Input } from "./input";
+import { WishListCreateForm } from "../forms/wishlist-create-form";
 
 interface ListingWishlistProps {
     triggerText?: string
@@ -21,7 +21,7 @@ export const ListingWishlist: React.FC<ListingWishlistProps> = ({ triggerText })
         event.stopPropagation();
     };
 
-    const form = WishListForm();
+    const form = WishListCreateForm();
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

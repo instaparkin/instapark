@@ -9,13 +9,13 @@ import { v4 as uuid } from "uuid"
 import Image from "next/image";
 import { Button } from "../components/button";
 import { X } from "lucide-react";
-import { Listing } from "@instapark/types";
+import { Listing, ListingRequest } from "@instapark/types";
 
 export const UploadDropzone = generateUploadDropzone({
     url: uiConfig.routes.LISTING_ADD_IMAGE_ROUTE
 });
 
-export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<Listing> }) => {
+export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest> }) => {
     const removePhoto = (url: string) => {
         const currentPhotos = form.getValues("photos") || []
         const updatedPhotos = currentPhotos.filter((photo) => photo.url !== url)
@@ -29,10 +29,6 @@ export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<Listing> }) =>
                     const currentPhotos = form.getValues("photos") || [];
                     const newPhotos = res?.map((file) => ({
                         url: file.url,
-                        listingId: uuid(),
-                        photoId: uuid(),
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
                     }));
                     form.setValue("photos", [...currentPhotos, ...newPhotos]);
                     toast.success("Upload Complete");

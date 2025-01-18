@@ -6,9 +6,9 @@ import { ListingsAddAllowedVehicles } from "./listings-add-allowed-vehicles";
 import { Step } from "../types/multi-step-form-types";
 import { ListingsStepInfo } from "./listings-step-info";
 import { Success } from "../components/success";
-import { Listing } from "@instapark/types";
+import { ListingRequest } from "@instapark/types";
 
-export const listingsAddSteps: Step<Listing>[] = [
+export const listingsAddSteps: Step<ListingRequest>[] = [
     {
         substeps: [
             {

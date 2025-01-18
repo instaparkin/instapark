@@ -9,12 +9,12 @@ interface SearchFilterProps {
 export const SearchFilter = ({ title, children }: SearchFilterProps) => {
     return (
         <Card className='border-none'>
-            <CardHeader>
-                <CardTitle>
+            <CardHeader className='px-0'>
+                <CardTitle className='text-lg font-medium'>
                     {title}
                 </CardTitle>
             </CardHeader>
-            <CardContent className='border-b'>
+            <CardContent className='border-b px-0'>
                 {children}
             </CardContent>
         </Card>

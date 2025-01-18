@@ -8,6 +8,7 @@ export interface SearchListingsProps {
         q: string
         name: string;
         filter_by?: string;
+        page?: number
     }[];
 }
 
@@ -32,6 +33,7 @@ export const searchListings = createAsyncThunk<Listing[], SearchListingsProps, {
                     collection: c.name,
                     q: c.q,
                     filter_by: c.filter_by,
+                    page: c.page
                 })),
             };
 

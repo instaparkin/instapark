@@ -8,7 +8,7 @@ import { ListingsFormField } from './listings-form-field';
 import dynamic from "next/dynamic";
 import { Skeleton } from '../components/skeleton';
 import { MapData } from '@instapark/state/src/slices/maps-slice';
-import { Listing } from '@instapark/types';
+import { Listing, ListingRequest } from '@instapark/types';
 
 const MapDynamic = dynamic(() =>
     import('../maps/maps-main').then((mod) => mod.MapsMain), {
@@ -19,16 +19,16 @@ const MapDynamic = dynamic(() =>
 );
 
 interface FieldsToUpdateProps {
-    path: Path<Listing>;
+    path: Path<ListingRequest>;
     value: string | number;
 }
 
-export const ListingsAddLocation = ({ form }: { form: UseFormReturn<Listing> }) => {
+export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingRequest> }) => {
     const { autocomplete } = useSelector((state: RootState) => state.maps);
 
     useEffect(() => {
         async function trigger() {
-            const paths: Path<Listing>[] = [
+            const paths: Path<ListingRequest>[] = [
                 "latitude",
                 "longitude",
                 "country",
@@ -40,8 +40,6 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<Listing> }) 
                 "name",
                 "landmark"
             ];
-            form.setValue("createdAt", new Date())
-            form.setValue("updatedAt", new Date())
             await form.watch(paths);
             await form.trigger(paths);
         }

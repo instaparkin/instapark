@@ -12,7 +12,7 @@ import { UserButton } from "../auth/user-button";
 import { HEADER_NAVIGATION_ITEMS } from "./header-constants"
 
 export const HeaderMain = () => {
-    const { userId } = useAuth();
+    const { userId, first_name } = useAuth();
     const pathname = usePathname();
     const isHostingPage = pathname.includes("hosting");
 
@@ -47,6 +47,7 @@ export const HeaderMain = () => {
                     <SwitchRoleButton variant="header" />
                     <NotificationIcon userId={userId} />
                     <UserButton
+                        first_name={first_name}
                         userId={userId}
                         navigationItems={navigationItems} />
                 </div>

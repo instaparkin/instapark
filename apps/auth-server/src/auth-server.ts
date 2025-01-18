@@ -1,7 +1,8 @@
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest } from "@instapark/auth";
 import { API_ENDPOINTS } from "@instapark/constants";
-import { config, cors, express } from "@instapark/utils";
-
+import { config, cors, express, sendResponse } from "@instapark/utils";
+import UserMetadata from "supertokens-node/recipe/usermetadata";
+import usernameRouter from "./routes/username.route";
 config();
 
 async function init() {
@@ -33,6 +34,25 @@ async function init() {
             userId: session!.getUserId(),
             accessTokenPayload: session!.getAccessTokenPayload(),
         });
+    });
+
+    app.use("/auth/username", verifySession(), usernameRouter)
+
+    app.post("/auth/username", verifySession(), async (req: SessionRequest, res) => {
+        const session = req.session;
+        const { first_name, last_name } = req.body;
+
+        console.log(first_name, last_name);
+
+        const userId = session?.getUserId() as string;
+
+        await UserMetadata.updateUserMetadata(userId, { first_name, last_name })
+            .then((response) => {
+                sendResponse(res, 200, "User Name added", "SUCCESS", response)
+            })
+            .catch((error) => {
+                sendResponse(res, 500, "Failed to add User Name added", "FAILURE", error)
+            })
     });
 
     app.use(errorHandler());

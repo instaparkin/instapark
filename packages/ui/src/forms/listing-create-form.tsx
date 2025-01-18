@@ -2,19 +2,17 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { listingsAddSchema } from "../../../schemas/src/listings/listings-create-schema";
 import z from "zod";
+import { listingsCreateSchema } from '@instapark/schemas'
+export type ListingsAddType = z.infer<typeof listingsCreateSchema>;
 
-export type ListingsAddType = z.infer<typeof listingsAddSchema>;
-
-export const ListingsAddForm = () =>
+export const ListingCreateForm = () =>
     useForm<ListingsAddType>({
-        resolver: zodResolver(listingsAddSchema),
+        resolver: zodResolver(listingsCreateSchema),
         defaultValues: {
-            id: "",
             userId: "",
             isOpen: true,
-            type: "House",
+            type: "",
             latitude: 0,
             longitude: 0,
             country: "",
@@ -25,17 +23,12 @@ export const ListingsAddForm = () =>
             pincode: 0,
             name: "",
             landmark: "",
-            allowedVehicles: [
-            ],
+            allowedVehicles: [],
             photos: [],
             basePrice: 0,
             pphbi: 0,
             pphcy: 0,
             pphcr: 0,
             plph: 0,
-            na_start_date: undefined,
-            na_end_date: undefined,
-            createdAt: new Date(),
-            updatedAt: new Date(),
         },
     });

@@ -6,11 +6,11 @@ import { Label } from '../components/label';
 import { Input } from '../components/input';
 import { fieldName } from '../utils/field-name';
 import { Path, UseFormReturn } from 'react-hook-form';
-import { Listing } from '@instapark/types';
+import { Listing, ListingRequest } from '@instapark/types';
 
 interface IListingsFormField {
-  form: UseFormReturn<Listing>;
-  name: Path<Listing>;
+  form: UseFormReturn<ListingRequest>;
+  name: Path<ListingRequest>;
   value?: string | number
 }
 

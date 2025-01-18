@@ -9,33 +9,18 @@ import toast from 'react-hot-toast'
 import uiConfig from "../../ui-config.json"
 import { v4 as uuid } from "uuid"
 import axios from 'axios'
-import { Listing } from '@instapark/types'
-import { ListingsAddForm } from '@instapark/forms'
+import { Listing, ListingRequest } from '@instapark/types'
 import { useAuth } from '../hooks/use-auth'
+import { ListingCreateForm } from '../forms/listing-create-form'
 
 export const ListingsAdd = () => {
-  const form = ListingsAddForm();
+  const form = ListingCreateForm();
   const { userId } = useAuth()
-  const handleSubmit = async (data: Listing) => {
+  const handleSubmit = async (data: ListingRequest) => {
     const listingId = uuid();
     try {
-      const dataWithUUIDs: Listing = {
-        ...data,
-        listingId,
-        userId: userId,
-        photos: data.photos.map(photo => ({
-          ...photo,
-          listingId
-        })),
-        allowedVehicles: data.allowedVehicles.map(vehicle => ({
-          ...vehicle,
-          listingId,
-        })),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
 
-      axios.post(uiConfig.routes.LISTING_ADD_ROUTE, dataWithUUIDs)
+      axios.post(uiConfig.routes.LISTING_ADD_ROUTE, data)
         .then((res) => {
           console.log(res);
         })
@@ -54,7 +39,7 @@ export const ListingsAdd = () => {
       <MultiStepForm
         form={form}
         steps={listingsAddSteps}
-        redisPrefix={session.userId}
+        redisPrefix={userId}
         redisSuffix={LISTINGS_ADD_FORM_KEY}
         onSubmit={({ data }) => handleSubmit(data)}
       />

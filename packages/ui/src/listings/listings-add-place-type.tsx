@@ -10,7 +10,7 @@ import { UseFormReturn } from "react-hook-form";
 import { PiFarm } from "react-icons/pi";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../components/form";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
-import { Listing, PlaceType } from "@instapark/types";
+import { Listing, ListingRequest, PlaceType } from "@instapark/types";
 
 export type PlaceTypeWithIcon = {
   type: PlaceType;
@@ -19,32 +19,32 @@ export type PlaceTypeWithIcon = {
 
 const placetypes: PlaceTypeWithIcon[] = [
   {
-    type: "House",
+    type: PlaceType.House,
     icon: <BsHouseDoor className="h-10 w-10" />,
   },
   {
-    type: "Hotel",
+    type: PlaceType.Hotel,
     icon: <LuHotel className="h-10 w-10" />,
   },
   {
-    type: "Castle",
+    type: PlaceType.Castle,
     icon: <PiCastleTurret className="h-10 w-10" />,
   },
   {
-    type: "Cabin",
+    type: PlaceType.Cabin,
     icon: <MdOutlineCabin className="h-10 w-10" />,
   },
   {
-    type: "Barn",
+    type: PlaceType.Barn,
     icon: <PiBarn className="h-10 w-10" />,
   },
   {
-    type: "Farm",
+    type: PlaceType.Farm,
     icon: <PiFarm className="h-10 w-10" />,
   },
 ];
 
-export const ListingsAddPlaceType = ({ form }: { form: UseFormReturn<Listing> }) => {
+export const ListingsAddPlaceType = ({ form }: { form: UseFormReturn<ListingRequest> }) => {
   return (
     <FormField
       control={form.control}

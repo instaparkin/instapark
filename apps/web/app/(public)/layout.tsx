@@ -10,12 +10,12 @@ const HeaderMainDynamic = dynamic(() =>
 
 const PublicLayout = ({ children }: { children: React.ReactNode }): JSX.Element => {
     return (
-        <AuthProvider>
-            <StoreProvider>
+        <StoreProvider>
+            <AuthProvider>
                 <HeaderMainDynamic />
-                {children}
-            </StoreProvider>
-        </AuthProvider>
+            </AuthProvider>
+            {children}
+        </StoreProvider>
     );
 }
 

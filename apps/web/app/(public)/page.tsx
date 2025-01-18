@@ -1,3 +1,5 @@
+"use client"
+
 import { HomeMain } from '@instapark/ui'
 
 const HomePage = () => {
