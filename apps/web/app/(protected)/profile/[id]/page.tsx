@@ -1,9 +1,11 @@
-import { ProfileMain } from '@instapark/ui'
+import { Page, ProfileMain } from '@instapark/ui'
 import React from 'react'
 
 const ProfilePage = () => {
     return (
-        <ProfileMain />
+        <Page>
+            <ProfileMain />
+        </Page>
     )
 }
 

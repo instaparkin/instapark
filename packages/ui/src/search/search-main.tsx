@@ -1,7 +1,7 @@
 "use client";
 
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
-import { Hits, Pagination, RefinementList, ClearRefinements, useHits } from "react-instantsearch";
+import { Hits, Pagination, ClearRefinements, useInstantSearch, RefinementList, RangeInput, TrendingItems, Configure } from "react-instantsearch";
 import { typesenseInstantsearchAdapter } from '../typesense/instantsearch-adapter';
 import { Listing } from '@instapark/types';
 import { ListingCard } from '../components/listing-card';
@@ -9,106 +9,111 @@ import { Autocomplete } from './search-autocomplete';
 import { SearchListingsFilter } from './search-listings-filter';
 import { SearchHeader } from './search-listings';
 import { Button } from '../components/button';
-import { useRef } from 'react';
 import { cn } from '../utils/cn';
-import { searchResultsPlugin } from './search-results-plugin';
+import { CustomHits } from './Hit-hook';
+import { ReactNode } from 'react';
+import { NoResults } from '../components/no-results';
+import { Search } from 'lucide-react';
+import { DateRangeFilter } from './date-picker';
+
 
 export function Hit({ hit }: { hit: Listing }) {
-    return <ListingCard listing={hit} />;
+  return <ListingCard listing={hit} />;
 }
 
 interface SearchHeaderProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export const SearchHeadera: React.FC<SearchHeaderProps> = ({ children }) => {
-    return (
-        <div className="flex flex-1">
-            {children}
-        </div>
-    );
-};
-
-
-interface SearchHeaderGroupProps extends React.HTMLAttributes<HTMLDivElement> { }
-
-export const SearchHeaderGroup: React.FC<SearchHeaderGroupProps> = ({ children }) => {
-    return (
-        <div className="flex w-full gap-4">
-            {children}
-        </div>
-    );
+  return (
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-screen mx-auto border-b py-4 pb-8">
+      {children}
+    </div>
+  );
 };
 
 interface SearchFooterProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export const SearchFooter: React.FC<SearchFooterProps> = ({ children }) => {
-    return (
-        <div className="flex justify-center w-full mx-auto py-4 my-4">
-            {children}
-        </div>
-    );
+  return (
+    <div className="flex justify-center w-full mx-auto py-4 my-4">
+      {children}
+    </div>
+  );
+};
+
+interface SearchContentProps extends React.HTMLAttributes<HTMLDivElement> { }
+
+export const SearchContent: React.FC<SearchContentProps> = ({ children }) => {
+  return (
+    <div className="container my-8">
+      {children}
+    </div>
+  );
 };
 
 interface SearchRootProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export const SearchRoot: React.FC<SearchRootProps> = ({ children, className }) => {
-    return (
-        <InstantSearchNext routing={true} indexName="listing_1" searchClient={typesenseInstantsearchAdapter.searchClient}>
-            <div className={cn(className, "p-4")}>{children}</div>
-        </InstantSearchNext>
-    );
+  return (
+    <InstantSearchNext routing={true} indexName="listing_1" searchClient={typesenseInstantsearchAdapter.searchClient}>
+      <div className={cn(className, "p-4")}>{children}</div>
+    </InstantSearchNext>
+  );
 };
 
 export const SearchMain = () => {
-    return (
-        <SearchRoot>
-            <SearchHeadera>
-                <SearchHeaderGroup>
-                    <Autocomplete openOnFocus placeholder='Search Listings' />
-                    <Button size="lg">Search </Button>
-                </SearchHeaderGroup>
-                <SearchHeaderGroup>
-                    <SearchListingsFilter
-                        ClearFilters={
-                            <ClearRefinements
-                                classNames={{
-                                    root: "flex items-center",
-                                    button: "font-semibold cursor-pointer hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 rounded-md",
-                                }}
-                                translations={{ resetButtonText: "Clear all" }}
-                            />
-                        }
-                    />
-                    <SearchHeader />
-                </SearchHeaderGroup>
-            </SearchHeadera>
-            <RefinementList
-                attribute="city"
-                classNames={{
-                    label: "flex items-center gap-2 justify-between w-full",
-                    checkbox: "h-4 w-4 rounded-md bg-red-400 text-red-400 fil-red-400",
-                    labelText: "",
-                    count: "px-2",
-                    root: "flex",
-                    item: "my-2",
-                }}
-            />
+
+  return (
+    <InstantSearchNext
+      routing={true}
+      indexName="listing_1"
+      searchClient={typesenseInstantsearchAdapter.searchClient}
+    >
+      <div className="p-4 max-w-[1400px] mx-auto">
+        <SearchHeader />
+        <NoResultsBoundary fallback={<NoResults icon={<Search />} text='No results' />}>
+          <RefinementList attribute='allowedVehicles' />
+          <RefinementList attribute='type' />
+          <div className="mt-8">
             <Hits
-                classNames={{
-                    list: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10",
-                }}
-                hitComponent={Hit}
+              classNames={{
+                list: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6",
+              }}
+              hitComponent={Hit}
             />
-            <SearchFooter>
-                <Pagination
-                    classNames={{
-                        list: "flex items-center",
-                        item: "p-2 h-12 w-12 flex items-center justify-center cursor-pointer border",
-                        firstPageItem: "rounded-l-md",
-                        lastPageItem: "rounded-r-md",
-                        selectedItem: "flex items-center justify-center bg-primary text-background",
-                    }}
-                />
-            </SearchFooter>
-        </SearchRoot>
+          </div>
+          <Configure index='listing_1' relevancyStrictness={1}  optionalFilters={["isOpen:!=true"]} />
+          <div className="flex justify-center mt-8">
+            <Pagination
+              classNames={{
+                list: "flex items-center gap-1",
+                item: "h-10 w-10 flex items-center justify-center rounded border hover:bg-accent",
+                selectedItem: "bg-primary text-primary-foreground hover:bg-primary/90",
+              }}
+            />
+          </div>
+        </NoResultsBoundary>
+      </div>
+    </InstantSearchNext >
+  )
+}
+
+interface NoResultsBoundaryProps {
+  children: ReactNode
+  fallback: ReactNode
+}
+
+function NoResultsBoundary({ children, fallback }: NoResultsBoundaryProps) {
+  const { results } = useInstantSearch();
+
+  if (!results.__isArtificial && results.nbHits === 0) {
+    return (
+      <>
+        {fallback}
+        <div hidden>{children}</div>
+      </>
     );
-};
+  }
+
+  return children;
+}

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { Booking } from "@instapark/types";
+import { Booking, BookingStatus } from "@instapark/types";
 
 const bookingSchema = new Schema<Booking>(
   {
@@ -27,6 +27,7 @@ const bookingSchema = new Schema<Booking>(
     status: {
       type: String,
       required: true,
+      enum: BookingStatus
     },
     lockedAt: {
       type: Date,

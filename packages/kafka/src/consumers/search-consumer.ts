@@ -29,16 +29,16 @@ export async function searchConsumer({ fromBeginning = false }: SearchConsumerPr
 
                     try {
                         if (messageValue.type === "POST") {
-                            axios.post("http://localhost:8080/search/typesense/listing/create",
+                            axios.post("http://localhost:8080/search/typesense/listing/",
                                 messageValue.data
                             )
                         }
                         else if (messageValue.type === "PUT") {
-                            axios.put("http://localhost:8080/search/typesense/listing/update",
+                            axios.put("http://localhost:8080/search/typesense/listing/",
                                 messageValue.data
                             )
                         } else if (messageValue.type === "DELETE") {
-                            axios.delete(`http://localhost:8080/search/typesense/listing/delete/${messageValue.data}`,
+                            axios.delete(`http://localhost:8080/search/typesense/listing/${messageValue.data}`,
                             )
                         }
                     } catch (error) {

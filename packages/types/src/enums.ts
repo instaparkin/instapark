@@ -9,7 +9,6 @@ export enum PaymentType {
     Completed = "Completed"
 }
 
-
 export enum Vehicle {
     Car = "Car",
     Bike = "Bike",

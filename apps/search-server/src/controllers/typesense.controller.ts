@@ -1,14 +1,14 @@
 import { typesenseClient } from "../typesense/typesense-client";
 import { Listing } from "@instapark/types";
 import { SEARCH_SERVER_CONSTANTS } from "../constants/search-server-constants";
-import { Request, Response, sendResponse } from "@instapark/utils";
+import { axios, Request, Response, sendResponse } from "@instapark/utils";
 
 // Upsert a listing document
 export const createListing = async (req: Request, res: Response) => {
-    const data  = req.body as Listing;
+    const data = req.body as Listing;
 
     console.log(data);
-    
+
     if (!data) {
         sendResponse(res, 400, "Invalid input from the client side", "FAILURE", null);
         return;
@@ -20,9 +20,24 @@ export const createListing = async (req: Request, res: Response) => {
             .documents()
             .create(data);
 
+        axios.post("http://localhost:8108/analytics/events",
+            {
+                "type": "search",
+                "name": "listing_search_event",
+                "data": {
+                    "q": data.country,
+                    "user_id": data.userId
+                }
+            },
+        {
+            headers: {
+                "x-typesense-api-key" : "xyz"
+            }
+        })
+
         sendResponse(res, 201, "Documents upserted successfully", "SUCCESS", result);
     } catch (error) {
-        sendResponse(res, 500, "Internal Server Error" , "FAILURE", {
+        sendResponse(res, 500, "Internal Server Error", "FAILURE", {
             data,
             error
         });
@@ -30,10 +45,10 @@ export const createListing = async (req: Request, res: Response) => {
 };
 
 export const updateListing = async (req: Request, res: Response) => {
-    const data  = req.body as Listing;
+    const data = req.body as Listing;
 
     console.log(data);
-    
+
     if (!data) {
         sendResponse(res, 400, "Invalid input from the client side", "FAILURE", null);
         return;
@@ -47,7 +62,7 @@ export const updateListing = async (req: Request, res: Response) => {
 
         sendResponse(res, 201, "Documents upserted successfully", "SUCCESS", result);
     } catch (error) {
-        sendResponse(res, 500, "Internal Server Error" , "FAILURE", {
+        sendResponse(res, 500, "Internal Server Error", "FAILURE", {
             data,
             error
         });

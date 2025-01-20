@@ -1,10 +1,8 @@
-import { Listing, Photo, PlaceType, Vehicle } from '@instapark/types';
-import { AllowedVehicle, AvailableDate, Rating, Review } from '@instapark/types/src/Listing';
+import { Listing, PlaceType, Vehicle, Rating, Review } from '@instapark/types';
 import mongoose, { Schema, Document } from 'mongoose';
+import { toUnixTimestamp, uuid } from '@instapark/utils';
 
-// Mongoose Schemas
 const ListingSchema: Schema = new Schema<Listing>({
-  id: { type: String, required: true },
   userId: { type: String, required: true },
   type: { type: String, enum: PlaceType, required: true },
   country: { type: String, required: true },
@@ -17,57 +15,46 @@ const ListingSchema: Schema = new Schema<Listing>({
   longitude: { type: Number, required: true },
   name: { type: String },
   landmark: { type: String },
+  allowedVehicles: { type: [String] },
   basePrice: { type: Number, required: true },
   pphbi: { type: Number, required: true },
   pphcy: { type: Number, required: true },
   pphcr: { type: Number, required: true },
   plph: { type: Number, required: true },
-  isOpen: { type: Boolean, required: true, default: true }
-}, { timestamps: true })
+  photos: { type: [String], required: true },
 
-const PhotoSchema: Schema = new Schema<Photo>({
-  listingId: { type: String, ref: 'Listing', required: true },
-  url: { type: String, required: true },
-}, { timestamps: true });
-
-const AllowedVehicleSchema: Schema = new Schema<AllowedVehicle>({
-  listingId: { type: String, ref: 'Listing', required: true },
-  vehicle: { type: String, enum: Vehicle, required: true }
-});
-
-const AvailableDateSchema: Schema = new Schema<AvailableDate>({
-  listingId: { type: String, ref: 'Listing', required: true },
-  startDate: { type: Date, required: true },
-  endDate: { type: Date, required: true }
-});
+  id: { type: String, required: true, default: uuid() },
+  isOpen: { type: Boolean, required: true, default: true },
+  rating: { type: Number, required: true, default: 0.00 },
+  availableFrom: { type: Number, required: true, default: toUnixTimestamp(new Date()) },
+  createdAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) },
+  updatedAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) }
+})
 
 const ReviewSchema: Schema = new Schema<Review>({
   id: { type: String, required: true },
-  listingId: { type: String, ref: 'Listing', required: true },
+  listingId: { type: String, ref: 'listings', required: true },
   location: { type: Number, min: 1, max: 5, required: true },
   cleanliness: { type: Number, min: 1, max: 5, required: true },
   communication: { type: Number, min: 1, max: 5, required: true },
   value: { type: Number, min: 1, max: 5, required: true },
   accuracy: { type: Number, min: 1, max: 5, required: true },
   description: { type: String },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  createdAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) },
+  updatedAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) }
 });
 
 const RatingSchema: Schema = new Schema<Rating>({
   id: { type: String, required: true },
-  listingId: { type: String, ref: 'Listing', required: true },
+  listingId: { type: String, ref: 'listings', required: true },
   rating: { type: Number, min: 1, max: 5, required: true },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  createdAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) },
+  updatedAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) }
 });
 
 // Mongoose Models
 const ListingModel = mongoose.model<Listing>('Listing', ListingSchema);
-const PhotoModel = mongoose.model<Photo>('Photo', PhotoSchema);
-const AllowedVehicleModel = mongoose.model<AllowedVehicle>('AllowedVehicle', AllowedVehicleSchema);
-const AvailableDateModel = mongoose.model<AvailableDate>('AvailableDate', AvailableDateSchema);
 const ReviewModel = mongoose.model<Review>('Review', ReviewSchema);
 const RatingModel = mongoose.model<Rating>('Rating', RatingSchema);
 
-export { ListingModel, PhotoModel, AllowedVehicleModel, AvailableDateModel, ReviewModel, RatingModel };
+export { ListingModel, ReviewModel, RatingModel };

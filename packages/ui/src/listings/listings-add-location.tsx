@@ -40,8 +40,6 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingReque
                 "name",
                 "landmark"
             ];
-            await form.watch(paths);
-            await form.trigger(paths);
         }
         trigger();
     }, [autocomplete, form.getValues]);
@@ -69,8 +67,7 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingReque
 
     return (
         <div className='space-y-4 max-w-[630px] mx-auto'>
-            <MapsSearch
-                
+            <MapsSearch    
                 onLocationClick={handleLocationUpdate}
             />
             <MapDynamic

@@ -10,3 +10,13 @@ export const addUUID = <T>(object: T, inputUUID?: string, id?: string): T & Reco
         ...object
     };
 };
+
+/**
+ * https://www.algolia.com/doc/guides/sending-and-managing-data/prepare-your-data/in-depth/what-is-in-a-record/#dates
+ * @param date 
+ * @returns 
+ */
+export function toUnixTimestamp(date: string | Date): number {
+    const parsedDate = typeof date === "string" ? new Date(date) : date;
+    return Math.floor(parsedDate.getTime() / 1000);
+}

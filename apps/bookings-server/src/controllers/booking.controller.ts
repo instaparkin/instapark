@@ -1,7 +1,8 @@
 import { getInterval, Request, Response, sendResponse } from "@instapark/utils";
 import { BookingModel } from "../models/booking.model";
-import { Booking } from "@instapark/types";
+import { Booking, BookingRequest } from "@instapark/types";
 import { v4 as uuid } from "uuid";
+import { BookingService } from "../booking/booking.service";
 
 const FIVE_MINUTES_IN_SECONDS = 5 * 60 * 1000
 
@@ -90,3 +91,21 @@ export const createLock = async (req: Request, res: Response) => {
         );
     }
 };
+
+export const book = async (req: Request, res: Response) => {
+    try {
+        const bookingRequest = req.body as BookingRequest;
+
+        const bookingService = new BookingService(bookingRequest);
+
+        const result = await bookingService.book();
+
+        if (result.success) {
+            sendResponse(res, 200, result.message, "SUCCESS", result.booking);
+        } else {
+            sendResponse(res, 400, result.message, "FAILURE", null);
+        }
+    } catch (error) {
+        sendResponse(res, 500, `Error creating Booking: ${error}`, "FAILURE", null);
+    }
+}

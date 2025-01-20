@@ -17,7 +17,6 @@ export const ListingsAdd = () => {
   const form = ListingCreateForm();
   const { userId } = useAuth()
   const handleSubmit = async (data: ListingRequest) => {
-    const listingId = uuid();
     try {
 
       axios.post(uiConfig.routes.LISTING_ADD_ROUTE, data)

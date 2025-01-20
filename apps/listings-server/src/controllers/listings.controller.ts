@@ -1,12 +1,11 @@
-import { addUUID, Request, Response, sendResponse } from "@instapark/utils";
-import { ListingModel, AllowedVehicleModel, PhotoModel } from "../models/listing.models";
-import { ListingRequest } from "@instapark/types";
+import { addUUID, toUnixTimestamp, Request, Response, sendResponse } from "@instapark/utils";
+import { ListingModel } from "../models/listing.models";
+import { Listing, ListingRequest } from "@instapark/types";
 import { listingsCreateSchema } from "@instapark/schemas"
 import { searchProducer } from "@instapark/kafka";
 
 export const createListing = async (req: Request, res: Response) => {
     const session = await ListingModel.startSession();
-
     try {
         const listing = req.body as ListingRequest;
         const result = listingsCreateSchema.safeParse(listing);
@@ -24,31 +23,17 @@ export const createListing = async (req: Request, res: Response) => {
         if (!newListing || !newListing[0]) {
             return sendResponse(res, 400, "Failed to create Listing", "FAILURE");
         }
-        const allowedVehicles = await AllowedVehicleModel.create(
-            listing.allowedVehicles.map(vehicle =>
-                addUUID(vehicle, newListing[0]?.id, "listingId")
-            ), { session });
-
-        const photos = await PhotoModel.create(listing.photos.map(photo =>
-            addUUID(photo, newListing[0]?.id, "listingId")
-        ), { session });
-
-            console.log(newListing[0]);
-        await session.commitTransaction();
-        const data = {
-            ...newListing[0]._doc, // Spread all fields of newListing[0]
-            allowedVehicles,
-            photos
-        };
-
-        console.log(data);
+        const data = newListing[0];
         
-        /**Produce the message to kafka to add it to Typesense */
-        await searchProducer({
-            type: "POST",
-            data: data,
-            partition: 0
-        });
+        await session.commitTransaction()
+            .then(async () => {
+                /**Produce the message to kafka to add it to Typesense */
+                await searchProducer({
+                    type: "POST",
+                    data: data,
+                    partition: 0
+                });
+            });
         return sendResponse(res, 201, "Listing created successfully.", "SUCCESS", data);
     } catch (error) {
         await session.abortTransaction();
@@ -104,10 +89,6 @@ export const deleteListing = async (req: Request, res: Response) => {
 
     try {
         const { id } = req.params;
-
-        await AllowedVehicleModel.deleteMany({ listingId: id }, { session });
-
-        await PhotoModel.deleteMany({ listingId: id }, { session });
 
         const deletedListing = await ListingModel.findOneAndDelete({ id }, { session });
 

@@ -2,13 +2,13 @@
 
 import React from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/tabs"
-import { Page, PageHeader } from '../components/page'
 import { HOSTING_MAIN_TABS_LIST } from "./hosting-constants"
 import { Button } from "../components/button"
 import Link from "next/link"
 import { useRedis } from "../hooks/use-redis"
 import { LISTINGS_ADD_FORM_KEY } from "../utils/global-constants"
 import { useSessionContext } from "supertokens-auth-react/recipe/session"
+import { useAuth } from "../hooks/use-auth"
 
 export const CompleteListingButton = () => {
     const session = useSessionContext()
@@ -27,13 +27,13 @@ export const CompleteListingButton = () => {
 };
 
 export const HostingMain = () => {
+    const { first_name } = useAuth()
     return (
-        <Page title="Hosting">
-            <PageHeader>
-                {
-                    <CompleteListingButton />
-                }
-            </PageHeader>
+        <div className="space-y-8">
+            <div className="flex justify-between items-center">
+                <div className="font-semibold text-lg md:text-xl lg:text-3xl">Welcome, {first_name}!</div>
+                <CompleteListingButton />
+            </div>
             <Tabs defaultValue={HOSTING_MAIN_TABS_LIST.data[0]?.value} className="w-full overflow-x-auto">
                 <TabsList className='space-x-2 mb-6'>
                     {
@@ -57,6 +57,6 @@ export const HostingMain = () => {
                     })
                 }
             </Tabs>
-        </Page>
+        </div >
     )
 }

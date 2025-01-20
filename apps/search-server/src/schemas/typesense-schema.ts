@@ -5,9 +5,8 @@ export const ListingSchema: CollectionCreateSchema = {
     name: SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME,
     enable_nested_fields: true,
     fields: [
-        { name: "id", type: "string" },
         { name: "userId", type: "string" },
-        { name: "type", type: "string" },
+        { name: "type", type: "string", facet: true },
         { name: "country", type: "string", facet: true, sort: true },
         { name: "state", type: "string", facet: true, sort: true },
         { name: "district", type: "string", facet: true, sort: true },
@@ -18,17 +17,23 @@ export const ListingSchema: CollectionCreateSchema = {
         { name: "longitude", type: "float" },
         { name: "name", type: "string", optional: true },
         { name: "landmark", type: "string", optional: true },
-        { name: "allowedVehicles", type: "object[]", facet: true },
-        { name: "basePrice", type: "float" },
-        { name: "pphbi", type: "float" },
-        { name: "pphcy", type: "float" },
-        { name: "pphcr", type: "float" },
-        { name: "plph", type: "float" },
-        { name: "photos", type: "object[]" },
-        { name: "availableDates", type: "object[]", facet: true, optional: true },
-        { name: "isOpen", type: "bool" },
-        { name: "createdAt", type: "string", "sort": true },
-        { name: "updatedAt", type: "string", "sort": true },
+        { name: "allowedVehicles", type: "string[]", facet: true },
+        { name: "basePrice", type: "float", facet: true },
+        { name: "pphbi", type: "float", facet: true },
+        { name: "pphcy", type: "float", facet: true },
+        { name: "pphcr", type: "float", facet: true },
+        { name: "plph", type: "float", facet: true },
+        { name: "photos", type: "string[]" },
+
+        { name: "id", type: "string" },
+        { name: "isOpen", type: "bool", facet: true },
+        { name: "rating", type: "float", facet: true },
+        { name: "availableFrom", type: "int64", facet: true, sort: true },
+        { name: "createdAt", type: "int64", "sort": true },
+        { name: "updatedAt", type: "int64", "sort": true },
+
+        /**Typesense Related Fields */
+        { name: "popularity", type: "int32", optional: true }
     ]
 }
 
@@ -43,8 +48,8 @@ export const ReviewSchema: CollectionCreateSchema = {
         { name: "value", type: "int32" },
         { name: "accuracy", type: "int32" },
         { name: "description", type: "string" },
-        { name: "createdAt", type: "string", "sort": true },
-        { name: "updatedAt", type: "string", "sort": true },
+        { name: "createdAt", type: "int64", "sort": true },
+        { name: "updatedAt", type: "int64", "sort": true },
     ]
 }
 
@@ -54,8 +59,27 @@ export const RatingSchema: CollectionCreateSchema = {
         { name: "id", type: "string" },
         { name: "listingId", type: "string", "reference": `${SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME}.listingId` },
         { name: "rating", type: "int32" },
-        { name: "createdAt", type: "string", "sort": true },
-        { name: "updatedAt", type: "string", "sort": true },
+        { name: "createdAt", type: "int64", "sort": true },
+        { name: "updatedAt", type: "int64", "sort": true },
     ]
 }
 
+/**
+ * https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/query-suggestions/js/.
+ */
+export const QuerySuggestionSchema: CollectionCreateSchema = {
+    name: SEARCH_SERVER_CONSTANTS.SCHEMAS.QUERY_SUGGESTION_SCHEMA_NAME,
+    fields: [
+        { name: "id", type: "string" },
+        { name: "count", type: "int32" },
+        { name: "q", type: "string" },
+    ]
+}
+
+export const ListingNoHitsQueries: CollectionCreateSchema = {
+    name: SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_NO_HITS_QUERIES,
+    fields: [
+        { name: "count", type: "int32" },
+        { name: "q", type: "string" },
+    ]
+}

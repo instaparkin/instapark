@@ -24,10 +24,10 @@ export const API_ENDPOINTS = {
         ROUTES: {
             LISTING: {
                 PREFIX: "/listings",
-                CREATE: "/create",
-                UPDATE: "/update/:id",
-                GET: "/get/:id",
-                DELETE: "/delete/:id",
+                CREATE: "/",
+                UPDATE: "/:id",
+                GET: "/:id",
+                DELETE: "/:id",
             },
             UPLOADTHING: {
                 PREFIX: "/listings/uploadthing"

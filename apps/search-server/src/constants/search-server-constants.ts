@@ -2,7 +2,9 @@ export const SEARCH_SERVER_CONSTANTS = {
     SCHEMAS: {
         LISTING_SCHEMA_NAME: "listing_1",
         REVIEW_SCHEMA_NAME: "reviews_1",
-        RATING_SCHEMA_NAME: "ratings_1"
+        RATING_SCHEMA_NAME: "ratings_1",
+        QUERY_SUGGESTION_SCHEMA_NAME: "listing_queries",
+        LISTING_NO_HITS_QUERIES: "listing_no_hits_queries"
     },
     TYPESENSE: {
         HOST: "localhost",

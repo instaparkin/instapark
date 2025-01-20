@@ -5,9 +5,6 @@ import { ProfilePersonalInfo } from './profile-personal-info'
 
 export const ProfileMain = () => {
     return (
-        <Page>
-            <ProfilePersonalInfo />
-            <ProfileVerification />
-        </Page>
+        <ProfilePersonalInfo />
     )
 }

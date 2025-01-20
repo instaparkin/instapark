@@ -6,11 +6,7 @@ export {
 } from "./src/enums"
 export {
     type Listing,
-    type Photo,
     type ListingRequest,
-    type AvailableDateRequest,
-    type AllowedVehicleRequest,
-    type PhotoRequest,
     type Review,
     type Rating
 } from "./src/Listing";
@@ -25,16 +21,23 @@ export {
     type OlaMapsGeocodingResult
 } from "./src/Search"
 export {
-    type Fullname
+    type Profile
 } from "./src/profile"
 export {
-    type ApiResponse
+    type ApiResponse,
+    type EventType
 } from "./src/Api"
 export {
     type Booking,
     type Payment,
+    type BookingRequest
 } from "./src/Booking"
 export {
     type SearchProducerType,
     type SearchConsumerType
 } from "./src/Kafka"
+export {
+    type User,
+    type AuthMetadata,
+    type AuthMetadataRequest,
+} from "./src/supertokens"

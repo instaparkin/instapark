@@ -3,10 +3,10 @@ import { deleteListing, createListing, updateListing } from "../controllers/type
 
 const router = Router();
 
-router.post("/listing/create", createListing)
+router.post("/listing", createListing)
 
-router.put("/listing/update", updateListing)
+router.put("/listing/", updateListing)
 
-router.delete("/listing/delete/:id", deleteListing)
+router.delete("/listing/:id", deleteListing)
 
 export default router

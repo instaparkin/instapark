@@ -12,6 +12,8 @@ export interface Booking {
     updatedAt: Date
 }
 
+export type BookingRequest = Pick<Booking, "listingId" | "userId" | "startDate" | "endDate">
+
 export interface Payment {
     bookingId: string
     userId: string

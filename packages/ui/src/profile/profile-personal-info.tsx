@@ -17,6 +17,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '../components
 import axios from 'axios'
 import { useSessionContext } from 'supertokens-auth-react/recipe/session'
 import { fullnameForm, FullnameType } from '../forms/profile-forms'
+import toast from 'react-hot-toast'
+import { ApiResponse } from '@instapark/types'
+import { useAuth } from '../hooks/use-auth'
 
 interface ProfileField {
   key: string
@@ -27,51 +30,12 @@ interface ProfileField {
 }
 
 export function ProfilePersonalInfo() {
-  const session = useSessionContext();
-  if (session.loading) {
-    return null
-  }
-
-  const userId = session.userId
-  console.log(session);
+  const { first_name, last_name, emails, setMetadata, userId } = useAuth()
 
   const [editingField, setEditingField] = useState<string | null>(null)
-  const [formData, setFormData] = useState({
-    firstName: 'Hitish',
-    lastName: 'Rao P'
-  })
-
-  const [fullname, setFullname] = useState<FullnameType>();
-
-  console.log(fullname);
-
-
-  useEffect(() => {
-    async function getdata() {
-      const response = await fetch("http://localhost:8081/auth/userdetails")
-      const data = await response.json()
-      console.log(data);
-    }
-    getdata()
-  }, []);
-
-  useEffect(() => {
-    axios.get(`http://localhost:8088/profile/fullname/get/${userId}`)
-      .then(res => {
-        setFullname(res.data)
-      })
-      .catch((error) => {
-        throw error
-      })
-  }, [])
-
-  const form = fullnameForm() as UseFormReturn<FullnameType>
-
 
   const fields: ProfileField[] = [
-    { key: 'legalName', label: 'Legal name', value: `${formData.firstName} ${formData.lastName}`, action: 'edit' },
     { key: 'preferredName', label: 'Preferred name', value: 'Not provided', action: 'add' },
-    { key: 'email', label: 'Email address', value: 'h***p@gmail.com', action: 'edit' },
     {
       key: 'phone',
       label: 'Phone numbers',
@@ -102,64 +66,44 @@ export function ProfilePersonalInfo() {
             <AccordionTrigger>
               <div>
                 <h2 className="text-lg font-medium">Legal name</h2>
-                <div>{"Hitish Rao P"}</div>
+                <div>{first_name} {last_name}</div>
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                  <FormField
-                    control={form.control}
-                    name="firstname"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {field.name}
-                        </FormLabel>
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="lastname"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {field.name}
-                        </FormLabel>
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit">Save</Button>
-                </form>
-              </Form>
+           
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First name on ID</Label>
                   <Input
                     id="firstName"
-                    value={formData.firstName}
-                    onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last name on ID</Label>
                   <Input
                     id="lastName"
-                    value={formData.lastName}
-                    onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
                   />
                 </div>
               </div>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+
+        <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Emails</AccordionTrigger>
+            <AccordionContent>
+              {
+                emails?.map((e,index) => (
+                  <div key={index}>
+                    {e}
+                  </div>
+                ))
+              }
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
         <h1 className="text-2xl font-semibold mb-6">Personal info</h1>
         <div className="space-y-6">
           {fields.map((field) => (

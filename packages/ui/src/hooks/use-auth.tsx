@@ -2,46 +2,62 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSessionContext } from "supertokens-auth-react/recipe/session";
-import { ApiResponse } from "@instapark/types"
+import { ApiResponse, AuthMetadata, AuthMetadataRequest } from "@instapark/types"
 import toast from "react-hot-toast";
 
-type Username = {
-    first_name: string
-    last_name: string
-    full_name: string
+interface UseAuthType extends AuthMetadata {
+    setMetadata: (key: keyof AuthMetadataRequest, value: string) => void
 }
 
-export const useAuth = () => {
+export const useAuth = (): UseAuthType => {
 
-    const session = useSessionContext();
-
-    const [username, setUsername] = useState<Username | undefined>();
+    const [info, setInfo] = useState<AuthMetadata>({
+        userId: "",
+        first_name: "",
+        last_name: "",
+        preferred_first_name: "",
+        emails: [],
+        phoneNumbers: [],
+        timeJoined: 0
+    });
 
     useEffect(() => {
-        axios.get<ApiResponse<Username>>("http://localhost:8080/auth/username/get")
-            .then(res => {
-                setUsername(res?.data?.data)
-            })
-            .catch((error) => {
-                toast.error(error);
-            })
-    }, [])
-
-    if (session.loading) {
-        return {
-            userId: "",
-            first_name: "",
-            last_name: "",
-            full_name: ""
+        const fetchMetadata = async () => {
+            try {
+                const response = await axios.get<ApiResponse<AuthMetadata>>(
+                    "http://localhost:8080/auth/metadata/"
+                );
+                if (response.data.data) {
+                    setInfo(response.data.data);
+                } else {
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                toast.error("An error occurred while fetching metadata: " + error);
+            }
         };
-    }
+
+        fetchMetadata();
+    }, []);
+
+    const setMetadata = async (key: keyof AuthMetadata, value: string) => {
+        try {
+            const response = await axios.post<ApiResponse<AuthMetadata>>(
+                "http://localhost:8080/auth/metadata/",
+                { [key]: value }
+            );
+            if (response.data.data) {
+                toast.success(response.data.message);
+            } else {
+                toast.error(response.data.message || "Failed to update metadata");
+            }
+        } catch (error) {
+            toast.error("Error Occurred: " + error);
+        }
+    };
 
     return {
-        session,
-        userId: session.userId,
-        first_name: username?.first_name || "",
-        last_name : username?.last_name || "",
-        full_name : username?.full_name || ""
+        ...info,
+        setMetadata
     }
 }

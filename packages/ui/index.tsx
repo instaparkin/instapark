@@ -17,7 +17,6 @@ export { Toaster } from "react-hot-toast"
 export { ourFileRouter, type OurFileRouter } from "./src/uploadthing/core"
 export { UploadDropzone } from "./src/listings/listings-add-photos"
 export { HostingLoading } from "./src/hosting/hosting-loading"
-export { Success } from "./src/components/success"
 export { HeaderSkeleton } from "./src/header/header-skeleton"
 export * from "./src/components/sidebar";
 export { AppSidebar } from "./src/components/app-sidebar";
@@ -27,3 +26,5 @@ export { StoreProvider } from "./src/providers/store-provider";
 export { AuthPage } from "./src/auth/auth-page"
 export { SessionAuthProvider } from "./src/providers/session-auth-provider"
 export { SearchMain } from "./src/search/search-main"
+export { Page } from "./src/components/page"
+export {useCurrentPage} from "./src/utils/current-page"

@@ -1,18 +1,27 @@
 "use client"
 
-import { HostingLoading } from '@instapark/ui'
+import { HostingLoading, Page, useCurrentPage } from '@instapark/ui'
 import dynamic from 'next/dynamic'
+import Head from 'next/head'
 import React from 'react'
 
 const HostingMainDynamic = dynamic(() => (
   import("@instapark/ui").then(mod => mod.HostingMain)
 ), {
-  loading: () => <HostingLoading />
+  loading: () => (
+    <Page>
+      <HostingLoading />
+    </Page>)
 })
 
 const HostingPage = () => {
   return (
-    <HostingMainDynamic />
+    <Page>
+      <Head>
+        <title>Host da</title>
+      </Head>
+      <HostingMainDynamic />
+    </Page>
   )
 }
 

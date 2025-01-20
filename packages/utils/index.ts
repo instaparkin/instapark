@@ -9,8 +9,7 @@ export { cors };
 export { logger } from "./src/winston"
 export { config } from "dotenv";
 export { Router, type Request, type Response } from "express";
-export { getInterval } from "./src/functions";
 export { Client } from "pg"
 export { postgres }
 export { v4 as uuid } from "uuid"
-export { addUUID } from "./src/functions";
+export { getInterval, addUUID, toUnixTimestamp } from "./src/functions";

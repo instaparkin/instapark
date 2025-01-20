@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+"use client"
+
 import {
   createElement,
   Fragment,
@@ -7,25 +8,14 @@ import {
   useState
 } from "react";
 import { createRoot, Root } from "react-dom/client";
-
-
-import { useHits, useInstantSearch, usePagination, useSearchBox } from "react-instantsearch";
+import {  usePagination, useSearchBox } from "react-instantsearch";
 import { autocomplete, AutocompleteOptions } from "@algolia/autocomplete-js";
 import { BaseItem } from "@algolia/autocomplete-core";
-import { createQuerySuggestionsPlugin } from "@algolia/autocomplete-plugin-query-suggestions";
-
-import "@algolia/autocomplete-theme-classic";
 import { NoResults } from "../components/no-results";
 import { cn } from "../utils/cn";
-import { useConnector } from 'react-instantsearch';
-import connectAutocomplete from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
 import { Listing } from "@instapark/types";
-import { SearchSuggestion } from "./search-suggestion";
-
-// Connect the InstantSearch.js `connectAutocomplete` connector to your component
-export function useAutocomplete() {
-  return useConnector(connectAutocomplete);
-}
+import { typesenseInstantsearchAdapter } from "../typesense/instantsearch-adapter";
+import "../styles/theme.min.css"
 
 type AutocompleteProps = Partial<AutocompleteOptions<BaseItem>> & {
   className?: string;
@@ -34,6 +24,25 @@ type AutocompleteProps = Partial<AutocompleteOptions<BaseItem>> & {
 type SetInstantSearchUiStateOptions = {
   query: string;
 };
+
+import { useConnector } from 'react-instantsearch';
+import connectAutocomplete from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
+
+import type {
+  AutocompleteConnectorParams,
+  AutocompleteWidgetDescription,
+} from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
+import axios from "axios";
+
+export type UseAutocompleteProps = AutocompleteConnectorParams;
+
+// Connect the InstantSearch.js `connectAutocomplete` connector to your component
+export function useAutocomplete(props?: UseAutocompleteProps) {
+  return useConnector<AutocompleteConnectorParams, AutocompleteWidgetDescription>(
+    connectAutocomplete,
+    props
+  );
+}
 
 export function Autocomplete({
   className,
@@ -44,8 +53,8 @@ export function Autocomplete({
   const rootRef = useRef<HTMLElement | null>(null);
 
   const { query, refine: setQuery } = useSearchBox();
-  const { refine: setPage } = usePagination();
 
+  const { refine: setPage } = usePagination();
   const [instantSearchUiState, setInstantSearchUiState] = useState<
     SetInstantSearchUiStateOptions
   >({ query });
@@ -55,32 +64,63 @@ export function Autocomplete({
     setPage(0);
   }, [instantSearchUiState]);
 
-  const { results, items, banner} = useHits();
-
-  const { setUiState, setIndexUiState } = useInstantSearch()
-  const { indices } = useAutocomplete()
-
   useEffect(() => {
     if (!autocompleteContainer.current) {
       return;
     }
-
+    typesenseInstantsearchAdapter.typesenseClient.multiSearch.perform
     const autocompleteInstance = autocomplete({
       ...autocompleteProps,
+      classNames: {
+        input: "bg-red-400"
+      },
       container: autocompleteContainer.current,
       initialState: { query },
+      getSources<BaseItem>({ query }: { query: string }) {
+        return [
+          {
+            sourceId: 'listing_1',
+            onActive({ item, setContext }) {
+              setContext({ item });
+            },
+            async getItems({ query }) {
+              return axios.post("http://localhost:8108/multi_search", {
+                "searches": [
+                  {
+                    "collection": "listing_queries",
+                    "q": query,
+                    "query_by": "q"
+                  }
+                ]
+              }, {
+                headers: {
+                  "x-typesense-api-key": "xyz"
+                }
+              }).then(res => res.data.results[0].hits.map(h => h.document));
+            },
+            getItemInputValue({ item }: { item: Listing }) {
+              return item.q;
+            },
+            templates: {
+              item({ item }: { item: Listing }) {
+                return (
+                  <div>{item.q}</div>
+                )
+              },
+              noResults() {
+                return (
+                  <NoResults text="No Results" />
+                );
+              },
+            },
+          },
+        ];
+      },
       onReset() {
         setInstantSearchUiState({ query: "" });
       },
       onSubmit({ state }) {
         setInstantSearchUiState({ query: state.query });
-      },
-      onStateChange({ prevState, state }) {
-        if (prevState.query !== state.query) {
-          setInstantSearchUiState({
-            query: state.query
-          });
-        }
       },
       renderer: {
         createElement, Fragment, render: () => { }
@@ -100,5 +140,7 @@ export function Autocomplete({
     return () => autocompleteInstance.destroy();
   }, []);
 
-  return <div className={cn(className, "z-50")} ref={autocompleteContainer} />;
+  return (
+    <div className={cn(className,)} ref={autocompleteContainer} />
+  )
 }

@@ -13,6 +13,7 @@ import { DataTable } from "../components/data-table"
 import { columns } from "./listings-hosting-columns"
 import { ListingWishlist } from "../components/listing-wishlist"
 import { ImageSwiper } from "../components/image-swiper"
+import { ListingCard } from "../components/listing-card"
 
 interface ListingsViewProps {
   data: Listing[]
@@ -49,45 +50,7 @@ export function ListingsView({ data, title = "Listings" }: ListingsViewProps) {
         {view === "Grid" ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in-0 duration-500">
             {data?.map((item) => (
-              <Card key={item?.listingId} className="overflow-hidden">
-                <div className="relative aspect-[4/3]">
-                  <ImageSwiper content={item.photos} />
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    className="absolute top-2 right-2 rounded-full"
-                  >
-                    <ListingWishlist />
-                  </Button>
-                </div>
-                <CardContent className="p-4">
-                  <h2 className="font-semibold text-lg mb-1">
-                    {item.city}, {item.state}
-                  </h2>
-                  <p className="text-muted-foreground text-sm mb-2">
-                    {item.city}, {item.state}
-                  </p>
-                  <p className="text-sm mt-2 flex gap-2">
-                    {item.allowedVehicles.map((v) => {
-                      const Icon = vehicleIcons[v]
-                      return (
-                        <Badge variant={"outline"} key={v} className="rounded-sm p-2 flex items-center gap-2">
-                          {Icon}
-                          {v}
-                        </Badge>
-                      )
-                    })}
-                  </p>
-                </CardContent>
-                <CardFooter className="p-4 pt-0 flex justify-between items-center">
-                  <div>
-                    <span className="font-semibold">${item.basePrice.toFixed(2)}</span> / hour
-                  </div>
-                  <Button variant="outline" asChild>
-                    <Link href={`/parkings/${item.listingId}`}>View Details</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
+              <ListingCard listing={item} />
             ))}
           </div>
         ) : (

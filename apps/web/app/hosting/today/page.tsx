@@ -1,9 +1,11 @@
-import { TodayMain } from '@instapark/ui'
+import { Page, TodayMain } from '@instapark/ui'
 import React from 'react'
 
 const TodayPage = () => {
     return (
-        <TodayMain />
+        <Page>
+            <TodayMain />
+        </Page>
     )
 }
 

@@ -1,13 +1,15 @@
-import { authDb } from "../db/auth-db-client";
+import { Response, sendResponse } from "@instapark/utils";
+import { SessionRequest, supertokens } from "@instapark/auth";
 
-export async function getEmailVerifiedUsers() {
+export async function getUserEmailsFromID(req: SessionRequest, res: Response) {
     try {
-        const res = await authDb.query('SELECT * FROM emailverification_verified_emails');
-        console.log(res.rows);
-        return res;
+        if (!req!.session) {
+            return sendResponse(res, 401, "Unauthorised", "FAILURE");
+        }
+        const userId = req.session!.getUserId();
+        const userInfo = await supertokens.getUser(userId)
+        return sendResponse(res, 200, "User Emails Fetched Successfully", "SUCCESS", userInfo);
     } catch (error) {
-        console.log(error);
-    } finally {
-        await authDb.end();
+        return sendResponse(res, 500, "Failed to fetch User Emails", "FAILURE", error);
     }
 }

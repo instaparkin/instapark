@@ -1,13 +1,17 @@
 "use client"
 
-import { Listing } from '@instapark/types'
+import { Listing, Vehicle } from '@instapark/types'
 import React from 'react'
 import { Card, CardContent, CardFooter } from '../components/card'
 import { ImageSwiper } from '../components/image-swiper'
-import { Star } from 'lucide-react'
+import {  BikeIcon, Car, Cylinder, Star } from 'lucide-react'
 import Link from 'next/link'
 import { ListingWishlist } from './listing-wishlist'
-
+import { unixSecToMonthYearTime } from '../utils/dayjs'
+import { Badge } from './badge'
+import { PiBicycleDuotone } from "react-icons/pi";
+import { FaCarAlt } from "react-icons/fa";
+import { FaMotorcycle } from "react-icons/fa";
 interface ListingsCard {
     listing: Listing
 }
@@ -21,10 +25,7 @@ interface ListingCardContentProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 interface ListingCardDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {
-    state: Listing["state"]
-    city: Listing["city"]
-    basePrice: Listing["basePrice"]
-    allowedVehicles: Listing["allowedVehicles"]
+    listing: Listing
 }
 
 
@@ -52,34 +53,55 @@ const ListingCardImages: React.FC<ListingCardImagesProps> =
     }
 
 const ListingCardDescription: React.FC<ListingCardDescriptionProps> =
-    ({ state, city, allowedVehicles, basePrice }) => {
+    ({ listing }) => {
         return (
             <>
-                <CardContent className="p-4 flex-col">
+                <CardContent className="p-4 flex-col space-y-2">
                     <div className='flex justify-between items-center'>
-                        <div className="font-semibold mb-1">
-                            {city}, {state}
+                        <div className="font-semibold mb-1 truncate">
+                            {listing.street}, {listing.city}
                         </div>
                         <div className='flex gap-1 items-center'>
                             <Star className='w-4 h-4 fill-current' />
-                            <span className='text-sm'>{4.96}</span>
+                            <span className='text-sm'>{listing.rating}</span>
                         </div>
                     </div>
+                    <ListingCardAllowedVehicles allowedVehicles={listing.allowedVehicles} />
                     <div className="text-muted-foreground text-sm">
-                        {"123 KMs away"}
-                    </div>
-                    <div className="text-muted-foreground text-sm">
-                        {"24- 29May"}
+                        Available From {unixSecToMonthYearTime(listing.availableFrom)}
                     </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0 flex justify-between listings-center">
                     <div>
-                        <span className="font-semibold">${basePrice.toFixed(2)}</span> / hour
+                        <span className="font-semibold">${listing.basePrice.toFixed(2)}</span> / hour
                     </div>
                 </CardFooter>
             </>
         )
     }
+
+
+const ListingCardAllowedVehicles = ({ allowedVehicles }: { allowedVehicles: Vehicle[] }) => {
+    const vehicleIcons: Record<Vehicle, React.ReactNode> = {
+        "Car": <FaCarAlt className="w-4 h-4" />,
+        "Bike": <FaMotorcycle className="w-4 h-4" />,
+        "Cycle": <PiBicycleDuotone className="w-4 h-4" />,
+    };
+
+    return (
+        <div className='flex gap-2'>
+            {
+
+                allowedVehicles.map((a, index) => (
+                    <Badge variant={"outline"} key={index} className="rounded-sm p-2 flex items-center gap-2">
+                        {vehicleIcons[a]}
+                        {a}
+                    </Badge>
+                ))
+            }
+        </div>
+    )
+}
 
 export const ListingCard: React.FC<ListingsCard> = ({ listing }) => {
     return (
@@ -88,10 +110,7 @@ export const ListingCard: React.FC<ListingsCard> = ({ listing }) => {
                 <ImageSwiper content={listing.photos} />
             </ListingCardImages>
             <ListingCardDescription
-                basePrice={listing.basePrice}
-                state={listing.state}
-                city={listing.city}
-                allowedVehicles={listing.allowedVehicles}
+                listing={listing}
             />
         </ListingCardContent>
     );

@@ -5,7 +5,7 @@ import { ListingsAddPhotos } from "./listings-add-photos";
 import { ListingsAddAllowedVehicles } from "./listings-add-allowed-vehicles";
 import { Step } from "../types/multi-step-form-types";
 import { ListingsStepInfo } from "./listings-step-info";
-import { Success } from "../components/success";
+import { Result } from "../components/result";
 import { ListingRequest } from "@instapark/types";
 
 export const listingsAddSteps: Step<ListingRequest>[] = [
@@ -84,9 +84,8 @@ export const listingsAddSteps: Step<ListingRequest>[] = [
                 name: "",
                 fields: [],
                 component: () =>
-                    <Success
+                    <Result
                         timeout={10000}
-                        text="Listing details added successfully"
                         redirectPath="/hosting/listings"
                     />,
             }

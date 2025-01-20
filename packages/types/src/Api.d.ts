@@ -1,5 +1,7 @@
+export type EventType = "SUCCESS" | "FAILURE" | "LOADING"
+
 export type ApiResponse<T> = {
     message: string,
-    status: "SUCCESS" | "FAILURE",
+    status: EventType,
     data?: T
 }

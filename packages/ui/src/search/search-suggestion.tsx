@@ -1,6 +1,7 @@
 import { Listing } from '@instapark/types';
+import { CircleParking, SquareParking } from 'lucide-react';
 import Image from 'next/image'
-  
+
 
 interface SuggestionItemProps {
   suggestion: Listing
@@ -11,14 +12,8 @@ export function SearchSuggestion({ suggestion }: SuggestionItemProps) {
     <div
       className="flex items-center w-full p-3 gap-3 hover:bg-gray-50 transition-colors"
     >
-      <div className={`w-10 h-10 flex-shrink-0`}>
-        <Image
-          src={suggestion.photos[0]?.url as string}
-          alt=""
-          width={40}
-          height={40}
-          className="w-full h-full rounded-sm"
-        />
+      <div className={` flex justify-center items-center border rounded-md bg-muted`}>
+        <CircleParking className='m-2' />
       </div>
       <div className="flex flex-col items-start">
         <div className="text-sm font-medium text-gray-900">

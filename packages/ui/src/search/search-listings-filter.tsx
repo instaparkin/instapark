@@ -33,6 +33,7 @@ import { Tabs, TabsList, TabsTrigger } from '../components/tabs'
 import { Vehicle } from '@instapark/types'
 import { FaMotorcycle, FaCarAlt } from "react-icons/fa"
 import { LiaBicycleSolid } from "react-icons/lia"
+import { RatingMenu } from './search-rating-menu'
 
 const vehicles: Record<Vehicle, ReactNode> = {
     Bike: <FaMotorcycle className='w-6 h-6' />,
@@ -41,7 +42,7 @@ const vehicles: Record<Vehicle, ReactNode> = {
 }
 
 type SearchListingsFilterProps = {
-    ClearFilters: ReactNode
+    ClearFilters?: ReactNode
 }
 
 const FilterContent: React.FC<{ onClose?: () => void }> = ({ onClose }) => (
@@ -78,6 +79,14 @@ const FilterContent: React.FC<{ onClose?: () => void }> = ({ onClose }) => (
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
+            <Accordion type="single" collapsible>
+                <AccordionItem className='border-none' value="item-1">
+                    <AccordionTrigger className='text-lg'>Ratings</AccordionTrigger>
+                    <AccordionContent>
+                        <RatingMenu attribute='rating' />
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
         </ScrollArea>
         <div className="flex w-full justify-between border-t pt-4 p-4">
             <Button variant="outline" onClick={onClose}>Clear</Button>
@@ -95,7 +104,7 @@ export const SearchListingsFilter: React.FC<SearchListingsFilterProps> = ({ Clea
     const triggerButton = (
         <Button
             variant="outline"
-            className="h-[48px] px-4 rounded-lg border border-input hover:bg-accent hover:text-accent-foreground w-fit md:w-auto"
+            className="h-[46px] px-4 rounded-none border border-input hover:bg-accent hover:text-accent-foreground w-fit"
         >
             <SlidersHorizontal className="h-4 w-4 mr-2" />
             <span className="text-sm hidden md:block">Filters</span>

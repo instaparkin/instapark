@@ -27,6 +27,10 @@ export const frontendConfig = (): SuperTokensConfig => {
             apiBasePath: GLOBAL_CONSTANTS.SUPERTOKENS.API_BASE_PATH,
             websiteBasePath: GLOBAL_CONSTANTS.SUPERTOKENS.WEBSITE_BASE_PATH,
         },
+        style: `
+          [data-supertokens~=superTokensBranding] {
+            display: none
+        }`,
         recipeList: [
             EmailPassword.init(),
             ThirdParty.init({

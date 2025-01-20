@@ -2,6 +2,7 @@
 
 import { Listing } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
+import { unixSecToMonthYearTime } from "../utils/dayjs"
 
 export const columns: ColumnDef<Listing>[] = [
   {
@@ -15,5 +16,12 @@ export const columns: ColumnDef<Listing>[] = [
   {
     accessorKey: "updatedAt",
     header: "Updated ",
+    cell: ({ cell }) => {
+      return (
+        <div>
+          {unixSecToMonthYearTime(cell.getValue())}
+        </div>
+      )
+    }
   },
 ]

@@ -76,7 +76,7 @@ export function ListingsAddAllowedVehicles({ form }: { form: UseFormReturn<Listi
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => append({ vehicle: "Car" })} 
+                    onClick={() => append({ vehicle: Vehicle.Car})} 
                 >
                     Add Vehicle
                 </Button>
