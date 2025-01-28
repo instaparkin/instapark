@@ -12,7 +12,6 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "./breadcrumb"
-import { useCurrentPage } from "../utils/current-page"
 
 interface PageProps {
     children: React.ReactNode

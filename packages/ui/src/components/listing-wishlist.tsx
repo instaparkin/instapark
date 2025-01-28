@@ -13,23 +13,15 @@ interface ListingWishlistProps {
 }
 
 export const ListingWishlist: React.FC<ListingWishlistProps> = ({ triggerText }) => {
-    const [open, setOpen] = useState<boolean>(false);
-
-    const handleButtonClick = (event: React.MouseEvent) => {
-        setOpen(true);
-        event.preventDefault();
-        event.stopPropagation();
-    };
 
     const form = WishListCreateForm();
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog>
             <DialogTrigger asChild>
                 <Button
                     variant={"ghost"}
                     size="icon"
-                    onClick={handleButtonClick}
                 >
                     <Heart className="h-4 w-4" />
                     {triggerText}

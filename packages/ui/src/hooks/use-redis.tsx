@@ -14,7 +14,7 @@ export const useRedis = (redisPrefix: string, redisSuffix: string) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if(!redisPrefix || !redisSuffix) return
+    if (!redisPrefix || !redisSuffix) return
     async function fetchDataFromRedis() {
       setIsLoading(true);
       try {

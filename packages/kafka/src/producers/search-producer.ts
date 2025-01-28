@@ -1,14 +1,15 @@
-import { SearchProducerType } from "@instapark/types";
+import { Listing, ProducerType } from "@instapark/types";
 import { KAFKA_CONSTANTS } from "../constants/kafka-constants";
 import { kafka } from "../kafka/kafka";
 
-export async function searchProducer({ type, data, partition }: SearchProducerType) {
+export async function searchProducer({ type, data, partition }: ProducerType<Listing | string>) {
 
     const producer = kafka.producer();
 
     await producer.connect();
 
-    await producer.send({
+    const ack = await producer.send({
+        acks: -1,
         topic: KAFKA_CONSTANTS.SEARCH_TOPIC,
         messages: [
             {
@@ -19,4 +20,6 @@ export async function searchProducer({ type, data, partition }: SearchProducerTy
     })
 
     await producer.disconnect();
+
+    return ack
 }

@@ -45,7 +45,10 @@ const ListingCardImages: React.FC<ListingCardImagesProps> =
         return (
             <div className="relative aspect-[4/3]">
                 {children}
-                <div className='absolute top-2 right-2 z-10 bg-accent rounded-full' onClick={(e) => e.stopPropagation()}>
+                <div className='absolute top-2 right-2 z-10 bg-accent rounded-full' onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                }}>
                     <ListingWishlist />
                 </div>
             </div>
@@ -68,7 +71,6 @@ const ListingCardDescription: React.FC<ListingCardDescriptionProps> =
                     </div>
                     <ListingCardAllowedVehicles allowedVehicles={listing.allowedVehicles} />
                     <div className="text-muted-foreground text-sm">
-                        Available From {unixSecToMonthYearTime(listing.availableFrom)}
                     </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0 flex justify-between listings-center">

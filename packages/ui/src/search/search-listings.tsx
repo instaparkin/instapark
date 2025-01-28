@@ -14,9 +14,6 @@ export function SearchHeader() {
       </div>
 
       <SearchListingsFilter />
-      
-      <DateRangeFilter attribute='availableFrom' />
-
     </div>
   )
 }

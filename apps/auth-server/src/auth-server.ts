@@ -1,9 +1,9 @@
-import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest } from "@instapark/auth";
+import "@dotenvx/dotenvx/config"
+import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import { API_ENDPOINTS } from "@instapark/constants";
-import { config, cors, express, sendResponse } from "@instapark/utils";
 import metadataRouter from "./routes/metadata.route";
-
-config();
+import express from "express"
+import cors from 'cors'
 
 async function init() {
     ensureSuperTokensInit();
@@ -31,8 +31,10 @@ async function init() {
 
     app.use(errorHandler());
 
+    const port = process.env.PORT
+
     app.listen(process.env.PORT, () => {
-        console.log(`Server running on http://localhost:${process.env.PORT}`);
+        console.log(`Server running on http://localhost:${port}`);
     });
 }
 

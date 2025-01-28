@@ -6,49 +6,60 @@ import {
   GeolocateResultEvent,
   Map as Maplibre,
   Marker,
-  MarkerDragEvent,
   NavigationControl,
+  Popup,
 } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
-import { CiMapPin } from "react-icons/ci";
+import { Heart, X } from 'lucide-react';
 import { AppDispatch, reverseGeocodeLocation, RootState, useDispatch, useSelector } from "@instapark/state";
+import { ListingCard } from '../components/listing-card';
+import { Listing } from '@instapark/types';
+import { Button } from '../components/button';
+import { Badge } from '../components/badge';
 
 export type MapProps = {
-  id: string;
-  initialLat?: number;
-  initialLng?: number;
+  listing?: Listing;
+  listings?: Listing[];
+  onListingSelect?: (listing: Listing) => void;
+  initialZoom?: number;
 };
 
-export const MapsMain = ({ id }: MapProps) => {
+export const MapsMain = ({ listing, listings = [], onListingSelect, initialZoom = 4 }: MapProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { autocomplete: locations } = useSelector((state: RootState) => state.maps);
+
+  const markersData = listing ? [listing] : listings;
 
   const [viewport, setViewport] = useState({
-    latitude: 0,
-    longitude: 0,
-    zoom: 0,
+    latitude: listing?.latitude || 20.5937,
+    longitude: listing?.longitude || 78.9629,
+    zoom: listing ? 12 : initialZoom,
   });
 
-  useEffect(() => {
-    if (locations.length > 0) {
-      const location = locations[0];
-      setViewport({
-        latitude: location?.lat as number,
-        longitude: location?.lng as number,
-        zoom: 16.5,
-      });
-    }
-  }, [locations]);
+  const [selectedListing, setSelectedListing] = useState<Listing | null>(listing || null);
+  const [showPopup, setShowPopup] = useState<boolean>(!!listing);
 
-  const onDragEnd = (event: MarkerDragEvent) => {
-    const { lngLat } = event;
-    setViewport((prev) => ({
-      ...prev,
-      latitude: lngLat.lat,
-      longitude: lngLat.lng,
-    }));
-    dispatch(reverseGeocodeLocation([lngLat.lat, lngLat.lng]));
+  useEffect(() => {
+    if (listing) {
+      setViewport({
+        latitude: listing.latitude,
+        longitude: listing.longitude,
+        zoom: 12,
+      });
+      setSelectedListing(listing);
+      setShowPopup(true);
+    }
+  }, [listing]);
+
+  const onMarkerClick = (clickedListing: Listing) => {
+    setSelectedListing(clickedListing);
+    setShowPopup(true);
+    setViewport({
+      latitude: clickedListing.latitude,
+      longitude: clickedListing.longitude,
+      zoom: 12,
+    });
+    onListingSelect?.(clickedListing);
   };
 
   const onGeoLocate = (e: GeolocateResultEvent) => {
@@ -57,7 +68,6 @@ export const MapsMain = ({ id }: MapProps) => {
 
   return (
     <Maplibre
-      id={id}
       mapLib={maplibregl}
       attributionControl={false}
       style={{
@@ -68,21 +78,43 @@ export const MapsMain = ({ id }: MapProps) => {
       mapStyle={
         "https://utfs.io/f/UMgDcGP2ujLzttNyuH0RaI6hWs0JoQclYfXvnANMEm9LGjzy"
       }
-      zoom={viewport.zoom}
-      latitude={viewport.latitude}
-      longitude={viewport.longitude}
+      {...viewport}
+      onMove={evt => setViewport(evt.viewState)}
     >
-      <GeolocateControl onGeolocate={onGeoLocate} />
-      {locations.length > 0 && (
+
+      {markersData.length > 0 && markersData.map((markerListing) => (
         <Marker
-          onDragEnd={onDragEnd}
-          draggable
-          longitude={viewport.longitude}
-          latitude={viewport.latitude}
+          onClick={() => onMarkerClick(markerListing)}
+          key={markerListing.id}
+          longitude={markerListing.longitude}
+          latitude={markerListing.latitude}
+          anchor="center"
         >
-          <CiMapPin size={40} className="text-black" />
+          <Badge
+            variant="map"
+            style={{ cursor: 'pointer' }}
+          >
+            {markerListing.basePrice}
+          </Badge>
         </Marker>
+
+      ))}
+
+      {showPopup && selectedListing && (
+        console.log('Rendering Popup:', selectedListing),
+        <Popup
+          longitude={selectedListing.longitude}
+          latitude={selectedListing.latitude}
+          onClose={() => setShowPopup(false)}
+        >
+          <div className='w-full'>
+            <ListingCard listing={selectedListing} />
+          </div>
+        </Popup>
       )}
+
+
+      <GeolocateControl onGeolocate={onGeoLocate} />
       <NavigationControl position="top-right" />
     </Maplibre>
   );

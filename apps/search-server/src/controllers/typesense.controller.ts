@@ -1,13 +1,14 @@
-import { typesenseClient } from "../typesense/typesense-client";
-import { Listing } from "@instapark/types";
-import { SEARCH_SERVER_CONSTANTS } from "../constants/search-server-constants";
-import { axios, Request, Response, sendResponse } from "@instapark/utils";
+import { Request, Response } from "@instapark/utils";
+import { Booking, CollectionType, Listing } from "@instapark/types";
+import { sendResponse } from "@instapark/utils";
+import { TypesenseService } from "../services/typesense.service";
 
-// Upsert a listing document
-export const createListing = async (req: Request, res: Response) => {
-    const data = req.body as Listing;
+export const createDocument = async (req: Request, res: Response) => {
+    const data = req.body as Listing | Booking;
+    const { collection } = req.params as { collection: CollectionType }
 
-    console.log(data);
+    console.log(collection);
+    
 
     if (!data) {
         sendResponse(res, 400, "Invalid input from the client side", "FAILURE", null);
@@ -15,77 +16,62 @@ export const createListing = async (req: Request, res: Response) => {
     }
 
     try {
-        const result = await typesenseClient
-            .collections(SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME)
-            .documents()
-            .create(data);
-
-        axios.post("http://localhost:8108/analytics/events",
-            {
-                "type": "search",
-                "name": "listing_search_event",
-                "data": {
-                    "q": data.country,
-                    "user_id": data.userId
-                }
-            },
-        {
-            headers: {
-                "x-typesense-api-key" : "xyz"
+        switch (collection) {
+            case "listing": {
+                const typesenseService = new TypesenseService<Listing>(collection, data as Listing);
+                const result = await typesenseService.createDocument();
+                return sendResponse(res, 201, "Document created successfully", "SUCCESS", result);
             }
-        })
-
-        sendResponse(res, 201, "Documents upserted successfully", "SUCCESS", result);
+            case "booking": {
+                const typesenseService = new TypesenseService<Booking>(collection, data as Booking);
+                const result = await typesenseService.createDocument();
+                return sendResponse(res, 201, "Document created successfully", "SUCCESS", result);
+            }
+        }
     } catch (error) {
-        sendResponse(res, 500, "Internal Server Error", "FAILURE", {
-            data,
-            error
-        });
+        return sendResponse(res, 500, "Failed to create document", "FAILURE", { error });
     }
 };
 
-export const updateListing = async (req: Request, res: Response) => {
-    const data = req.body as Listing;
+export const updateDocument = async (req: Request, res: Response) => {
+    const data = req.body as Listing | Booking;
+    const { collection } = req.params as { collection: CollectionType }
 
-    console.log(data);
-
-    if (!data) {
-        sendResponse(res, 400, "Invalid input from the client side", "FAILURE", null);
-        return;
+    if (!data || !data.id) {
+        return sendResponse(res, 400, "Invalid input from the client side", "FAILURE", null);
     }
 
     try {
-        const result = await typesenseClient
-            .collections(SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME)
-            .documents(data.id)
-            .update(data);
+        switch (collection) {
+            case "listing": {
+                const typesenseService = new TypesenseService<Listing>(collection, data as Listing);
+                const result = await typesenseService.updateDocument(data.id);
+                return sendResponse(res, 200, "Document updated successfully", "SUCCESS", result);
+            }
+            case "booking": {
+                const typesenseService = new TypesenseService<Booking>(collection, data as Booking);
+                const result = await typesenseService.updateDocument(data.id);
+                return sendResponse(res, 200, "Document updated successfully", "SUCCESS", result);
+            }
+        }
 
-        sendResponse(res, 201, "Documents upserted successfully", "SUCCESS", result);
     } catch (error) {
-        sendResponse(res, 500, "Internal Server Error", "FAILURE", {
-            data,
-            error
-        });
+        return sendResponse(res, 500, "Failed to update document", "FAILURE", { error });
     }
 };
 
-// Delete a listing document by ID
-export const deleteListing = async (req: Request, res: Response) => {
-    const { id } = req.params;
+export const deleteDocument = async (req: Request, res: Response) => {
+    const { collection, id } = req.params as { collection: CollectionType, id: string };
 
     if (!id) {
-        sendResponse(res, 400, "Invalid input from the client side", "FAILURE", null);
-        return;
+        return sendResponse(res, 400, "Invalid input from the client side", "FAILURE", null);
     }
 
     try {
-        const result = await typesenseClient
-            .collections(SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME)
-            .documents(id)
-            .delete();
-
-        sendResponse(res, 200, "Documents deleted successfully", "SUCCESS", result);
+        const typesenseService = new TypesenseService<null>(collection, null);
+        const result = await typesenseService.deleteDocument(id);
+        return sendResponse(res, 200, "Document deleted successfully", "SUCCESS", result);
     } catch (error) {
-        sendResponse(res, 500, "Internal Server Error" + error, "FAILURE", null);
+        return sendResponse(res, 500, "Failed to delete document", "FAILURE", { error });
     }
 };

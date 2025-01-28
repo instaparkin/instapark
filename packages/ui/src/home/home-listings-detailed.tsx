@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter } from '../components/card'
 import { Button } from '../components/button'
 import { GraduationCap, Grid2X2, Heart, Share, Share2, Shield, Star, X } from 'lucide-react'
 import Link from 'next/link'
-import { Fullname, Listing as ListingType } from "@instapark/types"
+import { ApiResponse, Listing, Listing as ListingType } from "@instapark/types"
 import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -15,6 +15,10 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { ListingWishlist } from '../components/listing-wishlist'
 import { useSessionContext } from 'supertokens-auth-react/recipe/session'
+import { useAuth } from '../hooks/use-auth'
+import { timeInInstapark } from '../utils/dayjs'
+import { Page } from '../components/page'
+import { MapsMain } from '../maps/maps-main'
 
 interface ListingProps {
     listingId: string
@@ -96,7 +100,7 @@ export function PhotoModal({ photos, onClose }: PhotoModalProps) {
                             return (
                                 <div key={index} className="relative aspect-[3/2] w-full">
                                     <Image
-                                        src={photo.url}
+                                        src={photo}
                                         alt={`Property photo ${index + 1}`}
                                         fill
                                         className="object-cover rounded-lg"
@@ -112,7 +116,7 @@ export function PhotoModal({ photos, onClose }: PhotoModalProps) {
                                     <div key={index} className="grid grid-cols-2 gap-4">
                                         <div className="relative aspect-[3/2]">
                                             <Image
-                                                src={photo.url}
+                                                src={photo}
                                                 alt={`Property photo ${index + 1}`}
                                                 fill
                                                 className="object-cover rounded-lg"
@@ -195,38 +199,8 @@ function ListingHostInfo({
     responseRate = 100,
     responseTime = "within an hour"
 }: HostInfoProps) {
-    const session = useSessionContext();
 
-    const [fullname, setFullname] = useState<Fullname>();
-
-    if (session.loading) {
-        return null
-    }
-    const userId = session.userId;
-
-    const handleCreateContact = async () => {
-        await fetch("http://localhost:8084/contacts/create", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                userId,
-                contactUserId: HostUserId
-            })
-        })
-    }
-
-    useEffect(() => {
-        axios.get<Fullname>(`http://localhost:8088/profile/fullname/get/${userId}`)
-            .then(res => {
-                console.log(res.data)
-                setFullname(res.data)
-            })
-            .catch((error) => {
-                throw error
-            })
-    }, [])
+    const { first_name, last_name, timeJoined } = useAuth()
 
     return (
         <div className="space-y-6">
@@ -243,8 +217,8 @@ function ListingHostInfo({
                             </div>
                         </div>
                         <div>
-                            <h3 className="text-xl font-semibold">{fullname?.fullname}</h3>
-                            <p className="text-sm text-muted-foreground">{fullname?.fullname}</p>
+                            <h3 className="text-xl font-semibold">{first_name}</h3>
+                            <p className="text-sm text-muted-foreground">{last_name}</p>
                         </div>
                     </div>
 
@@ -261,7 +235,7 @@ function ListingHostInfo({
 
                         <div>
                             <div className="text-2xl font-semibold">{parseInt(hostingDuration)}</div>
-                            <div className="text-sm text-muted-foreground">Months hosting</div>
+                            <div className="text-sm text-muted-foreground">{timeInInstapark(timeJoined / 1000)}</div>
                         </div>
                     </div>
                 </Card>
@@ -272,7 +246,7 @@ function ListingHostInfo({
                         <p>Response rate: {responseRate}%</p>
                         <p>Responds {responseTime}</p>
                     </div>
-                    <Button variant="default" className="w-full" asChild onClick={() => handleCreateContact()}>
+                    <Button variant="default" className="w-full">
                         <Link href={`/messages/${HostUserId}`}>
                             Message Host
                         </Link>
@@ -318,38 +292,42 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
     listingId
 }) => {
 
-    const [listing, setListing] = useState<ListingType | null>(null);
+    const [listing, setListing] = useState<ListingType | undefined>(undefined);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/listings/get/${listingId}`)
+        axios.get<ApiResponse<ListingType>>(`http://localhost:8080/listings/${listingId}`)
             .then(res => {
-                setListing(res.data)
+                console.log(res?.data);
+                setListing(res?.data?.data)
             })
             .catch((error) => {
-                throw error;
+                console.error(error);
             })
     }, []);
 
+    if (!listing) {
+        return <Page>loading..</Page>
+    }
     return (
         <ListingDetailedContent>
             <ListingDetailedHeader
-                title={`${listing!.state}, ${listing!.country}`}
+                title={`${listing.state}, ${listing.country}`}
                 onShare={() => console.log('Share clicked')}
                 onSave={() => console.log('Save clicked')}
             />
-            <ListingPhotoGrid photos={listing!.photos} onShowAllPhotos={() => console.log('Show all photos clicked')} />
+            <ListingPhotoGrid photos={listing.photos} onShowAllPhotos={() => console.log('Show all photos clicked')} />
             <div className="grid grid-cols-3 gap-12">
                 <div className="col-span-2">
                     <div className="border-b pb-6 mb-6">
                         <h2 className="text-xl font-semibold mb-2">
-                            Entire villa in {listing!.city}, {listing!.country}
+                            Entire villa in {listing.city}, {listing.country}
                         </h2>
                         <p className="text-muted-foreground">
-                            {listing!.allowedVehicles?.length} guests · {listing!.basePrice} bedrooms · {listing!.pphbi} beds · {listing!.pphcr} bathrooms
+                            {listing.allowedVehicles.length} guests · {listing.basePrice} bedrooms · {listing.pphbi} beds · {listing.pphcr} bathrooms
                         </p>
                     </div>
                     <ListingHostInfo
-                        userId={listing!.userId}
+                        userId={listing.userId}
                         name="Host Name" // Replace with actual host name
                         hostingDuration="12" // Replace with actual hosting duration
                         reviews={4}
@@ -362,27 +340,28 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                     {/* Desktop View */}
                     <div className="hidden md:block max-w-md mx-auto pt-8">
                         <PricingCalculator
-                            pphbi={listing!.pphbi}
-                            pphcy={listing!.pphcy}
-                            pphcr={listing!.pphcr}
-                            plph={listing!.plph}
-                            basePrice={listing!.basePrice}
+                            pphbi={listing.pphbi}
+                            pphcy={listing.pphcy}
+                            pphcr={listing.pphcr}
+                            plph={listing.plph}
+                            basePrice={listing.basePrice}
                         />
                     </div>
 
                     {/* Mobile View with Drawer */}
                     <PricingDrawer
-                        basePrice={listing!.basePrice}
+                        basePrice={listing.basePrice}
                         discountedPrice={33818}
                         startDate="5"
                         endDate="10 Jan"
-                        pphbi={listing!.pphbi}
-                        pphcy={listing!.pphcy}
-                        pphcr={listing!.pphcr}
-                        plph={listing!.plph}
+                        pphbi={listing.pphbi}
+                        pphcy={listing.pphcy}
+                        pphcr={listing.pphcr}
+                        plph={listing.plph}
                     />
                 </div>
             </div>
+            <MapsMain listings={[listing]} />
         </ListingDetailedContent>
     )
 }

@@ -1,11 +1,12 @@
+import '@dotenvx/dotenvx/config'
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit } from "@instapark/auth";
 import { API_ENDPOINTS } from "@instapark/constants";
-import { config, cors, express } from "@instapark/utils";
 import mongoose from "mongoose"
 import { BOOKINGS_SERVER_CONSTANTS } from "./constants/bookings-server-constants";
 import bookingsRouter from "./routes/booking.route";
-
-config();
+import cashfreeRouter from "./routes/cashfree.route"
+import express from "express"
+import cors from "cors"
 
 async function init() {
 
@@ -34,6 +35,8 @@ async function init() {
     app.use(API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.PREFIX,
         bookingsRouter
     )
+
+    app.use("/bookings", cashfreeRouter)
 
     app.use(errorHandler());
 

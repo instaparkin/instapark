@@ -1,110 +1,49 @@
-import { getInterval, Request, Response, sendResponse } from "@instapark/utils";
-import { BookingModel } from "../models/booking.model";
-import { Booking, BookingRequest } from "@instapark/types";
-import { v4 as uuid } from "uuid";
-import { BookingService } from "../booking/booking.service";
+import { Request, Response, sendResponse } from "@instapark/utils";
+import { BookingRequest, Payment, PaymentRequest } from "@instapark/types";
+import { LockingService } from "../services/locking.service";
+import { bookingProducer } from "@instapark/kafka"
+import { BookingService } from "../services/booking.service";
 
-const FIVE_MINUTES_IN_SECONDS = 5 * 60 * 1000
-
-/**
- * Check if a booking exists with lockedAt > 5min or not created.
- * @param req 
- * @param res 
- */
-export const createLock = async (req: Request, res: Response) => {
+export const lock = async (req: Request, res: Response) => {
     try {
-        const booking = req.body as Booking;
+        const lockingRequest = req.body as BookingRequest;
 
-        if (!booking || !booking.listingId || !booking.startDate || !booking.endDate) {
-            return sendResponse(res, 400, "Missing required fields", "FAILURE");
+        const lockingService = new LockingService(lockingRequest);
+
+        const result = await lockingService.book();
+
+
+        if (result.success && result.booking) {
+            sendResponse(res, 200, result.message, "SUCCESS", result.booking);
+
+        } else {
+            sendResponse(res, 400, result.message, "FAILURE", null);
         }
-
-        const existingBooking = await BookingModel.findOne({
-            listingId: booking.listingId,
-            $or: [
-                { startDate: { $gte: booking.startDate }, endDate: { $gt: booking.startDate } },
-                { startDate: { $lt: booking.endDate }, endDate: { $gte: booking.endDate } },
-                { startDate: { $gte: booking.startDate }, endDate: { $lte: booking.endDate } }
-            ]
-        }) as Booking;
-
-        if (!existingBooking) {
-            const createdBooking = await BookingModel.create({
-                ...booking,
-                id: uuid(),
-                status: "Locked",
-                lockedAt: new Date(Date.now())
-            });
-
-            return sendResponse(
-                res,
-                201,
-                "Booking created successfully",
-                "SUCCESS",
-                createdBooking
-            );
-        }
-
-        const lockedInterval = getInterval(new Date(existingBooking.lockedAt), new Date(Date.now()));
-
-        if (existingBooking.status === "Completed") {
-            return sendResponse(
-                res,
-                200,
-                "Parking Trip already Completed",
-                "SUCCESS",
-            );
-        }
-
-        if (existingBooking.lockedAt && lockedInterval > FIVE_MINUTES_IN_SECONDS) {
-            const updatedBooking = await BookingModel.updateOne(
-                { id: existingBooking.id },
-                {
-                    ...booking,
-                    lockedAt: new Date(Date.now())
-                },
-                { new: true }
-            );
-
-            return sendResponse(
-                res,
-                200,
-                "Booking updated successfully",
-                "SUCCESS",
-                updatedBooking
-            );
-        }
-
-        return sendResponse(
-            res,
-            200,
-            "Listing is not Available For Booking",
-            "SUCCESS"
-        );
     } catch (error) {
-        return sendResponse(
-            res,
-            500,
-            "Failed to process booking",
-            "FAILURE",
-            error instanceof Error ? error.message : error
-        );
+        sendResponse(res, 500, `Error creating Booking: ${error}`, "FAILURE", null);
     }
-};
+}
 
 export const book = async (req: Request, res: Response) => {
     try {
-        const bookingRequest = req.body as BookingRequest;
+        const bookingRequest = req.body as PaymentRequest;
 
         const bookingService = new BookingService(bookingRequest);
 
         const result = await bookingService.book();
 
-        if (result.success) {
-            sendResponse(res, 200, result.message, "SUCCESS", result.booking);
+        if (result.status == "SUCCESS") {
+            bookingProducer({
+                type: "POST",
+                data: result.data as Payment,
+                partition: 0
+            })
+            return sendResponse(res, 200, result.message, "SUCCESS", result.data);
+
         } else {
-            sendResponse(res, 400, result.message, "FAILURE", null);
+            return sendResponse(res, 400, result.message, "FAILURE", result);
         }
+
     } catch (error) {
         sendResponse(res, 500, `Error creating Booking: ${error}`, "FAILURE", null);
     }

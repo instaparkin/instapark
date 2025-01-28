@@ -3,7 +3,6 @@ import { SEARCH_SERVER_CONSTANTS } from "../constants/search-server-constants";
 
 export const ListingSchema: CollectionCreateSchema = {
     name: SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME,
-    enable_nested_fields: true,
     fields: [
         { name: "userId", type: "string" },
         { name: "type", type: "string", facet: true },
@@ -23,12 +22,11 @@ export const ListingSchema: CollectionCreateSchema = {
         { name: "pphcy", type: "float", facet: true },
         { name: "pphcr", type: "float", facet: true },
         { name: "plph", type: "float", facet: true },
-        { name: "photos", type: "string[]" },
+        { name: "photos", type: "string[]", },
 
         { name: "id", type: "string" },
         { name: "isOpen", type: "bool", facet: true },
         { name: "rating", type: "float", facet: true },
-        { name: "availableFrom", type: "int64", facet: true, sort: true },
         { name: "createdAt", type: "int64", "sort": true },
         { name: "updatedAt", type: "int64", "sort": true },
 
@@ -41,8 +39,10 @@ export const ReviewSchema: CollectionCreateSchema = {
     name: SEARCH_SERVER_CONSTANTS.SCHEMAS.REVIEW_SCHEMA_NAME,
     fields: [
         { name: "id", type: "string" },
-        { name: "listingId", type: "string", "reference": `${SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME}.listingId` },
+        { name: "listingId", type: "string", "reference": `${SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME}.id` },
+        { name: "userId", type: "string" },
         { name: "location", type: "int32" },
+        { name: "rating", type: "int32" },
         { name: "cleanliness", type: "int32" },
         { name: "communication", type: "int32" },
         { name: "value", type: "int32" },
@@ -53,18 +53,22 @@ export const ReviewSchema: CollectionCreateSchema = {
     ]
 }
 
-export const RatingSchema: CollectionCreateSchema = {
-    name: SEARCH_SERVER_CONSTANTS.SCHEMAS.RATING_SCHEMA_NAME,
+export const BookingSchema: CollectionCreateSchema = {
+    name: SEARCH_SERVER_CONSTANTS.SCHEMAS.BOOKING_SCHEMA_NAME,
     fields: [
         { name: "id", type: "string" },
-        { name: "listingId", type: "string", "reference": `${SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME}.listingId` },
-        { name: "rating", type: "int32" },
+        { name: "listingId", type: "string", "reference": `${SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_SCHEMA_NAME}.id` },
+        { name: "userId", type: "string" },
+        { name: "startDate", type: "int64", sort: true },
+        { name: "endDate", type: "int64", sort: true },
+        { name: "status", type: "string", facet: true, sort: true },
         { name: "createdAt", type: "int64", "sort": true },
         { name: "updatedAt", type: "int64", "sort": true },
     ]
 }
 
 /**
+ * Query Suggestion/Analytics Schemas
  * https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/query-suggestions/js/.
  */
 export const QuerySuggestionSchema: CollectionCreateSchema = {

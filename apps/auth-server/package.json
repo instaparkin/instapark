@@ -2,26 +2,33 @@
   "name": "@instapark/auth-server",
   "version": "1.0.0",
   "scripts": {
-    "dev": "tsx watch src/auth-server.ts",
-    "build": "rm -rf dist && tsc",
-    "start": "node dist/src/auth-server.js",
-    "lint": "eslint .",
-    "check-types": "tsc --noEmit --pretty"
+    "dev": "dotenvx run tsx watch src/auth-server.ts",
+    "build": "dotenvx run rm -rf dist && tsc",
+    "start": "dotenvx run node dist/src/auth-server.js",
+    "lint": "dotenvx run eslint .",
+    "check-types": "dotenvx run tsc --noEmit --pretty",
+    "test": "vitest"
   },
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.34.0",
     "@instapark/auth": "workspace:^",
     "@instapark/constants": "workspace:^",
     "@instapark/typescript-config": "workspace:^",
     "@instapark/utils": "workspace:^",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
     "supertokens-node": "^21.0.0"
   },
   "packageManager": "pnpm@8.53.1",
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@instapark/types": "workspace:^",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
     "eslint": "^9.18.0",
     "globals": "^15.14.0",
     "tsx": "^4.19.2",
-    "typescript-eslint": "^8.19.0"
+    "typescript-eslint": "^8.19.0",
+    "vitest": "^2.1.5"
   }
 }

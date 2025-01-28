@@ -15,6 +15,9 @@ import { ReactNode } from 'react';
 import { NoResults } from '../components/no-results';
 import { Search } from 'lucide-react';
 import { DateRangeFilter } from './date-picker';
+import { history } from 'instantsearch.js/es/lib/routers';
+import { useSearch } from '../hooks/use-search';
+import { MapsMain } from '../maps/maps-main';
 
 
 export function Hit({ hit }: { hit: Listing }) {
@@ -62,7 +65,6 @@ export const SearchRoot: React.FC<SearchRootProps> = ({ children, className }) =
 };
 
 export const SearchMain = () => {
-
   return (
     <InstantSearchNext
       routing={true}
@@ -82,7 +84,6 @@ export const SearchMain = () => {
               hitComponent={Hit}
             />
           </div>
-          <Configure index='listing_1' relevancyStrictness={1}  optionalFilters={["isOpen:!=true"]} />
           <div className="flex justify-center mt-8">
             <Pagination
               classNames={{

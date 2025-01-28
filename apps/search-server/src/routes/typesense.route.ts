@@ -1,12 +1,12 @@
 import { Router } from "@instapark/utils";
-import { deleteListing, createListing, updateListing } from "../controllers/typesense.controller";
+import { createDocument, updateDocument, deleteDocument } from "../controllers/typesense.controller";
 
 const router = Router();
 
-router.post("/listing", createListing)
+router.post("/:collection", createDocument)
 
-router.put("/listing/", updateListing)
+router.put("/:collection/", updateDocument)
 
-router.delete("/listing/:id", deleteListing)
+router.delete("/collection/:id", deleteDocument)
 
 export default router

@@ -4,7 +4,7 @@
 
 import { SEARCH_SERVER_CONSTANTS } from "../constants/search-server-constants";
 import { createCollection } from "../actions/create-collection";
-import { ListingSchema, RatingSchema, ReviewSchema } from "../schemas/typesense-schema";
+import { BookingSchema, ListingNoHitsQueries, ListingSchema, QuerySuggestionSchema, ReviewSchema } from "../schemas/typesense-schema";
 import { typesenseClient } from "../typesense/typesense-client";
 
 interface IcreateCollectionScript {
@@ -22,9 +22,17 @@ const collections = [
         schema: ReviewSchema
     },
     {
-        name: SEARCH_SERVER_CONSTANTS.SCHEMAS.RATING_SCHEMA_NAME,
-        schema: RatingSchema
+        name: SEARCH_SERVER_CONSTANTS.SCHEMAS.BOOKING_SCHEMA_NAME,
+        schema: BookingSchema
     },
+    {
+        name: SEARCH_SERVER_CONSTANTS.SCHEMAS.QUERY_SUGGESTION_SCHEMA_NAME,
+        schema: QuerySuggestionSchema
+    },
+    {
+        name: SEARCH_SERVER_CONSTANTS.SCHEMAS.LISTING_NO_HITS_QUERIES,
+        schema: ListingNoHitsQueries
+    }
 ]
 
 async function createCollectionScript({ deleteAllCollections, collectionsToDelete }: IcreateCollectionScript) {
@@ -50,5 +58,5 @@ async function createCollectionScript({ deleteAllCollections, collectionsToDelet
 }
 
 createCollectionScript({
-    deleteAllCollections: true
+    deleteAllCollections: false,
 });

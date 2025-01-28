@@ -5,6 +5,7 @@ import { AuthMetadata, AuthMetadataRequest } from "@instapark/types";
 
 export const upsertMetadata = async (req: SessionRequest, res: Response) => {
     const session = req.session;
+    
     const { first_name, last_name, preferred_first_name } = req.body as AuthMetadataRequest;
 
     const userId = session?.getUserId() as string;

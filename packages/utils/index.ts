@@ -13,3 +13,4 @@ export { Client } from "pg"
 export { postgres }
 export { v4 as uuid } from "uuid"
 export { getInterval, addUUID, toUnixTimestamp } from "./src/functions";
+export { portFinder } from "./src/portfinder";

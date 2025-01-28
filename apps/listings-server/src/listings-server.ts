@@ -1,12 +1,12 @@
+import "@dotenvx/dotenvx/config"
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import listingsRouter from "./routes/listings.route";
 import redisRouter from "./routes/redis.route";
 import { API_ENDPOINTS } from "@instapark/constants";
 import { uploadthingExpress } from "./uploadthing/uploadthing-express";
-import { config, cors, express } from "@instapark/utils";
 import mongoose from "mongoose";
-
-config();
+import express from "express"
+import cors from "cors"
 
 async function init() {
 

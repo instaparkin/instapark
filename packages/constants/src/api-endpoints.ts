@@ -65,9 +65,9 @@ export const API_ENDPOINTS = {
             },
             TYPESENSE: {
                 PREFIX: "/search/typesense",
-                CREATE: "/create",
-                UPDATE : "/update",
-                DELETE : "/delete"
+                CREATE: "/",
+                UPDATE : "/",
+                DELETE : "/"
             },
             OLAMAPS: {
                 PREFIX: "/search/olamaps",

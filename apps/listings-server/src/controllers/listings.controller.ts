@@ -24,17 +24,19 @@ export const createListing = async (req: Request, res: Response) => {
             return sendResponse(res, 400, "Failed to create Listing", "FAILURE");
         }
         const data = newListing[0];
-        
+
         await session.commitTransaction()
             .then(async () => {
                 /**Produce the message to kafka to add it to Typesense */
-                await searchProducer({
+                const ack = await searchProducer({
                     type: "POST",
                     data: data,
                     partition: 0
                 });
+                if (ack[0]?.errorCode === 0) {
+                    return sendResponse(res, 201, "Listing created successfully.", "SUCCESS", { data, ack });
+                }
             });
-        return sendResponse(res, 201, "Listing created successfully.", "SUCCESS", data);
     } catch (error) {
         await session.abortTransaction();
         return sendResponse(res, 500, "An unexpected error occurred while creating the listing.", "FAILURE", error);
@@ -54,7 +56,7 @@ export const getListing = async (req: Request, res: Response) => {
             return;
         }
 
-        sendResponse(res, 200, "Listing fetched successfully.", "SUCCESS", listing);
+        sendResponse(res, 200, "Listing fetched successfully.", "SUCCESS", listing[0]);
     } catch (error) {
         return sendResponse(res, 500, "An unexpected error occurred while fetching the listing.", "FAILURE", error);
     }

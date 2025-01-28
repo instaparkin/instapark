@@ -33,12 +33,9 @@ export interface Query {
 }
 
 export interface UseSearchProps {
+    q: string
     query_by: string[]
-    collections: {
-        name: string
-        q: string
-        filter_by?: string
-    }[]
+    filter_by?: string
 }
 
 export interface OlaMapsPrediction extends Record<string, unknown> {
@@ -58,3 +55,5 @@ export interface OlaMapsApiResponse {
 export interface OlaMapsGeocodingResult {
     formatted_address: string
 }
+
+export type CollectionType = "listing" | "booking"

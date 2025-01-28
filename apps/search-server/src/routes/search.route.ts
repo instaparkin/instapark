@@ -3,6 +3,6 @@ import { handleQuery } from "../controllers/search.controller";
 
 const router = Router();
 
-router.post("/:query_by", handleQuery);
+router.get("/:collection", handleQuery);
 
 export default router;

@@ -26,7 +26,6 @@ export interface Listing {
     id: string;
     isOpen: boolean;
     rating: number;
-    availableFrom: number
     createdAt: number;
     updatedAt: number;
 }
@@ -34,20 +33,14 @@ export interface Listing {
 export interface Review {
     id: string
     listingId: string;
+    userId: string;
+    rating: number;
     location: number;
     cleanliness: number;
     communication: number;
     value: number;
     accuracy: number;
     description?: string;
-    createdAt: number;
-    updatedAt: number;
-}
-
-export interface Rating {
-    id: string;
-    listingId: string;
-    rating: number;
     createdAt: number;
     updatedAt: number;
 }

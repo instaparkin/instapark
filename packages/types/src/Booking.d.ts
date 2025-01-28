@@ -4,12 +4,12 @@ export interface Booking {
     id: string
     listingId: string
     userId: string
-    startDate: Date
-    endDate: Date
+    startDate: number
+    endDate: number
     status: BookingStatus
-    lockedAt: Date
-    createdAt: Date
-    updatedAt: Date
+    lockedAt: number
+    createdAt: number
+    updatedAt: number
 }
 
 export type BookingRequest = Pick<Booking, "listingId" | "userId" | "startDate" | "endDate">
@@ -20,6 +20,8 @@ export interface Payment {
     orderId: string
     cfPaymentId: string
     paymentType: PaymentType
-    createdAt: Date
-    updatedAt: Date
+    createdAt: number
+    updatedAt: number
 }
+
+export type PaymentRequest = Pick<Payment, "bookingId" | "userId" | "cfPaymentId" | "orderId">;

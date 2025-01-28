@@ -1,7 +1,7 @@
 import { kafka } from "../kafka/kafka";
 import { axios, logger } from "@instapark/utils";
 import { KAFKA_CONSTANTS } from "../constants/kafka-constants";
-import { Listing, SearchConsumerType } from "@instapark/types"
+import { Listing, ConsumerType } from "@instapark/types"
 
 
 interface SearchConsumerProps {
@@ -10,6 +10,9 @@ interface SearchConsumerProps {
 
 export async function searchConsumer({ fromBeginning = false }: SearchConsumerProps) {
     const consumer = kafka.consumer({
+        retry: {
+            retries: 5
+        },
         groupId: KAFKA_CONSTANTS.SEARCH_CONSUMER_GROUP,
     });
 
@@ -23,7 +26,7 @@ export async function searchConsumer({ fromBeginning = false }: SearchConsumerPr
         await consumer.run({
             eachMessage: async ({ message }) => {
                 try {
-                    const messageValue: SearchConsumerType = JSON.parse(message.value?.toString() || '{}');
+                    const messageValue: ConsumerType<Listing> = JSON.parse(message.value?.toString() || '{}');
 
                     logger.info("Form Data:", messageValue.data);
 

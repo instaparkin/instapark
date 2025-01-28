@@ -77,11 +77,11 @@ export function SearchFilterPrice() {
             <div className="mt-6 flex items-center justify-between px-6">
                 <div className="text-sm">
                     <div className="text-muted-foreground mb-1">Minimum</div>
-                    <Input value={range.min} />
+                    <Input />
                 </div>
                 <div className="text-sm text-right">
                     <div className="text-muted-foreground mb-1">Maximum</div>
-                    <Input value={range.max} />
+                    <Input />
                 </div>
             </div>
         </SearchFilter>

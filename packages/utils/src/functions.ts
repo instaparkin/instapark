@@ -1,7 +1,7 @@
 import { v4 as uuid } from "uuid";
 
-export const getInterval = (startTime: Date, endTime: Date) => {
-    return Math.abs(startTime.getTime() - endTime.getTime());
+export const getInterval = (startTime: number, endTime: number) => {
+    return Math.abs(startTime - endTime);
 }
 
 export const addUUID = <T>(object: T, inputUUID?: string, id?: string): T & Record<string, string> => {

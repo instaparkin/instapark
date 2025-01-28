@@ -1,6 +1,5 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": ["PAYU_SALT", "PAYU_BASE_URL", "PAYU_MERCHANT_KEY", "PAYU_SURL", "PAYU_FURL", "NEXT_PUBLIC_MAP_STYLE_URL"],
   "ui": "tui",
   "tasks": {
     "build": {

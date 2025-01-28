@@ -2,16 +2,22 @@
   "name": "@instapark/bookings-server",
   "version": "1.0.0",
   "scripts": {
-    "dev": "tsx watch src/bookings-server.ts",
-    "build": "rm -rf dist && tsc",
-    "start": "node dist/src/bookings-server.js",
-    "lint": "eslint .",
-    "check-types": "tsc --noEmit --pretty"
+    "dotenvx": "dotenvx run  --env-file=.env.production --",
+    "dev": "pnpm dotenvx tsx watch src/bookings-server.ts",
+    "build": "pnpm dotenvx rm -rf dist && tsc",
+    "start": "pnpm dotenvx node dist/src/bookings-server.js",
+    "lint": "pnpm dotenvx eslint .",
+    "check-types": "pnpm dotenvx && tsc --noEmit --pretty"
   },
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.34.0",
     "@instapark/auth": "workspace:^",
     "@instapark/constants": "workspace:^",
+    "@instapark/kafka": "workspace:^",
     "@instapark/utils": "workspace:^",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
     "mongoose": "^8.9.5",
     "uuid": "^11.0.3"
   },
@@ -19,6 +25,8 @@
     "@eslint/js": "^9.17.0",
     "@instapark/types": "workspace:^",
     "@instapark/typescript-config": "workspace:^",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
     "eslint": "^9.18.0",
     "globals": "^15.14.0",
     "tsx": "^4.19.2",

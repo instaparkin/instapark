@@ -1,5 +1,7 @@
 import { Schema, model } from "mongoose";
 import { Booking, BookingStatus } from "@instapark/types";
+import { toUnixTimestamp } from "@instapark/utils";
+import { timeStamp } from "console";
 
 const bookingSchema = new Schema<Booking>(
   {
@@ -17,11 +19,11 @@ const bookingSchema = new Schema<Booking>(
       required: true,
     },
     startDate: {
-      type: Date,
+      type: Number,
       required: true,
     },
     endDate: {
-      type: Date,
+      type: Number,
       required: true,
     },
     status: {
@@ -30,12 +32,19 @@ const bookingSchema = new Schema<Booking>(
       enum: BookingStatus
     },
     lockedAt: {
-      type: Date,
+      type: Number,
       required: true,
     },
-  },
-  {
-    timestamps: true,
+    createdAt: {
+      type: Number,
+      required: true,
+      default: toUnixTimestamp(new Date()),
+    },
+    updatedAt: {
+      type: Number,
+      required: true,
+      default: toUnixTimestamp(new Date()),
+    }
   }
 );
 

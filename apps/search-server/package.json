@@ -13,6 +13,7 @@
     "@instapark/auth": "workspace:^",
     "@instapark/constants": "workspace:^",
     "@instapark/kafka": "workspace:^",
+    "@instapark/schemas": "workspace:^",
     "@instapark/utils": "workspace:^",
     "typesense": "^1.8.2"
   },

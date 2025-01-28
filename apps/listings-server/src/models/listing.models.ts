@@ -1,5 +1,5 @@
-import { Listing, PlaceType, Vehicle, Rating, Review } from '@instapark/types';
-import mongoose, { Schema, Document } from 'mongoose';
+import { Listing, PlaceType, Review } from '@instapark/types';
+import mongoose, { Schema } from 'mongoose';
 import { toUnixTimestamp, uuid } from '@instapark/utils';
 
 const ListingSchema: Schema = new Schema<Listing>({
@@ -26,7 +26,6 @@ const ListingSchema: Schema = new Schema<Listing>({
   id: { type: String, required: true, default: uuid() },
   isOpen: { type: Boolean, required: true, default: true },
   rating: { type: Number, required: true, default: 0.00 },
-  availableFrom: { type: Number, required: true, default: toUnixTimestamp(new Date()) },
   createdAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) },
   updatedAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) }
 })
@@ -34,6 +33,8 @@ const ListingSchema: Schema = new Schema<Listing>({
 const ReviewSchema: Schema = new Schema<Review>({
   id: { type: String, required: true },
   listingId: { type: String, ref: 'listings', required: true },
+  userId: { type: String, required: true },
+  rating: { type: Number, required: true },
   location: { type: Number, min: 1, max: 5, required: true },
   cleanliness: { type: Number, min: 1, max: 5, required: true },
   communication: { type: Number, min: 1, max: 5, required: true },
@@ -44,17 +45,8 @@ const ReviewSchema: Schema = new Schema<Review>({
   updatedAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) }
 });
 
-const RatingSchema: Schema = new Schema<Rating>({
-  id: { type: String, required: true },
-  listingId: { type: String, ref: 'listings', required: true },
-  rating: { type: Number, min: 1, max: 5, required: true },
-  createdAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) },
-  updatedAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) }
-});
-
 // Mongoose Models
 const ListingModel = mongoose.model<Listing>('Listing', ListingSchema);
 const ReviewModel = mongoose.model<Review>('Review', ReviewSchema);
-const RatingModel = mongoose.model<Rating>('Rating', RatingSchema);
 
-export { ListingModel, ReviewModel, RatingModel };
+export { ListingModel, ReviewModel };
