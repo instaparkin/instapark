@@ -25,7 +25,7 @@ export const useSearch = () => {
     const currentSearchParams = searchParams.toString(); // Converts query params to a query string
     console.log(currentSearchParams);
     
-    const url = `http://localhost:8080/search/listing_1?${encodeURIComponent("q=mgroad&query_by=city,state&filter_by=start")}`;
+    const url = `http://localhost:8086/search/listing_1?${encodeURIComponent("q=mgroad&query_by=city,state&filter_by=start")}`;
 
     axios.get(url)
       .then(res => {

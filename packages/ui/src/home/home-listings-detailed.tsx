@@ -295,7 +295,7 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
     const [listing, setListing] = useState<ListingType | undefined>(undefined);
 
     useEffect(() => {
-        axios.get<ApiResponse<ListingType>>(`http://localhost:8080/listings/${listingId}`)
+        axios.get<ApiResponse<ListingType>>(`http://localhost:8087/listings/${listingId}`)
             .then(res => {
                 console.log(res?.data);
                 setListing(res?.data?.data)

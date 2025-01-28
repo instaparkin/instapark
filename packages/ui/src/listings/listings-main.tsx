@@ -14,7 +14,7 @@ export const ListingsMain = () => {
 
 
   useEffect(() => {
-    axios.post(`http://localhost:8080/search/*`, {
+    axios.post(`http://localhost:8087/search/*`, {
       "searches": [
         {
           "collection": "listing_1",

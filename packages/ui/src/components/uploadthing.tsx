@@ -4,7 +4,7 @@ import React from "react";
 import { generateUploadButton } from "@uploadthing/react";
 
 export const UploadButton = generateUploadButton({
-    url: "http://localhost:8080/listings/uploadthing",
+    url: "http://localhost:8087/listings/uploadthing",
 });
 
 export const UploadThingButton = () => {

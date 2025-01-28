@@ -25,7 +25,7 @@ export const useAuth = (): UseAuthType => {
         const fetchMetadata = async () => {
             try {
                 const response = await axios.get<ApiResponse<AuthMetadata>>(
-                    "http://localhost:8080/auth/metadata/"
+                    "http://localhost:8081/auth/metadata/"
                 );
                 if (response.data.data) {
                     setInfo(response.data.data);
@@ -43,7 +43,7 @@ export const useAuth = (): UseAuthType => {
     const setMetadata = async (key: keyof AuthMetadata, value: string) => {
         try {
             const response = await axios.post<ApiResponse<AuthMetadata>>(
-                "http://localhost:8080/auth/metadata/",
+                "http://localhost:8081/auth/metadata/",
                 { [key]: value }
             );
             if (response.data.data) {
