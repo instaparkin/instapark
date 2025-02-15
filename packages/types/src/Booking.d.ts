@@ -12,7 +12,8 @@ export interface Booking {
     updatedAt: number
 }
 
-export type BookingRequest = Pick<Booking, "listingId" | "userId" | "startDate" | "endDate">
+export type BookingRequest = Pick<Booking,
+    "listingId" | "userId" | "startDate" | "endDate">
 
 export interface Payment {
     bookingId: string
@@ -24,4 +25,15 @@ export interface Payment {
     updatedAt: number
 }
 
-export type PaymentRequest = Pick<Payment, "bookingId" | "userId" | "cfPaymentId" | "orderId">;
+export type PaymentRequest = Pick<Payment,
+    "bookingId" | "userId" | "cfPaymentId" | "orderId">;
+
+export type BookingOTP = {
+    bookingId: string
+    otp: number
+    expiresAt: number
+}
+
+export type BookedResponse = {
+    otp: number
+}

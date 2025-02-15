@@ -39,8 +39,6 @@ export class LockingService {
                     this.existingBooking.lockedAt,
                     toUnixTimestamp(new Date())
                 );
-                console.log(lockedInterval);
-
                 return lockedInterval > LOCK_INTERVAL;
             }
             case "Booked":
@@ -62,7 +60,7 @@ export class LockingService {
                     status: "Locked",
                     lockedAt: toUnixTimestamp(new Date())
                 }],
-                { session }
+                { session },
             );
             await session.commitTransaction();
             return createdBooking;
@@ -85,14 +83,14 @@ export class LockingService {
         }
 
         try {
-            return await BookingModel.updateOne(
+            return await BookingModel.findOneAndUpdate(
                 { id: this.existingBooking.id },
                 {
                     ...this.lockingRequest,
                     lockedAt: toUnixTimestamp(new Date())
                 },
                 {
-                    new: true
+                    new: true,
                 }
             );
         } catch (error) {
@@ -115,7 +113,7 @@ export class LockingService {
         const isOpen = await this.isListingAvailable();
 
         if (!isOpen) {
-            return { success: false, message: "Listing is not available for Locking." };
+            return { success: false, message: "Listing is not available currently" };
         }
 
         try {
@@ -123,7 +121,7 @@ export class LockingService {
             if (updatedLock) {
                 return { success: true, message: "Lock updated successfully", booking: updatedLock };
             } else {
-                return { success: false, message: "Listing is not available for Locking" };
+                return { success: false, message: "Listing is not available currently" };
             }
         } catch (error) {
             return { success: false, message: `Error updating booking: ${error}` };

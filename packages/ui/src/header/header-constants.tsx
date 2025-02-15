@@ -11,7 +11,7 @@ export const HEADER_NAVIGATION_ITEMS = {
       {
           group: "Menu",
           items: [
-              { icon: <IoTodayOutline />, link: "/hosting/today", name: "Trips" },
+              { icon: <IoTodayOutline />, link: "/reservations", name: "Trips" },
               { icon: <TiThListOutline />, link: "/hosting/listings", name: "Wishlists" }
           ]
       }

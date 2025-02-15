@@ -4,7 +4,7 @@ import { axios } from "@instapark/utils";
 async function seedScript(data: ListingRequest[]) {
     try {
         data.map(listing => {
-            axios.post("http://localhost:8080/listings", listing)
+            axios.post("http://localhost:8087/listings", listing)
                 .then(res =>
                     console.log(res)
                 ).catch(error => {

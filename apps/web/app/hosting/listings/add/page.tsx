@@ -1,19 +1,23 @@
 "use client"
 
-import { ListingsAddLoading } from '@instapark/ui'
+import { ListingsAddLoading, Page } from '@instapark/ui'
 import dynamic from 'next/dynamic'
 import React from 'react'
 
 const ListingsAddDynamic = dynamic(() =>
     import('@instapark/ui').then((mod) => mod.ListingsAdd), {
     loading: () => (
-        <ListingsAddLoading />
+        <Page>
+            <ListingsAddLoading />
+        </Page>
     )
 })
 
 const ListingsAddPage = () => {
     return (
-        <ListingsAddDynamic />
+        <Page>
+            <ListingsAddDynamic />
+        </Page>
     )
 }
 

@@ -67,13 +67,10 @@ export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingReque
 
     return (
         <div className='space-y-4 max-w-[630px] mx-auto'>
-            <MapsSearch    
+            <MapsSearch
                 onLocationClick={handleLocationUpdate}
             />
-            <MapDynamic
-                initialLat={form.getValues("latitude")}
-                initialLng={form.getValues('longitude')}
-                id="ListingsAddLocation" />
+            <MapDynamic />
             <ListingsFormField
                 form={form}
                 name="country"

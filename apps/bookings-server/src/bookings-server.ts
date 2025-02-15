@@ -1,15 +1,29 @@
-import '@dotenvx/dotenvx/config'
+import { config } from 'dotenv';
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit } from "@instapark/auth";
 import { API_ENDPOINTS } from "@instapark/constants";
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 import { BOOKINGS_SERVER_CONSTANTS } from "./constants/bookings-server-constants";
 import bookingsRouter from "./routes/booking.route";
-import cashfreeRouter from "./routes/cashfree.route"
-import express from "express"
-import cors from "cors"
+import cashfreeRouter from "./routes/cashfree.route";
+import express, { Request, Response } from "express";
+import cors from "cors";
+import path from 'path';
+import { createHandler } from 'graphql-http/lib/use/express';
+import { schema } from "./graphql/schema";
+
+config({ path: path.resolve(__dirname, "../", ".env.local") });
+
+async function connectDB() {
+    try {
+        await mongoose.connect(BOOKINGS_SERVER_CONSTANTS.MONGODB.URI);
+        console.log("✅ MongoDB Connected");
+    } catch (error) {
+        console.error("❌ MongoDB connection error:", error);
+        process.exit(1);
+    }
+}
 
 async function init() {
-
     ensureSuperTokensInit();
 
     const app = express();
@@ -25,24 +39,21 @@ async function init() {
 
     app.use(middleware());
 
-    /**MongoDB Connection */
-    await mongoose.connect(BOOKINGS_SERVER_CONSTANTS.MONGODB.URI);
+    await connectDB();
 
     app.get(API_ENDPOINTS.BOOKINGS_SERVER.PREFIX, (req, res) => {
-        res.send("Booking Server is up and running");
-    })
+        res.send("🚀 Booking Server is up and running");
+    });
 
-    app.use(API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.PREFIX,
-        bookingsRouter
-    )
-
-    app.use("/bookings", cashfreeRouter)
+    app.use(API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.PREFIX, bookingsRouter);
+    app.use("/bookings", cashfreeRouter);
 
     app.use(errorHandler());
 
-    app.listen(process.env.PORT, () => {
-        console.log(`Server running on http://localhost:${process.env.PORT}`);
-    })
+    const PORT = process.env.PORT || 4000;
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running at http://localhost:${PORT}`);
+    });
 }
 
 init();

@@ -76,7 +76,7 @@ export const UserButton: React.FC<UserButtonProps> = ({
                 <span className="hidden sm:block">
                     {userId ? (
                         <Avatar>
-                            <AvatarFallback>{first_name.at(0)}</AvatarFallback>
+                            <AvatarFallback>{first_name?.at(0)}</AvatarFallback>
                         </Avatar>
                     ) : (
                         <Icon>

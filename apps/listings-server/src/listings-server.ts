@@ -1,7 +1,6 @@
 import "@dotenvx/dotenvx/config"
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import listingsRouter from "./routes/listings.route";
-import redisRouter from "./routes/redis.route";
 import { API_ENDPOINTS } from "@instapark/constants";
 import { uploadthingExpress } from "./uploadthing/uploadthing-express";
 import mongoose from "mongoose";
@@ -41,11 +40,6 @@ async function init() {
         API_ENDPOINTS.LISTINGS_SERVER.ROUTES.UPLOADTHING.PREFIX,
         verifySession(),
         uploadthingExpress);
-
-    app.use(
-        API_ENDPOINTS.LISTINGS_SERVER.ROUTES.REDIS.PREFIX,
-        verifySession(),
-        redisRouter)
 
     app.use(errorHandler());
 

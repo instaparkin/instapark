@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
-import { Booking, BookingStatus } from "@instapark/types";
+import { Booking, BookingStatus, BookingOTP } from "@instapark/types";
 import { toUnixTimestamp } from "@instapark/utils";
-import { timeStamp } from "console";
 
 const bookingSchema = new Schema<Booking>(
   {
@@ -48,4 +47,26 @@ const bookingSchema = new Schema<Booking>(
   }
 );
 
-export const BookingModel = model<Booking>("Booking", bookingSchema);
+const bookingOTPSchema = new Schema<BookingOTP>(
+  {
+    bookingId: {
+      type: String,
+      required: true
+    },
+    otp: {
+      type: Number,
+      required: true
+    },
+    expiresAt: {
+      type: Number,
+      required: true
+    }
+  }
+)
+const BookingModel = model<Booking>
+  ("Booking", bookingSchema);
+
+const BookingOTPModel = model<BookingOTP>
+  ("BookingOTP", bookingOTPSchema);
+
+export { BookingModel, BookingOTPModel }

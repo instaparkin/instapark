@@ -1,41 +1,25 @@
 "use client"
 
 import React from 'react'
-import { Page } from '../components/page'
-import { ListingsTools } from './listings-tools'
 import { useEffect, useState } from 'react'
-import { ListingsView } from './listings-view-hosting'
-import { Listing } from '@instapark/types'
+import { ApiResponse, Listing } from '@instapark/types'
 import axios from 'axios'
+import { ListingCard } from '../components/listing-card'
 
 export const ListingsMain = () => {
 
-  const [data, setData] = useState<Listing[]>([])
-
+  const [data, setData] = useState<Listing[]>([]);
 
   useEffect(() => {
-    axios.post(`http://localhost:8087/search/*`, {
-      "searches": [
-        {
-          "collection": "listing_1",
-          "q": "*"
-        }
-      ]
-    })
-      .then(res => {
-        console.log(res.data);
-        setData(res.data.results[0]?.hits?.map((hit: { document: Listing }) => hit.document) || []);
-      })
-      .catch((error) => {
-        console.log(error);
-
-      })
+    axios.get<ApiResponse<Listing>>("http://localhost:8087/listings/listings/all?userId=d045f6ac-35c7-4cfa-afe9-91d5c3f9d7ce").then(res => setData(res.data.data as unknown as Listing[])
+    )
   }, [])
 
   return (
-    <Page title='Listings'>
-      <ListingsTools />
-      <ListingsView data={data} />
-    </Page>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {data?.map((item, index) => (
+        <ListingCard key={index} listing={item} />
+      ))}
+    </div>
   )
 }

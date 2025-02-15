@@ -19,8 +19,6 @@ export type MultiStepFormType<T extends Record<string, unknown>> = {
     form: UseFormReturn<T>;
     steps: Step<T>[];
     onSubmit?: ({ data }: { data: T }) => void
-    redisPrefix: string
-    redisSuffix: string
 };
 
 export interface MultiStepNavigationProps<T extends Record<string, unknown>> {

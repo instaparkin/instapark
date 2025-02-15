@@ -19,6 +19,7 @@ import { useAuth } from '../hooks/use-auth'
 import { timeInInstapark } from '../utils/dayjs'
 import { Page } from '../components/page'
 import { MapsMain } from '../maps/maps-main'
+import { ListingReserve } from '../listings/listings-reserve'
 
 interface ListingProps {
     listingId: string
@@ -294,6 +295,8 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
 
     const [listing, setListing] = useState<ListingType | undefined>(undefined);
 
+    const { userId } = useAuth()
+
     useEffect(() => {
         axios.get<ApiResponse<ListingType>>(`http://localhost:8087/listings/${listingId}`)
             .then(res => {
@@ -318,13 +321,10 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
             <ListingPhotoGrid photos={listing.photos} onShowAllPhotos={() => console.log('Show all photos clicked')} />
             <div className="grid grid-cols-3 gap-12">
                 <div className="col-span-2">
-                    <div className="border-b pb-6 mb-6">
-                        <h2 className="text-xl font-semibold mb-2">
-                            Entire villa in {listing.city}, {listing.country}
+                    <div className="border-b pb-4 mb-6">
+                        <h2 className="text-xl font-semibold">
+                            {listing.type} {" in "}{listing.city}, {listing.country}
                         </h2>
-                        <p className="text-muted-foreground">
-                            {listing.allowedVehicles.length} guests · {listing.basePrice} bedrooms · {listing.pphbi} beds · {listing.pphcr} bathrooms
-                        </p>
                     </div>
                     <ListingHostInfo
                         userId={listing.userId}
@@ -340,12 +340,14 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                     {/* Desktop View */}
                     <div className="hidden md:block max-w-md mx-auto pt-8">
                         <PricingCalculator
+                            instaparkFeePercentage={30}
                             pphbi={listing.pphbi}
                             pphcy={listing.pphcy}
                             pphcr={listing.pphcr}
                             plph={listing.plph}
                             basePrice={listing.basePrice}
                         />
+                        <ListingReserve listingId={listing.id} userId={userId} startDate={1739503313} endDate={1739589713} />
                     </div>
 
                     {/* Mobile View with Drawer */}

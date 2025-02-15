@@ -2,7 +2,6 @@ import searchRoute from "./routes/search.route";
 import olaMapsRoute from "./routes/olamaps.route";
 import TypesenseRoute from "./routes/typesense.route";
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
-import { bookingConsumer, searchConsumer } from "@instapark/kafka";
 import { API_ENDPOINTS } from "@instapark/constants";
 import { config, cors, express } from "@instapark/utils";
 
@@ -46,10 +45,6 @@ async function init() {
 
     app.use(errorHandler());
 
-    searchConsumer({ fromBeginning: true });
-
-    bookingConsumer({ fromBeginning: false });
-    
     app.listen(process.env.PORT, () => {
         console.log(`Server running on http://localhost:${process.env.PORT}`);
     })

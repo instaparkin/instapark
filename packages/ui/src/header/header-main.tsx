@@ -45,7 +45,6 @@ export const HeaderMain = () => {
                 </NavigationMenu>
                 <div className="flex gap-4 items-center">
                     <SwitchRoleButton variant="header" />
-                    <NotificationIcon userId={userId} />
                     <UserButton
                         first_name={first_name}
                         userId={userId}

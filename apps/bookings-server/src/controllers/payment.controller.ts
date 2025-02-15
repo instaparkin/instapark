@@ -8,7 +8,7 @@ export const createBooking = async (req: Request, res: Response) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-        const payment = req.body as Pick<Payment, "bookingId" | "userId" | "cfPaymentId" | "orderId">;
+        const payment = req.body as Pick<Payment, "bookingId" | "userId" | "paymentSessionId" | "orderId">;
         if (!payment) {
             return sendResponse(
                 res,
@@ -70,7 +70,7 @@ export const completeBooking = async (req: Request, res: Response) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-        const payment = req.body as Pick<Payment, "bookingId" | "userId" | "cfPaymentId" | "orderId">;
+        const payment = req.body as Pick<Payment, "bookingId" | "userId" | "paymentSessionId" | "orderId">;
         if (!payment) {
             return sendResponse(
                 res,

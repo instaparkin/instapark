@@ -1,6 +1,6 @@
-import { addUUID, toUnixTimestamp, Request, Response, sendResponse } from "@instapark/utils";
-import { ListingModel } from "../models/listing.models";
-import { Listing, ListingRequest } from "@instapark/types";
+import { addUUID, toUnixTimestamp, Request, Response, sendResponse, axios } from "@instapark/utils";
+import { ListingModel } from "../models/listing.model";
+import { ApiResponse, Booking, Listing, ListingRequest, ListingSearch, Vehicle } from "@instapark/types";
 import { listingsCreateSchema } from "@instapark/schemas"
 import { searchProducer } from "@instapark/kafka";
 
@@ -114,3 +114,34 @@ export const deleteListing = async (req: Request, res: Response) => {
         session.endSession();
     }
 };
+
+export const getAllListings = async (req: Request, res: Response) => {
+    try {
+        const filters: Partial<Record<string, any>> = {};
+        const { street, startDate, endDate, vehicleType, userId } = req.query as Record<string, string>;
+
+        if (street) filters.$text = { $search: street };
+
+        if (userId) {
+            filters.userId = { $eq: userId }
+        }
+
+        if (vehicleType) filters.allowedVehicles = { $in: [vehicleType] };
+
+        const bookingsPromise = startDate && endDate
+            ? axios.get<ApiResponse<{ listingId: string }[]>>(
+                `http://localhost:8085/bookings/all?startDate=${startDate}&endDate=${endDate}`
+            ).then(res => res.data.data)
+            : Promise.resolve([]);
+
+        const [bookings] = await Promise.all([bookingsPromise]);
+
+        if (bookings?.length > 0) filters.id = { $nin: bookings.map(l => l.listingId) };
+
+        const listings = await ListingModel.find(filters, { _id: 0, __v: 0 });
+
+        return sendResponse(res, 200, "Listings Fetched Successfully", "SUCCESS", listings);
+    } catch (error) {
+        return sendResponse(res, 500, "An unexpected error occurred while fetching the results.", "FAILURE", error);
+    }
+}    

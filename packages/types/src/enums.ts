@@ -1,6 +1,7 @@
 export enum BookingStatus {
     Locked = "Locked",
     Booked = "Booked",
+    Ongoing = "Ongoing",
     Completed = "Completed"
 }
 

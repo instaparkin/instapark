@@ -13,16 +13,6 @@ export const HOSTING_MAIN_TABS_LIST = {
             content: <HostingCheckingOut />
         },
         {
-            name: "Current",
-            value: "current",
-            content: <HostingCurrent />
-        },
-        {
-            name: "Arriving Soon",
-            value: "arriving-soon",
-            content: <HostingArrivingSoon />
-        },
-        {
             name: "Upcoming",
             value: "upcoming",
             content: <HostingUpcoming />

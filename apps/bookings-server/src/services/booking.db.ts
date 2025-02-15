@@ -2,7 +2,7 @@ import { Booking, BookingRequest } from "@instapark/types";
 import { BookingModel } from "../models/booking.model";
 import { uuid } from "@instapark/utils";
 
-export class BookingRepository {
+export class BookingDB {
     /**
      * Find a booking by query
      */
@@ -10,28 +10,10 @@ export class BookingRepository {
         return await BookingModel.findOne({
             listingId: listingId,
             $or: [
-                { startDate: { $lte: endDate }, endDate: { $gte: startDate } }
+                { startDate, endDate }
             ]
-        }) as Booking | null;
+        }) as Booking;
     }
-
-    /**
-     * Create a new booking
-     */
-    static async createBooking(data: BookingRequest): Promise<Booking> {
-        const session = await BookingModel.startSession();
-        session.startTransaction();
-        return await BookingModel.create(
-            [{
-                ...data,
-                id: uuid(),
-                status: "Locked",
-                lockedAt: new Date()
-            }],
-            { session }
-        );
-    }
-
     /**
      * Update a booking by ID
      */
@@ -40,17 +22,22 @@ export class BookingRepository {
     }
 
     /**
-     * Find bookings by criteria
-     */
-    static async find(query: any): Promise<Booking[]> {
-        return BookingModel.find(query).exec() as Promise<Booking[]>;
-    }
-
-    /**
      * Delete a booking by ID
      */
     static async deleteById(id: string): Promise<boolean> {
         const result = await BookingModel.deleteOne({ id }).exec();
         return result.deletedCount === 1;
+    }
+
+    static async findBookings(startDate: number, endDate: number) {
+        return await BookingModel.find({ startDate, endDate }, { listingId: 1, _id: 0 });
+    }
+
+    static async findBookingsByListingId(listingId: string) {
+        return await BookingModel.find({ listingId }, { _id: 0 })
+    }
+
+    static async findBookingsByListingIds(listingIds: string[]) {
+        return await BookingModel.find({ listingId: { $in: listingIds } }, { _id: 0, __v: 0 })
     }
 }

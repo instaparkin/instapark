@@ -2,7 +2,7 @@ import { Router } from "@instapark/utils";
 import { BOOKINGS_SERVER_CONSTANTS } from "../constants/bookings-server-constants";
 
 const router = Router();
-    
+
 router.post("/aadhar/verify", async (req, res) => {
     try {
         const options = {
@@ -51,6 +51,10 @@ router.post("/aadhar/otp", async (req, res) => {
     } catch (error) {
         res.send(error)
     }
+})
+
+router.post("/order", async (req, res) => {
+ 
 })
 
 export default router

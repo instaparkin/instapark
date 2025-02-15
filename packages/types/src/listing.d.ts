@@ -1,3 +1,4 @@
+import { BookingRequest } from "./Booking";
 import { Vehicle, PlaceType } from "./enums";
 
 export interface Listing {
@@ -24,6 +25,7 @@ export interface Listing {
 
     /**Fields Not required During form submission */
     id: string;
+    bookings?: BookingRequest[]
     isOpen: boolean;
     rating: number;
     createdAt: number;
@@ -46,3 +48,11 @@ export interface Review {
 }
 
 export type ListingRequest = Omit<Listing, "id" | "createdAt" | "updatedAt" | "isOpen" | "availableFrom" | "rating"> 
+
+export type ListingSearch =  {
+    q: string
+    vehicleType: typeof Vehicle;
+    page: number
+    startDate?: number;
+    endDate?: number;
+}

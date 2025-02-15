@@ -1,16 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import stateConfig from "../../state-config.json"
-import { Listing } from "@instapark/types"
-
-export interface SearchListingsProps {
-    query_by: string[];
-    collections: {
-        q: string
-        name: string;
-        filter_by?: string;
-        page?: number
-    }[];
-}
+import { Listing, ListingSearch } from "@instapark/types"
 
 interface InitialState {
     listingData: Listing[];
@@ -24,9 +14,9 @@ const initialState: InitialState = {
     error: null,
 };
 
-export const searchListings = createAsyncThunk<Listing[], SearchListingsProps, { rejectValue: string }>(
+export const searchListings = createAsyncThunk<Listing[], ListingSearch, { rejectValue: string }>(
     "search/listings",
-    async ({ query_by, collections }, { rejectWithValue }) => {
+    async ({ q, vehicleType, page, startDate, endDate }, { rejectWithValue }) => {
         try {
             const payload = {
                 searches: collections.map((c) => ({

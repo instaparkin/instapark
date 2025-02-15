@@ -1,5 +1,5 @@
 import { Router } from "@instapark/utils";
-import { deleteListing, getListing, createListing, updateListing } from "../controllers/listings.controller";
+import { deleteListing, getListing, createListing, updateListing, getAllListings } from "../controllers/listings.controller";
 import { API_ENDPOINTS } from "@instapark/constants";
 
 const router = Router();
@@ -19,5 +19,7 @@ router.get(
 router.delete(
     API_ENDPOINTS.LISTINGS_SERVER.ROUTES.LISTING.DELETE,
     deleteListing);
+
+router.get("/listings/all", getAllListings)
 
 export default router;

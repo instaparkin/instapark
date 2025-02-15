@@ -1,7 +1,9 @@
-import { ApiResponse, BookingRequest, Payment, PaymentRequest } from "@instapark/types";
+import { ApiResponse, BookedResponse, BookingRequest, Payment, PaymentRequest } from "@instapark/types";
 import mongoose from "mongoose";
-import { BookingModel } from "../models/booking.model";
+import { BookingModel, BookingOTPModel } from "../models/booking.model";
 import { PaymentModel } from "../models/payment.model";
+import { Cashfree } from "cashfree-pg";
+import { sign } from "jsonwebtoken"
 
 export class BookingService {
     private paymentRequest: PaymentRequest
@@ -10,9 +12,12 @@ export class BookingService {
         this.paymentRequest = paymentRequest
     }
 
-    private async createBooking(): Promise<ApiResponse<Payment>> {
+    private async createBooking(): Promise<ApiResponse<BookedResponse>> {
         const session = await mongoose.startSession();
         session.startTransaction();
+        /**
+         * Update the booking status
+         */
         try {
             const bookingUpdate = await BookingModel.findOneAndUpdate(
                 { id: this.paymentRequest.bookingId, userId: this.paymentRequest.userId, status: "Locked" },
@@ -28,25 +33,51 @@ export class BookingService {
                 }
             }
 
-            const newPayment = await PaymentModel.create(
+            /**
+             * Create the payment record
+             */
+            let version = "2023-08-01"
+            Cashfree.PGFetchOrder(version, this.paymentRequest.orderId).then((response) => {
+                console.log('Order fetched successfully:', response.data);
+            }).catch((error) => {
+                console.error('Error:', error.response.data.message);
+            });
+
+            await PaymentModel.create(
                 [
                     {
-                        ...this.createBooking,
+                        ...this.paymentRequest,
                         paymentType: "Booked",
                     },
                 ],
                 { session },
             );
 
-            console.log(newPayment);
-            
 
+            /**
+             * OTP is generated and sent to the buyer
+             */
+            const otp = Math.floor(100000 + Math.random() * 900000);
+
+            await BookingOTPModel.create([
+                {
+                    bookingId: this.paymentRequest.bookingId,
+                    otp,
+                    expiresAt: bookingUpdate.endDate
+                }
+            ], { session })
+
+            /**
+             * Commit and send the response
+             */
             await session.commitTransaction();
             session.endSession();
             return {
                 message: "Booking and payment created successfully",
                 status: "SUCCESS",
-                data: newPayment[0]
+                data: {
+                    otp
+                }
             }
         } catch (error) {
             await session.abortTransaction();
@@ -55,7 +86,7 @@ export class BookingService {
         }
     };
 
-    async book(): Promise<ApiResponse<Payment>> {
+    async book(): Promise<ApiResponse<BookedResponse>> {
         if (!this.paymentRequest) {
             return {
                 message: "Invalid input",

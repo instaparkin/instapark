@@ -1,10 +1,10 @@
-import { Page, ProfileMain } from '@instapark/ui'
+import { Page, ProfileMain, ProfilePublic } from '@instapark/ui'
 import React from 'react'
 
 const ProfilePage = () => {
     return (
         <Page>
-            <ProfileMain />
+            <ProfilePublic />
         </Page>
     )
 }

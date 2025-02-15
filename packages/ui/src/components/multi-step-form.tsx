@@ -60,8 +60,6 @@ const MultiStepProgress = ({ calculateProgress }: MultiStepProgressProps) => (
 export const MultiStepForm = <T extends Record<string, unknown>>({
     form,
     steps,
-    redisPrefix,
-    redisSuffix,
     onSubmit = () => { }
 }: MultiStepFormType<T>) => {
     const {
@@ -74,19 +72,12 @@ export const MultiStepForm = <T extends Record<string, unknown>>({
         currentSubStep,
         isLastSecondStep,
         setSubmitted
-    } = useMultiStepForm({ steps, form, redisPrefix, redisSuffix });
+    } = useMultiStepForm({ steps, form });
 
     const handleSubmit = async (data: T) => {
         setSubmitted();
         try {
             onSubmit({ data });
-            const deleteResponse = await fetch(`http://localhost:8087/listings/redis/del/${redisPrefix}-${redisSuffix}`, {
-                method: "DELETE",
-            });
-
-            if (!deleteResponse.ok) {
-                throw new Error(`Error deleting Redis entry: ${deleteResponse.status} - ${deleteResponse.statusText}`);
-            }
             next();
         } catch (error) {
             toast.error("Error: " + error)

@@ -1,6 +1,6 @@
 "use client"
 
-import { ListingsLoading } from '@instapark/ui'
+import { ListingsLoading, Page } from '@instapark/ui'
 import React from 'react'
 import dynamic from "next/dynamic"
 
@@ -13,7 +13,9 @@ const ListingsMainDynamic = dynamic(() =>
 
 const ListingsPage = () => {
     return (
-        <ListingsMainDynamic />
+        <Page>
+            <ListingsMainDynamic />
+        </Page>
     )
 }
 

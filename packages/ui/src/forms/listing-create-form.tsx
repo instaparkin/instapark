@@ -11,8 +11,6 @@ export const ListingCreateForm = () =>
         resolver: zodResolver(listingsCreateSchema),
         defaultValues: {
             userId: "",
-            isOpen: true,
-            type: "",
             latitude: 0,
             longitude: 0,
             country: "",

@@ -8,6 +8,7 @@ export {
     type Listing,
     type ListingRequest,
     type Review,
+    type ListingSearch
 } from "./src/Listing";
 export {
     type SearchResult,
@@ -31,7 +32,9 @@ export {
     type Booking,
     type Payment,
     type BookingRequest,
-    type PaymentRequest
+    type PaymentRequest,
+    type BookingOTP,
+    type BookedResponse
 } from "./src/Booking"
 export {
     type ProducerType,

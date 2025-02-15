@@ -27,8 +27,8 @@ export const Page: React.FC<PageProps> = ({ children, title, className }) => {
     return (
         <main className={cn("relative top-28 w-full mx-auto space-y-6 pb-12", className)}>
             <div className="container space-y-6">
-                {title && <div className="font-semibold text-lg md:text-xl lg:text-2xl">{title}</div>}
                 <PageBreadCrumbs />
+                {title && <div className="font-semibold text-lg md:text-xl lg:text-2xl">{title}</div>}
                 {children}
             </div>
         </main>

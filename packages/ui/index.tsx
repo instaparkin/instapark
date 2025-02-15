@@ -8,7 +8,6 @@ export { EarningsMain } from "./src/earnings/earnings-main"
 export { TodayMain } from "./src/today/today-main"
 export { ProfileMain } from "./src/profile/profile-main"
 export { ListingsAdd } from "./src/listings/listings-add"
-export { SearchListingsComponent } from "./src/search/search-listings-component"
 export { HostingMain } from "./src/hosting/hosting-main"
 export { HomeMain } from "./src/home/home-main"
 export { ListingsLoading } from "./src/listings/listings-loading"
@@ -25,5 +24,8 @@ export { AuthProvider } from "./src/providers/auth-provider";
 export { StoreProvider } from "./src/providers/store-provider";
 export { AuthPage } from "./src/auth/auth-page"
 export { SessionAuthProvider } from "./src/providers/session-auth-provider"
-export { SearchMain } from "./src/search/search-main"
 export { Page } from "./src/components/page"
+export { Reserve } from "./src/checkout/reserve"
+export { ProfilePublic } from "./src/profile/profile-public";
+export { TripsMain } from "./src/trips/trips-main"
+export { TripDetailed } from "./src/trips/trip-detailed"
