@@ -96,5 +96,3 @@ For detailed guidelines, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 Instapark is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.  
 
 ---
-
-Would you like to include **user authentication details** or **business model information**?
