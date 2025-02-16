@@ -3,24 +3,24 @@ import { HostingArrivingSoon } from "./hosting-arriving-soon";
 import { HostingCheckingOut } from "./hosting-checking-out";
 import { HostingPendingReview } from "./hosting-pending-review";
 import { HostingCurrent } from "./hosting-current";
-import { HostingUpcoming } from "./hosting-upcoming";
+import { HostingCompleted } from "./hosting-completed";
 
 export const HOSTING_MAIN_TABS_LIST = {
     data: [
         {
-            name: "Checking Out",
-            value: "checking-out",
+            name: "Current",
+            value: "current",
             content: <HostingCheckingOut />
-        },
-        {
-            name: "Upcoming",
-            value: "upcoming",
-            content: <HostingUpcoming />
         },
         {
             name: "Pending Review",
             value: "pending-review",
             content: <HostingPendingReview />
+        },
+        {
+            name: "Completed",
+            value: "completed",
+            content: <HostingCompleted />
         },
     ]
 }

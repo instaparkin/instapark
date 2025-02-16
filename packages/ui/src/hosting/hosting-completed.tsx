@@ -9,7 +9,7 @@ import { columns } from './hosting-columns'
 import { DataTable } from '../components/data-table'
 import toast from 'react-hot-toast'
 
-export const HostingUpcoming = () => {
+export const HostingCompleted = () => {
   const [bookings, setBookings] = useState<Booking[]>([])
 
   useEffect(() => {

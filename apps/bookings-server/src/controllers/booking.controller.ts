@@ -95,32 +95,43 @@ export const getBookings = async (req: Request, res: Response) => {
             return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
         }
 
+
+        if (userId && status === "review") {
+            const listings = await axios.get<ApiResponse<Listing[]>>(`http://localhost:8087/listings/listings/all?userId=${userId}`).then(res => res.data.data)
+
+            const bookings = await BookingModel.find(
+                {
+                    status: { $in: ["Booked"] },
+                    startDate: { $lt: toUnixTimestamp(new Date()) },
+                    listingId: {
+                        $in: listings?.map(l => l.id),
+                    }
+                }, { _id: 0, __v: 0 })
+
+            return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
+        }
+
+        if (userId && status === "complete") {
+            const listings = await axios.get<ApiResponse<Listing[]>>(`http://localhost:8087/listings/listings/all?userId=${userId}`).then(res => res.data.data)
+
+            const bookings = await BookingModel.find(
+                {
+                    status: { $in: ["OnGoing"] },
+                    listingId: {
+                        $in: listings?.map(l => l.id),
+                    }
+                }, { _id: 0, __v: 0 })
+            return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
+        }
+
         if (userId) {
             const bookings = await BookingModel.find({ userId, status: { $nin: ["Locked"] } }, { _id: 0, __v: 0 })
             return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
         }
 
 
-
-        if (userId && status === "checkingOut") {
-            const listings = await axios.get<ApiResponse<Listing[]>>(`http://localhost:8087/listings/listings/all?userId=${userId}`).then(res => res.data.data)
-
-            const bookings = await BookingModel.find({ listingId: { $in: listings?.map(l => l.id) }, startDate: { $lt: toUnixTimestamp(new Date()) } }, { _id: 0, __v: 0 })
-
-            return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
-        }
-
-        if (userId && status === "current") {
-            const listings = await axios.get<ApiResponse<Listing[]>>(`http://localhost:8087/listings/listings/all?userId=${userId}`).then(res => res.data.data)
-
-            const bookings = await BookingModel.find({ listingId: { $in: listings?.map(l => l.id) } }, { _id: 0, __v: 0 })
-
-            return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
-        }
-
-
     } catch (error) {
-        sendResponse(res, 500, `Error creating Booking: ${error}`, "FAILURE", null);
+        sendResponse(res, 500, `Failed to get Bookings: ${error}`, "FAILURE", null);
     }
 }
 
@@ -131,6 +142,33 @@ export const getOtp = async (req: Request, res: Response) => {
         return sendResponse(res, 200, "OTP  fetched successfully", "SUCCESS", { otp: otp[0].otp });
     } catch (error) {
         sendResponse(res, 500, `Error Fetching OTP ${error}`, "FAILURE", null);
-
     }
 }
+
+export const verifyBooking = async (req: Request, res: Response) => {
+    try {
+        const { otp, bookingId } = req.body;
+
+        console.log(req.body);
+
+
+        const bookingOTP = await BookingOTPModel.find({
+            bookingId: bookingId,
+            otp: otp,
+            expiresAt: { $gt: toUnixTimestamp(new Date()) }
+        });
+
+        if (bookingOTP.length !== 0) {
+            await BookingModel.findOneAndUpdate({
+                id: bookingId
+            }, {
+                status: "OnGoing"
+            })
+            return sendResponse(res, 200, "Booking verified successfully", "SUCCESS", null);
+        } else {
+            return sendResponse(res, 400, "Failed to verify Booking", "FAILURE", null);
+        }
+    } catch (error) {
+        return sendResponse(res, 500, `Failed to verify Booking: ${error}`, "FAILURE", null);
+    }
+};

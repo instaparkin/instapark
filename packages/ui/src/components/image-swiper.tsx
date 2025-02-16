@@ -7,7 +7,6 @@ import Image from 'next/image';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Photo } from '@instapark/types';
 
 interface SwiperMainProps {
   content: string[]

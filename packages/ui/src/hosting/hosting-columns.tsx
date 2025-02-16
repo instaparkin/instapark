@@ -3,6 +3,10 @@
 import { Booking } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { unixSecToMonthYearTime } from "../utils/dayjs"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/dropdown-menu"
+import { Button } from "../components/button"
+import { MoreHorizontal } from "lucide-react"
+import Link from "next/link"
 
 export const columns: ColumnDef<Booking>[] = [
     {
@@ -26,6 +30,12 @@ export const columns: ColumnDef<Booking>[] = [
                 case "Locked":
                     return (
                         <div className="bg-gray-200 p-2 w-fit rounded-sm">
+                            {value}
+                        </div>
+                    )
+                case "OnGoing":
+                    return (
+                        <div className="bg-yellow-200 p-2 w-fit rounded-sm">
                             {value}
                         </div>
                     )
@@ -55,5 +65,25 @@ export const columns: ColumnDef<Booking>[] = [
                 </div>
             )
         }
+    },
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            const bookingId = row.original.id
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem>
+                            Verify
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )
+        },
     },
 ]
