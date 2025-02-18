@@ -1,13 +1,14 @@
+"use client"
+
 import React from 'react'
-import { Page } from '../components/page'
 import { EarningsMonthly } from './earnings-monthly'
-import { EarningsVisitors } from './earnings-visitors'
+import { EarningsHeader } from './earnings-header'
 
 export const EarningsMain = () => {
   return (
-    <Page title="Earnings">
+    <>
+      <EarningsHeader />
       <EarningsMonthly />
-      <EarningsVisitors />
-    </Page>
+    </>
   )
 }

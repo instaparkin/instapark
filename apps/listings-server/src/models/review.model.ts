@@ -17,4 +17,4 @@ const ReviewSchema: Schema = new Schema<Review>({
     updatedAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) }
   });
 
-const ReviewModel = mongoose.model<Review>('Review', ReviewSchema);
+export const ReviewModel = mongoose.model<Review>('Review', ReviewSchema);

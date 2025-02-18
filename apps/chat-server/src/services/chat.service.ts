@@ -9,12 +9,11 @@ export class ChatService extends SocketService {
 
     private sendMessage() {
         this.io?.on("", () => {
-            
+
         })
     }
 
     private receiveMessage() {
-
     }
 
 }

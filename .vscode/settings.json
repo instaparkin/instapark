@@ -1,7 +1,6 @@
 {
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ]
+  "workbench.editor.showTabs": "single",
+  "workbench.statusBar.visible": false,
+  "workbench.tips.enabled": false,
+  "vsicons.presets.hideExplorerArrows": true
 }

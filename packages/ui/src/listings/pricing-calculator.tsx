@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React from "react"
 import { Card, CardContent } from "../components/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/select"
 import { Input } from "../components/input"
@@ -30,9 +30,9 @@ export function PricingCalculator({
   instaparkFeePercentage,
   className,
 }: PricingCalculatorProps) {
-  const [startDate, setStartDate] = useState<string>(new Date().toISOString().slice(0, 16))
-  const [endDate, setEndDate] = useState<string>(new Date(Date.now() + 3600000).toISOString().slice(0, 16))
-  const [selectedVehicle, setSelectedVehicle] = useState<Vehicle>("Bike")
+  const [startDate, setStartDate] = React.useState<string>(new Date().toISOString().slice(0, 16))
+  const [endDate, setEndDate] = React.useState<string>(new Date(Date.now() + 3600000).toISOString().slice(0, 16))
+  const [selectedVehicle, setSelectedVehicle] = React.useState<Vehicle>("Bike")
 
   const getHourlyRate = (vehicleType: Vehicle) => {
     switch (vehicleType) {

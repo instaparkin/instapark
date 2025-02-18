@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/tabs"
 import { HOSTING_MAIN_TABS_LIST } from "./hosting-constants"
 import { useSessionContext } from "supertokens-auth-react/recipe/session"
 import { useAuth } from "../hooks/use-auth"
+import { MapsSearch } from "../maps/maps-search"
 
 export const CompleteListingButton = () => {
     const session = useSessionContext()
@@ -41,6 +42,7 @@ export const HostingMain = () => {
                     })
                 }
             </Tabs>
+            <MapsSearch />
         </div >
     )
 }

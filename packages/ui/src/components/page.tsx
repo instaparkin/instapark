@@ -1,9 +1,8 @@
 "use client"
 
-import React, { type ReactNode } from "react"
+import React from "react"
 import { cn } from "../utils/cn"
 import { usePathname } from "next/navigation"
-import Link from "next/link"
 import {
     Breadcrumb,
     BreadcrumbItem,

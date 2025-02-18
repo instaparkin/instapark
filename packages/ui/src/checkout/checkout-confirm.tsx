@@ -1,16 +1,8 @@
+import React from "react"
 import Image from "next/image"
-import { Button } from "../components/button"
 import Link from "next/link"
 import { Alert, AlertDescription, AlertTitle } from "../components/alert"
 
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "../components/card"
 
 interface BookingConfirmationProps {
     dates: {
@@ -36,7 +28,6 @@ export function CheckoutConfirm({
         checkIn: "28 Feb",
         checkOut: "5 Mar",
     },
-    guestCount = 1,
     property = {
         name: "Moon Villa",
         type: "Entire guest house",
@@ -104,7 +95,7 @@ export function CheckoutConfirm({
                         </p>
                         <ul className="list-disc list-inside space-y-2 text-gray-600">
                             <li>Follow the house rules</li>
-                            <li>Treat your Host's home like your own</li>
+                            <li>{"Treat your Host's home like your own"}</li>
                         </ul>
                     </section>
 
@@ -116,7 +107,7 @@ export function CheckoutConfirm({
                             <Link href="#" className="text-primary hover:underline">
                                 charge my payment method
                             </Link>{" "}
-                            if I'm responsible for damage.
+                            {" if I'm responsible for damage."}
                         </p>
                     </section>
                 </div>

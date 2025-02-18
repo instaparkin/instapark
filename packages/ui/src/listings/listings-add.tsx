@@ -3,12 +3,10 @@
 import React from 'react'
 import { MultiStepForm } from '../components/multi-step-form'
 import { listingsAddSteps } from './listings-add-steps'
-import { LISTINGS_ADD_FORM_KEY } from '../utils/global-constants'
 import toast from 'react-hot-toast'
 import uiConfig from "../../ui-config.json"
 import axios from 'axios'
-import { Listing, ListingRequest } from '@instapark/types'
-import { useAuth } from '../hooks/use-auth'
+import { ListingRequest } from '@instapark/types'
 import { ListingCreateForm } from '../forms/listing-create-form'
 
 export const ListingsAdd = () => {

@@ -10,7 +10,7 @@ import { UseFormReturn } from "react-hook-form";
 import { PiFarm } from "react-icons/pi";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../components/form";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
-import { Listing, ListingRequest, PlaceType } from "@instapark/types";
+import {  ListingRequest, PlaceType } from "@instapark/types";
 
 export type PlaceTypeWithIcon = {
   type: PlaceType;

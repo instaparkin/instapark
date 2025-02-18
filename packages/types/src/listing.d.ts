@@ -25,7 +25,6 @@ export interface Listing {
 
     /**Fields Not required During form submission */
     id: string;
-    bookings?: BookingRequest[]
     isOpen: boolean;
     rating: number;
     createdAt: number;
@@ -47,7 +46,7 @@ export interface Review {
     updatedAt: number;
 }
 
-export type ListingRequest = Omit<Listing, "id" | "createdAt" | "updatedAt" | "isOpen" | "availableFrom" | "rating"> 
+export type ListingRequest = Omit<Listing, "id" | "createdAt" | "updatedAt" | "isOpen" | "availableFrom" | "rating">
 
 export type ListingSearch =  {
     q: string

@@ -24,3 +24,15 @@ export enum PlaceType {
     Hotel = 'Hotel',
     Farm = 'Farm'
 }
+
+export enum VendorStatus {
+    ACTIVE = "ACTIVE"
+}
+
+export enum AccountType {
+    BUSINESS = "BUSINESS"
+}
+
+export enum BusinessType {
+    "Travel and Hospitality" = "Travel and Hospitality "
+}

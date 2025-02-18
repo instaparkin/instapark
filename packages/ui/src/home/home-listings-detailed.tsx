@@ -1,9 +1,9 @@
 'use client'
 
 import React from 'react'
-import { Card, CardContent, CardFooter } from '../components/card'
+import { Card } from '../components/card'
 import { Button } from '../components/button'
-import { GraduationCap, Grid2X2, Heart, Share, Share2, Shield, Star, X } from 'lucide-react'
+import { GraduationCap, Grid2X2, Heart, Share, Share2, Shield, X } from 'lucide-react'
 import Link from 'next/link'
 import { ApiResponse, Listing, Listing as ListingType } from "@instapark/types"
 import Image from 'next/image'
@@ -14,12 +14,14 @@ import { PricingDrawer } from '../listings/pricing-drawer'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { ListingWishlist } from '../components/listing-wishlist'
-import { useSessionContext } from 'supertokens-auth-react/recipe/session'
 import { useAuth } from '../hooks/use-auth'
 import { timeInInstapark } from '../utils/dayjs'
 import { Page } from '../components/page'
 import { MapsMain } from '../maps/maps-main'
 import { ListingReserve } from '../listings/listings-reserve'
+import { gql, useQuery } from '@apollo/client'
+import toast from 'react-hot-toast'
+import { ListingLoadingSkeleton } from './home-detailed-loading'
 
 interface ListingProps {
     listingId: string
@@ -48,7 +50,7 @@ interface ListingDetailedHeaderProps {
     onSave: () => void
 }
 
-const ListingDetailedHeader: React.FC<ListingDetailedHeaderProps> = ({ title, onShare, onSave }) => {
+const ListingDetailedHeader: React.FC<ListingDetailedHeaderProps> = ({ title, onShare }) => {
     return (
         <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-semibold">{title}</h1>
@@ -293,24 +295,54 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
     listingId
 }) => {
 
-    const [listing, setListing] = useState<ListingType | undefined>(undefined);
+    const GET_LISTING = gql`
+    query GET_LISTINGS($id: String!) {
+  ListingQuery {
+    getListingById(id: $id) {
+      allowedVehicles
+      basePrice
+      city
+      country
+      createdAt
+      district
+      id
+      isOpen
+      landmark
+      userId
+      type
+      state
+      street
+      pincode
+      latitude
+      longitude
+      name
+      pphbi
+      pphcy
+      pphcr
+      plph
+      photos
+      rating
+      updatedAt
+    }
+  }
+}
+`
 
+    const { loading, error, data } = useQuery(GET_LISTING, {
+        variables: { id: listingId }
+    });
     const { userId } = useAuth()
 
-    useEffect(() => {
-        axios.get<ApiResponse<ListingType>>(`http://localhost:8087/listings/${listingId}`)
-            .then(res => {
-                console.log(res?.data);
-                setListing(res?.data?.data)
-            })
-            .catch((error) => {
-                console.error(error);
-            })
-    }, []);
-
-    if (!listing) {
-        return <Page>loading..</Page>
+    if (loading) {
+        return <ListingLoadingSkeleton />
     }
+
+    if (error) {
+        toast.error(`Error: ${error.message}`);
+    }
+
+    const listing: Listing = data.ListingQuery.getListingById
+
     return (
         <ListingDetailedContent>
             <ListingDetailedHeader
@@ -328,8 +360,8 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                     </div>
                     <ListingHostInfo
                         userId={listing.userId}
-                        name="Host Name" // Replace with actual host name
-                        hostingDuration="12" // Replace with actual hosting duration
+                        name="Host Name"
+                        hostingDuration="12"
                         reviews={4}
                         rating={4.5}
                         responseRate={100}

@@ -8,7 +8,6 @@ import { Icon } from "../components/icon";
 import {
     Avatar,
     AvatarFallback,
-    AvatarImage,
 } from "../components/avatar";
 import {
     DropdownMenu,

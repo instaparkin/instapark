@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Path, UseFormReturn } from 'react-hook-form';
-import { RootState, useSelector } from '@instapark/state';
 import { MapsSearch } from '../maps/maps-search';
 import { ListingsFormField } from './listings-form-field';
 import dynamic from "next/dynamic";
 import { Skeleton } from '../components/skeleton';
 import { MapData } from '@instapark/state/src/slices/maps-slice';
-import { Listing, ListingRequest } from '@instapark/types';
+import { ListingRequest } from '@instapark/types';
 
 const MapDynamic = dynamic(() =>
     import('../maps/maps-main').then((mod) => mod.MapsMain), {
@@ -24,25 +23,6 @@ interface FieldsToUpdateProps {
 }
 
 export const ListingsAddLocation = ({ form }: { form: UseFormReturn<ListingRequest> }) => {
-    const { autocomplete } = useSelector((state: RootState) => state.maps);
-
-    useEffect(() => {
-        async function trigger() {
-            const paths: Path<ListingRequest>[] = [
-                "latitude",
-                "longitude",
-                "country",
-                "state",
-                "district",
-                "city",
-                "street",
-                "pincode",
-                "name",
-                "landmark"
-            ];
-        }
-        trigger();
-    }, [autocomplete, form.getValues]);
 
     const handleLocationUpdate = (location: MapData) => {
         const fieldsToUpdate: FieldsToUpdateProps[] = [

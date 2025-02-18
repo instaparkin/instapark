@@ -1,9 +1,9 @@
 export type Profile = {
     userId: string
-    userProof: {
-        governmentId: string
-        frontsideUrl: string
-        backsideUrl: string
+    phoneNumber: number
+    kyc: {
+        uidai: number
+        verified: boolean
     }
     country: string;
     state: string;
@@ -15,4 +15,8 @@ export type Profile = {
     longitude: number;
     name?: string;
     landmark?: string;
-}   
+}
+
+export type ProfileRequest = Omit<Profile, "userId" |"kyc"> & {
+    kyc: Pick<Profile["kyc"], "uidai">
+}

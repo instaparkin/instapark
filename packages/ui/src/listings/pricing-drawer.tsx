@@ -44,15 +44,15 @@ export function PricingDrawer({
                 {startDate}-{endDate}
               </span>
             </div>
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="bg-pink-600 hover:bg-pink-700 text-white min-w-[120px]"
               onClick={() => setOpen(true)}
             >
               Reserve
             </Button>
           </div>
-          <div 
+          <div
             className={cn(
               "flex items-center justify-center py-2 border-t",
               open && "hidden"
@@ -71,7 +71,7 @@ export function PricingDrawer({
               pphcr={pphcr}
               plph={plph}
               basePrice={basePrice}
-            />
+              instaparkFeePercentage={0} />
           </div>
         </div>
       </DrawerContent>

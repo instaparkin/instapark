@@ -1,0 +1,30 @@
+{
+	"name": "@instapark/payments-server",
+	"scripts": {
+		"dev": "tsx watch src/payments-server.ts",
+		"build": "rm -rf dist && tsc",
+		"start": "node dist/src/payments-server.js",
+		"lint": "eslint .",
+		"check-types": "tsc --noEmit --pretty"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.20.0",
+		"@instapark/types": "workspace:^",
+		"@instapark/typescript-config": "workspace:^",
+		"@types/cors": "^2.8.17",
+		"@types/express": "^5.0.0",
+		"eslint": "^9.20.1",
+		"globals": "^15.14.0",
+		"tsx": "^4.19.2",
+		"typescript-eslint": "^8.19.0"
+	},
+	"dependencies": {
+		"@instapark/auth": "workspace:^",
+		"@instapark/utils": "workspace:^",
+		"cashfree-pg": "^4.3.10",
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.7",
+		"express": "^4.21.2",
+		"mongoose": "^8.9.5"
+	}
+}

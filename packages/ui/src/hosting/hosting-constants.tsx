@@ -1,8 +1,6 @@
 import React from "react";
-import { HostingArrivingSoon } from "./hosting-arriving-soon";
-import { HostingCheckingOut } from "./hosting-checking-out";
-import { HostingPendingReview } from "./hosting-pending-review";
 import { HostingCurrent } from "./hosting-current";
+import { HostingPendingReview } from "./hosting-pending-review";
 import { HostingCompleted } from "./hosting-completed";
 
 export const HOSTING_MAIN_TABS_LIST = {
@@ -10,7 +8,7 @@ export const HOSTING_MAIN_TABS_LIST = {
         {
             name: "Current",
             value: "current",
-            content: <HostingCheckingOut />
+            content: <HostingCurrent />
         },
         {
             name: "Pending Review",

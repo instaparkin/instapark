@@ -1,4 +1,4 @@
-import "@dotenvx/dotenvx/config"
+import "dotenv/config"
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import { API_ENDPOINTS } from "@instapark/constants";
 import metadataRouter from "./routes/metadata.route";

@@ -4,7 +4,6 @@ import React from "react"
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/avatar';
 import { SwitchRoleButton } from "../components/switch-role-button";
-import { NotificationIcon } from '../components/notification-icon';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../hooks/use-auth';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from '../components/navigation-menu';

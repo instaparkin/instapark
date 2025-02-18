@@ -2,16 +2,13 @@
   "name": "@instapark/bookings-server",
   "version": "1.0.0",
   "scripts": {
-    "dotenvx": "dotenvx run  --env-file=.env.production --",
     "dev": " tsx watch src/bookings-server.ts",
-    "build": "pnpm dotenvx rm -rf dist && tsc",
-    "start": "pnpm dotenvx node dist/src/bookings-server.js",
-    "lint": "pnpm dotenvx eslint .",
-    "convex:dev": "pnpm dlx convex dev",
-    "check-types": "pnpm dotenvx && tsc --noEmit --pretty"
+    "build": "rm -rf dist && tsc",
+    "start": "node dist/src/bookings-server.js",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit --pretty"
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.34.0",
     "@instapark/auth": "workspace:^",
     "@instapark/constants": "workspace:^",
     "@instapark/kafka": "workspace:^",

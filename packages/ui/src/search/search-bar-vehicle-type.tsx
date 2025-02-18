@@ -1,5 +1,6 @@
 'use client'
 
+import React from "react"
 import { Vehicle } from "@instapark/types";
 import {
     Select,
@@ -19,7 +20,7 @@ export function SearchBarVehicleType() {
             <SelectContent className='flex'>
                 {
                     Object.keys(Vehicle).map(v => (
-                        <SelectItem className='cursor-pointer w-full' value={v}>
+                        <SelectItem key={v} className='cursor-pointer w-full' value={v}>
                             {v}
                         </SelectItem>
                     ))

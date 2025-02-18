@@ -1,4 +1,4 @@
-import { Listing, PlaceType, Review } from '@instapark/types';
+import { Listing, PlaceType } from '@instapark/types';
 import mongoose, { Schema } from 'mongoose';
 import { toUnixTimestamp, uuid } from '@instapark/utils';
 

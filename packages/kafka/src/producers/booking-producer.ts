@@ -1,4 +1,4 @@
-import { Booking, Listing, Payment, ProducerType } from "@instapark/types";
+import { Payment, ProducerType } from "@instapark/types";
 import { KAFKA_CONSTANTS } from "../constants/kafka-constants";
 import { kafka } from "../kafka/kafka";
 

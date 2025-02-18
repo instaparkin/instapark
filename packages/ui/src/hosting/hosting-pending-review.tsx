@@ -6,28 +6,50 @@ import { CiCircleCheck } from 'react-icons/ci'
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from "../components/input-otp"
 import axios from 'axios'
 import { ApiResponse, Booking } from '@instapark/types'
 import toast from 'react-hot-toast'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/card'
 import { Button } from '../components/button'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../components/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '../components/form'
 import { OTPInputForm, OTPInputFormType } from '../forms/otp-input-form'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_REVIEW_BOOKINGS = gql`
+query GET_REVIEW_BOOKINGS {
+  BookingQuery {
+    getBookingsForHost(status: Booked) {
+      id
+      listingId
+      userId
+      startDate
+      endDate
+      status
+      lockedAt
+      createdAt
+      updatedAt
+    }
+  }
+}
+`
 
 export const HostingPendingReview = () => {
-  const [data, setData] = useState<Booking[]>([])
+  const { loading, error, data } = useQuery(GET_REVIEW_BOOKINGS);
   const form = OTPInputForm()
 
-  useEffect(() => {
-    axios.get<ApiResponse<Booking[]>>(`http://localhost:8085/bookings/all?userId=d045f6ac-35c7-4cfa-afe9-91d5c3f9d7ce&status=review`)
-      .then(res => setData(res.data.data as Booking[]))
-      .catch(error => toast.error(error.message))
-  }, [])
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
-  if (data.length === 0) {
+  if (error) {
+    toast.error(`Error: ${error.message}`);
+  }
+
+  const bookings = data.BookingQuery.getBookingsForHost
+
+  if (bookings.length === 0) {
     return (
       <NoResults
         text="You don't have any guest reviews to write."
@@ -35,7 +57,6 @@ export const HostingPendingReview = () => {
       />
     )
   }
-
 
   function onSubmit(bookingId: string, data: OTPInputFormType) {
     axios.post(`http://localhost:8085/bookings/otp/verify`, {
@@ -51,7 +72,7 @@ export const HostingPendingReview = () => {
   return (
     <div>
       {
-        data.map(b => (
+        bookings.map((b: Booking) => (
           <Card key={b.id} className="w-[350px]">
             <CardHeader>
               <CardTitle>Create project</CardTitle>

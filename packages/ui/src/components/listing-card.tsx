@@ -4,14 +4,14 @@ import { Listing, Vehicle } from '@instapark/types'
 import React from 'react'
 import { Card, CardContent, CardFooter } from '../components/card'
 import { ImageSwiper } from '../components/image-swiper'
-import {  BikeIcon, Car, Cylinder, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 import Link from 'next/link'
 import { ListingWishlist } from './listing-wishlist'
-import { unixSecToMonthYearTime } from '../utils/dayjs'
 import { Badge } from './badge'
 import { PiBicycleDuotone } from "react-icons/pi";
 import { FaCarAlt } from "react-icons/fa";
 import { FaMotorcycle } from "react-icons/fa";
+
 interface ListingsCard {
     listing: Listing
 }

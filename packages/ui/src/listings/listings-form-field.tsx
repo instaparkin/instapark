@@ -6,7 +6,7 @@ import { Label } from '../components/label';
 import { Input } from '../components/input';
 import { fieldName } from '../utils/field-name';
 import { Path, UseFormReturn } from 'react-hook-form';
-import { Listing, ListingRequest } from '@instapark/types';
+import { ListingRequest } from '@instapark/types';
 
 interface IListingsFormField {
   form: UseFormReturn<ListingRequest>;
@@ -15,13 +15,6 @@ interface IListingsFormField {
 }
 
 export const ListingsFormField = ({ form, name, value }: IListingsFormField) => {
-  useEffect(() => {
-    async function trigger() {
-      await form.watch()
-      await form.trigger();
-    }
-    trigger()
-  }, [form.getValues()]);
 
   return (
     <FormField

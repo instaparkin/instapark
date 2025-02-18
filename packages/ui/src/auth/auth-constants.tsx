@@ -1,3 +1,4 @@
+import React from "react";
 import { FaRegUser } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 

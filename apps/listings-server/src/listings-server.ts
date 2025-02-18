@@ -1,4 +1,4 @@
-import "@dotenvx/dotenvx/config"
+import "dotenv/config"
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import listingsRouter from "./routes/listings.route";
 import { API_ENDPOINTS } from "@instapark/constants";
@@ -27,7 +27,7 @@ async function init() {
     await mongoose.connect("mongodb://localhost:27017/instapark-listings")
 
     app.get(
-        API_ENDPOINTS.LISTINGS_SERVER.PREFIX,
+        "/",
         (req, res) => {
             res.send("Listings server is up and Running")
         })
@@ -38,7 +38,6 @@ async function init() {
 
     app.use(
         API_ENDPOINTS.LISTINGS_SERVER.ROUTES.UPLOADTHING.PREFIX,
-        verifySession(),
         uploadthingExpress);
 
     app.use(errorHandler());

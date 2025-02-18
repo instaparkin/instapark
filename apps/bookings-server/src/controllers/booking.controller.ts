@@ -5,6 +5,7 @@ import { BookingService } from "../services/booking.service";
 import { Cashfree } from "cashfree-pg";
 import { BookingDB } from "../services/booking.db";
 import { BookingModel, BookingOTPModel } from "../models/booking.model";
+import { Z_UNKNOWN } from "zlib";
 
 export const lock = async (req: Request, res: Response) => {
     try {
@@ -18,6 +19,7 @@ export const lock = async (req: Request, res: Response) => {
             Cashfree.XClientId = "TEST10180324795c6ed369800e535fc242308101";
             Cashfree.XClientSecret = "cfsk_ma_test_ea216f531ab789cd1bb6c0d98bf6f4a6_179a58b2";
             Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
+
 
             async function createOrder() {
                 const request = {
@@ -34,12 +36,10 @@ export const lock = async (req: Request, res: Response) => {
                     },
                     "order_note": ""
                 }
-
                 return Cashfree.PGCreateOrder("2023-08-01", request)
             }
 
             const response = await createOrder();
-            console.log(response.data.payment_session_id);
 
             sendResponse(res, 200, result.message, "SUCCESS", {
                 c: result.booking,
@@ -75,71 +75,38 @@ export const book = async (req: Request, res: Response) => {
 
 export const getBookings = async (req: Request, res: Response) => {
     try {
-        const { startDate, endDate, listingId, userId, status } = req.query as unknown as { startDate: number, endDate: number, listingId: string, userId: string, status: string }
+        const { startDate, endDate, listingId, userId, status } =
+            req.query as unknown as {
+                startDate: number,
+                endDate: number,
+                listingId: string,
+                userId: string,
+                status: string
+            };
 
-        if (startDate && endDate) {
-            const bookings = await BookingDB.findBookings(startDate, endDate);
-            return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
-        }
+        const bookings = await BookingModel.find(
+            {
+                ...(startDate ? { startDate } : {}),
+                ...(endDate ? { endDate } : {}),
+                ...(listingId ? { listingId } : {}),
+                ...(userId ? { userId } : {}),
+                ...(status ? { status: { $in: [status], $nin: ["Locked"] } } : {}),
+            },
+            { _id: 0, __v: 0 }
+        );
 
-        if (listingId) {
-            const bookings = await BookingDB.findBookingsByListingId(listingId);
-            return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
-        }
-
-        if (userId && status === "upcoming") {
-            const listings = await axios.get<ApiResponse<Listing[]>>(`http://localhost:8087/listings/listings/all?userId=${userId}`).then(res => res.data.data)
-
-            const bookings = await BookingModel.find({ listingId: { $in: listings?.map(l => l.id) } }, { _id: 0, __v: 0 })
-
-            return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
-        }
-
-
-        if (userId && status === "review") {
-            const listings = await axios.get<ApiResponse<Listing[]>>(`http://localhost:8087/listings/listings/all?userId=${userId}`).then(res => res.data.data)
-
-            const bookings = await BookingModel.find(
-                {
-                    status: { $in: ["Booked"] },
-                    startDate: { $lt: toUnixTimestamp(new Date()) },
-                    listingId: {
-                        $in: listings?.map(l => l.id),
-                    }
-                }, { _id: 0, __v: 0 })
-
-            return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
-        }
-
-        if (userId && status === "complete") {
-            const listings = await axios.get<ApiResponse<Listing[]>>(`http://localhost:8087/listings/listings/all?userId=${userId}`).then(res => res.data.data)
-
-            const bookings = await BookingModel.find(
-                {
-                    status: { $in: ["OnGoing"] },
-                    listingId: {
-                        $in: listings?.map(l => l.id),
-                    }
-                }, { _id: 0, __v: 0 })
-            return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
-        }
-
-        if (userId) {
-            const bookings = await BookingModel.find({ userId, status: { $nin: ["Locked"] } }, { _id: 0, __v: 0 })
-            return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
-        }
-
-
+        return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
     } catch (error) {
         sendResponse(res, 500, `Failed to get Bookings: ${error}`, "FAILURE", null);
     }
-}
+};
+
 
 export const getOtp = async (req: Request, res: Response) => {
     try {
         const { bookingId } = req.params as { bookingId: string }
         const otp = await BookingOTPModel.find({ bookingId })
-        return sendResponse(res, 200, "OTP  fetched successfully", "SUCCESS", { otp: otp[0].otp });
+        return sendResponse(res, 200, "OTP  fetched successfully", "SUCCESS", { otp: otp[0]?.otp });
     } catch (error) {
         sendResponse(res, 500, `Error Fetching OTP ${error}`, "FAILURE", null);
     }

@@ -1,25 +1,49 @@
 "use client"
 
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { ApiResponse, Booking } from '@instapark/types';
+import React from 'react'
 import toast from 'react-hot-toast';
 import { DataTable } from '../components/data-table';
 import { columns } from './trips-columns';
+import { gql, useQuery } from '@apollo/client';
+import { useAuth } from '../hooks/use-auth';
+import { Booking } from '@instapark/types';
+
+const GET_TRIPS = gql`
+query GET_TRIPS($userId: String!) {
+  BookingQuery {
+    getBookingsForBuyer(userId: $userId) {
+      id
+      listingId
+      userId
+      startDate
+      endDate
+      status
+      lockedAt
+      createdAt
+      updatedAt
+    }
+  }
+}
+`
 
 export const TripsMain = () => {
-    const [data, setData] = useState<Booking[]>([])
+    const { userId } = useAuth();
 
-    useEffect(() => {
-        axios.get<ApiResponse<Booking[]>>
-            (`http://localhost:8085/bookings/all?userId=bd202289-afd6-4d1b-a36c-9bc43315948b`)
-            .then(res => setData(res.data.data as Booking[]))
-            .catch(error => {
-                toast.error(error.message)
-            })
-    }, [])
+    const { loading, error, data } = useQuery(GET_TRIPS, {
+        variables: { userId }
+    });
+
+    if (loading) {
+        return <div>Loading...</div>
+    }
+
+    if (error) {
+        toast.error(`Error: ${error.message}`);
+    }
+
+    const bookings: Booking[] = data?.BookingQuery?.getBookingsForBuyer
 
     return (
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={bookings} />
     )
 }

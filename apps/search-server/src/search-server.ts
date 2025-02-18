@@ -1,5 +1,3 @@
-import searchRoute from "./routes/search.route";
-import olaMapsRoute from "./routes/olamaps.route";
 import TypesenseRoute from "./routes/typesense.route";
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import { API_ENDPOINTS } from "@instapark/constants";
@@ -31,17 +29,8 @@ async function init() {
         })
 
     app.use(
-        API_ENDPOINTS.SEARCH_SERVER.ROUTES.SEARCH.PREFIX,
-        searchRoute);
-
-    app.use(
         API_ENDPOINTS.SEARCH_SERVER.ROUTES.TYPESENSE.PREFIX,
         TypesenseRoute);
-
-    app.use(
-        API_ENDPOINTS.SEARCH_SERVER.ROUTES.OLAMAPS.PREFIX,
-        verifySession(),
-        olaMapsRoute);
 
     app.use(errorHandler());
 

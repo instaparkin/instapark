@@ -5,11 +5,10 @@ import { generateUploadDropzone } from "@uploadthing/react";
 import { UseFormReturn } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import uiConfig from "../../ui-config.json";
-import { v4 as uuid } from "uuid"
 import Image from "next/image";
 import { Button } from "../components/button";
 import { X } from "lucide-react";
-import { Listing, ListingRequest } from "@instapark/types";
+import { ListingRequest } from "@instapark/types";
 
 export const UploadDropzone = generateUploadDropzone({
     url: uiConfig.routes.LISTING_ADD_IMAGE_ROUTE
@@ -18,7 +17,7 @@ export const UploadDropzone = generateUploadDropzone({
 export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest> }) => {
     const removePhoto = (url: string) => {
         const currentPhotos = form.getValues("photos") || []
-        const updatedPhotos = currentPhotos.filter((photo) => photo.url !== url)
+        const updatedPhotos = currentPhotos.filter((photo) => photo !== url)
         form.setValue("photos", updatedPhotos)
     }
     return (
@@ -27,9 +26,7 @@ export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
                     const currentPhotos = form.getValues("photos") || [];
-                    const newPhotos = res?.map((file) => ({
-                        url: file.url,
-                    }));
+                    const newPhotos = res?.map((file) => file.ufsUrl);
                     form.setValue("photos", [...currentPhotos, ...newPhotos]);
                     toast.success("Upload Complete");
                 }}
@@ -41,7 +38,7 @@ export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest
                 {form.getValues("photos").map((photo, index) => (
                     <div key={index} className="relative group">
                         <Image
-                            src={photo.url}
+                            src={photo}
                             width={200}
                             height={200}
                             alt="Listing Photo"
@@ -51,7 +48,7 @@ export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest
                             variant="destructive"
                             size="icon"
                             className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={() => removePhoto(photo.url)}
+                            onClick={() => removePhoto(photo)}
                         >
                             <X className="h-4 w-4" />
                             <span className="sr-only">Remove photo</span>

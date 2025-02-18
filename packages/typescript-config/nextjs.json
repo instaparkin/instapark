@@ -6,7 +6,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowJs": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
     "noEmit": true
   }
 }

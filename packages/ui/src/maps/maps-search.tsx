@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
   DialogTrigger,
 } from "../components/dialog";
 import { Card, CardDescription } from "../components/card";
@@ -21,6 +22,7 @@ import { NoResults } from "../components/no-results";
 import { Text } from "../components/text";
 import { CiLocationOn } from "react-icons/ci";
 import { MapData } from "@instapark/state/src/slices/maps-slice";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 interface MapsSearchProps {
   onLocationClick?: (location: MapData) => void;
@@ -62,6 +64,9 @@ export const MapsSearch: React.FC<MapsSearchProps> = ({
         />
       </DialogTrigger>
       <DialogContent className="p-0">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Search On Maps</DialogTitle>
+        </DialogHeader>
         <SearchInput
           className="fixed top-0 left-0 z-10"
           value={value}

@@ -1,9 +1,11 @@
-import { EarningsMain } from '@instapark/ui'
+import { EarningsMain, Page } from '@instapark/ui'
 import React from 'react'
 
 const EarningsPage = () => {
     return (
-        <EarningsMain />
+        <Page title='Earnings'>
+            <EarningsMain />
+        </Page>
     )
 }
 

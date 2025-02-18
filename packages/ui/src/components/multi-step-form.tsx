@@ -71,11 +71,9 @@ export const MultiStepForm = <T extends Record<string, unknown>>({
         currentSubStepIndex,
         currentSubStep,
         isLastSecondStep,
-        setSubmitted
     } = useMultiStepForm({ steps, form });
 
     const handleSubmit = async (data: T) => {
-        setSubmitted();
         try {
             onSubmit({ data });
             next();

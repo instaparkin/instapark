@@ -2,11 +2,11 @@
   "name": "@instapark/listings-server",
   "version": "1.0.0",
   "scripts": {
-    "start": "dotenvx run node dist/src/listings-server",
-    "dev": "dotenvx run tsx watch src/listings-server.ts",
-    "build": "dotenvx run rm -rf dist && tsc",
-    "lint": "dotenvx run eslint .",
-    "check-types": "dotenvx run tsc --noEmit --pretty"
+    "start": "node dist/src/listings-server",
+    "dev": "tsx watch src/listings-server.ts",
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit --pretty"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.34.0",
@@ -16,6 +16,7 @@
     "@instapark/schemas": "workspace:^",
     "@instapark/utils": "workspace:^",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "mongoose": "^8.9.5",
     "postgres": "^3.4.5",

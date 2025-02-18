@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import { BookingModel, BookingOTPModel } from "../models/booking.model";
 import { PaymentModel } from "../models/payment.model";
 import { Cashfree } from "cashfree-pg";
-import { sign } from "jsonwebtoken"
 
 export class BookingService {
     private paymentRequest: PaymentRequest

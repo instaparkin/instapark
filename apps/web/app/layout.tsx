@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@instapark/ui/src/styles/globals.css";
-import { Toaster } from "@instapark/ui";
+import { GraphQLProvider, Toaster } from "@instapark/ui";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.className}`}>
-        <Toaster position="top-right" />
-        {children}
+        <GraphQLProvider>
+          <Toaster position="top-right" />
+          {children}
+        </GraphQLProvider>
       </body>
-    </html>
+    </html >
   );
 }

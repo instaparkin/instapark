@@ -1,24 +1,45 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { NoResults } from '../components/no-results'
 import { CiCircleCheck } from 'react-icons/ci'
-import { ApiResponse, Booking } from '@instapark/types'
-import axios from 'axios'
 import { columns } from './hosting-columns'
 import { DataTable } from '../components/data-table'
 import toast from 'react-hot-toast'
+import { gql, useQuery } from '@apollo/client'
+import { Booking } from '@instapark/types'
+
+const GET_COMPLETED_BOOKINGS = gql`
+query GET_COMPLETED_BOOKINGS {
+  BookingQuery {
+    getBookingsForHost(status: Completed) {
+      id
+      listingId
+      userId
+      startDate
+      endDate
+      status
+      lockedAt
+      createdAt
+      updatedAt
+    }
+  }
+}
+`
+
 
 export const HostingCompleted = () => {
-  const [bookings, setBookings] = useState<Booking[]>([])
+  const { loading, error, data } = useQuery(GET_COMPLETED_BOOKINGS);
 
-  useEffect(() => {
-    axios.get<ApiResponse<Booking[]>>(`http://localhost:8085/bookings/all?userId=d045f6ac-35c7-4cfa-afe9-91d5c3f9d7ce&status=upcoming`)
-      .then(res => setBookings(res.data.data as Booking[]))
-      .catch(error =>
-        toast.error(JSON.stringify(error.message))
-      )
-  }, [])
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    toast.error(`Error: ${error.message}`);
+  }
+
+  const bookings: Booking[] = data.BookingQuery.getBookingsForHost
 
   if (bookings.length === 0) {
     return (

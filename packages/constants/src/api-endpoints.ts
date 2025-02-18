@@ -26,7 +26,6 @@ export const API_ENDPOINTS = {
                 PREFIX: "/listings",
                 CREATE: "/",
                 UPDATE: "/:id",
-                GET: "/:id",
                 DELETE: "/:id",
             },
             UPLOADTHING: {

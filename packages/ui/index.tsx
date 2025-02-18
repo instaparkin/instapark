@@ -29,3 +29,7 @@ export { Reserve } from "./src/checkout/reserve"
 export { ProfilePublic } from "./src/profile/profile-public";
 export { TripsMain } from "./src/trips/trips-main"
 export { TripDetailed } from "./src/trips/trip-detailed"
+export { Vendor } from "./src/vendor/vendor"
+export { ApolloProvider } from '@apollo/client';
+export { apolloClient } from "./src/graphql/apollo-client";
+export { GraphQLProvider } from "./src/graphql/graphql-provider"

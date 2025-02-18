@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { Booking } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { unixSecToMonthYearTime } from "../utils/dayjs"
@@ -9,8 +10,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../components/dropdown-menu"
 import Link from "next/link"
@@ -31,6 +30,12 @@ export const columns: ColumnDef<Booking>[] = [
                 case "Completed":
                     return (
                         <div className="bg-lime-200 p-2 w-fit rounded-sm">
+                            {value}
+                        </div>
+                    )
+                case "OnGoing":
+                    return (
+                        <div className="bg-yellow-200 p-2 w-fit rounded-sm">
                             {value}
                         </div>
                     )

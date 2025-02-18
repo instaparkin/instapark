@@ -1,7 +1,5 @@
-import React, { ReactNode } from 'react'
-import { HomeFacets } from '../home/home-facets'
+import React from 'react'
 import { Input } from '../components/input'
-import { SearchBarDateRange } from './search-bar-date-range'
 import { Button } from '../components/button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../components/form'
 import { listingsSearchForm, ListingsSearchFormType } from '../forms/listings-search-form'
@@ -12,12 +10,7 @@ import axios from 'axios'
 import { useIsMobile } from '../hooks/use-mobile'
 import {
     Drawer,
-    DrawerClose,
     DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
     DrawerTrigger,
 } from "../components/drawer"
 
@@ -76,7 +69,7 @@ export const SearchBarMain = () => {
                                 name="endDate"
                                 render={({ field }) => (
                                     <FormItem>
-                                            <FormLabel>{"End Date"}</FormLabel>
+                                        <FormLabel>{"End Date"}</FormLabel>
                                         <FormControl>
                                             <Input className='h-12' type="datetime-local" {...field} />
                                         </FormControl>
@@ -88,7 +81,7 @@ export const SearchBarMain = () => {
                                 name="vehicleType"
                                 render={({ field }) => (
                                     <FormItem>
-                                            <FormLabel>{"Vehicle Type"}</FormLabel>
+                                        <FormLabel>{"Vehicle Type"}</FormLabel>
                                         <FormControl>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <SelectTrigger className="md:w-[120px]">

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { MultiStepFormType, Step, SubStep } from "../types/multi-step-form-types";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +12,6 @@ export const useMultiStepForm = <T extends Record<string, unknown>>({
 
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [currentSubStepIndex, setCurrentSubStepIndex] = useState<number>(0);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const next = async () => {
     const currentStep = steps[currentStepIndex] as Step<T>;
@@ -26,6 +25,9 @@ export const useMultiStepForm = <T extends Record<string, unknown>>({
       }
     }
   };
+
+  console.log(form.formState.errors);
+  
 
   const back = () => {
     if (isFirstStep) {
@@ -79,10 +81,6 @@ export const useMultiStepForm = <T extends Record<string, unknown>>({
 
   const currentSubStep = currentStep.substeps[currentSubStepIndex] as SubStep<T>;
 
-  const setSubmitted = () => {
-    setIsSubmitted(true);
-  };
-
   return {
     currentStepIndex,
     currentSubStepIndex,
@@ -95,6 +93,5 @@ export const useMultiStepForm = <T extends Record<string, unknown>>({
     isLastStep,
     isLastSecondStep,
     calculateProgress,
-    setSubmitted,
   };
 };

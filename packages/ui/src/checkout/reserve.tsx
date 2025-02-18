@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { load } from "@cashfreepayments/cashfree-js";
 import axios from "axios";
 import { Button } from "../components/button";
@@ -8,7 +9,6 @@ import { CheckoutConfirm } from "./checkout-confirm";
 import { ApiResponse, BookedResponse } from "@instapark/types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Alert, AlertDescription, AlertTitle } from "../components/alert";
 import { Badge } from "../components/badge";
 
 interface ReserveProps {
@@ -29,8 +29,8 @@ export function Reserve({ bookingId, orderId, paymentSessionId }: ReserveProps) 
       })
   }, []);
 
-  let cashfree: { checkout: (arg0: { paymentSessionId: string; redirectTarget: string; }) => Promise<any>; };
-  var initializeSDK = async function () {
+  let cashfree;
+  const initializeSDK = async function () {
     cashfree = await load({
       mode: "sandbox",
     });
@@ -39,7 +39,7 @@ export function Reserve({ bookingId, orderId, paymentSessionId }: ReserveProps) 
 
   const doPayment = async () => {
 
-    let checkoutOptions = {
+    const checkoutOptions = {
       paymentSessionId,
       redirectTarget: "_modal",
     };
@@ -77,7 +77,7 @@ export function Reserve({ bookingId, orderId, paymentSessionId }: ReserveProps) 
       <CheckoutConfirm />
       {
         otp ?
-         <Badge variant={"outline"}>{otp}</Badge>
+          <Badge variant={"outline"}>{otp}</Badge>
           :
           <Button size={"lg"} className="w-full sm:w-fit my-4" type="submit" id="renderBtn" onClick={doPayment}>
             {"Confirm and Pay"}

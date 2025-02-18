@@ -1,3 +1,4 @@
+import "dotenv/config"
 import { config } from 'dotenv';
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit } from "@instapark/auth";
 import { API_ENDPOINTS } from "@instapark/constants";
@@ -41,11 +42,12 @@ async function init() {
 
     await connectDB();
 
-    app.get(API_ENDPOINTS.BOOKINGS_SERVER.PREFIX, (req, res) => {
+    app.get("/", (req, res) => {
         res.send("🚀 Booking Server is up and running");
     });
 
     app.use(API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.PREFIX, bookingsRouter);
+
     app.use("/bookings", cashfreeRouter);
 
     app.use(errorHandler());

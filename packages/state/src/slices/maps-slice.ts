@@ -1,6 +1,20 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { OlaMapsApiResponse } from "@instapark/types";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/search/olamaps';
+const apiKey = "4txhcXV6VGU9Onf5RCWGlAr8Gru7grfrIrsRvE36";
+
+export type CodeLocationType = {
+    formatted_address: string,
+    geometry: {
+        location:
+        {
+            lat: number,
+            lng: number
+        }
+    },
+    name: string
+}
 
 export interface MapData {
     [key: string]: unknown;
@@ -30,12 +44,29 @@ export const autoCompleteLocations = createAsyncThunk<MapData[], string, ThunkAp
     'maps/autocomplete',
     async (query, { rejectWithValue }) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/autocomplete/${query}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch autocomplete data');
-            }
-            const data: MapData[] = await response.json();
-            return data;
+            const response = await axios.get<OlaMapsApiResponse>(
+                `https://api.olamaps.io/places/v1/autocomplete`,
+                { params: { input: query, api_key: apiKey } }
+            );
+
+            const formattedData = response.data.predictions.map((p) => {
+                const parts = p.description.split(",");
+                return {
+                    location: p.description,
+                    lat: p.geometry.location.lat,
+                    lng: p.geometry.location.lng,
+                    country: parts.at(parts.length - 1),
+                    pincode: parts.at(parts.length - 2),
+                    state: parts.at(parts.length - 3),
+                    district: parts.at(parts.length - 4),
+                    taluk: parts.at(parts.length - 5),
+                    locality: parts.at(parts.length - 6),
+                    "sub-locality": parts.at(parts.length - 7),
+                    street: parts.at(parts.length - 8),
+                    name: parts.slice(0, parts.length - 8)
+                };
+            });
+            return formattedData;
         } catch (error) {
             return rejectWithValue('Unknown error occurred: ' + error);
         }
@@ -46,12 +77,13 @@ export const directions = createAsyncThunk<MapData[], { origin: number[]; destin
     'maps/directions',
     async ({ origin, destination }, { rejectWithValue }) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/directions/${origin}/${destination}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch directions data');
-            }
-            const data: MapData[] = await response.json();
-            return data;
+            const response = await axios.post(
+                `https://api.olamaps.io/routing/v1/directions`,
+                null,
+                { params: { origin, destination, api_key: apiKey } }
+            );
+
+            return response.data.routes[0].legs[0].steps;
         } catch (error) {
             return rejectWithValue('Unknown error occurred: ' + error);
         }
@@ -62,12 +94,28 @@ export const reverseGeocodeLocation = createAsyncThunk<MapData[], number[], Thun
     'maps/reverse-geocode',
     async (latlng, { rejectWithValue }) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/reverse-geocode/${latlng}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch reverse geocode data');
-            }
-            const data: MapData[] = await response.json();
-            return data;
+            const response = await axios.get(
+                `https://api.olamaps.io/places/v1/reverse-geocode`,
+                { params: { latlng, api_key: apiKey } }
+            );
+
+            return response.data.results.map((r: CodeLocationType) => {
+                const parts = r.formatted_address.split(",");
+                return {
+                    location: r.formatted_address,
+                    lat: r.geometry.location.lat,
+                    lng: r.geometry.location.lng,
+                    country: parts.at(parts.length - 1),
+                    pincode: parts.at(parts.length - 2),
+                    state: parts.at(parts.length - 3),
+                    district: parts.at(parts.length - 4),
+                    taluk: parts.at(parts.length - 5),
+                    locality: parts.at(parts.length - 6),
+                    "sub-locality": parts.at(parts.length - 7),
+                    street: parts.at(parts.length - 8),
+                    name: r.name
+                };
+            });
         } catch (error) {
             return rejectWithValue('Unknown error occurred: ' + error);
         }
@@ -78,12 +126,28 @@ export const geocodeLocation = createAsyncThunk<MapData[], string, ThunkApiConfi
     'maps/geocode',
     async (q, { rejectWithValue }) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/geocode/${q}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch geocode data');
-            }
-            const data: MapData[] = await response.json();
-            return data;
+            const response = await axios.get(
+                `https://api.olamaps.io/places/v1/geocode`,
+                { params: { address: q, language: "hi", api_key: apiKey } }
+            );
+
+            return response.data.geocodingResults.map((r: CodeLocationType) => {
+                const parts = r.formatted_address.split(",");
+                return {
+                    location: r.formatted_address,
+                    lat: r.geometry.location.lat,
+                    lng: r.geometry.location.lng,
+                    country: parts.at(parts.length - 1),
+                    pincode: parts.at(parts.length - 2),
+                    state: parts.at(parts.length - 3),
+                    district: parts.at(parts.length - 4),
+                    taluk: parts.at(parts.length - 5),
+                    locality: parts.at(parts.length - 6),
+                    "sub-locality": parts.at(parts.length - 7),
+                    street: parts.at(parts.length - 8),
+                    name: r.name
+                };
+            });
         } catch (error) {
             return rejectWithValue('Unknown error occurred: ' + error);
         }

@@ -1,12 +1,20 @@
-import { userDb } from "./pg/user-pg-client";
-import userNameRoute from "./routes/userName.route";
-import userProofRoute from "./routes/userProof.route";
-import userAddressRoute from "./routes/userAddress.route";
-import userPhoneNumberRoute from "./routes/userPhoneNumber.route";
 import { errorHandler, middleware, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import { config, cors, express } from "@instapark/utils";
+import mongoose from "mongoose";
+import { USER_SERVER_CONSTANTS } from "./constants/user-server-constants";
+import { ProfileRouter } from "./routes/profile.route";
 
 config();
+
+async function connectDB() {
+    try {
+        await mongoose.connect(USER_SERVER_CONSTANTS.MONGODB.URI);
+        console.log("✅ MongoDB Connected");
+    } catch (error) {
+        console.error("❌ MongoDB connection error:", error);
+        process.exit(1);
+    }
+}
 
 async function init() {
     ensureSuperTokensInit();
@@ -23,19 +31,13 @@ async function init() {
 
     app.use(middleware());
 
-    await userDb.connect();
+    await connectDB();
 
-    app.get("/user", (req, res) => {
+    app.get("/", (req, res) => {
         res.send("User Server is Up and Running")
     })
 
-    app.use("/user/user-name", verifySession(), userNameRoute);
-
-    app.use("/user/user-proof", verifySession(), userProofRoute);
-
-    app.use("/user/user-address", verifySession(), userAddressRoute);
-
-    app.use("/user/user-phoneNumber", verifySession(), userPhoneNumberRoute);
+    app.use("/profile", ProfileRouter)
 
     app.use(errorHandler());
 

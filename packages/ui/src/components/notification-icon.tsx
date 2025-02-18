@@ -7,31 +7,14 @@ import { Button } from './button';
 import { Archive, Bell, Settings} from 'lucide-react';
 import { ScrollArea } from './scroll-area';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
-import { useEffect, useState } from 'react';
 import { Icon } from './icon';
-import { apiEndpoint } from '../utils/format-endpoint';
-import axios from 'axios';
 
-interface Message {
-    senderId: string
-    receiverId: string
-    content: string
-    status: string
-}
-
-export const NotificationIcon = ({ userId }: { userId: string }) => {
-
+export const NotificationIcon = () => {
     return (
         <Popover>
             <PopoverTrigger>
                 <Icon className="relative">
                     <Bell className="h-4 w-4" />
-                    {
-                        "as" ?
-                            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
-                                {123}
-                            </span> : null
-                    }
                 </Icon>
             </PopoverTrigger>
             <PopoverContent className="w-full p-0">
@@ -57,7 +40,7 @@ export const NotificationIcon = ({ userId }: { userId: string }) => {
                         <TabsContent value="inbox" className="m-0">
                             <ScrollArea className="h-[min(calc(100vh-8rem),400px)]">
                                 <CardContent className="p-0">
-                               
+
                                 </CardContent>
                             </ScrollArea>
                             <div className="p-4 border-t">

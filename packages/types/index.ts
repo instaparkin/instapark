@@ -3,6 +3,9 @@ export {
     PaymentType,
     Vehicle,
     PlaceType,
+    VendorStatus,
+    AccountType,
+    BusinessType
 } from "./src/enums"
 export {
     type Listing,
@@ -22,7 +25,8 @@ export {
     type CollectionType
 } from "./src/Search"
 export {
-    type Profile
+    type Profile,
+    type ProfileRequest
 } from "./src/profile"
 export {
     type ApiResponse,
@@ -30,9 +34,7 @@ export {
 } from "./src/Api"
 export {
     type Booking,
-    type Payment,
     type BookingRequest,
-    type PaymentRequest,
     type BookingOTP,
     type BookedResponse
 } from "./src/Booking"
@@ -48,3 +50,9 @@ export {
 export {
     type Message
 } from "./src/Chat"
+export {
+    type PaymentRequest,
+    type Payment,
+    type Vendor,
+    type VendorRequest
+} from "./src/Payment"
