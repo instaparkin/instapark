@@ -10,6 +10,7 @@ import { ApiResponse, BookedResponse } from "@instapark/types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Badge } from "../components/badge";
+import { PaymentGateway } from "./payment-gateway";
 
 interface ReserveProps {
   bookingId: string
@@ -19,15 +20,8 @@ interface ReserveProps {
 
 export function Reserve({ bookingId, orderId, paymentSessionId }: ReserveProps) {
   const { userId } = useAuth();
-  const [otp, setOtp] = useState(0)
 
-  useEffect(() => {
-    axios.get<ApiResponse<BookedResponse>>(`http://localhost:8085/bookings/otp/${bookingId}`)
-      .then(res => setOtp(res.data.data?.otp as number))
-      .catch(error => {
-        toast.error(error.message)
-      })
-  }, []);
+  console.log(orderId, paymentSessionId);
 
   let cashfree;
   const initializeSDK = async function () {
@@ -51,6 +45,7 @@ export function Reserve({ bookingId, orderId, paymentSessionId }: ReserveProps) 
         console.log(result.error);
       }
       if (result.redirect) {
+
         // This will be true when the payment redirection page couldnt be opened in the same window
         // This is an exceptional case only when the page is opened inside an inAppBrowser
         // In this case the customer will be redirected to return url once payment is completed
@@ -59,7 +54,6 @@ export function Reserve({ bookingId, orderId, paymentSessionId }: ReserveProps) 
       if (result.paymentDetails) {
         axios.post<ApiResponse<BookedResponse>>("http://localhost:8085/bookings/book", {
           orderId,
-          cfPaymentId: paymentSessionId,
           bookingId,
           userId
         }).then(res => {
@@ -76,12 +70,9 @@ export function Reserve({ bookingId, orderId, paymentSessionId }: ReserveProps) 
     <div>
       <CheckoutConfirm />
       {
-        otp ?
-          <Badge variant={"outline"}>{otp}</Badge>
-          :
-          <Button size={"lg"} className="w-full sm:w-fit my-4" type="submit" id="renderBtn" onClick={doPayment}>
-            {"Confirm and Pay"}
-          </Button>
+        <Button size={"lg"} className="w-full sm:w-fit my-4" type="submit" id="renderBtn" onClick={doPayment}>
+          {"Confirm and Pay"}
+        </Button>
       }
     </div>
   );

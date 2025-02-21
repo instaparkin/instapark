@@ -17,6 +17,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "../components/chart"
+import { useQuery } from "@apollo/client";
+import { GET_VENDOR_BALANCE } from "../graphql/get-vendor-balance";
 const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },
@@ -34,6 +36,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function EarningsMonthly() {
+
   return (
     <Card>
       <CardHeader>

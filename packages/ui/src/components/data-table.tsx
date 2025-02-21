@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "./table"
+import { Skeleton } from "./skeleton"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -44,9 +45,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 )
               })}
@@ -79,3 +80,48 @@ export function DataTable<TData, TValue>({
     </div>
   )
 }
+
+
+interface DataTableLoadingProps {
+  columns?: number
+  rows?: number
+}
+
+export function DataTableLoading({ columns = 5, rows = 5 }: DataTableLoadingProps) {
+  return (
+    <div className="w-full">
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {Array.from({ length: columns }).map((_, i) => (
+                <TableHead key={i}>
+                  <Skeleton className="h-4 w-[100px]" />
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Array.from({ length: rows }).map((_, i) => (
+              <TableRow key={i}>
+                {Array.from({ length: columns }).map((_, j) => (
+                  <TableCell key={j}>
+                    <Skeleton className="h-4 w-[100px]" />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Skeleton className="h-8 w-[250px]" />
+        <div className="space-x-2">
+          <Skeleton className="inline-block h-8 w-[80px]" />
+          <Skeleton className="inline-block h-8 w-[80px]" />
+        </div>
+      </div>
+    </div>
+  )
+}
+

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@instapark/constants": "workspace:^",
+    "axios": "^1.7.9",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.1.0",
     "supertokens-node": "^21.0.0"

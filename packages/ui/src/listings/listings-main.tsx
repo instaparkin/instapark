@@ -5,39 +5,8 @@ import { Listing } from '@instapark/types'
 import { ListingCard } from '../components/listing-card'
 import { gql, useQuery } from '@apollo/client'
 import toast from 'react-hot-toast'
-
-const GET_LISTINGS_FOR_HOST = gql`
-query GetListingsForHost($userId: String!) {
-  ListingQuery {
-    getListingsForHost(userId: $userId) {
-      userId
-      type
-      country
-      state
-      district
-      city
-      street
-      pincode
-      latitude
-      longitude
-      name
-      landmark
-      allowedVehicles
-      basePrice
-      pphbi
-      pphcy
-      pphcr
-      plph
-      photos
-      id
-      isOpen
-      rating
-      createdAt
-      updatedAt
-    }
-  }
-}
-`;
+import { GET_LISTINGS_FOR_HOST } from '../graphql/get-listings-for-host'
+import { ListingsAddButton } from './listings-add-button'
 
 export const ListingsMain = () => {
 
@@ -57,10 +26,13 @@ export const ListingsMain = () => {
 
   const listings: Listing[] = data.ListingQuery.getListingsForHost;
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {listings?.map((item, index) => (
-        <ListingCard key={index} listing={item} />
-      ))}
+    <div>
+      <ListingsAddButton />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {listings?.map((item, index) => (
+          <ListingCard key={index} listing={item} />
+        ))}
+      </div>
     </div>
   )
 }

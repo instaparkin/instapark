@@ -1,7 +1,9 @@
-import { ApiResponse, Booking, Listing, ListingRequest } from "@instapark/types";
+import { ApiResponse, Booking, LikedListing, Listing, ListingRequest } from "@instapark/types";
 import { axios } from "@instapark/utils";
 import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
-import { ListingType, PlaceTypeEnum, VehicleEnum } from "../types/listing.graphql.type";
+import { LikedListingType, ListingType, PlaceTypeEnum, VehicleEnum } from "../types/listing.graphql.type";
+import { BookingQuery } from "./booking.graphql.query";
+import { BookingType } from "../types/booking.graphql.type";
 
 export const ListingQuery = new GraphQLObjectType({
     name: "ListingQuery",
@@ -35,32 +37,40 @@ export const ListingQuery = new GraphQLObjectType({
                 return listings
             }
         },
-        getListingsForHost: {
+        getListings: {
             type: new GraphQLList(ListingType),
             args: {
-                userId: { type: GraphQLString }
+                userId: { type: GraphQLString },
+                id: { type: GraphQLString },
             },
-            resolve: async (parent, { userId }) => {
-                const response = await axios.get<ApiResponse<Listing>>("http://localhost:8087/listings/", {
-                    params: { userId }
-                })
-                return response.data.data
-            }
-        },
-        getListingById: {
-            type: ListingType,
-            args: {
-                id: { type: GraphQLString }
-            },
-            resolve: async (parent, { id }) => {
-                const response = await axios.get<ApiResponse<Listing[]>>("http://localhost:8087/listings/", {
-                    params: { id }
-                })
-
+            resolve: async (parent, { id, userId }) => {
+                const response = await axios.get<ApiResponse<Listing[]>>
+                    ("http://localhost:8087/listings/", {
+                        params: { id, userId }
+                    })
                 if (response.data.data) {
-                    return response.data.data[0] as Listing
+                    return response.data.data as Listing[]
                 }
             }
-        }
+        },
+        getLikedListings: {
+            type: new GraphQLList(LikedListingType),
+            args: {
+                id: { type: GraphQLString },
+                userId: { type: GraphQLString },
+                listingId: { type: GraphQLString },
+            },
+            resolve: async (parent, { id, userId, listingId }) => {
+                const response = await axios.get<ApiResponse<LikedListing[]>>
+                    ("http://localhost:8088/liked-listings/", {
+                        params: {
+                            id,
+                            userId,
+                            listingId
+                        }
+                    })
+                return response.data.data
+            },
+        },
     }
 })

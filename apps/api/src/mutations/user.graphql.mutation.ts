@@ -1,12 +1,11 @@
 import { GraphQLBoolean, GraphQLFloat, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
-import { KYCType, ProfileType } from "../types/user.graphql.type";
 import { axios } from "@instapark/utils";
 import { ApiResponse } from "@instapark/types";
 
 export const KYCInputType = new GraphQLInputObjectType({
     name: "KYCInput",
     fields: {
-        uidai: { type: GraphQLInt },
+        uidai: { type: GraphQLString },
         verified: { type: GraphQLBoolean }
     }
 });
@@ -18,6 +17,10 @@ export const UserMutation = new GraphQLObjectType({
             type: GraphQLString,
             args: {
                 userId: { type: GraphQLString },
+                firstName: { type: GraphQLString },
+                lastName: { type: GraphQLString },
+                emails: { type: new GraphQLList(GraphQLString) },
+                timeJoined: { type: GraphQLInt },
                 phoneNumber: { type: GraphQLInt },
                 kyc: { type: KYCInputType },
                 country: { type: GraphQLString },

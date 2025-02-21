@@ -1,6 +1,7 @@
 import { GraphQLObjectType } from "graphql";
 import { ListingMutation } from "./listing.graphql.mutation";
 import { UserMutation } from "./user.graphql.mutation";
+import { VendorMutation } from "./vendor.graphql.mutation";
 
 export const RootMutation = new GraphQLObjectType({
   name: "RootMutation",
@@ -9,8 +10,12 @@ export const RootMutation = new GraphQLObjectType({
       type: ListingMutation,
       resolve: () => ({})
     },
-    UserMutation: {
-      type: UserMutation,
+    // UserMutation: {
+    //   type: UserMutation,
+    //   resolve: () => ({})
+    // },
+    VendorMutation: {
+      type: VendorMutation,
       resolve: () => ({})
     }
   }

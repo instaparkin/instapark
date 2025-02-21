@@ -11,10 +11,9 @@ import { UserButton } from "../auth/user-button";
 import { HEADER_NAVIGATION_ITEMS } from "./header-constants"
 
 export const HeaderMain = () => {
-    const { userId, first_name } = useAuth();
+    const { firstName, userId } = useAuth();
     const pathname = usePathname();
     const isHostingPage = pathname.includes("hosting");
-
     const navigationItems = isHostingPage ? HEADER_NAVIGATION_ITEMS.HOSTING : HEADER_NAVIGATION_ITEMS.BUYER
 
     return (
@@ -25,7 +24,7 @@ export const HeaderMain = () => {
                         <AvatarImage width={200} height={200} src="/instapark.svg" />
                         <AvatarFallback>P</AvatarFallback>
                     </Avatar>
-                    <div className="hidden sm:flex text-lg font-semibold text-[#010080]">Instapark</div>
+                    <div className="hidden sm:flex text-lg font-semibold text-[#010080] dark:text-white">Instapark</div>
                 </Link>
                 <NavigationMenu>
                     <NavigationMenuList className="hidden lg:flex space-x-3">
@@ -45,7 +44,7 @@ export const HeaderMain = () => {
                 <div className="flex gap-4 items-center">
                     <SwitchRoleButton variant="header" />
                     <UserButton
-                        first_name={first_name}
+                        first_name={firstName}
                         userId={userId}
                         navigationItems={navigationItems} />
                 </div>

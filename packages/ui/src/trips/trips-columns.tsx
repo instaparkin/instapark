@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Booking } from "@instapark/types"
+import { Booking, Listing, Payment } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { unixSecToMonthYearTime } from "../utils/dayjs"
 import { MoreHorizontal } from "lucide-react"
@@ -13,8 +13,32 @@ import {
     DropdownMenuTrigger,
 } from "../components/dropdown-menu"
 import Link from "next/link"
+import { formatLocation } from "../utils/field-name"
 
-export const columns: ColumnDef<Booking>[] = [
+export const columns: ColumnDef<Booking & { payments: Payment[], listing: Listing }>[] = [
+    {
+        accessorKey: "id",
+        header: "Booking Id",
+    },
+    {
+        accessorKey: "listing",
+        header: "Location",
+        cell: ({ cell }) => {
+            const value: Listing = cell.getValue() as Listing;
+            return (
+                <div className="flex items-center gap-4">
+                    {formatLocation(
+                        value.country,
+                        value.state,
+                        value.district,
+                        value.city,
+                        value.street,
+                        value.pincode,
+                        false)}
+                </div>
+            )
+        }
+    },
     {
         accessorKey: "status",
         header: "Status",
@@ -23,7 +47,7 @@ export const columns: ColumnDef<Booking>[] = [
             switch (value) {
                 case "Booked":
                     return (
-                        <div className="bg-blue-200 p-2 w-fit rounded-sm">
+                        <div className="bg-blue-200 text-blue-700  p-2 w-fit rounded-sm">
                             {value}
                         </div>
                     )
@@ -65,28 +89,5 @@ export const columns: ColumnDef<Booking>[] = [
                 </div>
             )
         }
-    },
-    {
-        id: "actions",
-        cell: ({ row }) => {
-            const bookingId = row.original.id
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <Link href={`/reservations/${bookingId}`}>
-                            <DropdownMenuItem>
-                                View
-                            </DropdownMenuItem>
-                        </Link>
-                        <DropdownMenuItem>OTP</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            )
-        },
     },
 ]

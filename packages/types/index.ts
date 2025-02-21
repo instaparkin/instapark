@@ -26,7 +26,9 @@ export {
 } from "./src/Search"
 export {
     type Profile,
-    type ProfileRequest
+    type ProfileRequest,
+    type LikedListing,
+    type LikedListingRequest
 } from "./src/profile"
 export {
     type ApiResponse,
@@ -36,7 +38,8 @@ export {
     type Booking,
     type BookingRequest,
     type BookingOTP,
-    type BookedResponse
+    type BookedResponse,
+    type TimeFrame
 } from "./src/Booking"
 export {
     type ProducerType,
@@ -54,5 +57,8 @@ export {
     type PaymentRequest,
     type Payment,
     type Vendor,
-    type VendorRequest
+    type VendorRequest,
+    type Order,
+    type PaymentExtended,
+    type VendorBalance
 } from "./src/Payment"

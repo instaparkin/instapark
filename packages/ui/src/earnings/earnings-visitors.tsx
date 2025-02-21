@@ -1,110 +1,89 @@
-"use client"
+"use client";
+import React, { useState, useMemo } from "react";
+import { TrendingUp } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../components/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../components/chart";
+import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
+import weekOfYear from "dayjs/plugin/weekOfYear";
+import { formatPrice } from "../utils/field-name";
 
-import React from "react"
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
+dayjs.extend(isoWeek);
+dayjs.extend(weekOfYear);
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../components/card"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "../components/chart"
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+// Sample Booking Data (Replace with API data)
+const rawData = [
+  { totalPrice: 3081, updatedAt: 1740079197, status: "Completed" },
+  { totalPrice: 2200, updatedAt: 1740165600, status: "Pending" },
+  { totalPrice: 4500, updatedAt: 1740252000, status: "Completed" },
+  { totalPrice: 5000, updatedAt: 1742803200, status: "Completed" }, // Next month
+  { totalPrice: 3500, updatedAt: 1751328000, status: "Completed" }, // Next year
+];
 
+// Chart Config (Matching Your Style)
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  totalPrice: {
+    label: "Total Price",
     color: "hsl(var(--chart-1))",
   },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
-  },
-  label: {
-    color: "hsl(var(--background))",
-  },
-} satisfies ChartConfig
+} satisfies ChartConfig;
+
+// Function to group data by Week, Month, or Year
+const groupDataByTimeframe = (data: any[], view: string) => {
+  const groupedData: Record<string, number> = {};
+
+  data.forEach((item) => {
+    const date = dayjs.unix(item.updatedAt); // Convert Unix timestamp to Day.js object
+    let key: string;
+
+    if (view === "week") key = `Week ${date.week()} - ${date.year()}`;
+    else if (view === "month") key = date.format("MMM YYYY");
+    else key = date.format("YYYY"); // Yearly view
+
+    if (!groupedData[key]) groupedData[key] = 0;
+    groupedData[key] += item.totalPrice;
+  });
+
+  return Object.keys(groupedData).map((key) => ({
+    date: key,
+    totalPrice: groupedData[key],
+  }));
+};
 
 export function EarningsVisitors() {
+  const [view, setView] = useState("month"); // Default view
+
+  const chartData = useMemo(() => {
+    const filteredData = rawData.filter((item) => item.status === "Completed");
+    return groupDataByTimeframe(filteredData, view);
+  }, [view]);
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Bar Chart - Custom Label</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+    <Card className="my-6">
+      <CardHeader className="flex flex-col">
+        <CardTitle className="text-sm">Total Revenue</CardTitle>
+        <div className="md:hidden lg:block">
+          <div className="text-2xl font-bold">{formatPrice(100)}</div>
+          <p className="text-xs text-muted-foreground mt-1">{"Total money you made on instapark"}</p>
+        </div>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              right: 16,
-            }}
-          >
-            <CartesianGrid horizontal={false} />
-            <YAxis
-              dataKey="month"
-              type="category"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-              hide
+          <AreaChart data={chartData} width={600} height={300}>
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
+            <YAxis />
+            <Tooltip content={<ChartTooltipContent />} />
+            <Area
+              dataKey="totalPrice"
+              type="monotone"
+              fill={chartConfig.totalPrice.color}
+              stroke={chartConfig.totalPrice.color}
             />
-            <XAxis dataKey="desktop" type="number" hide />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <Bar
-              dataKey="desktop"
-              layout="vertical"
-              fill="var(--color-desktop)"
-              radius={4}
-            >
-              <LabelList
-                dataKey="month"
-                position="insideLeft"
-                offset={8}
-                className="fill-[--color-label]"
-                fontSize={12}
-              />
-              <LabelList
-                dataKey="desktop"
-                position="right"
-                offset={8}
-                className="fill-foreground"
-                fontSize={12}
-              />
-            </Bar>
-          </BarChart>
+          </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
-  )
+  );
 }

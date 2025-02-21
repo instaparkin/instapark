@@ -1,6 +1,6 @@
 import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql"
-import { PlaceTypeEnum, VehicleEnum } from "../types/listing.graphql.type"
-import { ApiResponse, Listing, ListingRequest } from "@instapark/types"
+import { LikedListingType, PlaceTypeEnum, VehicleEnum } from "../types/listing.graphql.type"
+import { ApiResponse, LikedListing, Listing, ListingRequest } from "@instapark/types"
 import { axios } from "@instapark/utils"
 
 export const ListingMutation = new GraphQLObjectType({
@@ -31,7 +31,7 @@ export const ListingMutation = new GraphQLObjectType({
             },
             resolve: async (parent, args: ListingRequest) => {
                 const response = await axios.post<ApiResponse<Listing>>
-                    ("http://localhost:8087/listings/create",
+                    ("http://localhost:8087/listings/",
                         args)
 
                 return response.data.message
@@ -78,6 +78,33 @@ export const ListingMutation = new GraphQLObjectType({
                     ("http://localhost:8087/listings/delete/" + args.id)
                 return response.data.message
             }
+        },
+        createLikedListing: {
+            type: GraphQLString,
+            args: {
+                userId: { type: GraphQLString },
+                listingId: { type: GraphQLString },
+            },
+            resolve: async (parent, args) => {
+                const response = await axios.post<ApiResponse<LikedListing>>
+                    ("http://localhost:8088/liked-listings/", args)
+                return response.data.message
+            },
+        },
+        deleteLikedListing: {
+            type: GraphQLString,
+            args: {
+                id: { type: GraphQLString },
+            },
+            resolve: async (parent, { id }) => {
+                const response = await axios.delete<ApiResponse<null>>
+                    ("http://localhost:8088/liked-listings/", {
+                        params: {
+                            id,
+                        }
+                    })
+                return response.data.message
+            },
         }
     }
 })

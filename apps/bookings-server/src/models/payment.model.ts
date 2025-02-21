@@ -1,4 +1,5 @@
 import { Payment, PaymentType } from "@instapark/types";
+import { toUnixTimestamp } from "@instapark/utils";
 import { model, Schema } from "mongoose";
 
 export const paymentSchema = new Schema<Payment>(
@@ -20,9 +21,9 @@ export const paymentSchema = new Schema<Payment>(
             type: String,
             enum: PaymentType,
             required: true
-        }
-    }, {
-    timestamps: true
-})
+        },
+        createdAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) },
+        updatedAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) }
+    })
 
 export const PaymentModel = model<Payment>("Payment", paymentSchema)

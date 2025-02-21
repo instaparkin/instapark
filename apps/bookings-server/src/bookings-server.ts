@@ -11,6 +11,9 @@ import cors from "cors";
 import path from 'path';
 import { createHandler } from 'graphql-http/lib/use/express';
 import { schema } from "./graphql/schema";
+import { VendorRoute } from "./routes/vendor.route";
+import { settlementRouter } from "./routes/settlements.route";
+import { PaymentRouter } from "./routes/payment.route";
 
 config({ path: path.resolve(__dirname, "../", ".env.local") });
 
@@ -48,7 +51,13 @@ async function init() {
 
     app.use(API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.PREFIX, bookingsRouter);
 
+    app.use("/settlements", settlementRouter)
+
     app.use("/bookings", cashfreeRouter);
+
+    app.use("/vendor", VendorRoute)
+
+    app.use("/payments", PaymentRouter)
 
     app.use(errorHandler());
 

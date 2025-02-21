@@ -33,3 +33,6 @@ export { Vendor } from "./src/vendor/vendor"
 export { ApolloProvider } from '@apollo/client';
 export { apolloClient } from "./src/graphql/apollo-client";
 export { GraphQLProvider } from "./src/graphql/graphql-provider"
+export { useVendor } from "./src/hooks/use-vendor";
+export { ThemeProvider } from "./src/providers/theme-provider"
+export { SettingsMain } from "./src/settings/settings-main"

@@ -34,6 +34,31 @@ const bookingSchema = new Schema<Booking>(
       type: Number,
       required: true,
     },
+    basePrice: {
+      type: Number,
+      required: true
+    },
+    totalPrice: {
+      type: Number,
+      required: true
+    },
+    parkingPrice: {
+      type: Number,
+      required: true
+    },
+    ipFee: {
+      type: Number,
+      required: true
+    },
+    penalty: {
+      type: Number,
+      required: false,
+      default: 0
+    },
+    verified: {
+      type: Boolean,
+      default: false
+    },
     createdAt: {
       type: Number,
       required: true,

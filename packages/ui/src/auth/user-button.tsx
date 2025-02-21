@@ -67,7 +67,7 @@ export const UserButton: React.FC<UserButtonProps> = ({
     );
 
     return (
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
             <DropdownMenuTrigger className="flex items-center gap-2 rounded-full border p-1.5">
                 <Icon className='border-none'>
                     <LuAlignJustify />

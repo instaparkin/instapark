@@ -1,4 +1,5 @@
 import ThirdParty from "supertokens-node/recipe/thirdparty";
+import EmailVerification from "supertokens-node/recipe/emailverification";
 import EmailPassword from "supertokens-node/recipe/emailpassword";
 import Session from "supertokens-node/recipe/session";
 import { TypeInput } from "supertokens-node/types";
@@ -7,11 +8,12 @@ import SuperTokens from "supertokens-node/lib/build/supertokens";
 import { AUTH_CONSTANTS } from "../constants/auth-constants";
 import { GLOBAL_CONSTANTS } from "@instapark/constants";
 import UserMetadata from "supertokens-node/recipe/usermetadata";
-
-console.log(AUTH_CONSTANTS.SUPERTOKENS_API_KEY);
+import axios from "axios"
+import * as supertokens from "supertokens-node";
 
 const backendConfig = (): TypeInput => {
     return {
+        framework: "express",
         supertokens: {
             connectionURI: AUTH_CONSTANTS.SUPERTOKENS_CONNECTION_URL,
             apiKey: AUTH_CONSTANTS.SUPERTOKENS_API_KEY as string
@@ -25,53 +27,47 @@ const backendConfig = (): TypeInput => {
         },
         recipeList: [
             EmailPassword.init({
-                override: {
-                    functions: (originalImplementation) => {
-                        return {
-                            ...originalImplementation,
-                            signUp: async function (input) {
-                                const response = await originalImplementation.signUp(input);
-                                return response;
-                            }
-                        }
-                    }
-                }
-            }),
-            ThirdParty.init({
-                signInAndUpFeature: {
-                    providers: [
-                        {
-                            config: {
-                                thirdPartyId: AUTH_CONSTANTS.GOOGLE_ID,
-                                clients: [
-                                    {
-                                        clientId:
-                                            AUTH_CONSTANTS.GOOGLE_CLIENT_ID,
-                                        clientSecret: AUTH_CONSTANTS.GOOGLE_CLIENT_SECRET,
-                                    },
-                                ],
-                            },
-                        },
-                    ],
+                signUpFeature: {
+                    formFields: [{
+                        id: "firstName"
+                    }, {
+                        id: "lastName",
+                        optional: true
+                    }, {
+                        id: "terms"
+                    }]
                 },
                 override: {
-                    functions: (originalImplementation) => {
+                    apis: (originalImplementation) => {
                         return {
                             ...originalImplementation,
-                            signInUp: async function (input) {
+                            signUpPOST: async function (input) {
+                                if (originalImplementation.signUpPOST === undefined) {
+                                    throw Error("Should never come here");
+                                }
+                                const response = await originalImplementation.signUpPOST(input);
+                                if (response.status === "OK") {
+                                    /**User Input */
+                                    const formFields = input.formFields;
+                                    const firstName = formFields.find(f => f.id === "firstName")?.value || "";
+                                    const lastName = formFields.find(f => f.id === "lastName")?.value || "";
 
-                                const response = await originalImplementation.signInUp(input);
-
+                                    /**Fetching other required details from the session */
+                                    axios.post("http://localhost:8088/profile", {
+                                        userId: response.user.id,
+                                        firstName,
+                                        lastName,
+                                        emails: response.user.emails,
+                                        timeJoined: Math.floor(response.user.timeJoined / 1000)
+                                    })
+                                }
                                 return response;
                             }
                         }
                     }
                 }
             }),
-            Session.init({
-                exposeAccessTokenToFrontendInCookieBasedAuth: true
-            }),
-            UserMetadata.init(),
+            Session.init(),
             Dashboard.init(),
         ],
     };

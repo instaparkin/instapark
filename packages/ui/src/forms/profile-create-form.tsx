@@ -6,5 +6,21 @@ export type ProfileFormType = z.infer<typeof profileSchema>
 
 export const ProfileForm = () =>
     useForm<ProfileFormType>({
-        resolver: zodResolver(profileSchema)
+        resolver: zodResolver(profileSchema),
+        defaultValues: {
+            phoneNumber: "",
+            kyc:{
+                uidai: ""
+            },
+            latitude: 0,
+            longitude: 0,
+            country: "",
+            state: "",
+            district: "",
+            city: "",
+            street: "",
+            pincode: 0,
+            name: "",
+            landmark: "",
+        }
     })

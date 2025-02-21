@@ -11,9 +11,9 @@ export const preferredFirstnameSchema = z.object({
 }) satisfies ZodType<Pick<AuthMetadata, "preferred_first_name">>
 
 export const profileSchema = z.object({
-    phoneNumber: z.number(),
+    phoneNumber: z.string(),
     kyc: z.object({
-        uidai: z.number(),
+        uidai: z.string(),
     }),
     country: z.string(),
     state: z.string(),

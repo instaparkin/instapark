@@ -8,6 +8,7 @@ import { Listing } from "@instapark/types";
 import toast from "react-hot-toast";
 import { Skeleton } from "../components/skeleton";
 import { Card, CardContent, CardFooter } from "../components/card";
+import { PaymentGateway } from "../checkout/payment-gateway";
 
 const SEARCH_LISTINGS = gql`
 query GET_LISTINGS {
@@ -100,3 +101,4 @@ export const ListingLoading: React.FC<ListingLoadingProps> = ({ count = 8 }) => 
     </div>
   )
 }
+

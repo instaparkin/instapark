@@ -3,6 +3,7 @@ import { config, cors, express } from "@instapark/utils";
 import mongoose from "mongoose";
 import { USER_SERVER_CONSTANTS } from "./constants/user-server-constants";
 import { ProfileRouter } from "./routes/profile.route";
+import { LikedListingRouter } from "./routes/liked-listing.route";
 
 config();
 
@@ -38,6 +39,8 @@ async function init() {
     })
 
     app.use("/profile", ProfileRouter)
+
+    app.use("/liked-listings", LikedListingRouter)
 
     app.use(errorHandler());
 

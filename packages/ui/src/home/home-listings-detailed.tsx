@@ -203,7 +203,10 @@ function ListingHostInfo({
     responseTime = "within an hour"
 }: HostInfoProps) {
 
-    const { first_name, last_name, timeJoined } = useAuth()
+    const { firstName, lastName, timeJoined } = useAuth()
+
+    console.log(timeJoined);
+
 
     return (
         <div className="space-y-6">
@@ -220,8 +223,8 @@ function ListingHostInfo({
                             </div>
                         </div>
                         <div>
-                            <h3 className="text-xl font-semibold">{first_name}</h3>
-                            <p className="text-sm text-muted-foreground">{last_name}</p>
+                            <h3 className="text-xl font-semibold">{firstName}</h3>
+                            <p className="text-sm text-muted-foreground">{lastName}</p>
                         </div>
                     </div>
 
@@ -238,7 +241,7 @@ function ListingHostInfo({
 
                         <div>
                             <div className="text-2xl font-semibold">{parseInt(hostingDuration)}</div>
-                            <div className="text-sm text-muted-foreground">{timeInInstapark(timeJoined / 1000)}</div>
+                            <div className="text-sm text-muted-foreground">{timeInInstapark(1739982727)}</div>
                         </div>
                     </div>
                 </Card>
@@ -298,7 +301,7 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
     const GET_LISTING = gql`
     query GET_LISTINGS($id: String!) {
   ListingQuery {
-    getListingById(id: $id) {
+    getListings(id: $id) {
       allowedVehicles
       basePrice
       city
@@ -333,6 +336,9 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
     });
     const { userId } = useAuth()
 
+    console.log(data);
+
+
     if (loading) {
         return <ListingLoadingSkeleton />
     }
@@ -341,7 +347,7 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
         toast.error(`Error: ${error.message}`);
     }
 
-    const listing: Listing = data.ListingQuery.getListingById
+    const listing: Listing = data.ListingQuery.getListings[0]
 
     return (
         <ListingDetailedContent>
@@ -379,7 +385,15 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                             plph={listing.plph}
                             basePrice={listing.basePrice}
                         />
-                        <ListingReserve listingId={listing.id} userId={userId} startDate={1739503313} endDate={1739589713} />
+                        <ListingReserve
+                            listingId={listing.id}
+                            userId={userId}
+                            startDate={1739503313}
+                            endDate={1739589713}
+                            basePrice={2200}
+                            parkingPrice={170}
+                            totalPrice={3081}
+                            ipFee={711} />
                     </div>
 
                     {/* Mobile View with Drawer */}
@@ -395,7 +409,7 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                     />
                 </div>
             </div>
-            <MapsMain listings={[listing]} />
+            <MapsMain />
         </ListingDetailedContent>
     )
 }

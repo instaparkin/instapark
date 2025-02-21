@@ -8,7 +8,7 @@ export const createListing = async (req: Request, res: Response) => {
     try {
         const listing = req.body as ListingRequest;
         const result = listingsCreateSchema.safeParse(listing);
-        
+
         console.log(result);
 
         if (!result.success) {
@@ -90,7 +90,6 @@ export const getListings = async (req: Request, res: Response) => {
                 userId: string
                 id: string
             }
-
         const listings = await ListingModel.find(
             {
                 ...(id ? { id } : {}),
@@ -101,7 +100,6 @@ export const getListings = async (req: Request, res: Response) => {
             },
             { _id: 0, __v: 0 }
         );
-
         return sendResponse(res, 200, "Listings Fetched Successfully", "SUCCESS", listings);
     } catch (error) {
         return sendResponse(res, 500, "An unexpected error occurred while fetching the results " + error, "FAILURE", error);

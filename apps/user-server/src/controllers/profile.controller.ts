@@ -12,7 +12,12 @@ export const upsertProfile = async (req: Request, res: Response) => {
         }
 
         const updateFields: Partial<Profile> = {
-            ...(profileRequest.phoneNumbers && { phoneNumbers: profileRequest.phoneNumbers }),
+            ...(profileRequest.userId && { userId: profileRequest.userId }),
+            ...(profileRequest.firstName && { firstName: profileRequest.firstName }),
+            ...(profileRequest.lastName && { lastName: profileRequest.lastName }),
+            ...(profileRequest.emails && { emails: profileRequest.emails }),
+            ...(profileRequest.timeJoined && { timeJoined: profileRequest.timeJoined }),
+            ...(profileRequest.phoneNumber && { phoneNumbers: profileRequest.phoneNumber }),
             ...(profileRequest.kyc?.uidai && { kyc: { uidai: profileRequest.kyc.uidai, verified: profileRequest.kyc.verified ?? false } }),
             ...(profileRequest.country && { country: profileRequest.country }),
             ...(profileRequest.state && { state: profileRequest.state }),
@@ -29,7 +34,7 @@ export const upsertProfile = async (req: Request, res: Response) => {
         await ProfileModel.updateOne(
             { userId: profileRequest.userId },
             { $set: updateFields },
-            { upsert: true }
+            { upsert: true },
         );
 
         return sendResponse(res, 200, "Profile updated successfully", "SUCCESS", null);
@@ -37,3 +42,21 @@ export const upsertProfile = async (req: Request, res: Response) => {
         return sendResponse(res, 500, "Internal Server Error", "FAILURE", null);
     }
 };
+
+
+export const getProfile = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.query;
+
+        if (!userId) {
+            return sendResponse(res, 400, "User ID is required", "FAILURE", null);
+        }
+
+        const profile = await ProfileModel.findOne({
+            userId
+        })
+        return sendResponse(res, 200, "Profile details fetched successfully", "SUCCESS", profile);
+    } catch (error) {
+        return sendResponse(res, 500, "Internal Server Error", "FAILURE", null);
+    }
+}

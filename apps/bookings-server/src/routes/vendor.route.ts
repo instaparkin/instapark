@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createVendor, getBalance, getDocumentStatus, getVendor, updateVendor } from "../controllers/vendor.controller";
+import { createOnDemandBalanceTransfer, createVendor, getBalance, getDocumentStatus, getVendor, updateVendor } from "../controllers/vendor.controller";
 
 const VendorRoute = Router();
 
@@ -14,5 +14,7 @@ VendorRoute.patch("/", updateVendor);
  VendorRoute.get("/documents/status", getDocumentStatus);
 
  VendorRoute.get("/balance", getBalance);
+
+ VendorRoute.post("/transfer", createOnDemandBalanceTransfer)
 
 export { VendorRoute };

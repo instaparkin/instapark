@@ -4,7 +4,7 @@ import React from 'react'
 import { NoResults } from '../components/no-results'
 import { CiCircleCheck } from 'react-icons/ci'
 import { columns } from './hosting-columns'
-import { DataTable } from '../components/data-table'
+import { DataTable, DataTableLoading } from '../components/data-table'
 import toast from 'react-hot-toast'
 import { gql, useQuery } from '@apollo/client'
 import { Booking } from '@instapark/types'
@@ -27,12 +27,11 @@ query GET_COMPLETED_BOOKINGS {
 }
 `
 
-
 export const HostingCompleted = () => {
   const { loading, error, data } = useQuery(GET_COMPLETED_BOOKINGS);
 
   if (loading) {
-    return <div>Loading...</div>
+    return <DataTableLoading />
   }
 
   if (error) {

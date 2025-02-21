@@ -3,9 +3,10 @@ import { ApiResponse, BookingOTP, BookingRequest, BookingStatus, Listing, Paymen
 import { LockingService } from "../services/locking.service";
 import { BookingService } from "../services/booking.service";
 import { Cashfree } from "cashfree-pg";
-import { BookingDB } from "../services/booking.db";
 import { BookingModel, BookingOTPModel } from "../models/booking.model";
-import { Z_UNKNOWN } from "zlib";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 export const lock = async (req: Request, res: Response) => {
     try {
@@ -20,10 +21,9 @@ export const lock = async (req: Request, res: Response) => {
             Cashfree.XClientSecret = "cfsk_ma_test_ea216f531ab789cd1bb6c0d98bf6f4a6_179a58b2";
             Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
 
-
             async function createOrder() {
                 const request = {
-                    "order_amount": 1,
+                    "order_amount": 2000,
                     "order_currency": "INR",
                     "customer_details": {
                         "customer_id": "node_sdk_test",
@@ -32,14 +32,22 @@ export const lock = async (req: Request, res: Response) => {
                         "customer_phone": "9019205231"
                     },
                     "order_meta": {
-                        "return_url": "https://test.cashfree.com/pgappsdemos/return.php?order_id=order_123"
+                        "return_url": "http://localhost:3000"
                     },
+                    "order_splits": [
+                        {
+                            "vendor_id": "uniqueSampleVendorId",
+                            "amount": 1000,
+                        }
+                    ],
                     "order_note": ""
                 }
                 return Cashfree.PGCreateOrder("2023-08-01", request)
             }
 
             const response = await createOrder();
+
+            console.log(response);
 
             sendResponse(res, 200, result.message, "SUCCESS", {
                 c: result.booking,
@@ -90,7 +98,7 @@ export const getBookings = async (req: Request, res: Response) => {
                 ...(endDate ? { endDate } : {}),
                 ...(listingId ? { listingId } : {}),
                 ...(userId ? { userId } : {}),
-                ...(status ? { status: { $in: [status], $nin: ["Locked"] } } : {}),
+                ...(status ? { status: { $in: [status] } } : {}),
             },
             { _id: 0, __v: 0 }
         );
@@ -100,7 +108,6 @@ export const getBookings = async (req: Request, res: Response) => {
         sendResponse(res, 500, `Failed to get Bookings: ${error}`, "FAILURE", null);
     }
 };
-
 
 export const getOtp = async (req: Request, res: Response) => {
     try {
@@ -137,5 +144,91 @@ export const verifyBooking = async (req: Request, res: Response) => {
         }
     } catch (error) {
         return sendResponse(res, 500, `Failed to verify Booking: ${error}`, "FAILURE", null);
+    }
+};
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+export const earnings = async (req: Request, res: Response) => {
+    try {
+        const { listingIds } = req.query;
+        console.log(listingIds);
+
+        if (!listingIds || !Array.isArray(listingIds) || listingIds.length === 0) {
+            return sendResponse(res, 400, "Missing or invalid listingIds", "FAILURE", null);
+        }
+
+        const startOfCurrentMonth = dayjs().startOf("month").unix();
+        const endOfCurrentMonth = dayjs().endOf("month").unix();
+
+        const startOfPreviousMonth = dayjs().subtract(1, "month").startOf("month").unix();
+        const endOfPreviousMonth = dayjs().subtract(1, "month").endOf("month").unix();
+
+        const result = await BookingModel.aggregate([
+            { $match: { listingId: { $in: listingIds } } },
+            {
+                $facet: {
+                    currentMonth: [
+                        { $match: { createdAt: { $gte: startOfCurrentMonth, $lte: endOfCurrentMonth } } },
+                        {
+                            $group: {
+                                _id: null,
+                                totalBookings: { $sum: 1 },
+                                totalRevenue: { $sum: "$totalPrice" },
+                                totalNetProfit: { $sum: { $subtract: ["$totalPrice", "$ipFee"] } },
+                                avgBookingValue: { $avg: "$totalPrice" }
+                            }
+                        }
+                    ],
+                    previousMonth: [
+                        { $match: { createdAt: { $gte: startOfPreviousMonth, $lte: endOfPreviousMonth } } },
+                        {
+                            $group: {
+                                _id: null,
+                                totalBookings: { $sum: 1 },
+                                totalRevenue: { $sum: "$totalPrice" },
+                                totalNetProfit: { $sum: { $subtract: ["$totalPrice", "$ipFee"] } },
+                                avgBookingValue: { $avg: "$totalPrice" }
+                            }
+                        }
+                    ]
+                }
+            }
+        ]);
+
+        const currentMonthData = result[0].currentMonth.length > 0 ? result[0].currentMonth[0] : {
+            totalBookings: 0,
+            totalRevenue: 0,
+            totalNetProfit: 0,
+            avgBookingValue: 0
+        };
+
+        const previousMonthData = result[0].previousMonth.length > 0 ? result[0].previousMonth[0] : {
+            totalBookings: 0,
+            totalRevenue: 0,
+            totalNetProfit: 0,
+            avgBookingValue: 0
+        };
+
+        const percentageChange = (current: number, previous: number) => {
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return ((current - previous) / previous) * 100;
+        };
+
+        const netPL = {
+            totalBookingsPLPercent: percentageChange(currentMonthData.totalBookings, previousMonthData.totalBookings),
+            totalRevenuePLPercent: percentageChange(currentMonthData.totalRevenue, previousMonthData.totalRevenue),
+            totalNetProfitPLPercent: percentageChange(currentMonthData.totalNetProfit, previousMonthData.totalNetProfit),
+            avgBookingValuePLPercent: percentageChange(currentMonthData.avgBookingValue, previousMonthData.avgBookingValue)
+        };
+
+        return sendResponse(res, 200, "Booking statistics fetched successfully", "SUCCESS", {
+            currentMonth: currentMonthData,
+            previousMonth: previousMonthData,
+            netPL
+        });
+    } catch (error) {
+        return sendResponse(res, 500, `Failed to calculate booking statistics: ${error}`, "FAILURE", null);
     }
 };

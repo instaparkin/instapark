@@ -10,6 +10,7 @@ import { Button } from "../components/button";
 import { unixSecToMonthYearTime } from "../utils/dayjs";
 import { gql, useQuery } from "@apollo/client";
 import { Booking } from "@instapark/types";
+import { BookingCard, BookingHistory, BookingSummary } from "../components/booking-detailed";
 
 const GET_CHECKINGOUT_BOOKINGS = gql`
 query GET_CHECKINGOUT_BOOKINGS {
@@ -55,30 +56,17 @@ export const HostingCurrent = () => {
     <div>
       {
         bookings.map((b: Booking) => (
-          <Card key={b.id} className="w-full max-w-md">
-            <CardHeader>
-              <CardTitle>Booking Details</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-8">
-              <div className="flex justify-between items-center">
-                <span className="font-semibold">Start Date:</span>
-                <span>{unixSecToMonthYearTime(b.startDate)}</span>
+          <div className="container mx-auto p-4 space-y-8">
+            <div className="grid gap-6 lg:grid-cols-3">
+              <div className="lg:col-span-2">
+                <BookingCard />
               </div>
-              <div className="flex justify-between items-center">
-                <span className="font-semibold">End Date:</span>
-                <span>{unixSecToMonthYearTime(b.endDate)}</span>
+              <div>
+                <BookingSummary />
               </div>
-              <div className="flex justify-between items-center">
-                <span className="font-semibold">Status:</span>
-                <Badge variant={b.status === "Completed" ? "default" : "secondary"}>{b.status}</Badge>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full" disabled={b.status === "Completed"}>
-                {"Complete Trip"}
-              </Button>
-            </CardFooter>
-          </Card>
+            </div>
+            <BookingHistory />
+          </div>
         ))
       }
     </div>

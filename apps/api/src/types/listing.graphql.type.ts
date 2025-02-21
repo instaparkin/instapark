@@ -1,4 +1,9 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { ProfileType } from "./user.graphql.type";
+import { axios } from "@instapark/utils";
+import { ApiResponse, Booking, Profile } from "@instapark/types";
+import { BookingStatusEnum, BookingType, EarningsType } from "./booking.graphql.type";
+import { Earnings } from "@instapark/types/src/Booking";
 
 export const PlaceTypeEnum = new GraphQLEnumType({
     name: "PlaceType",
@@ -20,10 +25,9 @@ export const VehicleEnum = new GraphQLEnumType({
         Cycle: { value: "Cycle" },
     }
 })
-
 export const ListingType = new GraphQLObjectType({
     name: "Listing",
-    fields: {
+    fields: () => ({
         userId: { type: GraphQLString },
         type: { type: PlaceTypeEnum },
         country: { type: GraphQLString },
@@ -43,14 +47,37 @@ export const ListingType = new GraphQLObjectType({
         pphcr: { type: GraphQLFloat },
         plph: { type: GraphQLFloat },
         photos: { type: new GraphQLList(GraphQLString) },
-
         id: { type: GraphQLString },
         isOpen: { type: GraphQLBoolean },
         rating: { type: GraphQLFloat },
         createdAt: { type: GraphQLInt },
         updatedAt: { type: GraphQLInt },
-    }
-})
+        earnings: {
+            type: EarningsType,
+            resolve: async (parent) => {
+                const response = await axios.get<ApiResponse<Earnings>>(
+                    "http://localhost:8085/bookings/earnings",
+                    {
+                        params: { listingIds: [parent.id] }
+                    }
+                );
+                return response.data.data;
+            }
+        },
+        user: {
+            type: ProfileType,
+            resolve: async (parent) => {
+                const response = await axios.get<ApiResponse<Profile>>(
+                    "http://localhost:8088/profile",
+                    {
+                        params: { userId: parent.userId }
+                    }
+                );
+                return response.data.data;
+            }
+        },
+    })
+});
 
 export const ReviewType = new GraphQLObjectType({
     name: "Review",
@@ -67,5 +94,14 @@ export const ReviewType = new GraphQLObjectType({
         description: { type: GraphQLString },
         createdAt: { type: GraphQLInt },
         updatedAt: { type: GraphQLInt }
+    }
+})
+
+export const LikedListingType = new GraphQLObjectType({
+    name: "LikedListing",
+    fields: {
+        id: { type: GraphQLString },
+        listingId: { type: GraphQLString },
+        userId: { type: GraphQLString },
     }
 })

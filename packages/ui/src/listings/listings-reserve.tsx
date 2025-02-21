@@ -5,18 +5,21 @@ import { ApiResponse, Booking, BookingRequest } from '@instapark/types'
 import toast from 'react-hot-toast'
 import { redirect } from 'next/navigation'
 
-export const ListingReserve = ({ listingId, userId, startDate, endDate }: BookingRequest) => {
-
+export const ListingReserve = ({ listingId, userId, startDate, endDate, basePrice, parkingPrice, totalPrice, ipFee }: BookingRequest) => {
     const handleReservation = async () => {
         await axios.post<ApiResponse<Booking>>("http://localhost:8085/bookings/lock", {
             listingId,
             userId,
             startDate,
             endDate,
-        }).then( res => {
+            basePrice,
+            totalPrice,
+            parkingPrice,
+            ipFee
+        }).then(res => {
             if (res.data.status === "SUCCESS") {
                 console.log(res.data.data);
-                
+
                 redirect(`/reserve/${res.data.data.c?.id}?oid=${res.data.data.orderId}&psid=${res.data.data.payment_session_id}`)
             } else {
                 toast.error(res.data.message)
