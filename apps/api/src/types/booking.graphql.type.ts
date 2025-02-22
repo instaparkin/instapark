@@ -1,10 +1,9 @@
-import { graphql, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
 import { ListingType } from "./listing.graphql.type";
 import { OrderType } from "./order.graphql.type";
 import { axios } from "@instapark/utils";
 import { ApiResponse, Order, Payment } from "@instapark/types";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
-
 
 export const fetchOrderById = async (orderId: string): Promise<Order> => {
     const options = {
@@ -158,6 +157,15 @@ export const EarningsType = new GraphQLObjectType({
                     avgBookingValuePLPercent: { type: GraphQLFloat },
                 },
             }),
+        },
+        timeRangeData: {
+            type: new GraphQLList(new GraphQLObjectType({
+                name: "TimeRangeData",
+                fields: {
+                    date: { type: GraphQLString },
+                    totalPrice: { type: GraphQLFloat },
+                },
+            })),
         },
     },
 })

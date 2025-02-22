@@ -1,13 +1,13 @@
-import { Success } from '@instapark/ui/src/components/success'
+import { Result } from '@instapark/ui/src/components/result'
 import React from 'react'
 
 const SuccessPage = () => {
   return (
     <>
-      <Success
+      <Result
         timeout={10000}
-        text="Listing details added successfully"
-        redirectPath="/hosting/listings"
+        response="Listing details added successfully"
+        redirectPath="/hosting"
       />,
     </>
   )

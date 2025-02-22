@@ -10,7 +10,7 @@ export const HEADER_NAVIGATION_ITEMS = {
           group: "Menu",
           items: [
               { icon: <IoTodayOutline />, link: "/reservations", name: "Trips" },
-              { icon: <TiThListOutline />, link: "/hosting/listings", name: "Wishlists" }
+              { icon: <TiThListOutline />, link: "/hosting/listings", name: "Wishlists" },
           ]
       }
   ],
@@ -20,7 +20,8 @@ export const HEADER_NAVIGATION_ITEMS = {
           items: [
               { icon: <TiThListOutline />, link: "/hosting/listings", name: "Listings" },
               { icon: <BsBuildingCheck />, link: "/hosting", name: "Bookings" },
-              { icon: <TbDeviceIpadDollar />, link: "/hosting/earnings", name: "Earnings" }
+              { icon: <TbDeviceIpadDollar />, link: "/hosting/earnings", name: "Earnings" },
+              { icon: <TbDeviceIpadDollar />, link: "/hosting/payments", name: "Payments" },
           ]
       },
   ]

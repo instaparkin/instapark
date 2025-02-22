@@ -13,6 +13,9 @@ query GetBookingsForHost {
       lockedAt
       createdAt
       updatedAt
+      totalPrice
+      basePrice
+      parkingPrice
       listing {
         photos,
         country,

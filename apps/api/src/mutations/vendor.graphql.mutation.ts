@@ -1,6 +1,6 @@
 import { ApiResponse } from "@instapark/types";
 import { axios } from "@instapark/utils";
-import { GraphQLBoolean, GraphQLFloat, GraphQLInputObjectType, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLFloat, GraphQLInputObjectType, GraphQLObjectType, GraphQLString } from "graphql";
 
 export const VendorBankInput = new GraphQLInputObjectType({
     name: "VendorBankInput",

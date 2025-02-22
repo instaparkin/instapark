@@ -1,5 +1,3 @@
-import ThirdParty from "supertokens-node/recipe/thirdparty";
-import EmailVerification from "supertokens-node/recipe/emailverification";
 import EmailPassword from "supertokens-node/recipe/emailpassword";
 import Session from "supertokens-node/recipe/session";
 import { TypeInput } from "supertokens-node/types";
@@ -7,9 +5,7 @@ import Dashboard from "supertokens-node/recipe/dashboard";
 import SuperTokens from "supertokens-node/lib/build/supertokens";
 import { AUTH_CONSTANTS } from "../constants/auth-constants";
 import { GLOBAL_CONSTANTS } from "@instapark/constants";
-import UserMetadata from "supertokens-node/recipe/usermetadata";
 import axios from "axios"
-import * as supertokens from "supertokens-node";
 
 const backendConfig = (): TypeInput => {
     return {

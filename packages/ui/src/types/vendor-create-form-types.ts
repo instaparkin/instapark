@@ -3,7 +3,8 @@ import { Path, UseFormReturn } from "react-hook-form";
 
 export type Field<T extends Record<string, unknown>> = {
     name: Path<T>;
-    type: HTMLInputTypeAttribute ;
+    type: HTMLInputTypeAttribute;
+    description: string
 }
 
 export type VendorCreateFormElements<T extends Record<string, unknown>> = {

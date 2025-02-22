@@ -10,7 +10,6 @@ import { Button } from "../components/button";
 import { unixSecToMonthYearTime } from "../utils/dayjs";
 import { gql, useQuery } from "@apollo/client";
 import { Booking } from "@instapark/types";
-import { BookingCard, BookingHistory, BookingSummary } from "../components/booking-detailed";
 
 const GET_CHECKINGOUT_BOOKINGS = gql`
 query GET_CHECKINGOUT_BOOKINGS {
@@ -52,23 +51,11 @@ export const HostingCurrent = () => {
     )
   }
 
+  /**
+   * TODO
+   * 1. Hosting Current Page
+   */
   return (
-    <div>
-      {
-        bookings.map((b: Booking) => (
-          <div className="container mx-auto p-4 space-y-8">
-            <div className="grid gap-6 lg:grid-cols-3">
-              <div className="lg:col-span-2">
-                <BookingCard />
-              </div>
-              <div>
-                <BookingSummary />
-              </div>
-            </div>
-            <BookingHistory />
-          </div>
-        ))
-      }
-    </div>
+    <div></div>
   )
 }

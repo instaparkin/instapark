@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
+import { errorHandler, middleware, supertokens, ensureSuperTokensInit } from "@instapark/auth";
 import listingsRouter from "./routes/listings.route";
 import { API_ENDPOINTS } from "@instapark/constants";
 import { uploadthingExpress } from "./uploadthing/uploadthing-express";
@@ -7,6 +7,12 @@ import mongoose from "mongoose";
 import express from "express"
 import cors from "cors"
 
+/**
+ * TODO:
+ * 1. Rate limiting
+ * 2. VerifySession()
+ * 3. GraphQL Integration
+ */
 async function init() {
 
     ensureSuperTokensInit();

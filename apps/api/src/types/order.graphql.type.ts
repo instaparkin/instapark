@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInt, GraphQLBoolean } from "graphql";
+import { GraphQLObjectType, GraphQLString, GraphQLFloat, GraphQLList, GraphQLInt } from "graphql";
 
 export const OrderSplitType = new GraphQLObjectType({
   name: "OrderSplit",

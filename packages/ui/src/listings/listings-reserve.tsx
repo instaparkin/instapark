@@ -18,8 +18,6 @@ export const ListingReserve = ({ listingId, userId, startDate, endDate, basePric
             ipFee
         }).then(res => {
             if (res.data.status === "SUCCESS") {
-                console.log(res.data.data);
-
                 redirect(`/reserve/${res.data.data.c?.id}?oid=${res.data.data.orderId}&psid=${res.data.data.payment_session_id}`)
             } else {
                 toast.error(res.data.message)

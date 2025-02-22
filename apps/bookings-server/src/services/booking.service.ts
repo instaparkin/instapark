@@ -1,11 +1,8 @@
-import { ApiResponse, BookedResponse, BookingRequest, Payment, PaymentRequest } from "@instapark/types";
+import { ApiResponse, BookedResponse, PaymentRequest } from "@instapark/types";
 import mongoose from "mongoose";
 import { BookingModel, BookingOTPModel } from "../models/booking.model";
 import { PaymentModel } from "../models/payment.model";
 import { Cashfree } from "cashfree-pg";
-import { BOOKINGS_SERVER_CONSTANTS } from "../constants/bookings-server-constants";
-import { uuid } from "@instapark/utils";
-import shortid from "shortid"
 
 export class BookingService {
     private paymentRequest: PaymentRequest

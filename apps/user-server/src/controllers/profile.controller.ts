@@ -39,7 +39,7 @@ export const upsertProfile = async (req: Request, res: Response) => {
 
         return sendResponse(res, 200, "Profile updated successfully", "SUCCESS", null);
     } catch (error) {
-        return sendResponse(res, 500, "Internal Server Error", "FAILURE", null);
+        return sendResponse(res, 500, `Internal Server Error: ${error}`, "FAILURE", null);
     }
 };
 
@@ -57,6 +57,6 @@ export const getProfile = async (req: Request, res: Response) => {
         })
         return sendResponse(res, 200, "Profile details fetched successfully", "SUCCESS", profile);
     } catch (error) {
-        return sendResponse(res, 500, "Internal Server Error", "FAILURE", null);
+        return sendResponse(res, 500, `Internal Server Error: ${error}`, "FAILURE", null);
     }
 }

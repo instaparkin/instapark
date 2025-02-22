@@ -1,6 +1,6 @@
 import { addUUID, Request, Response, sendResponse } from "@instapark/utils";
 import { ListingModel } from "../models/listing.model";
-import { Booking, Listing, ListingRequest } from "@instapark/types";
+import { Booking, ListingRequest } from "@instapark/types";
 import { listingsCreateSchema } from "@instapark/schemas"
 
 export const createListing = async (req: Request, res: Response) => {
@@ -16,7 +16,9 @@ export const createListing = async (req: Request, res: Response) => {
         }
 
         session.startTransaction();
-        const a = await ListingModel.findOne({ latitude: listing.latitude, longitude: listing.longitude }).select('-_id -__v');
+        const a = await ListingModel.
+            findOne({ latitude: listing.latitude, longitude: listing.longitude })
+            .select('-_id -__v');
         if (a) {
             return sendResponse(res, 200, "A Listing already exists on this location", "FAILURE", a);
         }

@@ -1,43 +1,33 @@
-"use client"
-import React from"react"
-import { Monitor, Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
-import { cn } from "../utils/cn"
+import React from "react"
+import { Moon, Sun, Monitor } from "lucide-react"
 import { Button } from "../components/button"
+import { cn } from "../utils/cn"
+import { useTheme } from "next-themes"
 
 export function ModeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { setTheme, theme } = useTheme()
 
   return (
-    <div className="inline-flex items-center rounded-lg border bg-background p-1 dark:bg-muted">
-      <Button
-        variant="ghost"
-        size="icon"
-        className={cn("size-8 rounded-md", theme === "system" && "bg-primary text-primary-foreground")}
-        onClick={() => setTheme("system")}
-      >
+    <div className="inline-flex items-center border rounded-full p-1">
+      <Toggle className={cn("size-5 w-full h-hull p-1.5", theme === "system" && "border")} onClick={() => setTheme("system")}>
         <Monitor className="size-4" />
         <span className="sr-only">System theme</span>
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        className={cn("size-8 rounded-md", theme === "light" && "bg-primary text-primary-foreground")}
-        onClick={() => setTheme("light")}
-      >
+      </Toggle>
+      <Toggle className={cn("size-5 w-full h-hull p-1.5", theme === "light" && "border")} onClick={() => setTheme("light")}>
         <Sun className="size-4" />
         <span className="sr-only">Light theme</span>
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        className={cn("size-8 rounded-md", theme === "dark" && "bg-primary text-primary-foreground")}
-        onClick={() => setTheme("dark")}
-      >
+      </Toggle>
+      <Toggle className={cn("size-5 w-full h-hull p-1.5", theme === "dark" && "border")} onClick={() => setTheme("dark")}>
         <Moon className="size-4" />
         <span className="sr-only">Dark theme</span>
-      </Button>
+      </Toggle>
     </div>
   )
+}
+
+interface ToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> { }
+
+function Toggle({ className, ...props }: ToggleProps) {
+  return <Button variant="ghost" size="icon" className={cn(className)} {...props} />
 }
 

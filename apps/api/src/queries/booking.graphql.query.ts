@@ -1,7 +1,7 @@
 import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
 import { axios } from "@instapark/utils";
 import { ApiResponse, Booking, Listing, Payment, Vendor } from "@instapark/types";
-import { BookingExtendedType, BookingStatusEnum, BookingType, EarningsType, PaymentType, PaymentTypeEnum } from "../types/booking.graphql.type";
+import { BookingExtendedType, BookingStatusEnum, EarningsType, PaymentType } from "../types/booking.graphql.type";
 import { ListingType } from "../types/listing.graphql.type";
 import { Earnings } from "@instapark/types/src/Booking";
 import { VendorBalance } from "../types/vendor.graphql.type";
@@ -140,6 +140,7 @@ export const BookingQuery = new GraphQLObjectType({
                         type: EarningsType,
                         args: {
                             userId: { type: GraphQLString },
+                            timeRange: { type: GraphQLString }
                         },
                         resolve: async (parent, { userId }) => {
                             try {
@@ -187,7 +188,7 @@ export const BookingQuery = new GraphQLObjectType({
                     }
                 },
             }),
-            resolve: () =>({})
-        }
+            resolve: () => ({})
+        },
     }
 });

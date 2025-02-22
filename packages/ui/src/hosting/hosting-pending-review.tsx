@@ -11,10 +11,10 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } fr
 import { useQuery } from "@apollo/client"
 import Image from "next/image"
 import type { BookingExtended } from "@instapark/types/src/Booking"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../components/dialog"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../components/dialog"
 import { GET_REVIEW_BOOKINGS } from "../graphql/get-review-bookings"
 import { OTPInputForm, OTPInputFormType } from "../forms/otp-input-form"
-import { formatLocation } from "../utils/field-name"
+import { formatLocation, formatPrice } from "../utils/field-name"
 import { Details } from "../components/details"
 import { unixSecToMonthYearTime } from "../utils/dayjs"
 
@@ -84,10 +84,11 @@ export const HostingPendingReview = () => {
             </CardContent>
             <CardFooter className="flex flex-col justify-start bg-muted">
               <Details
-              className="py-4"
+                className="py-4"
                 items={[
                   { field: "Start Date", value: unixSecToMonthYearTime(b.startDate) },
                   { field: "End Date", value: unixSecToMonthYearTime(b.endDate) },
+                  { field: "Total Price", value: formatPrice(b.totalPrice) },
                 ]} />
               <Dialog>
                 <DialogTrigger asChild>
@@ -95,16 +96,15 @@ export const HostingPendingReview = () => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Enter OTP to Approve</DialogTitle>
+                    <DialogTitle className="text-center">Enter OTP</DialogTitle>
                   </DialogHeader>
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit((e) => onSubmit(b.id, e))} className="space-y-6">
+                    <form onSubmit={form.handleSubmit((e) => onSubmit(b.id, e))} className="space-y-6 my-6 flex flex-col justify-center items-center">
                       <FormField
                         control={form.control}
                         name="otp"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>One-Time Password</FormLabel>
                             <FormControl>
                               <InputOTP maxLength={6} {...field}>
                                 <InputOTPGroup>
@@ -117,13 +117,14 @@ export const HostingPendingReview = () => {
                                 </InputOTPGroup>
                               </InputOTP>
                             </FormControl>
-                            <FormDescription>Please enter the one-time password sent to your phone.</FormDescription>
                           </FormItem>
                         )}
                       />
-                      <Button type="submit">Submit</Button>
                     </form>
                   </Form>
+                  <DialogFooter>
+                    <Button size={"lg"} type="submit">Submit</Button>
+                  </DialogFooter>
                 </DialogContent>
               </Dialog>
             </CardFooter>

@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { ApolloServer } from '@apollo/server';
-import { GraphQLSchema, GraphQLObjectType } from 'graphql';
+import { GraphQLSchema } from 'graphql';
 import { RootQuery } from './queries/root.graphql.query';
 import { RootMutation } from './mutations/root.graphql.mutation';
 import express from "express"

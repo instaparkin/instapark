@@ -152,19 +152,21 @@ dayjs.extend(timezone);
 
 export const earnings = async (req: Request, res: Response) => {
     try {
-        const { listingIds } = req.query;
+        const { listingIds } = req.query as { listingIds: string[]};
         console.log(listingIds);
 
         if (!listingIds || !Array.isArray(listingIds) || listingIds.length === 0) {
             return sendResponse(res, 400, "Missing or invalid listingIds", "FAILURE", null);
         }
 
-        const startOfCurrentMonth = dayjs().startOf("month").unix();
-        const endOfCurrentMonth = dayjs().endOf("month").unix();
+        const now = dayjs();
+        const startOfCurrentMonth = now.startOf("month").unix();
+        const endOfCurrentMonth = now.endOf("month").unix();
 
-        const startOfPreviousMonth = dayjs().subtract(1, "month").startOf("month").unix();
-        const endOfPreviousMonth = dayjs().subtract(1, "month").endOf("month").unix();
-
+        const startOfPreviousMonth = now.subtract(1, "month").startOf("month").unix();
+        const endOfPreviousMonth = now.subtract(1, "month").endOf("month").unix();
+        
+        // Monthly earnings comparison
         const result = await BookingModel.aggregate([
             { $match: { listingId: { $in: listingIds } } },
             {
@@ -226,7 +228,7 @@ export const earnings = async (req: Request, res: Response) => {
         return sendResponse(res, 200, "Booking statistics fetched successfully", "SUCCESS", {
             currentMonth: currentMonthData,
             previousMonth: previousMonthData,
-            netPL
+            netPL,
         });
     } catch (error) {
         return sendResponse(res, 500, `Failed to calculate booking statistics: ${error}`, "FAILURE", null);

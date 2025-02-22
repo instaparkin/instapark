@@ -1,4 +1,4 @@
-import { errorHandler, middleware, ensureSuperTokensInit, verifySession } from "@instapark/auth";
+import { errorHandler, middleware, ensureSuperTokensInit } from "@instapark/auth";
 import { config, cors, express } from "@instapark/utils";
 import mongoose from "mongoose";
 import { USER_SERVER_CONSTANTS } from "./constants/user-server-constants";
@@ -7,6 +7,12 @@ import { LikedListingRouter } from "./routes/liked-listing.route";
 
 config();
 
+/**
+ * TODO:
+ * 1. Rate limiting
+ * 2. VerifySession()
+ * 3. GraphQL Integration
+ */
 async function connectDB() {
     try {
         await mongoose.connect(USER_SERVER_CONSTANTS.MONGODB.URI);

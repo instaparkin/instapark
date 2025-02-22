@@ -99,3 +99,61 @@ export type VendorBalance = {
     vendor_id: string
     vendor_unsettled: number
 }
+
+interface OrderSplit {
+    merchant_vendor_id: string;
+    percentage: number;
+    tags: string | null;
+}
+
+export interface Transaction {
+    amount: number;
+    settlement_eligibility_time: string;
+    merchant_order_id: string;
+    tx_time: string;
+    settled: string;
+    entity_id: string;
+    merchant_settlement_utr: string;
+    currency: string;
+    sale_type: string;
+    customer_email: string;
+    customer_phone: string;
+    payment_utr: string;
+    merchant_vendor_commission: string;
+    split_service_charge: string;
+    split_service_tax: string;
+    pg_service_tax: string;
+    pg_service_charge: string;
+    pg_charge_postpaid: string;
+    merchant_settlement_id: string;
+    added_on: string;
+    tags: string;
+    entity_type: string;
+    settlement_initiated_on: string;
+    settlement_time: string;
+    eligible_split_balance: string;
+    order_splits: OrderSplit[];
+}
+
+export interface VendorCommission {
+    amount: number;
+    merchant_order_id: string;
+    tx_time: string;
+    settled: string;
+    entity_id: string;
+    merchant_vendor_id: string;
+    currency: string;
+    sale_type: string;
+    customer_email: string;
+    customer_phone: string;
+    added_on: string;
+    entity_type: string;
+    vendor_settlement_time: string;
+    vendor_settlement_initiated_on: string;
+    vendor_settlement_eligibility_time: string;
+    vendor_settlement_id: string;
+    vendor_commission: string;
+    vendor_pg_service_charge: string;
+    vendor_pg_service_tax: string;
+    status: string;
+}

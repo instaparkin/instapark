@@ -4,21 +4,27 @@ import { BOOKINGS_SERVER_CONSTANTS } from "../constants/bookings-server-constant
 
 export const getSettlements = async (req: Request, res: Response) => {
     try {
+        const { orderIds, limit, entity_type } = req.query as unknown as {
+            limit: string
+            orderIds: string[]
+            entity_type: "vendor_commision" | "transaction"
+        }
+
+        if (!entity_type) {
+            return sendResponse(res, 400, "Entity Type is required", "FAILURE", null)
+        }
         const options = {
             method: 'POST',
             headers: {
-                'x-api-version': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_API_VERSION,
+                'x-api-version': "2025-01-01",
                 'x-client-id': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID,
                 'x-client-secret': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_SECRET,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "pagination": { "limit": 11 },
+                "pagination": { "limit": parseInt(limit) },
                 "filters": {
-                    "order_ids":
-                        ["order_101803242tLf64JLArnG17VJEvwg6hkcY1B",
-                            "order_101803242tJnzuagFEXdei6gGh6XglB39RU"
-                        ]
+                    "order_ids": orderIds
                 }
             })
         };
@@ -26,7 +32,17 @@ export const getSettlements = async (req: Request, res: Response) => {
         fetch('https://sandbox.cashfree.com/pg/split/order/vendor/recon', options)
             .then(response => response.json())
             .then(response => {
-                sendResponse(res, 200, "Settlements fetched successfully", "SUCCESS", response)
+                switch (entity_type) {
+                    case "transaction":
+                        response = response.data.slice(0, (response.limit / 2))
+                        console.log(response);
+
+                        return sendResponse(res, 200, "Settlements fetched successfully", "SUCCESS", response)
+                    case "vendor_commision":
+                        response = response.data.slice((response.limit / 2))
+                        console.log(response);
+                        return sendResponse(res, 200, "Settlements fetched successfully", "SUCCESS", response)
+                }
             })
             .catch(error => {
                 sendResponse(res, 500, `Failed to fetch settlements: ${error}`, "FAILURE", null)

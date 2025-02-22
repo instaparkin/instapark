@@ -24,11 +24,9 @@ export default function RootLayout({
         <GraphQLProvider>
           <ThemeProvider>
             <Toaster
-              containerClassName={"p-20"}
               toastOptions={
                 {
                   duration: 3000,
-                  className: "p-20"
                 }
               }
               position="top-right" />

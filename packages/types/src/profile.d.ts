@@ -23,7 +23,7 @@ export type Profile = {
     ratings: number
 }
 
-export type ProfileRequest = Omit<Profile, "userId" | "kyc"> & {
+export type ProfileRequest = Omit<Profile, "userId" | "kyc" | "firstName" | "lastName" | "emails" | "timeJoined" | "reviews" | "ratings"> & {
     kyc: Pick<Profile["kyc"], "uidai">
 }
 

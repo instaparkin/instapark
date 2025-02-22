@@ -1,4 +1,4 @@
-import { Page, ProfileMain } from '@instapark/ui'
+import { Page, ProfilePersonalMain } from '@instapark/ui'
 import { Metadata } from 'next'
 import React from 'react'
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const UserProfilePage = () => {
     return (
         <Page className='pt-8'>
-            <ProfileMain />
+            <ProfilePersonalMain />
         </Page>
     )
 }

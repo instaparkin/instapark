@@ -42,7 +42,7 @@ export const createVendor = (req: SessionRequest, res: Response) => {
             .then(response => response.json())
             .then(response => {
                 sendResponse(res, 200,
-                    response.message ? "Vendor already exists" : "Vendor Created Successfully"
+                    response.message ? "Payment details already submitted" : "Payment details submitted Successfully"
                     , "SUCCESS", null);
             })
             .catch(error => {
@@ -127,34 +127,6 @@ export const updateVendor = (req: SessionRequest, res: Response) => {
                 sendResponse(res, 500, `Error Creating vendor: ${error}`, "FAILURE", null);
             });
 
-    } catch (error) {
-        sendResponse(res, 500, "Internal server Error", "FAILURE", null);
-    }
-}
-
-export const getDocumentStatus = (req: SessionRequest, res: Response) => {
-    try {
-        /**Getting UserId from the session */
-        const session = req.session;
-        const userId = session?.getUserId() as string;
-
-        const options = {
-            method: 'GET',
-            headers: {
-                'x-api-version': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_API_VERSION,
-                'x-client-id': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID,
-                'x-client-secret': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_SECRET,
-            }
-        };
-
-        fetch(`https://sandbox.cashfree.com/pg/easy-split/vendor-docs/${userId}`, options)
-            .then(response => response.json())
-            .then(response => {
-                sendResponse(res, 200, response.message, "SUCCESS", response);
-            })
-            .catch(error => {
-                sendResponse(res, 500, `Error Fetching vendor details: ${error}`, "FAILURE", null);
-            });
     } catch (error) {
         sendResponse(res, 500, "Internal server Error", "FAILURE", null);
     }

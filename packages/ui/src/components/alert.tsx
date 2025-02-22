@@ -14,7 +14,7 @@ const alertVariants = cva(
           "Not applied": "bg-blue-100 text-blue-800 border rounded-md p-6 dark:bg-blue-900 dark:text-blue-100",
           "Waiting For Approval": "bg-yellow-100 text-yellow-800 border rounded-md p-6 dark:bg-yellow-900 dark:text-yellow-100",
           "Approved": "bg-lime-100 text-lime-800 border rounded-md p-6 dark:bg-lime-900 dark:text-lime-100",
-          "Rejected": "bg-red-100 text-red-800 border rounded-md p-6 dark:bg-red-900 dark:text-red-100",
+          "Rejected": "bg-red-100 text-red-800 border rounded-md p-6 dark:bg-destructive dark:text-red-100",
       },
     },
     defaultVariants: {

@@ -1,4 +1,4 @@
-import { Page, ProfileMain, ProfilePublic } from '@instapark/ui'
+import { Page, ProfilePublic } from '@instapark/ui'
 import React from 'react'
 
 const ProfilePage = () => {

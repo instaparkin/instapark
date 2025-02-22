@@ -45,7 +45,7 @@ export const paymentsColumns: ColumnDef<Payment & { order: Order }>[] = [
         cell: ({ cell }) => {
             const value = cell.getValue();
             return (
-                <div className="bg-lime-100 p-2 text-green-600 rounded-sm w-fit">
+                <div className="p-2 text-positive rounded-sm w-fit">
                     {value as string}
                 </div>
             )

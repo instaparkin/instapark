@@ -1,21 +1,20 @@
 "use client"
 
 import React from 'react'
-import { EarningsMonthly } from './earnings-monthly'
-import { EarningsHeader } from './earnings-header'
-import { EarningsVisitors } from './earnings-visitors'
+import { EarningsStats } from './earnings-stats'
+import { EarningsTransactions } from './earnings-transactions'
 
 export const EarningsMain = () => {
   /**
    * TODO:
    * 1. Pass the props from here with proper type definitions
    * 2. Create the transactions Data Table
-   * 3. Create a GraphQL query to fetch bookings for the graph
    */
   return (
-    <div className=''>
-      <EarningsHeader />
-      <EarningsVisitors />
+    <div className='space-y-6'>
+      <EarningsStats />
+      <h2 className='text-lg font-semibold'>Transactions</h2>
+      <EarningsTransactions />
     </div>
   )
 }

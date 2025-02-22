@@ -4,15 +4,6 @@ import React from "react"
 import { Booking, Listing, Payment } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { unixSecToMonthYearTime } from "../utils/dayjs"
-import { MoreHorizontal } from "lucide-react"
-import { Button } from "../components/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "../components/dropdown-menu"
-import Link from "next/link"
 import { formatLocation } from "../utils/field-name"
 
 export const columns: ColumnDef<Booking & { payments: Payment[], listing: Listing }>[] = [

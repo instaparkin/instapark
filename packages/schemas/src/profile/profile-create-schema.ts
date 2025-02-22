@@ -1,4 +1,4 @@
-import { AuthMetadata, Profile, ProfileRequest } from "@instapark/types";
+import { AuthMetadata, ProfileRequest } from "@instapark/types";
 import { z, ZodType } from "zod";
 
 export const legalNameSchema = z.object({

@@ -30,7 +30,7 @@ export const HeaderMain = () => {
                     <NavigationMenuList className="hidden lg:flex space-x-3">
                         {navigationItems.flatMap((group) =>
                             group.items.map((item, index) => (
-                                <NavigationMenuItem key={index}>
+                                <NavigationMenuItem className="text-muted-foreground" key={index}>
                                     <Link href={item.link} legacyBehavior passHref>
                                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                                             {item.name}

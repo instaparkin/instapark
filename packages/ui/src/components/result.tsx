@@ -8,7 +8,7 @@ import { motion } from "framer-motion"
 import { ApiResponse } from '@instapark/types'
 
 interface EventHandlerProps<T> {
-  response?: ApiResponse<T>
+  response?: ApiResponse<T> | string
   timeout?: number
   redirectPath?: string
   customContent?: React.ReactNode

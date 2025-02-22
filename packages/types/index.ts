@@ -60,5 +60,7 @@ export {
     type VendorRequest,
     type Order,
     type PaymentExtended,
-    type VendorBalance
+    type VendorBalance,
+    type Transaction,
+    type VendorCommission
 } from "./src/Payment"

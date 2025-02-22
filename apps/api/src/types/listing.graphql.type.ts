@@ -1,8 +1,8 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
 import { ProfileType } from "./user.graphql.type";
 import { axios } from "@instapark/utils";
-import { ApiResponse, Booking, Profile } from "@instapark/types";
-import { BookingStatusEnum, BookingType, EarningsType } from "./booking.graphql.type";
+import { ApiResponse, Profile } from "@instapark/types";
+import { EarningsType } from "./booking.graphql.type";
 import { Earnings } from "@instapark/types/src/Booking";
 
 export const PlaceTypeEnum = new GraphQLEnumType({

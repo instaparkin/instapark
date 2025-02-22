@@ -1,1 +1,0 @@
-export const LISTINGS_ADD_FORM_KEY = "LISTINGS_ADD_DATA"

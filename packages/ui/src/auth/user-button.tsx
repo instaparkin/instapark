@@ -21,6 +21,7 @@ import { SignOutButton } from "./sign-out-button";
 import { User } from "lucide-react";
 import { SwitchRoleButton } from "../components/switch-role-button";
 import { USER_BUTTON_DEFAULT_PROTECTED_ITEMS, USER_BUTTON_PUBLIC_ITEMS } from "./auth-constants";
+import { ModeToggle } from "../components/mode-toggle";
 
 interface UserButtonProps {
     first_name: string
@@ -84,17 +85,26 @@ export const UserButton: React.FC<UserButtonProps> = ({
                     )}
                 </span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-44">
+            <DropdownMenuContent className="w-52 p-2 dark:text-muted-foreground">
                 {userId
                     ? DropdownItems(userMenuItems)
-                    : USER_BUTTON_PUBLIC_ITEMS.map((item) => (
+                    :
+                    USER_BUTTON_PUBLIC_ITEMS.map((item) => (
                         <Link key={item.name} href={item.link}>
                             <DropdownMenuItem>{item.name}</DropdownMenuItem>
                         </Link>
                     ))}
                 <DropdownMenuSeparator />
+                <DropdownMenuLabel
+                    className="font-normal flex justify-between items-center">
+                    <span>
+                        Theme
+                    </span>
+                    <ModeToggle />
+                </DropdownMenuLabel>
                 {userId && (
                     <>
+                        <DropdownMenuSeparator />
                         <SwitchRoleButton variant="dropdown" />
                         <SignOutButton />
                     </>

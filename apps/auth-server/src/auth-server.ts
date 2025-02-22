@@ -1,6 +1,5 @@
 import "dotenv/config"
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest } from "@instapark/auth";
-import metadataRouter from "./routes/metadata.route";
 import express from "express"
 import cors from 'cors'
 import { sendResponse } from "@instapark/utils";

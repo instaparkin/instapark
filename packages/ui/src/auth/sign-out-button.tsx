@@ -20,7 +20,7 @@ export const SignOutButton = ({ text = 'Sign out' }: SignOutButtonProps) => {
     <Button
       size={"icon"}
       onClick={handleSignOut}
-      className="w-full flex pl-2 justify-start text-red-500 border-red-500 hover:bg-red-50 dark:hover:bg-[#2A1314]  hover:text-red-500"
+      className="w-full flex pl-2 justify-start text-red-500 border-red-500 hover:bg-red-50 dark:hover:bg-destructive  hover:text-red-500"
       variant={"ghost"}>
       {text}
     </Button>

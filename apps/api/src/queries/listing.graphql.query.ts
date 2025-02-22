@@ -1,9 +1,7 @@
-import { ApiResponse, Booking, LikedListing, Listing, ListingRequest } from "@instapark/types";
+import { ApiResponse, Booking, LikedListing, Listing } from "@instapark/types";
 import { axios } from "@instapark/utils";
-import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
-import { LikedListingType, ListingType, PlaceTypeEnum, VehicleEnum } from "../types/listing.graphql.type";
-import { BookingQuery } from "./booking.graphql.query";
-import { BookingType } from "../types/booking.graphql.type";
+import { GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { LikedListingType, ListingType, VehicleEnum } from "../types/listing.graphql.type";
 
 export const ListingQuery = new GraphQLObjectType({
     name: "ListingQuery",

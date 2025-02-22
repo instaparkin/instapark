@@ -8,7 +8,6 @@ const HeaderMainDynamic = dynamic(() =>
   loading: () => <HeaderSkeleton />
 })
 
-
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   return (
     <SessionAuthProvider>

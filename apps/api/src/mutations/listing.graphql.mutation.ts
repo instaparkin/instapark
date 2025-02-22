@@ -1,5 +1,5 @@
 import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql"
-import { LikedListingType, PlaceTypeEnum, VehicleEnum } from "../types/listing.graphql.type"
+import { PlaceTypeEnum, VehicleEnum } from "../types/listing.graphql.type"
 import { ApiResponse, LikedListing, Listing, ListingRequest } from "@instapark/types"
 import { axios } from "@instapark/utils"
 
