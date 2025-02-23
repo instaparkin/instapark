@@ -5,6 +5,6 @@ const ProfileRouter = Router();
 
 ProfileRouter.post("/", upsertProfile);
 
-ProfileRouter.get("/", getProfile)
+ProfileRouter.get("/", getProfile);
 
 export { ProfileRouter }

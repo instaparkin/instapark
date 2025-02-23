@@ -1,15 +1,13 @@
+import "dotenv/config"
 import { errorHandler, middleware, ensureSuperTokensInit } from "@instapark/auth";
-import { config, cors, express } from "@instapark/utils";
 import mongoose from "mongoose";
 import { USER_SERVER_CONSTANTS } from "./constants/user-server-constants";
 import { ProfileRouter } from "./routes/profile.route";
-import { LikedListingRouter } from "./routes/liked-listing.route";
-
-config();
+import express from "express"
+import cors from "cors"
 
 /**
  * TODO:
- * 1. Rate limiting
  * 2. VerifySession()
  * 3. GraphQL Integration
  */
@@ -45,8 +43,6 @@ async function init() {
     })
 
     app.use("/profile", ProfileRouter)
-
-    app.use("/liked-listings", LikedListingRouter)
 
     app.use(errorHandler());
 

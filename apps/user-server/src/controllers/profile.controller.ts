@@ -17,7 +17,7 @@ export const upsertProfile = async (req: Request, res: Response) => {
             ...(profileRequest.lastName && { lastName: profileRequest.lastName }),
             ...(profileRequest.emails && { emails: profileRequest.emails }),
             ...(profileRequest.timeJoined && { timeJoined: profileRequest.timeJoined }),
-            ...(profileRequest.phoneNumber && { phoneNumbers: profileRequest.phoneNumber }),
+            ...(profileRequest.phoneNumber && { phoneNumber: profileRequest.phoneNumber }),
             ...(profileRequest.kyc?.uidai && { kyc: { uidai: profileRequest.kyc.uidai, verified: profileRequest.kyc.verified ?? false } }),
             ...(profileRequest.country && { country: profileRequest.country }),
             ...(profileRequest.state && { state: profileRequest.state }),
@@ -29,6 +29,8 @@ export const upsertProfile = async (req: Request, res: Response) => {
             ...(profileRequest.longitude && { longitude: profileRequest.longitude }),
             ...(profileRequest.name && { name: profileRequest.name }),
             ...(profileRequest.landmark && { landmark: profileRequest.landmark }),
+            ...(profileRequest.reviews && { reviews: profileRequest.reviews }),
+            ...(profileRequest.ratings && { ratings: profileRequest.ratings }),
         };
 
         await ProfileModel.updateOne(
@@ -55,6 +57,8 @@ export const getProfile = async (req: Request, res: Response) => {
         const profile = await ProfileModel.findOne({
             userId
         })
+        console.log(profile);
+
         return sendResponse(res, 200, "Profile details fetched successfully", "SUCCESS", profile);
     } catch (error) {
         return sendResponse(res, 500, `Internal Server Error: ${error}`, "FAILURE", null);
