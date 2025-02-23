@@ -1,7 +1,7 @@
-import { gql } from "@apollo/client";
+import { gql } from "../__generated__";
 
-export const GET_TRANSACTIONS = gql`
-query GetTransactions($orderIds: [String], $limit: Int, $entityType: String) {
+export const GET_TRANSACTIONS = gql(`
+query GET_TRANSACTIONS($orderIds: [String], $limit: Int, $entityType: String) {
   VendorQuery {
     getTransactions(orderIds: $orderIds, limit: $limit, entity_type: $entityType) {
       amount
@@ -38,4 +38,4 @@ query GetTransactions($orderIds: [String], $limit: Int, $entityType: String) {
     }
   }
 }
-`
+`)

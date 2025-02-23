@@ -1,4 +1,4 @@
-import { HomeListingsDetailed } from '@instapark/ui'
+import { HomeListingsDetailed, Page } from '@instapark/ui'
 import React from 'react'
 
 interface ParkingInterface {
@@ -7,9 +7,11 @@ interface ParkingInterface {
 
 const ParkingsPage = async ({ params }: ParkingInterface) => {
   const listingId = (await params).id;
-  
+
   return (
-    <HomeListingsDetailed listingId={listingId} />
+    <Page>
+      <HomeListingsDetailed listingId={listingId} />
+    </Page>
   )
 }
 

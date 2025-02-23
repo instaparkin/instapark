@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
+import { gql } from "../__generated__";
 
-export const CREATE_VENDOR = gql`
+export const CREATE_VENDOR = gql(`
 mutation CreateVendor(
   $name: String
   $email: String
@@ -20,4 +20,4 @@ mutation CreateVendor(
     )
   }
 }
-`
+`)

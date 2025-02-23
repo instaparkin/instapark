@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
+import { gql } from "../__generated__";
 
-export const GET_REVIEW_BOOKINGS = gql`
+export const GET_REVIEW_BOOKINGS = gql(`
 query GetBookingsForHost {
   BookingQuery {
     getBookingsForHost(status: Booked) {
@@ -27,4 +27,4 @@ query GetBookingsForHost {
     }
   }
 }
-`
+`)

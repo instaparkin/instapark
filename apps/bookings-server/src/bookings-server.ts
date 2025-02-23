@@ -1,19 +1,17 @@
 import "dotenv/config"
 import { config } from 'dotenv';
 import { errorHandler, middleware, supertokens, ensureSuperTokensInit } from "@instapark/auth";
-import { API_ENDPOINTS } from "@instapark/constants";
 import mongoose from "mongoose";
 import { BOOKINGS_SERVER_CONSTANTS } from "./constants/bookings-server-constants";
-import bookingsRouter from "./routes/booking.route";
-import cashfreeRouter from "./routes/cashfree.route";
-import express, { Request, Response } from "express";
+import { BookingRouter } from "./routes/booking.route";
+import { AadharRouter } from "./routes/aadhar.route";
+import express from "express";
 import cors from "cors";
 import path from 'path';
-import { createHandler } from 'graphql-http/lib/use/express';
-import { schema } from "./graphql/schema";
-import { VendorRoute } from "./routes/vendor.route";
-import { settlementRouter } from "./routes/settlements.route";
+import { VendorRouter } from "./routes/vendor.route";
+import { SettlementRouter } from "./routes/settlements.route";
 import { PaymentRouter } from "./routes/payment.route";
+import { rateLimiter } from "@instapark/utils";
 
 config({ path: path.resolve(__dirname, "../", ".env.local") });
 
@@ -43,19 +41,21 @@ async function init() {
 
     app.use(middleware());
 
+    app.use(rateLimiter)
+
     await connectDB();
 
     app.get("/", (req, res) => {
         res.send("🚀 Booking Server is up and running");
     });
 
-    app.use(API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.PREFIX, bookingsRouter);
+    app.use("/bookings", BookingRouter);
 
-    app.use("/settlements", settlementRouter)
+    app.use("/settlements", SettlementRouter)
 
-    app.use("/bookings", cashfreeRouter);
+    app.use("/aadhar", AadharRouter);
 
-    app.use("/vendor", VendorRoute)
+    app.use("/vendor", VendorRouter)
 
     app.use("/payments", PaymentRouter)
 

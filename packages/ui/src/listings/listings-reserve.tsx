@@ -1,13 +1,13 @@
 import React from 'react'
 import { Button } from '../components/button'
 import axios from 'axios'
-import { ApiResponse, Booking, BookingRequest } from '@instapark/types'
+import { ApiResponse, Booking, BookingRequest, LockedResponse } from '@instapark/types'
 import toast from 'react-hot-toast'
 import { redirect } from 'next/navigation'
 
 export const ListingReserve = ({ listingId, userId, startDate, endDate, basePrice, parkingPrice, totalPrice, ipFee }: BookingRequest) => {
     const handleReservation = async () => {
-        await axios.post<ApiResponse<Booking>>("http://localhost:8085/bookings/lock", {
+        await axios.post<ApiResponse<LockedResponse>>("http://localhost:8085/bookings/lock", {
             listingId,
             userId,
             startDate,
@@ -18,7 +18,7 @@ export const ListingReserve = ({ listingId, userId, startDate, endDate, basePric
             ipFee
         }).then(res => {
             if (res.data.status === "SUCCESS") {
-                redirect(`/reserve/${res.data.data.c?.id}?oid=${res.data.data.orderId}&psid=${res.data.data.payment_session_id}`)
+                redirect(`/reserve/${res.data.data?.booking.id}?oid=${res.data.data?.orderId}&psid=${res.data.data?.payment_session_id}`)
             } else {
                 toast.error(res.data.message)
             }

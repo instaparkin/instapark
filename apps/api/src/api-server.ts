@@ -1,3 +1,4 @@
+//@ts-nocheck
 import "dotenv/config";
 import { ApolloServer } from '@apollo/server';
 import { GraphQLSchema } from 'graphql';

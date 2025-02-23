@@ -1,18 +1,14 @@
 import { Router } from "express";
-import { createOnDemandBalanceTransfer, createVendor, getBalance, getVendor, updateVendor } from "../controllers/vendor.controller";
+import { createVendor, getBalance, getVendor, updateVendor } from "../controllers/vendor.controller";
 
-const VendorRoute = Router();
+const VendorRouter = Router();
 
-VendorRoute.post("/", createVendor);
+VendorRouter.post("/", createVendor);
 
- VendorRoute.get("/", getVendor);
+VendorRouter.get("/", getVendor);
 
-VendorRoute.patch("/", updateVendor);
+VendorRouter.patch("/", updateVendor);
 
-// VendorRoute.post("/documents/upload", uploadDocuments);
+VendorRouter.get("/balance", getBalance);
 
- VendorRoute.get("/balance", getBalance);
-
- VendorRoute.post("/transfer", createOnDemandBalanceTransfer)
-
-export { VendorRoute };
+export { VendorRouter };

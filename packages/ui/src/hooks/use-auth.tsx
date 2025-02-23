@@ -24,12 +24,10 @@ export const useAuth = (): Profile => {
 
     const { data } = useQuery(GET_PROFILE, {
         variables: {
-            userId: userId
-        }
+            userId: userId,
+        },
+        skip: !userId
     });
-
-    console.log(data);
-    
 
     return {
         ...data?.UserQuery?.getProfile as Profile,

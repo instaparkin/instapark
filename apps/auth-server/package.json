@@ -14,9 +14,10 @@
     "@instapark/constants": "workspace:^",
     "@instapark/typescript-config": "workspace:^",
     "@instapark/utils": "workspace:^",
+    "axios": "^1.7.9",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.1",
+    "express": "^4.21.2",
     "supertokens-node": "^21.0.0"
   },
   "packageManager": "pnpm@8.53.1",

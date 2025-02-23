@@ -1,11 +1,14 @@
-"use client"
-
-import { HeaderSkeleton, MapsProvider, StoreProvider, SessionAuthProvider } from "@instapark/ui";
+import { MapsProvider, StoreProvider, SessionAuthProvider, HeaderMain, HeaderSkeleton } from "@instapark/ui";
+import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
+export const metadata: Metadata = {
+  title: "Hosting - Instapark",
+};
+
 const HeaderMainDynamic = dynamic(() =>
-  import("@instapark/ui").then(mod => mod.HeaderMain), {
-  loading: () => <HeaderSkeleton />
+    import("@instapark/ui").then(mod => mod.HeaderMain), {
+    loading: () => <HeaderSkeleton />
 })
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {

@@ -29,7 +29,7 @@ export const VendorQuery = new GraphQLObjectType({
             },
             resolve: async (parent, args) => {
                 const response = (await axios.get<ApiResponse<Vendor>>
-                    ("http://localhost:8085/settlements/balance", {
+                    ("http://localhost:8085/vendor/balance", {
                         params: {
                             vendorId: args.vendorId
                         }

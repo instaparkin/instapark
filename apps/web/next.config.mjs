@@ -11,10 +11,14 @@ const nextConfig = {
 				protocol: 'https',
 				hostname: 'example.com',
 			},
-      {
+			{
 				protocol: 'https',
-				hostname: 'j44q34msba.ufs.sh',
+				hostname: 'loremflickr.com',
 			},
+			{
+				protocol: "https",
+				hostname: "picsum.photos"
+			}
 		],
 	},
 };

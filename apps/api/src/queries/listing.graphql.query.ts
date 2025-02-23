@@ -1,4 +1,4 @@
-import { ApiResponse, Booking, LikedListing, Listing } from "@instapark/types";
+import { ApiResponse, Booking, Listing } from "@instapark/types";
 import { axios } from "@instapark/utils";
 import { GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
 import { LikedListingType, ListingType, VehicleEnum } from "../types/listing.graphql.type";
@@ -50,25 +50,6 @@ export const ListingQuery = new GraphQLObjectType({
                     return response.data.data as Listing[]
                 }
             }
-        },
-        getLikedListings: {
-            type: new GraphQLList(LikedListingType),
-            args: {
-                id: { type: GraphQLString },
-                userId: { type: GraphQLString },
-                listingId: { type: GraphQLString },
-            },
-            resolve: async (parent, { id, userId, listingId }) => {
-                const response = await axios.get<ApiResponse<LikedListing[]>>
-                    ("http://localhost:8088/liked-listings/", {
-                        params: {
-                            id,
-                            userId,
-                            listingId
-                        }
-                    })
-                return response.data.data
-            },
         },
     }
 })

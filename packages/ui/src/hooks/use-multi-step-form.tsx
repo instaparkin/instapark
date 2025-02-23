@@ -26,9 +26,6 @@ export const useMultiStepForm = <T extends Record<string, unknown>>({
     }
   };
 
-  console.log(form.formState.errors);
-  
-
   const back = () => {
     if (isFirstStep) {
       router.back();

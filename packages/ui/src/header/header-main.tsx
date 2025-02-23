@@ -11,7 +11,7 @@ import { UserButton } from "../auth/user-button";
 import { HEADER_NAVIGATION_ITEMS } from "./header-constants"
 
 export const HeaderMain = () => {
-    const { firstName, userId } = useAuth();
+    const { firstName, userId } = useAuth()!;
     const pathname = usePathname();
     const isHostingPage = pathname.includes("hosting");
     const navigationItems = isHostingPage ? HEADER_NAVIGATION_ITEMS.HOSTING : HEADER_NAVIGATION_ITEMS.BUYER

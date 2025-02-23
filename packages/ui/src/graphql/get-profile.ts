@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
+import { gql } from "../__generated__";
 
-export const GET_PROFILE = gql`
+export const GET_PROFILE = gql(`
 query UserQuery($userId: String) {
   UserQuery {
     getProfile(userId: $userId) {
@@ -27,4 +27,4 @@ query UserQuery($userId: String) {
     }
   }
 }
-`
+`)

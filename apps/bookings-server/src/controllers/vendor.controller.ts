@@ -50,7 +50,7 @@ export const createVendor = (req: SessionRequest, res: Response) => {
             });
 
     } catch (error) {
-        sendResponse(res, 500, "Internal server Error", "FAILURE", null);
+        sendResponse(res, 500, `Internal server Error: ${error}`, "FAILURE", null);
     }
 }
 
@@ -77,15 +77,13 @@ export const getVendor = (req: Request, res: Response) => {
                 sendResponse(res, 500, `Error Fetching vendor details: ${error}`, "FAILURE", null);
             });
     } catch (error) {
-        sendResponse(res, 500, "Internal server Error", "FAILURE", null);
+        sendResponse(res, 500, `Internal server Error: ${error}`, "FAILURE", null);
     }
 }
 
 export const updateVendor = (req: SessionRequest, res: Response) => {
     try {
-        /**Getting UserId from the session */
-        const session = req.session;
-        const userId = session?.getUserId() as string;
+        const { userId } = req.query;
 
         const vendorRequest: VendorRequest = req.body;
         const options = {
@@ -128,7 +126,7 @@ export const updateVendor = (req: SessionRequest, res: Response) => {
             });
 
     } catch (error) {
-        sendResponse(res, 500, "Internal server Error", "FAILURE", null);
+        sendResponse(res, 500, `Internal server Error: ${error}`, "FAILURE", null);
     }
 }
 
@@ -154,46 +152,6 @@ export const getBalance = (req: SessionRequest, res: Response) => {
                 sendResponse(res, 500, `Error Fetching vendor details: ${error}`, "FAILURE", null);
             });
     } catch (error) {
-        sendResponse(res, 500, "Internal server Error", "FAILURE", null);
-    }
-}
-
-export const createOnDemandBalanceTransfer = (req: Request, res: Response) => {
-    try {
-        const { vendorId, transfer_amount } = req.body as {
-            vendorId: string,
-            transfer_amount: number
-        };
-        const options = {
-            method: 'POST',
-            headers: {
-                'x-api-version': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_API_VERSION,
-                'x-client-id': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID,
-                'x-client-secret': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_SECRET,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(
-                {
-                    "transfer_from": "VENDOR",
-                    "transfer_type": "ON_DEMAND",
-                    "transfer_amount": transfer_amount,
-                    "currency": "INR",
-                    "tags": {
-                        "order_id": "order_101803242tLf64JLArnG17VJEvwg6hkcY1B"
-                    }
-                }
-            )
-        };
-
-        fetch(`https://sandbox.cashfree.com/pg/easy-split/vendors/${vendorId}/transfer`, options)
-            .then(response => response.json())
-            .then(response => {
-                sendResponse(res, 200, response.message, "SUCCESS", response);
-            })
-            .catch(error => {
-                sendResponse(res, 500, `Error transering amount: ${error}`, "FAILURE", null);
-            });
-    } catch (error) {
-        sendResponse(res, 500, "Internal server Error", "FAILURE", null);
+        sendResponse(res, 500, `Internal server Error: ${error}`, "FAILURE", null);
     }
 }

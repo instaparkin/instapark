@@ -20,7 +20,15 @@ export interface Booking {
 }
 
 export type BookingRequest = Pick<Booking,
-    "listingId" | "userId" | "startDate" | "endDate" | "basePrice" | "totalPrice" | "ipFee" | "parkingPrice">
+    "listingId" | "userId" | "startDate" | "endDate" | "basePrice" | "totalPrice" | "ipFee" | "parkingPrice"> &
+{
+    customer: {
+        "customer_name": string,
+        "customer_email": string,
+        "customer_phone": string,
+    }
+    "vendor_id": string
+}
 
 export type BookingOTP = {
     bookingId: string
@@ -35,8 +43,6 @@ export type BookedResponse = {
 export interface BookingExtended extends Booking {
     listing: Listing
 }
-
-export type TimeFrame = "week" | "Month" | "Year"
 
 export type Earnings = {
     currentMonth: {
@@ -58,3 +64,9 @@ export type Earnings = {
         avgBookingValuePLPercent: number;
     };
 };
+
+export type LockedResponse = {
+    bookingId: string,
+    orderId: string,
+    payment_session_id: string
+}

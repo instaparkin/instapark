@@ -4,7 +4,7 @@ import { Card, CardDescription, CardTitle } from '../components/card'
 import { Skeleton } from '../components/skeleton'
 import { Separator } from '../components/separator'
 
-export const ListingsAddLoading = () => {
+export const ListingsAddSkeleton = () => {
     return (
         <Page>
             <Card className="border-none shadow-none h-96 grid lg:grid-cols-2">

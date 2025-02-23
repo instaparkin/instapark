@@ -58,30 +58,6 @@ export const updateListing = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteListing = async (req: Request, res: Response) => {
-    const session = await ListingModel.startSession();
-    session.startTransaction();
-
-    try {
-        const { id } = req.params;
-
-        const deletedListing = await ListingModel.findOneAndDelete({ id }, { session });
-
-        if (!deletedListing) {
-            throw new Error("Listing not found.");
-        }
-
-        await session.commitTransaction();
-
-        sendResponse(res, 200, "Listing deleted successfully.", "SUCCESS", deletedListing);
-    } catch (error) {
-        await session.abortTransaction();
-        return sendResponse(res, 500, "An unexpected error occurred while Deleting the listing.", "FAILURE", error);
-    } finally {
-        session.endSession();
-    }
-};
-
 export const getListings = async (req: Request, res: Response) => {
     try {
         const { street, bookedListings, vehicleType, userId, id } =
@@ -92,6 +68,8 @@ export const getListings = async (req: Request, res: Response) => {
                 userId: string
                 id: string
             }
+            console.log(id);
+
         const listings = await ListingModel.find(
             {
                 ...(id ? { id } : {}),
@@ -104,6 +82,6 @@ export const getListings = async (req: Request, res: Response) => {
         );
         return sendResponse(res, 200, "Listings Fetched Successfully", "SUCCESS", listings);
     } catch (error) {
-        return sendResponse(res, 500, "An unexpected error occurred while fetching the results " + error, "FAILURE", error);
+        return sendResponse(res, 500, "Internal server error " + error, "FAILURE", error);
     }
 }

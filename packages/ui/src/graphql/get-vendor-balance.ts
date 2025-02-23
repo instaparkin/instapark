@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
+import { gql } from "../__generated__";
 
-export const GET_VENDOR_BALANCE = gql`
+export const GET_VENDOR_BALANCE = gql(`
 query GetVendorBalance($vendorId: String) {
   VendorQuery {
     getVendorBalance(vendorId: $vendorId) {
@@ -9,4 +9,4 @@ query GetVendorBalance($vendorId: String) {
     }
   }
 }
-`
+`)

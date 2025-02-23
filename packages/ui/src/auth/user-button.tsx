@@ -79,9 +79,13 @@ export const UserButton: React.FC<UserButtonProps> = ({
                             <AvatarFallback>{first_name?.at(0)}</AvatarFallback>
                         </Avatar>
                     ) : (
-                        <Icon>
-                            <User className="h-5 w-5 text-muted-foreground" />
-                        </Icon>
+                        <Avatar>
+                            <AvatarFallback>
+                                <Icon>
+                                    <User className="h-5 w-5 text-muted-foreground" />
+                                </Icon>
+                            </AvatarFallback>
+                        </Avatar>
                     )}
                 </span>
             </DropdownMenuTrigger>

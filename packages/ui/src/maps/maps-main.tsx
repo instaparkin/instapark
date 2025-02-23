@@ -7,31 +7,37 @@ import {
   Map as Maplibre,
   Marker,
   NavigationControl,
-  Popup,
 } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
 import { AppDispatch, reverseGeocodeLocation, useDispatch } from "@instapark/state";
-import { Listing } from '@instapark/types';
+import { ParkingCircle } from 'lucide-react';
+
+const BENGALURU = { lat: 12.9716, lng: 77.5946 };
 
 export type MapProps = {
-  listing?: Listing;
-  listings?: Listing[];
-  onListingSelect?: (listing: Listing) => void;
   initialZoom?: number;
+  maxZoom?: number;
+  location?: { lat: number; lng: number };
 };
 
-export const MapsMain = () => {
+export const MapsMain = ({ location, initialZoom, maxZoom }: MapProps) => {
+  const mapLocation = location || BENGALURU;
   const dispatch = useDispatch<AppDispatch>();
-
   const onGeoLocate = (e: GeolocateResultEvent) => {
     dispatch(reverseGeocodeLocation([e.coords.latitude, e.coords.longitude]));
   };
 
   return (
     <Maplibre
+      maxZoom={maxZoom || 22}
       mapLib={maplibregl}
       attributionControl={false}
+      initialViewState={{
+        latitude: mapLocation.lat,
+        longitude: mapLocation.lng,
+        zoom: 12,
+      }}
       style={{
         width: "100%",
         height: "90vh",
@@ -47,6 +53,12 @@ export const MapsMain = () => {
       <NavigationControl
         position="top-right"
       />
+      {
+        location &&
+        <Marker latitude={mapLocation.lat} longitude={mapLocation.lng} anchor="bottom">
+          <ParkingCircle className="w-16 h-16  fill-blue-500 dark:text-black" />
+        </Marker>
+      }
     </Maplibre>
   );
 };

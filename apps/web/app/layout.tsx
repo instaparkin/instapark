@@ -9,7 +9,7 @@ const geistSans = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Instapark",
+  title: "Home - Instapark",
   description: "Get a space to park your vehicle",
 };
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { gql, useQuery } from '@apollo/client'
-import React from 'react'
+import React, { use } from 'react'
 import { DataTable, DataTableLoading } from '../components/data-table'
 import { Booking, Listing, Order, Payment, Profile } from '@instapark/types'
 import { paymentsColumns } from './payments-column'
@@ -12,11 +12,12 @@ import Image from 'next/image'
 import { formatName, formatPrice, rating } from '../utils/field-name'
 import { ListingMini } from '../components/listing-mini'
 import { HostCard } from '../components/host-card'
+import { useAuth } from '../hooks/use-auth'
 
 const GET_TRIP = gql`
-query GET_TRIP($id: String) {
+query GET_TRIP($id: String, $userId: String) {
   BookingQuery {
-    getBookingsForBuyer(id: $id) {
+    getBookingsForBuyer(id: $id, userId: $userId) {
       id
       listingId
       userId
@@ -128,73 +129,75 @@ query GET_TRIP($id: String) {
 `
 
 export const TripDetailed = ({ id }: { id: string }) => {
+  const { userId } = useAuth();
   const { data, loading, error } = useQuery(GET_TRIP, {
     variables: {
-      id
+      id,
+      userId
     }
   })
 
-  if (loading) {
-    return <DataTableLoading />
-  }
-  const booking = data?.BookingQuery?.getBookingsForBuyer[0] as Booking & { listing: Listing & { user: Profile }, payments: Payment & { order: Order }[] };
-  const listing = booking.listing
-  const orders = booking.payments
-  const host = booking.listing.user
-  return (
-    <div className="max-w-5xl mx-auto space-y-6 ">
-      <div className="flex flex-col lg:flex-row justify-between gap-6">
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle>{"Host Summary"}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex flex-col items-center justify-center space-y-6">
-              <div className="relative w-36 h-36">
-                <Image
-                  fill
-                  src={"/placeholder.svg"}
-                  alt={"Listing photo"}
-                  className="object-cover rounded-md border"
-                />
-              </div>
-              <Details  items={[
-                { field: "Name", value: formatName(host.firstName, host.lastName) },
-                { field: "Reviews", value: host.reviews },
-                { field: "Ratings", value: host.ratings },
-                { field: "Experience", value: timeInInstapark(host.timeJoined) },
-                { field: "Verified", value: host.kyc.verified ? "Verified" : "Not verified", className: `${host.kyc.verified ? "bg-lime-100" : "bg-red-100"}` },
-              ]} />
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="w-full lg:max-w-md">
-          <CardHeader>
-            <CardTitle>{"Booking Summary"}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-6">
-              <ListingMini listing={listing} />
-              <Details items={[
-                { field: "Start Date", value: unixSecToMonthYearTime(booking.startDate) },
-                { field: "End Date", value: unixSecToMonthYearTime(booking.endDate) },
-                { field: "Base Price", value: formatPrice(booking.basePrice) },
-                { field: "Instapark Fee", value: formatPrice(booking.ipFee) },
-                { field: "Parking Price", value: formatPrice(booking.parkingPrice) },
-                { field: "Total Price", value: formatPrice(booking.totalPrice), separator: true },
-              ]} />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      <Card>
+if (loading) {
+  return <DataTableLoading />
+}
+const booking = data?.BookingQuery?.getBookingsForBuyer[0] as Booking & { listing: Listing & { user: Profile }, payments: Payment & { order: Order }[] };
+const listing = booking.listing
+const orders = booking.payments
+const host = booking.listing.user
+return (
+  <div className="max-w-5xl mx-auto space-y-6 ">
+    <div className="flex flex-col lg:flex-row justify-between gap-6">
+      <Card className="w-full">
         <CardHeader>
-          <CardTitle>Payment Summary</CardTitle>
+          <CardTitle>{"Host Summary"}</CardTitle>
         </CardHeader>
-        <CardContent>
-          <DataTable data={orders} columns={paymentsColumns} />
+        <CardContent className="space-y-6">
+          <div className="flex flex-col items-center justify-center space-y-6">
+            <div className="relative w-36 h-36">
+              <Image
+                fill
+                src={"/placeholder.svg"}
+                alt={"Listing photo"}
+                className="object-cover rounded-md border"
+              />
+            </div>
+            <Details items={[
+              { field: "Name", value: formatName(host.firstName, host.lastName) },
+              { field: "Reviews", value: host.reviews },
+              { field: "Ratings", value: host.ratings },
+              { field: "Experience", value: timeInInstapark(host.timeJoined) },
+              { field: "Verified", value: host.kyc.verified ? "Verified" : "Not verified", className: `${host.kyc.verified ? "bg-lime-100" : "bg-red-100"}` },
+            ]} />
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="w-full lg:max-w-md">
+        <CardHeader>
+          <CardTitle>{"Booking Summary"}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-6">
+            <ListingMini listing={listing} />
+            <Details items={[
+              { field: "Start Date", value: unixSecToMonthYearTime(booking.startDate) },
+              { field: "End Date", value: unixSecToMonthYearTime(booking.endDate) },
+              { field: "Base Price", value: formatPrice(booking.basePrice) },
+              { field: "Instapark Fee", value: formatPrice(booking.ipFee) },
+              { field: "Parking Price", value: formatPrice(booking.parkingPrice) },
+              { field: "Total Price", value: formatPrice(booking.totalPrice), separator: true },
+            ]} />
+          </div>
         </CardContent>
       </Card>
     </div>
-  )
+    <Card>
+      <CardHeader>
+        <CardTitle>Payment Summary</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <DataTable data={orders} columns={paymentsColumns} />
+      </CardContent>
+    </Card>
+  </div>
+)
 }

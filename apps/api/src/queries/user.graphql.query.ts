@@ -2,6 +2,7 @@ import { GraphQLObjectType, GraphQLString } from "graphql";
 import { ProfileType } from "../types/user.graphql.type";
 import { axios } from "@instapark/utils";
 import { ApiResponse, Profile } from "@instapark/types";
+import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 
 export const UserQuery = new GraphQLObjectType({
     name: "UserQuery",
@@ -13,11 +14,12 @@ export const UserQuery = new GraphQLObjectType({
             },
             resolve: async (parent, args) => {
                 const response = (await axios.get<ApiResponse<Profile>>
-                    ("http://localhost:8088/profile", {
-                        params: {
-                            userId: args.userId
-                        }
-                    })).data.data
+                    (API_SERVER_CONSTANTS.ENDPOINTS.USER.PROFILE.GET,
+                        {
+                            params: {
+                                userId: args.userId
+                            }
+                        })).data.data
                 return response
             }
         }

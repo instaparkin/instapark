@@ -18,15 +18,3 @@ export declare type User = {
     })[];
     toJson: () => any;
 };
-
-export type AuthMetadata = {
-    userId: string
-    first_name: string
-    last_name?: string
-    preferred_first_name?: string
-    emails: User["emails"]
-    timeJoined: User["timeJoined"]
-    phoneNumbers?: User["phoneNumbers"]
-}
-
-export type AuthMetadataRequest = Pick<AuthMetadata, "first_name" | "last_name" | "preferred_first_name">

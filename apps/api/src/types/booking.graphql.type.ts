@@ -113,6 +113,11 @@ export const BookingExtendedType = new GraphQLObjectType({
         endDate: { type: GraphQLInt },
         status: { type: BookingStatusEnum },
         lockedAt: { type: GraphQLInt },
+        basePrice: { type: GraphQLFloat },
+        parkingPrice: { type: GraphQLFloat },
+        totalPrice: { type: GraphQLFloat },
+        ipFee: { type: GraphQLFloat },
+        penalty: { type: GraphQLFloat },
         createdAt: { type: GraphQLInt },
         updatedAt: { type: GraphQLInt },
         listing: {

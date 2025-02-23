@@ -5,5 +5,5 @@ export const GLOBAL_CONSTANTS = {
         WEBSITE_DOMAIN: "http://localhost:3000",
         API_BASE_PATH: "/auth",
         WEBSITE_BASE_PATH: '/auth'
-    }
+    },
 };

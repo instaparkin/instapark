@@ -1,58 +1,33 @@
-import { axios, Request, Response, sendResponse, toUnixTimestamp } from "@instapark/utils";
-import { ApiResponse, BookingOTP, BookingRequest, BookingStatus, Listing, Payment, PaymentRequest } from "@instapark/types";
+import { sendResponse, toUnixTimestamp } from "@instapark/utils";
+import { BookingRequest, Payment, PaymentRequest } from "@instapark/types";
 import { LockingService } from "../services/locking.service";
 import { BookingService } from "../services/booking.service";
-import { Cashfree } from "cashfree-pg";
 import { BookingModel, BookingOTPModel } from "../models/booking.model";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { Request, Response } from "express";
+import { BOOKINGS_SERVER_CONSTANTS } from "../constants/bookings-server-constants";
+import { PaymentModel } from "../models/payment.model";
+import mongoose from "mongoose";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const lock = async (req: Request, res: Response) => {
     try {
         const lockingRequest = req.body as BookingRequest;
+        console.log(lockingRequest);
 
         const lockingService = new LockingService(lockingRequest);
 
         const result = await lockingService.book();
 
-        if (result.success && result.booking) {
-            Cashfree.XClientId = "TEST10180324795c6ed369800e535fc242308101";
-            Cashfree.XClientSecret = "cfsk_ma_test_ea216f531ab789cd1bb6c0d98bf6f4a6_179a58b2";
-            Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
-
-            async function createOrder() {
-                const request = {
-                    "order_amount": 2000,
-                    "order_currency": "INR",
-                    "customer_details": {
-                        "customer_id": "node_sdk_test",
-                        "customer_name": "",
-                        "customer_email": "hitishraop@gmail.com",
-                        "customer_phone": "9019205231"
-                    },
-                    "order_meta": {
-                        "return_url": "http://localhost:3000"
-                    },
-                    "order_splits": [
-                        {
-                            "vendor_id": "uniqueSampleVendorId",
-                            "amount": 1000,
-                        }
-                    ],
-                    "order_note": ""
-                }
-                return Cashfree.PGCreateOrder("2023-08-01", request)
-            }
-
-            const response = await createOrder();
-
-            console.log(response);
-
+        if (result.success && result.booking && result.order) {
             sendResponse(res, 200, result.message, "SUCCESS", {
-                c: result.booking,
-                orderId: response.data.order_id,
-                payment_session_id: response.data.payment_session_id
+                bookingId: result.booking.id,
+                orderId: result.order.order_id,
+                payment_session_id: result.order.payment_session_id
             });
         } else {
             sendResponse(res, 200, result.message, "FAILURE", null);
@@ -80,6 +55,68 @@ export const book = async (req: Request, res: Response) => {
         sendResponse(res, 500, `Error creating Booking: ${error}`, "FAILURE", null);
     }
 }
+
+export const completeBooking = async (req: Request, res: Response) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+        const payment = req.body as Pick<Payment, "bookingId" | "userId" | "orderId">;
+        if (!payment) {
+            return sendResponse(
+                res,
+                400,
+                "Missing required fields: bookingId, cfPaymentId, or orderId",
+                "FAILURE"
+            );
+        }
+
+        const bookingUpdate = await BookingModel.findOneAndUpdate(
+            { id: payment.bookingId, userId: payment.userId, status: "Booked" },
+            { status: "Completed" },
+            { session, new: true }
+        );
+
+        if (!bookingUpdate) {
+            await session.abortTransaction();
+            return sendResponse(
+                res,
+                404,
+                `Booking with ID ${payment.bookingId} not found`,
+                "FAILURE"
+            );
+        }
+
+        const newPayment = await PaymentModel.create(
+            [
+                {
+                    ...payment,
+                    paymentType: "Completed",
+                },
+            ],
+            { session }
+        );
+
+        await session.commitTransaction();
+        session.endSession();
+        sendResponse(
+            res,
+            201,
+            "Booking and payment created successfully",
+            "SUCCESS",
+            newPayment
+        );
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        sendResponse(
+            res,
+            500,
+            "Internal Server Error",
+            "FAILURE",
+            error instanceof Error ? error.message : "An unknown error occurred"
+        );
+    }
+};
 
 export const getBookings = async (req: Request, res: Response) => {
     try {
@@ -147,12 +184,9 @@ export const verifyBooking = async (req: Request, res: Response) => {
     }
 };
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-
 export const earnings = async (req: Request, res: Response) => {
     try {
-        const { listingIds } = req.query as { listingIds: string[]};
+        const { listingIds } = req.query as { listingIds: string[] };
         console.log(listingIds);
 
         if (!listingIds || !Array.isArray(listingIds) || listingIds.length === 0) {
@@ -165,7 +199,7 @@ export const earnings = async (req: Request, res: Response) => {
 
         const startOfPreviousMonth = now.subtract(1, "month").startOf("month").unix();
         const endOfPreviousMonth = now.subtract(1, "month").endOf("month").unix();
-        
+
         // Monthly earnings comparison
         const result = await BookingModel.aggregate([
             { $match: { listingId: { $in: listingIds } } },

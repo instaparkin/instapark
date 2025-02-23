@@ -1,6 +1,5 @@
 export const API_ENDPOINTS = {
     USER_SERVER: {
-        URL: "http://localhost:8080/user",
         PREFIX: "/user",
         ROUTES: {
             USER_NAME: {
@@ -19,7 +18,6 @@ export const API_ENDPOINTS = {
     },
 
     LISTINGS_SERVER: {
-        URL: "http://localhost:8080/listings",
         PREFIX: "/listings",
         ROUTES: {
             LISTING: {
@@ -55,26 +53,4 @@ export const API_ENDPOINTS = {
             }
         }
     },
-    SEARCH_SERVER: {
-        URL: "http://localhost:8080/search",
-        PREFIX: "/search",
-        ROUTES: {
-            SEARCH: {
-                PREFIX: "/search"
-            },
-            TYPESENSE: {
-                PREFIX: "/search/typesense",
-                CREATE: "/",
-                UPDATE : "/",
-                DELETE : "/"
-            },
-            OLAMAPS: {
-                PREFIX: "/search/olamaps",
-                AUTOCOMPLETE: "/autocomplete/:q",
-                GEOCODE: "/geocode/:q",
-                REVERSE_GEOCODE: "/reverse-geocode/:latlng",
-                DIRECTIONS: "/directions/:origin/:destination"
-            }
-        }
-    }
 }

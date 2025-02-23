@@ -45,12 +45,6 @@ const ListingCardImages: React.FC<ListingCardImagesProps> =
         return (
             <div className="relative aspect-[4/3]">
                 {children}
-                <div className='absolute top-2 right-2 z-10 bg-accent rounded-full' onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                }}>
-                    <ListingWishlist />
-                </div>
             </div>
         )
     }

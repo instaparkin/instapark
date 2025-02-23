@@ -10,7 +10,7 @@ import { Table } from 'lucide-react'
 import { GET_EARNINGS_DASHBOARD } from '../graphql/get-earnings'
 import { Vendor, VendorBalance } from '@instapark/types'
 import Link from 'next/link'
-import { EarningsStatsSkeleton } from '../skeletons/earnings-stats-skeleton'
+import { EarningsStatsSkeleton } from './earnings-stats-skeleton'
 
 export const EarningsStats = () => {
     const { data, loading, error } = useQuery(GET_EARNINGS_DASHBOARD, {

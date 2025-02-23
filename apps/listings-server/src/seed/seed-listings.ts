@@ -1,106 +1,49 @@
-import { ListingRequest, PlaceType, Vehicle } from "@instapark/types";
-import { axios } from "@instapark/utils";
+import { ApiResponse, Listing, ListingRequest, PlaceType, Vehicle } from "@instapark/types";
+import { faker } from "@faker-js/faker";
+import axios from "axios";
+import { v4 as uuid } from "uuid";
 
-async function seedScript(data: ListingRequest[]) {
-    try {
-        data.map(listing => {
-            axios.post("http://localhost:8087/listings", listing)
-                .then(res =>
-                    console.log(res)
-                ).catch(error => {
-                    console.error(error);
-                })
-        })
-    } catch (error) {
-        console.error(error)
+async function seedScript(amount: number) {
+    console.log(`Seeding ${amount} listings...`);
+
+    for (let i = 1; i <= amount; i++) {
+        const listingData = {
+            userId: uuid(),
+            type: PlaceType.House,
+            country: "India",
+            state: "Karnataka",
+            district: "Bengaluru Urban",
+            city: "Bengaluru",
+            street: faker.location.streetAddress(),
+            pincode: faker.location.zipCode(),
+            latitude: faker.location.latitude(),
+            longitude: faker.location.longitude(),
+            name: "Elegant 3BHK Villa",
+            landmark: "Near UB City Mall",
+            basePrice: faker.commerce.price({ min: 10 }),
+            pphbi: faker.commerce.price({ min: 10 }),
+            pphcy: faker.commerce.price({ min: 5 }),
+            pphcr: faker.commerce.price({ min: 20 }),
+            plph: faker.commerce.price({ min: 60 }),
+            allowedVehicles: [Vehicle.Car, Vehicle.Bike],
+            photos: [
+                faker.image.url(),
+                faker.image.url(),
+                faker.image.url(),
+                faker.image.url(),
+            ],
+        };
+
+        try {
+            console.log(`📤 Sending request ${i} to create listing...`);
+            const response = await axios.post<ApiResponse<Listing>>("http://localhost:8087/listings", listingData);
+            console.log(`✅ Listing ${i} created successfully:`, response.data.data);
+        } catch (error) {
+            console.error(`❌ Error creating listing ${i}:`, error || error);
+        }
     }
+
+    console.log("🎉 Seeding completed!");
 }
 
-const sampleData: ListingRequest[] = [
-    {
-        userId: "c134f7ae-67b5-4dfd-bcd5-91c3a1d4e1fa",
-        type: PlaceType.House,
-        country: "India",
-        state: "Karnataka",
-        district: "Bengaluru Urban",
-        city: "Bengaluru",
-        street: "Church Street",
-        pincode: 560001,
-        latitude: 12.9715,
-        longitude: 77.6094,
-        name: "Elegant 3BHK Villa",
-        landmark: "Near UB City Mall",
-        basePrice: 4500,
-        pphbi: 250,
-        pphcy: 180,
-        pphcr: 120,
-        plph: 3000,
-        allowedVehicles: [Vehicle.Car, Vehicle.Bike],
-        photos: [
-            "https://example.com/churchstreetphoto1.jpg",
-            "https://example.com/churchstreetphoto2.jpg",
-            "https://example.com/churchstreetphoto3.jpg",
-            "https://example.com/churchstreetphoto4.jpg"
-        ]
-    },
-    {
-        userId: "a934f5ab-27e4-4ccf-bdf9-13c2d7f9c8eb",
-        type: PlaceType.Cabin,
-        country: "India",
-        state: "Karnataka",
-        district: "Bengaluru Urban",
-        city: "Bengaluru",
-        street: "Bannerghatta Road",
-        pincode: 560076,
-        latitude: 12.8684,
-        longitude: 77.6017,
-        name: "Stylish 2BHK Flat",
-        landmark: "Near IIM Bengaluru",
-        basePrice: 4000,
-        pphbi: 220,
-        pphcy: 170,
-        pphcr: 130,
-        plph: 2800,
-        allowedVehicles: [Vehicle.Car, Vehicle.Cycle],
-        photos: [
-            "https://example.com/bannerghattaroad1.jpg",
-            "https://example.com/bannerghattaroad2.jpg",
-            "https://example.com/bannerghattaroad3.jpg",
-            "https://example.com/bannerghattaroad4.jpg"
-        ]
-    },
-    {
-        userId: "d045f6ac-35c7-4cfa-afe9-91d5c3f9d7ce",
-        type: PlaceType.Barn,
-        country: "India",
-        state: "Karnataka",
-        district: "Bengaluru Rural",
-        city: "Nelamangala",
-        street: "Tumkur Road",
-        pincode: 562123,
-        latitude: 13.0854,
-        longitude: 77.5252,
-        name: "Peaceful Barn Retreat",
-        landmark: "Near Yelahanaka",
-        basePrice: 2200,
-        pphbi: 170,
-        pphcy: 120,
-        pphcr: 90,
-        plph: 1500,
-        allowedVehicles: [Vehicle.Bike, Vehicle.Cycle],
-        photos: [
-            "https://example.com/tumkurroad1.jpg",
-            "https://example.com/tumkurroad2.jpg",
-            "https://example.com/tumkurroad3.jpg",
-            "https://example.com/tumkurroad4.jpg"
-        ]
-    }
-];
-
-
-seedScript(
-    sampleData
-)
-
-
-
+seedScript(10);

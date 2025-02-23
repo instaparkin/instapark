@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
+import { gql } from "../__generated__";
 
-export const GET_VENDOR = gql`
+export const GET_VENDOR = gql(`
 query GetVendor($vendorId: String) {
   VendorQuery {
     getVendor (vendorId: $vendorId){
@@ -34,4 +34,4 @@ query GetVendor($vendorId: String) {
       }
     }
   }
-}`
+}`)

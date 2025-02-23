@@ -100,12 +100,6 @@ export type VendorBalance = {
     vendor_unsettled: number
 }
 
-interface OrderSplit {
-    merchant_vendor_id: string;
-    percentage: number;
-    tags: string | null;
-}
-
 export interface Transaction {
     amount: number;
     settlement_eligibility_time: string;
@@ -132,7 +126,11 @@ export interface Transaction {
     settlement_initiated_on: string;
     settlement_time: string;
     eligible_split_balance: string;
-    order_splits: OrderSplit[];
+    order_splits: {
+        merchant_vendor_id: string;
+        percentage: number;
+        tags: string | null;
+    }[];
 }
 
 export interface VendorCommission {

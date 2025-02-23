@@ -5,23 +5,20 @@ import { Card } from '../components/card'
 import { Button } from '../components/button'
 import { GraduationCap, Grid2X2, Heart, Share, Share2, Shield, X } from 'lucide-react'
 import Link from 'next/link'
-import { ApiResponse, Listing, Listing as ListingType } from "@instapark/types"
+import { Listing, Listing as ListingType } from "@instapark/types"
 import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { PricingCalculator } from '../listings/pricing-calculator'
 import { PricingDrawer } from '../listings/pricing-drawer'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import { ListingWishlist } from '../components/listing-wishlist'
 import { useAuth } from '../hooks/use-auth'
 import { timeInInstapark } from '../utils/dayjs'
-import { Page } from '../components/page'
 import { MapsMain } from '../maps/maps-main'
 import { ListingReserve } from '../listings/listings-reserve'
 import { gql, useQuery } from '@apollo/client'
 import toast from 'react-hot-toast'
 import { ListingLoadingSkeleton } from './home-detailed-loading'
+import { MapsApproximate } from '../maps/maps-approximate'
 
 interface ListingProps {
     listingId: string
@@ -59,7 +56,6 @@ const ListingDetailedHeader: React.FC<ListingDetailedHeaderProps> = ({ title, on
                     <Share className="w-4 h-4" />
                     Share
                 </Button>
-                <ListingWishlist triggerText='Save' />
             </div>
         </div>
     )
@@ -409,7 +405,7 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                     />
                 </div>
             </div>
-            <MapsMain />
+            <MapsMain maxZoom={14} location={{ lat: listing.latitude, lng: listing.longitude }} />
         </ListingDetailedContent>
     )
 }

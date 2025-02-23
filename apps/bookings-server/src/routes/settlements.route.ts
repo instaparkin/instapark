@@ -1,17 +1,10 @@
 import { Router } from "express";
-import { createSettlement, getOnDemanBalance, getSettlements } from "../controllers/settlements.controller";
+import { getSettlements } from "../controllers/settlements.controller";
 
-const settlementRouter = Router();
+const SettlementRouter = Router();
 
-settlementRouter.get(
+SettlementRouter.get(
     "/",
     getSettlements
 )
-
-settlementRouter.get("/balance",
-    getOnDemanBalance
-)
-
-settlementRouter.post("/",createSettlement)
-
-export { settlementRouter };
+export { SettlementRouter };

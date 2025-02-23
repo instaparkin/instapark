@@ -1,8 +1,10 @@
 import "dotenv/config"
-import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession, SessionRequest } from "@instapark/auth";
+import { errorHandler, middleware, supertokens, ensureSuperTokensInit, verifySession } from "@instapark/auth";
 import express from "express"
 import cors from 'cors'
-import { sendResponse } from "@instapark/utils";
+import { AUTH_SERVER_CONSTANTS } from "./constants/auth-server-constants";
+import { VerificationRouter } from "./routes/verification.route";
+import { rateLimiter } from "@instapark/utils";
 
 async function init() {
     ensureSuperTokensInit();
@@ -12,7 +14,7 @@ async function init() {
     app.use(express.json());
 
     app.use(cors({
-        origin: "http://localhost:3000",
+        origin: AUTH_SERVER_CONSTANTS.FRONTEND_URL,
         allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
         methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
         credentials: true,
@@ -20,20 +22,15 @@ async function init() {
 
     app.use(middleware());
 
+    app.use(rateLimiter)
+
     app.get(
         "/",
         (req, res) => {
             res.send("Auth Server is up and running");
         })
 
-    app.get("/verify", verifySession(), (req: SessionRequest, res) => {
-        try {
-            const userId = req.session?.getUserId() ?? null;
-            sendResponse(res, 200, "User Name added", "SUCCESS", { userId })
-        } catch (error) {
-            sendResponse(res, 500, "Internal server error", "FAILURE", error)
-        }
-    })
+    app.use("/verify", verifySession(), VerificationRouter)
 
     app.use(errorHandler());
 

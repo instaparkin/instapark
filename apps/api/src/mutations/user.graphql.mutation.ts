@@ -1,6 +1,7 @@
-import { GraphQLBoolean, GraphQLFloat, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLBoolean, GraphQLFloat, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { axios } from "@instapark/utils";
 import { ApiResponse } from "@instapark/types";
+import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 
 export const KYCInputType = new GraphQLInputObjectType({
     name: "KYCInput",
@@ -16,12 +17,12 @@ export const UserMutation = new GraphQLObjectType({
         upsertProfile: {
             type: GraphQLString,
             args: {
-                userId: { type: GraphQLString },
+                userId: { type: new GraphQLNonNull(GraphQLString) },
                 firstName: { type: GraphQLString },
                 lastName: { type: GraphQLString },
                 emails: { type: new GraphQLList(GraphQLString) },
                 timeJoined: { type: GraphQLInt },
-                phoneNumber: { type: GraphQLInt },
+                phoneNumber: { type: GraphQLString },
                 kyc: { type: KYCInputType },
                 country: { type: GraphQLString },
                 state: { type: GraphQLString },
@@ -36,7 +37,7 @@ export const UserMutation = new GraphQLObjectType({
             },
             resolve: async (parent, args) => {
                 const response = (await axios.post<ApiResponse<null>>
-                    ("http://localhost:8088/profile", args)).data.message
+                    (API_SERVER_CONSTANTS.ENDPOINTS.USER.PROFILE.UPSERT, args)).data.message
                 return response
             }
         }

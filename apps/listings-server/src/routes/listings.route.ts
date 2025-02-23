@@ -1,22 +1,18 @@
 import { Router } from "@instapark/utils";
-import { deleteListing, createListing, updateListing, getListings } from "../controllers/listings.controller";
+import { createListing, updateListing, getListings } from "../controllers/listings.controller";
 
-const router = Router();
+const ListingsRouter = Router();
 
-router.post(
+ListingsRouter.post(
     "/",
     createListing);
 
-router.put(
+ListingsRouter.put(
     "/",
     updateListing);
 
-router.delete(
-    "/",
-    deleteListing);
-
-router.get(
+ListingsRouter.get(
     "/",
     getListings)
 
-export default router;
+export { ListingsRouter }

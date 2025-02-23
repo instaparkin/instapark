@@ -106,7 +106,7 @@ export const HomeSearchBar = () => {
                                     <FormControl>
                                         <div className="relative w-full">
                                             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                            <Input {...field} placeholder="Search by street" className="pl-10 w-full bg-muted" />
+                                            <Input {...field} placeholder="Search by street" className="pl-10 w-full dark:bg-muted" />
                                         </div>
                                     </FormControl>
                                 </FormItem>

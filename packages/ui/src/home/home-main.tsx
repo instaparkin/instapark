@@ -1,47 +1,14 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useQuery, gql } from "@apollo/client";
+import React from "react";
+import { useQuery } from "@apollo/client";
 import { ListingCard } from "../components/listing-card";
 import { HomeSearchBar } from "./home-search-bar";
 import { Listing } from "@instapark/types";
 import toast from "react-hot-toast";
-import { Skeleton } from "../components/skeleton";
-import { Card, CardContent, CardFooter } from "../components/card";
-import { HomeListingsSkeleton } from "../skeletons/home-listings-skeleton";
+import { HomeListingsSkeleton } from "./home-listings-skeleton";
+import { SEARCH_LISTINGS } from "../graphql/search-listings";
 
-const SEARCH_LISTINGS = gql`
-query GET_LISTINGS {
-  ListingQuery {
-    searchListings(vehicleType: Bike) {
-      basePrice
-      id
-      isOpen
-      state
-      street
-      allowedVehicles
-      city
-      country
-      createdAt
-      district
-      landmark
-      userId
-      type
-      updatedAt
-      rating
-      pphcy
-      latitude
-      longitude
-      name
-      photos
-      pincode
-      plph
-      pphbi
-      pphcr
-    }
-  }
-}
-`;
 
 export const HomeMain = () => {
   const { loading, error, data } = useQuery(SEARCH_LISTINGS);

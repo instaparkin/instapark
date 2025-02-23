@@ -1,26 +1,21 @@
-import { Router, sendResponse, Request } from "@instapark/utils";
-import { book, earnings, getBookings, getOtp, lock, verifyBooking } from "../controllers/booking.controller";
-import { completeBooking, createBooking } from "../controllers/payment.controller";
-import { API_ENDPOINTS } from "@instapark/constants";
-import { Cashfree } from "cashfree-pg";
+import { book, completeBooking, earnings, getBookings, getOtp, lock, verifyBooking } from "../controllers/booking.controller";
+import { Router } from "express"
 
-const router = Router();
+const BookingRouter = Router();
 
-router.post(
-    API_ENDPOINTS.BOOKINGS_SERVER.ROUTES.BOOKINGS.COMPLETE,
-    completeBooking);
+BookingRouter.post("/complete", completeBooking);
 
-router.post("/book", book)
+BookingRouter.post("/book", book)
 
-router.post("/lock", lock);
+BookingRouter.post("/lock", lock);
 
-router.get("/", getBookings);
+BookingRouter.get("/", getBookings);
 
-router.get("/otp/:bookingId", getOtp);
+BookingRouter.get("/otp/:bookingId", getOtp);
 
-router.post("/otp/verify", verifyBooking)
+BookingRouter.post("/otp/verify", verifyBooking)
 
-router.get("/earnings", earnings)
+BookingRouter.get("/earnings", earnings)
 
-export default router;
+export { BookingRouter };
 

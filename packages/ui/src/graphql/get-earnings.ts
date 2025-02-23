@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
+import { gql } from "../__generated__";
 
-export const GET_EARNINGS_DASHBOARD = gql`
+export const GET_EARNINGS_DASHBOARD = gql(`
 query GetEarningsDashboard($vendorId: String, $userId: String) {
   BookingQuery {
     getEarningsDashboard {
@@ -31,4 +31,4 @@ query GetEarningsDashboard($vendorId: String, $userId: String) {
     }
   }
 }
-`
+`)

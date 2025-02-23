@@ -26,11 +26,3 @@ export type Profile = {
 export type ProfileRequest = Omit<Profile, "userId" | "kyc" | "firstName" | "lastName" | "emails" | "timeJoined" | "reviews" | "ratings"> & {
     kyc: Pick<Profile["kyc"], "uidai">
 }
-
-export type LikedListing = {
-    id: string,
-    listingId: string,
-    userId: string
-}
-
-export type LikedListingRequest = Omit<LikedListing, "id">

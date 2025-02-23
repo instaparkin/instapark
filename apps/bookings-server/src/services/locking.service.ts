@@ -1,12 +1,15 @@
-import { Booking, BookingRequest } from "@instapark/types";
+import { Booking, BookingRequest, Order } from "@instapark/types";
 import { BookingModel } from "../models/booking.model";
-import { getInterval, logger, toUnixTimestamp, uuid } from "@instapark/utils";
+import { getInterval, toUnixTimestamp } from "@instapark/utils";
+import { v4 as uuid } from "uuid";
+import { BOOKINGS_SERVER_CONSTANTS } from "../constants/bookings-server-constants";
 
 const LOCK_INTERVAL = 0.5 * 60;
 
 export class LockingService {
     private lockingRequest: BookingRequest;
     private existingBooking: Booking | null = null;
+    private order: Order | null = null
 
     constructor(lockingRequest: BookingRequest) {
         if (!lockingRequest.listingId || !lockingRequest.startDate || !lockingRequest.endDate) {
@@ -72,13 +75,50 @@ export class LockingService {
         }
     }
 
+    private async createOrder(): Promise<Order> {
+        const options = {
+            method: 'POST',
+            headers: {
+                'x-api-version': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_API_VERSION,
+                'x-client-id': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID,
+                'x-client-secret': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_SECRET,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "order_amount": this.lockingRequest.basePrice,
+                "order_currency": "INR",
+                "customer_details": {
+                    "customer_id": this.lockingRequest.userId,
+                    "customer_name": this.lockingRequest.customer.customer_name,
+                    "customer_email": this.lockingRequest.customer.customer_email,
+                    "customer_phone": this.lockingRequest.customer.customer_phone
+                },
+                "order_splits": [
+                    {
+                        "vendor_id": "uniqueSampleVendorId",
+                        "percentage": 70
+                    }
+                ]
+            })
+        };
+
+        return fetch('https://sandbox.cashfree.com/pg/orders', options)
+            .then(response => response.json())
+            .then((response: Order) => {
+                return response
+            })
+            .catch(error => {
+                return error
+            });
+    }
+
     private async updateLock() {
         if (!this.existingBooking) return;
 
         const isAvailable = await this.isListingAvailable();
 
         if (!isAvailable) {
-            logger.info("Listing is not available for update.");
+            console.log("Listing is not available for update.");
             return null;
         }
 
@@ -104,7 +144,8 @@ export class LockingService {
         if (!this.existingBooking) {
             try {
                 const createdLock = await this.createLock();
-                return { success: true, message: "Lock Created Successfully", booking: createdLock[0] };
+                const order: Order = await this.createOrder();
+                return { success: true, message: "Lock Created Successfully", booking: createdLock[0], order };
             } catch (error) {
                 return { success: false, message: `Error creating Lock: ${error}` };
             }
@@ -117,9 +158,14 @@ export class LockingService {
         }
 
         try {
+
             const updatedLock = await this.updateLock();
             if (updatedLock) {
-                return { success: true, message: "Lock updated successfully", booking: updatedLock };
+                /**
+                 * Create the Order on cashfree
+                 */
+                const order: Order = await this.createOrder();
+                return { success: true, message: "Lock updated successfully", booking: updatedLock, order};
             } else {
                 return { success: false, message: "Listing is not available currently" };
             }
