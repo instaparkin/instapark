@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormControl, FormField, FormItem, FormMessage } from '../components/form';
 import { Label } from '../components/label';
 import { Input } from '../components/input';

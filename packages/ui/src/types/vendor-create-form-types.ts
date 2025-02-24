@@ -1,5 +1,5 @@
 import { HTMLInputTypeAttribute } from "react";
-import { Path, UseFormReturn } from "react-hook-form";
+import { Path } from "react-hook-form";
 
 export type Field<T extends Record<string, unknown>> = {
     name: Path<T>;

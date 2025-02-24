@@ -12,7 +12,7 @@ export const UserQuery = new GraphQLObjectType({
             args: {
                 userId: { type: GraphQLString },
             },
-            resolve: async (parent, args) => {
+            resolve: async (_, args) => {
                 const response = (await axios.get<ApiResponse<Profile>>
                     (API_SERVER_CONSTANTS.ENDPOINTS.USER.PROFILE.GET,
                         {

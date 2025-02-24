@@ -17,7 +17,6 @@ import {
   TableRow,
 } from "./table"
 import { Skeleton } from "./skeleton"
-import { Button } from "../components/button"
 import { DataTablePagination } from "./data-table-pagination"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

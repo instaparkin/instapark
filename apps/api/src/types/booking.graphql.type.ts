@@ -2,30 +2,8 @@ import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectTy
 import { ListingType } from "./listing.graphql.type";
 import { OrderType } from "./order.graphql.type";
 import { axios } from "@instapark/utils";
-import { ApiResponse, Order, Payment } from "@instapark/types";
-import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
-
-export const fetchOrderById = async (orderId: string): Promise<Order> => {
-    const options = {
-        method: 'GET',
-        headers: {
-            'x-api-version': API_SERVER_CONSTANTS.CASHFREE.CASHFREE_API_VERSION,
-            'x-client-id': API_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID,
-            'x-client-secret': API_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_SECRET
-        }
-    };
-
-    try {
-        const response = await fetch(
-            `https://sandbox.cashfree.com/pg/orders/${orderId}`, options);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch order: ${response.statusText}`);
-        }
-        return await response.json();
-    } catch (error) {
-        throw new Error(`Error fetching order: ${error}`);
-    }
-};
+import { ApiResponse, Payment } from "@instapark/types";
+import { fetchOrderById } from "../utils/fetch-order-by-id";
 
 export const PaymentTypeEnum = new GraphQLEnumType({
     name: "PaymentType",
@@ -52,6 +30,7 @@ export const PaymentType = new GraphQLObjectType({
         }
     }
 })
+
 export const BookingStatusEnum = new GraphQLEnumType({
     name: "BookingStatus",
     values: {
@@ -125,7 +104,6 @@ export const BookingExtendedType = new GraphQLObjectType({
         },
     }
 })
-
 
 export const EarningsType = new GraphQLObjectType({
     name: "Earnings",

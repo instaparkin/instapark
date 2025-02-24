@@ -1,4 +1,4 @@
-import { book, completeBooking, earnings, getBookings, getOtp, lock, verifyBooking } from "../controllers/booking.controller";
+import { book, completeBooking, earningsStats, getBookings, getOtp, lock, verifyBooking } from "../controllers/booking.controller";
 import { Router } from "express"
 
 const BookingRouter = Router();
@@ -11,11 +11,11 @@ BookingRouter.post("/lock", lock);
 
 BookingRouter.get("/", getBookings);
 
-BookingRouter.get("/otp/:bookingId", getOtp);
+BookingRouter.get("/otp", getOtp);
 
 BookingRouter.post("/otp/verify", verifyBooking)
 
-BookingRouter.get("/earnings", earnings)
+BookingRouter.get("/earnings-stats", earningsStats)
 
 export { BookingRouter };
 

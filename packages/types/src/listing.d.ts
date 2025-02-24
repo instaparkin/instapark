@@ -46,6 +46,8 @@ export interface Review {
     updatedAt: number;
 }
 
+export type ReviewRequest = Omit<Review, "createdAt" | "updatedAt">
+
 export type ListingRequest = Omit<Listing, "id" | "createdAt" | "updatedAt" | "isOpen" | "availableFrom" | "rating">
 
 export type ListingSearch =  {

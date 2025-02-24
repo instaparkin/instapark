@@ -16,12 +16,11 @@ import { ParkingCircle } from 'lucide-react';
 const BENGALURU = { lat: 12.9716, lng: 77.5946 };
 
 export type MapProps = {
-  initialZoom?: number;
   maxZoom?: number;
   location?: { lat: number; lng: number };
 };
 
-export const MapsMain = ({ location, initialZoom, maxZoom }: MapProps) => {
+export const MapsMain = ({ location, maxZoom }: MapProps) => {
   const mapLocation = location || BENGALURU;
   const dispatch = useDispatch<AppDispatch>();
   const onGeoLocate = (e: GeolocateResultEvent) => {

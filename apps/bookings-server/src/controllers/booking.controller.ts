@@ -7,7 +7,6 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { Request, Response } from "express";
-import { BOOKINGS_SERVER_CONSTANTS } from "../constants/bookings-server-constants";
 import { PaymentModel } from "../models/payment.model";
 import mongoose from "mongoose";
 
@@ -17,7 +16,6 @@ dayjs.extend(timezone);
 export const lock = async (req: Request, res: Response) => {
     try {
         const lockingRequest = req.body as BookingRequest;
-        console.log(lockingRequest);
 
         const lockingService = new LockingService(lockingRequest);
 
@@ -148,7 +146,7 @@ export const getBookings = async (req: Request, res: Response) => {
 
 export const getOtp = async (req: Request, res: Response) => {
     try {
-        const { bookingId } = req.params as { bookingId: string }
+        const { bookingId } = req.query as { bookingId: string }
         const otp = await BookingOTPModel.find({ bookingId })
         return sendResponse(res, 200, "OTP  fetched successfully", "SUCCESS", { otp: otp[0]?.otp });
     } catch (error) {
@@ -184,7 +182,7 @@ export const verifyBooking = async (req: Request, res: Response) => {
     }
 };
 
-export const earnings = async (req: Request, res: Response) => {
+export const earningsStats = async (req: Request, res: Response) => {
     try {
         const { listingIds } = req.query as { listingIds: string[] };
         console.log(listingIds);

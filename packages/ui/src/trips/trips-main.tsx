@@ -7,10 +7,7 @@ import { columns } from './trips-columns';
 import { useQuery } from '@apollo/client';
 import { useAuth } from '../hooks/use-auth';
 import { TripsDataTable } from './trips-data-table';
-import { gql } from '../__generated__';
 import { GET_TRIPS } from '../graphql/get-trips';
-
-
 
 export const TripsMain = () => {
   const { userId } = useAuth();

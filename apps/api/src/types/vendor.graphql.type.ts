@@ -57,8 +57,8 @@ export const VendorType = new GraphQLObjectType({
 export const VendorBalance = new GraphQLObjectType({
     name: "VendorBalance",
     fields: {
-        vendor_id: { type: GraphQLString },
-        vendor_unsettled: { type: GraphQLFloat }
+        vendor_id: { type: new GraphQLNonNull(GraphQLString) },
+        vendor_unsettled: { type: new GraphQLNonNull(GraphQLString) }
     }
 })
 

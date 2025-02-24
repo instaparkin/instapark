@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@instapark/auth": "workspace:^",
+    "@instapark/common": "workspace:^",
     "@instapark/constants": "workspace:^",
     "@instapark/kafka": "workspace:^",
     "@instapark/utils": "workspace:^",

@@ -3,7 +3,6 @@
 import React from 'react'
 import { EarningsStats } from './earnings-stats'
 import { EarningsTransactions } from './earnings-transactions'
-import { MapsSearch } from '../maps/maps-search'
 
 export const EarningsMain = () => {
   /**

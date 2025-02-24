@@ -1,9 +1,10 @@
-import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { ProfileType } from "./user.graphql.type";
 import { axios } from "@instapark/utils";
 import { ApiResponse, Profile } from "@instapark/types";
 import { EarningsType } from "./booking.graphql.type";
 import { Earnings } from "@instapark/types/src/Booking";
+import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 
 export const PlaceTypeEnum = new GraphQLEnumType({
     name: "PlaceType",
@@ -28,47 +29,35 @@ export const VehicleEnum = new GraphQLEnumType({
 export const ListingType = new GraphQLObjectType({
     name: "Listing",
     fields: () => ({
-        userId: { type: GraphQLString },
-        type: { type: PlaceTypeEnum },
-        country: { type: GraphQLString },
-        state: { type: GraphQLString },
-        district: { type: GraphQLString },
-        city: { type: GraphQLString },
-        street: { type: GraphQLString },
-        pincode: { type: GraphQLInt },
-        latitude: { type: GraphQLFloat },
-        longitude: { type: GraphQLFloat },
-        name: { type: GraphQLString },
-        landmark: { type: GraphQLString },
-        allowedVehicles: { type: new GraphQLList(VehicleEnum) },
-        basePrice: { type: GraphQLFloat },
-        pphbi: { type: GraphQLFloat },
-        pphcy: { type: GraphQLFloat },
-        pphcr: { type: GraphQLFloat },
-        plph: { type: GraphQLFloat },
-        photos: { type: new GraphQLList(GraphQLString) },
-        id: { type: GraphQLString },
-        isOpen: { type: GraphQLBoolean },
-        rating: { type: GraphQLFloat },
-        createdAt: { type: GraphQLInt },
-        updatedAt: { type: GraphQLInt },
-        earnings: {
-            type: EarningsType,
-            resolve: async (parent) => {
-                const response = await axios.get<ApiResponse<Earnings>>(
-                    "http://localhost:8085/bookings/earnings",
-                    {
-                        params: { listingIds: [parent.id] }
-                    }
-                );
-                return response.data.data;
-            }
-        },
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        type: { type: new GraphQLNonNull(PlaceTypeEnum) },
+        country: { type: new GraphQLNonNull(GraphQLString) },
+        state: { type: new GraphQLNonNull(GraphQLString) },
+        district: { type: new GraphQLNonNull(GraphQLString) },
+        city: { type: new GraphQLNonNull(GraphQLString) },
+        street: { type: new GraphQLNonNull(GraphQLString) },
+        pincode: { type: new GraphQLNonNull(GraphQLInt) },
+        latitude: { type: new GraphQLNonNull(GraphQLFloat) },
+        longitude: { type: new GraphQLNonNull(GraphQLFloat) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        landmark: { type: new GraphQLNonNull(GraphQLString) },
+        allowedVehicles: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(VehicleEnum))) },
+        basePrice: { type: new GraphQLNonNull(GraphQLFloat) },
+        pphbi: { type: new GraphQLNonNull(GraphQLFloat) },
+        pphcy: { type: new GraphQLNonNull(GraphQLFloat) },
+        pphcr: { type: new GraphQLNonNull(GraphQLFloat) },
+        plph: { type: new GraphQLNonNull(GraphQLFloat) },
+        photos: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))) },
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        isOpen: { type: new GraphQLNonNull(GraphQLBoolean) },
+        rating: { type: new GraphQLNonNull(GraphQLFloat) },
+        createdAt: { type: new GraphQLNonNull(GraphQLInt) },
+        updatedAt: { type: new GraphQLNonNull(GraphQLInt) },
         user: {
             type: ProfileType,
             resolve: async (parent) => {
                 const response = await axios.get<ApiResponse<Profile>>(
-                    "http://localhost:8088/profile",
+                    API_SERVER_CONSTANTS.ENDPOINTS.USER.PROFILE.GET,
                     {
                         params: { userId: parent.userId }
                     }
@@ -94,14 +83,5 @@ export const ReviewType = new GraphQLObjectType({
         description: { type: GraphQLString },
         createdAt: { type: GraphQLInt },
         updatedAt: { type: GraphQLInt }
-    }
-})
-
-export const LikedListingType = new GraphQLObjectType({
-    name: "LikedListing",
-    fields: {
-        id: { type: GraphQLString },
-        listingId: { type: GraphQLString },
-        userId: { type: GraphQLString },
     }
 })

@@ -1,8 +1,8 @@
 export const API_SERVER_CONSTANTS = {
     CASHFREE: {
-        CASHFREE_API_VERSION: '2023-08-01',
-        CASHFREE_CLIENT_ID: 'TEST10180324795c6ed369800e535fc242308101',
-        CASHFREE_CLIENT_SECRET: 'cfsk_ma_test_ea216f531ab789cd1bb6c0d98bf6f4a6_179a58b2',
+        CASHFREE_API_VERSION: process.env.CASHFREE_API_VERSION,
+        CASHFREE_CLIENT_ID: process.env.CASHFREE_CLIENT_ID,
+        CASHFREE_CLIENT_SECRET: process.env.CASHFREE_CLIENT_SECRET,
     },
     SERVERS: {
         AUTH_SERVER_URL: process.env.AUTH_SERVER_URL,
@@ -17,7 +17,13 @@ export const API_SERVER_CONSTANTS = {
             GET: `${process.env.LISTINGS_SERVER_URL}/listings`,
         },
         BOOKINGS: {
-
+            BOOKING: {
+                EARNING_STATS: `${process.env.BOOKINGS_SERVER_URL}/bookings/earnings-stats`
+            },
+            VENDOR: {
+                BALANCE: `${process.env.BOOKINGS_SERVER_URL}/vendor/balance`,
+                GET: `${process.env.BOOKINGS_SERVER_URL}/vendor`,
+            }
         },
         USER: {
             PROFILE: {

@@ -13,14 +13,13 @@ export const useAuth = (): Profile => {
         axios.get<ApiResponse<{ userId: string }>>
             ("http://localhost:8081/verify")
             .then(response => {
-                setUserId(response.data.data?.userId as string)
-            })
-            .catch(error => {
-                if (error.response.status === 401) {
+                if (response.status === 401) {
                     setUserId("")
                 }
+                setUserId(response.data.data?.userId as string)
             })
     }, [])
+    console.log(userId);
 
     const { data } = useQuery(GET_PROFILE, {
         variables: {
@@ -30,6 +29,6 @@ export const useAuth = (): Profile => {
     });
 
     return {
-        ...data?.UserQuery?.getProfile as Profile,
+        ...data?.UserQuery?.getProfile,
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '../components/button'
 import axios from 'axios'
-import { ApiResponse, Booking, BookingRequest, LockedResponse } from '@instapark/types'
+import { ApiResponse, BookingRequest, LockedResponse } from '@instapark/types'
 import toast from 'react-hot-toast'
 import { redirect } from 'next/navigation'
 

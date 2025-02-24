@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { Map as Maplibre, Marker, Source, Layer, NavigationControl } from "react-map-gl/maplibre";
+import { Map as Maplibre, Marker, NavigationControl } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
-import { MapPin, ParkingCircle } from "lucide-react";
+import { ParkingCircle } from "lucide-react";
 
 export type MapsApproximateProps = {
     location?: { lat: number; lng: number };

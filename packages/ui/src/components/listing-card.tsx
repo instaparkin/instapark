@@ -6,7 +6,6 @@ import { Card, CardContent, CardFooter } from '../components/card'
 import { ImageSwiper } from '../components/image-swiper'
 import { Star } from 'lucide-react'
 import Link from 'next/link'
-import { ListingWishlist } from './listing-wishlist'
 import { Badge } from './badge'
 import { PiBicycleDuotone } from "react-icons/pi";
 import { FaCarAlt } from "react-icons/fa";
@@ -16,10 +15,6 @@ interface ListingsCard {
     listing: Listing
 }
 
-interface ListingCardImagesProps extends React.HTMLAttributes<HTMLDivElement> {
-
-}
-
 interface ListingCardContentProps extends React.HTMLAttributes<HTMLDivElement> {
     listingId: string
 }
@@ -27,7 +22,6 @@ interface ListingCardContentProps extends React.HTMLAttributes<HTMLDivElement> {
 interface ListingCardDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {
     listing: Listing
 }
-
 
 const ListingCardContent: React.FC<ListingCardContentProps> =
     ({ children, listingId }) => {
@@ -40,7 +34,7 @@ const ListingCardContent: React.FC<ListingCardContentProps> =
         )
     }
 
-const ListingCardImages: React.FC<ListingCardImagesProps> =
+const ListingCardImages: React.FC<React.HTMLAttributes<HTMLDivElement>> =
     ({ children }) => {
         return (
             <div className="relative aspect-[4/3]">

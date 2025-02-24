@@ -3,7 +3,7 @@ import { faker } from "@faker-js/faker";
 import axios from "axios";
 import { v4 as uuid } from "uuid";
 
-async function seedScript(amount: number) {
+async function seedListings(amount: number) {
     console.log(`Seeding ${amount} listings...`);
 
     for (let i = 1; i <= amount; i++) {
@@ -46,4 +46,4 @@ async function seedScript(amount: number) {
     console.log("🎉 Seeding completed!");
 }
 
-seedScript(10);
+seedListings(10);

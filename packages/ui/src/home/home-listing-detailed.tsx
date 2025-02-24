@@ -18,7 +18,8 @@ import { ListingReserve } from '../listings/listings-reserve'
 import { gql, useQuery } from '@apollo/client'
 import toast from 'react-hot-toast'
 import { ListingLoadingSkeleton } from './home-detailed-loading'
-import { MapsApproximate } from '../maps/maps-approximate'
+import { HomeListingRating } from './home-listing-rating'
+import { formatLocation } from '../utils/field-name'
 
 interface ListingProps {
     listingId: string
@@ -51,12 +52,10 @@ const ListingDetailedHeader: React.FC<ListingDetailedHeaderProps> = ({ title, on
     return (
         <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-semibold">{title}</h1>
-            <div className="flex justify-between border">
-                <Button variant="ghost" className="flex items-center gap-2" onClick={onShare}>
-                    <Share className="w-4 h-4" />
-                    Share
-                </Button>
-            </div>
+            <Button variant="ghost" className="flex items-center gap-2" onClick={onShare}>
+                <Share className="w-4 h-4" />
+                Share
+            </Button>
         </div>
     )
 }
@@ -348,7 +347,7 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
     return (
         <ListingDetailedContent>
             <ListingDetailedHeader
-                title={`${listing.state}, ${listing.country}`}
+                title={formatLocation(listing.street, listing.city)}
                 onShare={() => console.log('Share clicked')}
                 onSave={() => console.log('Save clicked')}
             />
@@ -389,7 +388,13 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                             basePrice={2200}
                             parkingPrice={170}
                             totalPrice={3081}
-                            ipFee={711} />
+                            ipFee={711}
+                            customer={{
+                                customer_name: '',
+                                customer_email: '',
+                                customer_phone: ''
+                            }}
+                            vendor_id={''} />
                     </div>
 
                     {/* Mobile View with Drawer */}
@@ -405,6 +410,7 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                     />
                 </div>
             </div>
+            <HomeListingRating />
             <MapsMain maxZoom={14} location={{ lat: listing.latitude, lng: listing.longitude }} />
         </ListingDetailedContent>
     )

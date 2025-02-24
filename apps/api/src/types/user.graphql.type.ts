@@ -1,4 +1,4 @@
-import { GraphQLBoolean, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLBoolean, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
 export const KYCType = new GraphQLObjectType({
     name: "kyc",
@@ -11,12 +11,12 @@ export const KYCType = new GraphQLObjectType({
 export const ProfileType = new GraphQLObjectType({
     name: "Profile",
     fields: {
-        userId: { type: GraphQLString },
-        firstName: { type: GraphQLString },
-        lastName: { type: GraphQLString },
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        firstName: { type: new GraphQLNonNull(GraphQLString) },
+        lastName: { type: new GraphQLNonNull(GraphQLString) },
         emails: { type: new GraphQLList(GraphQLString) },
         timeJoined: { type: GraphQLInt },
-        phoneNumber: { type: GraphQLInt },
+        phoneNumber: { type: GraphQLString },
         kyc: { type: KYCType },
         country: { type: GraphQLString },
         state: { type: GraphQLString },

@@ -34,13 +34,12 @@ export const getSettlements = async (req: Request, res: Response) => {
             .then(response => {
                 switch (entity_type) {
                     case "transaction":
-                        response = response.data.slice(0, (response.limit / 2))
                         console.log(response);
-
+                        response = response.data.slice(0, (response.limit / 2))
                         return sendResponse(res, 200, "Settlements fetched successfully", "SUCCESS", response)
                     case "vendor_commision":
-                        response = response.data.slice((response.limit / 2))
                         console.log(response);
+                        response = response.data.slice((response.limit / 2))
                         return sendResponse(res, 200, "Settlements fetched successfully", "SUCCESS", response)
                 }
             })

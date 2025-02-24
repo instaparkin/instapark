@@ -4,14 +4,13 @@ import React from "react";
 import { generateUploadDropzone } from "@uploadthing/react";
 import { UseFormReturn } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import uiConfig from "../../ui-config.json";
 import Image from "next/image";
 import { Button } from "../components/button";
 import { X } from "lucide-react";
 import { ListingRequest } from "@instapark/types";
 
 export const UploadDropzone = generateUploadDropzone({
-    url: uiConfig.routes.LISTING_ADD_IMAGE_ROUTE
+    url: "http://localhost:8087/uploadthing"
 });
 
 export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest> }) => {

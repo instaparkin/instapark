@@ -1,8 +1,9 @@
-import { GraphQLFloat, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString, GraphQLUnionType } from "graphql";
-import { TransactionType, VendorBalance, VendorCommissionType, VendorType } from "../types/vendor.graphql.type";
+import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { VendorType } from "../types/vendor.graphql.type";
 import { axios } from "@instapark/utils";
 import { ApiResponse, Transaction, Vendor, VendorCommission } from "@instapark/types";
 import { OrderSplitType } from "../types/order.graphql.type";
+import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 
 export const VendorQuery = new GraphQLObjectType({
     name: "VendorQuery",
@@ -12,26 +13,11 @@ export const VendorQuery = new GraphQLObjectType({
             args: {
                 vendorId: { type: GraphQLString }
             },
-            resolve: async (parent, args) => {
+            resolve: async (_,args) => {
                 const response = (await axios.get<ApiResponse<Vendor>>
-                    ("http://localhost:8085/vendor", {
+                    (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.VENDOR.GET, {
                         params: {
                             userId: args.vendorId
-                        }
-                    })).data.data
-                return response
-            }
-        },
-        getVendorBalance: {
-            type: VendorBalance,
-            args: {
-                vendorId: { type: GraphQLString }
-            },
-            resolve: async (parent, args) => {
-                const response = (await axios.get<ApiResponse<Vendor>>
-                    ("http://localhost:8085/vendor/balance", {
-                        params: {
-                            vendorId: args.vendorId
                         }
                     })).data.data
                 return response

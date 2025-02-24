@@ -6,6 +6,8 @@ import { DataTable, DataTableLoading } from '../components/data-table'
 import toast from 'react-hot-toast'
 import { settlementColumns } from './earnings-settlement-columns'
 import { GET_SETTLEMENTS } from '../graphql/get-settlements'
+import { VendorCommission } from '@instapark/types'
+import { ColumnDef } from '@tanstack/react-table'
 
 export const EarningsSettlements = () => {
   const { data, loading, error } = useQuery(GET_SETTLEMENTS, {
@@ -27,9 +29,9 @@ export const EarningsSettlements = () => {
     return toast.error(`${error}`)
   }
 
-  const transactions = data.VendorQuery.getTransactions
-
   return (
-      <DataTable data={transactions} columns={settlementColumns} />
+    <DataTable
+      data={data?.VendorQuery?.getTransactions as VendorCommission[]}
+      columns={settlementColumns} />
   )
 }

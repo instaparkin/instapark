@@ -1,9 +1,7 @@
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from './card'
+import { Card, CardContent } from './card'
 import { Profile } from '@instapark/types'
-import { formatName } from '../utils/field-name'
 import Image from 'next/image'
-import { Details } from './details'
 
 export const HostCard = ({ host }: { host: Profile }) => {
     return (

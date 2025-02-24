@@ -1,7 +1,8 @@
 import { ApiResponse, Booking, Listing } from "@instapark/types";
 import { axios } from "@instapark/utils";
 import { GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
-import { LikedListingType, ListingType, VehicleEnum } from "../types/listing.graphql.type";
+import { ListingType, VehicleEnum } from "../types/listing.graphql.type";
+import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 
 export const ListingQuery = new GraphQLObjectType({
     name: "ListingQuery",
@@ -41,9 +42,9 @@ export const ListingQuery = new GraphQLObjectType({
                 userId: { type: GraphQLString },
                 id: { type: GraphQLString },
             },
-            resolve: async (parent, { id, userId }) => {
+            resolve: async (_, { id, userId }) => {
                 const response = await axios.get<ApiResponse<Listing[]>>
-                    ("http://localhost:8087/listings/", {
+                    (API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.GET, {
                         params: { id, userId }
                     })
                 if (response.data.data) {

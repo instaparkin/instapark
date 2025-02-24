@@ -4,12 +4,7 @@ import React from "react";
 import { NoResults } from "../components/no-results"
 import { CiCircleCheck } from "react-icons/ci";
 import toast from "react-hot-toast";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../components/card";
-import { Badge } from "../components/badge";
-import { Button } from "../components/button";
-import { unixSecToMonthYearTime } from "../utils/dayjs";
 import { gql, useQuery } from "@apollo/client";
-import { Booking } from "@instapark/types";
 
 const GET_CHECKINGOUT_BOOKINGS = gql`
 query GET_CHECKINGOUT_BOOKINGS {

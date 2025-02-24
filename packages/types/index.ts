@@ -11,6 +11,7 @@ export {
     type Listing,
     type ListingRequest,
     type Review,
+    type ReviewRequest,
     type ListingSearch
 } from "./src/Listing";
 export {

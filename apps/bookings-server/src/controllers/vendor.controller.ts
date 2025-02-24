@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { BOOKINGS_SERVER_CONSTANTS } from "../constants/bookings-server-constants";
 import { VendorRequest } from "@instapark/types";
 import { SessionRequest } from "@instapark/auth";
+import { uuidToAlphanumeric } from "@instapark/common";
 
 export const createVendor = (req: SessionRequest, res: Response) => {
     try {
@@ -17,7 +18,7 @@ export const createVendor = (req: SessionRequest, res: Response) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "vendor_id": vendorRequest.vendor_id,
+                "vendor_id": uuidToAlphanumeric(vendorRequest.vendor_id),
                 "status": "ACTIVE",
                 "name": vendorRequest.name,
                 "email": vendorRequest.email,
@@ -42,7 +43,7 @@ export const createVendor = (req: SessionRequest, res: Response) => {
             .then(response => response.json())
             .then(response => {
                 sendResponse(res, 200,
-                    response.message ? "Payment details already submitted" : "Payment details submitted Successfully"
+                    response.message ? response.message : "Payment details submitted Successfully"
                     , "SUCCESS", null);
             })
             .catch(error => {
@@ -133,6 +134,7 @@ export const updateVendor = (req: SessionRequest, res: Response) => {
 export const getBalance = (req: SessionRequest, res: Response) => {
     try {
         const { userId } = req.query;
+        console.log( BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID);
 
         const options = {
             method: 'GET',
@@ -143,7 +145,7 @@ export const getBalance = (req: SessionRequest, res: Response) => {
             }
         };
 
-        fetch(`https://sandbox.cashfree.com/pg/easy-split/vendors/${userId}/balance`, options)
+        fetch(`https://sandbox.cashfree.com/pg/easy-split/vendors/${userId}/balances`, options)
             .then(response => response.json())
             .then(response => {
                 sendResponse(res, 200, response.message, "SUCCESS", response);

@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 const ListingsAddLayout = ({ children }: { children: React.ReactNode }) => {
 
-    const { isVendor } = useVendor({ vendorId: "123" })
+    const { isVendor } = useVendor({ userId: "123" })
 
     if (isVendor) {
         return (

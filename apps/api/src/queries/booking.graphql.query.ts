@@ -5,6 +5,7 @@ import { BookingExtendedType, BookingStatusEnum, EarningsType, PaymentType } fro
 import { ListingType } from "../types/listing.graphql.type";
 import { Earnings } from "@instapark/types/src/Booking";
 import { VendorBalance } from "../types/vendor.graphql.type";
+import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 
 export const BookingQuery = new GraphQLObjectType({
     name: "BookingQuery",
@@ -72,20 +73,23 @@ export const BookingQuery = new GraphQLObjectType({
         getBookingsForHost: {
             type: new GraphQLList(BookingExtendedType),
             args: {
+                userId: { type: GraphQLString },
                 status: { type: BookingStatusEnum }
             },
-            resolve: async (parent, { status }) => {
-                const bookingsResponse = await axios.get<ApiResponse<Booking[]>>(`http://localhost:8085/bookings/`, {
-                    params: { status }
-                });
+            resolve: async (_, { status, userId }) => {
+                const bookingsResponse = await axios.get<ApiResponse<Booking[]>>
+                    (`http://localhost:8085/bookings/`, {
+                        params: { status }
+                    });
 
                 const bookings = bookingsResponse.data.data as Booking[];
 
                 return Promise.all(
                     bookings.map(async (b) => {
-                        const listingsResponse = await axios.get<ApiResponse<Listing[]>>(`http://localhost:8087/listings/`, {
-                            params: { id: b.listingId }
-                        });
+                        const listingsResponse = await axios.get<ApiResponse<Listing[]>>
+                            (`http://localhost:8087/listings/`, {
+                                params: { id: b.listingId }
+                            });
 
                         return {
                             ...b,
@@ -113,18 +117,18 @@ export const BookingQuery = new GraphQLObjectType({
                 return response.data.data;
             }
         },
-        getEarnings: {
+        getEarningsStats: {
             type: EarningsType,
             args: {
                 userId: { type: GraphQLString },
             },
-            resolve: async (parent, { userId }) => {
+            resolve: async (_, { userId }) => {
                 const listings = await axios.get<ApiResponse<Listing[]>>
-                    ("http://localhost:8087/listings/", {
+                    (API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.GET, {
                         params: { userId }
                     })
                 const response = await axios.get<ApiResponse<Earnings>>
-                    ("http://localhost:8085/bookings/earnings", {
+                    (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.BOOKING.EARNING_STATS, {
                         params: {
                             listingIds: listings.data.data?.map(l => l.id)
                         }
@@ -152,7 +156,7 @@ export const BookingQuery = new GraphQLObjectType({
                                 const listingIds = listings.data.data?.map(l => l.id) ?? [];
 
                                 if (listingIds.length === 0) {
-                                    return null; // Or return an appropriate default response
+                                    return null;
                                 }
 
                                 const response = await axios.get<ApiResponse<Earnings>>(
@@ -168,14 +172,14 @@ export const BookingQuery = new GraphQLObjectType({
                         }
                     },
                     vendorBalance: {
-                        type: VendorBalance, // Ensure this is a valid GraphQLObjectType
+                        type: VendorBalance,
                         args: {
                             vendorId: { type: GraphQLString }
                         },
                         resolve: async (parent, { vendorId }) => {
                             try {
                                 const response = await axios.get<ApiResponse<Vendor>>(
-                                    "http://localhost:8085/settlements/balance",
+                                    "http://localhost:8085/vendor/balance",
                                     { params: { vendorId } }
                                 );
 

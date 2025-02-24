@@ -2,44 +2,40 @@
 
 import React, { useEffect } from 'react'
 import { VendorCreateForm, VendorCreateFormType } from '../forms/vendor-create-form'
-import { VendorCreateFormElements } from '../types/vendor-create-form-types';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useFormField } from '../components/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../components/form';
 import { Input } from '../components/input';
 import { fieldName } from '../utils/field-name';
-import { Button, buttonVariants } from '../components/button';
+import { Button } from '../components/button';
 import { useMutation } from '@apollo/client';
 import { CREATE_VENDOR } from '../graphql/create-vendor';
 import toast from 'react-hot-toast';
-import { useVendor } from '../hooks/use-vendor';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/card';
 import { SideBarLayout } from '../components/sidebar-layout';
 import { Badge } from '../components/badge';
 import { paymentDetailsSteps } from './payment-details-steps';
-import { cn } from '../utils/cn';
-import { cva } from 'class-variance-authority';
 
 export const PaymentDetailsMain = () => {
-    const form = VendorCreateForm();
+    const { form } = VendorCreateForm();
     const [createVendor, { data, loading, error }] = useMutation(CREATE_VENDOR);
-    const { vendorInfo, loading: VendorDetailsLoading } = useVendor({
-        vendorId: "992"
-    })
 
     useEffect(() => {
         if (data) {
-            toast.success(data.VendorMutation.createVendor);
+            toast.success(data.VendorMutation?.createVendor as string);
         }
     }, [data])
 
-    if (error) {
-        return toast.error(`Submission error! ${error.message}`)
-    }
     const onSubmit = (data: VendorCreateFormType) => {
-        const request = {
-            ...data,
-            vendor_id: "991"
+        if (loading) {
+            toast.loading("Submitting Payment details");
         }
 
+        if (error) {
+            toast.error(`Submission error! ${error.message}`)
+        }
+
+        const request = {
+            ...data,
+        }
         createVendor({
             variables: request
         })
@@ -60,7 +56,7 @@ export const PaymentDetailsMain = () => {
                                     </div>
                                     {
                                         d.fields.map((f, i) => (
-                                            <Card id={f.name} className='rounded-sm'>
+                                            <Card key={i} id={f.name} className='rounded-sm'>
                                                 <FormField
                                                     key={i}
                                                     control={form.control}
@@ -79,7 +75,7 @@ export const PaymentDetailsMain = () => {
                                                             </CardHeader>
                                                             <CardContent>
                                                                 <FormControl>
-                                                                    <Input className='max-w-xs' type={f.type} {...field} />
+                                                                    <Input className='max-w-xs' type={f.type} {...field} value={field.value as string} />
                                                                 </FormControl>
                                                                 <FormMessage />
                                                             </CardContent>
@@ -92,7 +88,7 @@ export const PaymentDetailsMain = () => {
                                 </div>
                             ))
                         }
-                        <Button  type="submit">Request Approval</Button>
+                        <Button type="submit">Request Approval</Button>
                     </form>
                 </Form>
             </div >

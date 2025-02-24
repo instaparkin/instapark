@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import { Transaction, VendorCommission } from "@instapark/types"
+import { Transaction } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { formatPrice } from "../utils/field-name"
 

@@ -1,8 +1,5 @@
 import { sendResponse } from "@instapark/utils";
 import { PaymentModel } from "../models/payment.model";
-import { BookingModel } from "../models/booking.model";
-import { Payment } from "@instapark/types";
-import mongoose from "mongoose";
 import { Request, Response, } from "express";
 
 export const getPayments = async (req: Request, res: Response) => {

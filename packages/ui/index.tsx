@@ -8,14 +8,13 @@ export { EarningsMain } from "./src/earnings/earnings-main"
 export { ListingsAdd } from "./src/listings/listings-add"
 export { HostingMain } from "./src/hosting/hosting-main"
 export { HomeMain } from "./src/home/home-main"
-export { ListingsLoading } from "./src/listings/listings-loading"
 export { ListingsAddSkeleton } from "./src/listings/listings-add-skeleton"
 export { Toaster } from "react-hot-toast"
 export { ourFileRouter, type OurFileRouter } from "./src/uploadthing/core"
 export { UploadDropzone } from "./src/listings/listings-add-photos"
 export { HostingLoading } from "./src/hosting/hosting-loading"
 export { HeaderSkeleton } from "./src/header/header-skeleton"
-export { HomeListingsDetailed } from "./src/home/home-listings-detailed"
+export { HomeListingsDetailed } from "./src/home/home-listing-detailed"
 export { AuthProvider } from "./src/providers/auth-provider";
 export { StoreProvider } from "./src/providers/store-provider";
 export { AuthPage } from "./src/auth/auth-page"
@@ -29,7 +28,6 @@ export { apolloClient } from "./src/graphql/apollo-client";
 export { GraphQLProvider } from "./src/graphql/graphql-provider"
 export { useVendor } from "./src/hooks/use-vendor";
 export { ThemeProvider } from "./src/providers/theme-provider"
-export { SettingsMain } from "./src/settings/settings-main"
 export { PaymentDetailsMain } from "./src/payments/payment-details-main"
 export { EarningsTransactions } from "./src/earnings/earnings-transactions"
 export { ProfilePersonalMain } from "./src/profile/profile-personal-main"

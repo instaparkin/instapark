@@ -6,7 +6,6 @@ import Session from 'supertokens-auth-react/recipe/session';
 import { useRouter } from 'next/navigation';
 import { SuperTokensConfig } from 'supertokens-auth-react/lib/build/types';
 import { GLOBAL_CONSTANTS } from "@instapark/constants";
-import EmailVerification from "supertokens-auth-react/recipe/emailverification";
 
 const routerInfo: { router?: ReturnType<typeof useRouter>; pathName?: string } =
     {};

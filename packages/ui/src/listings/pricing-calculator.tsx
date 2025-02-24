@@ -134,7 +134,7 @@ export function PricingCalculator({
               <span>Instapark fee ({instaparkFeePercentage}%)</span>
               <span>₹{calculateInstaparkFee().toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-destructive">
+            <div className="flex justify-between text-negative">
               <span>Penalty Per Hour</span>
               <span>₹{plph}</span>
             </div>

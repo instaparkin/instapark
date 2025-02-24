@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "start" : "pnpm run build && pnpm start",
+    "start": "pnpm run build && pnpm start",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo test",
@@ -14,15 +14,15 @@
     "validate": "pnpm format:write && pnpm check-types && pnpm lint && pnpm build"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0",
-    "husky": "^8.0.0",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.6.8",
-    "turbo": "^2.3.3",
+    "@types/node": "^22.13.5",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.2",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "turbo": "^2.4.2",
     "typescript": "5.5.4"
   },
-  "packageManager": "pnpm@8.15.0",
+  "packageManager": "pnpm@10.4.1",
   "engines": {
     "node": ">=18"
   },

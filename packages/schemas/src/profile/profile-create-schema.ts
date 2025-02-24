@@ -1,14 +1,5 @@
-import { AuthMetadata, ProfileRequest } from "@instapark/types";
+import { ProfileRequest } from "@instapark/types";
 import { z, ZodType } from "zod";
-
-export const legalNameSchema = z.object({
-    first_name: z.string().min(1),
-    last_name: z.string().optional()
-}) satisfies ZodType<Pick<AuthMetadata, "first_name" | "last_name">>
-
-export const preferredFirstnameSchema = z.object({
-    preferred_first_name: z.string({ message: "Enter your preferred first name" })
-}) satisfies ZodType<Pick<AuthMetadata, "preferred_first_name">>
 
 export const profileSchema = z.object({
     phoneNumber: z.string(),
