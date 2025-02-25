@@ -61,7 +61,7 @@ export function TripsDataTable<TData, TValue>({
               <TableRow
                 className="cursor-pointer"
                 onClick={() => {
-                  redirect(`/trips/${row.getValue("id")}`)
+                  redirect(`/trips/${row.getValue("bookingId")}`)
                 }}
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}

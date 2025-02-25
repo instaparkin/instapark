@@ -80,6 +80,7 @@ export const getListings = async (req: Request, res: Response) => {
             },
             { _id: 0, __v: 0 }
         );
+        console.log(listings);
         return sendResponse(res, 200, "Listings Fetched Successfully", "SUCCESS", listings);
     } catch (error) {
         return sendResponse(res, 500, "Internal server error " + error, "FAILURE", error);

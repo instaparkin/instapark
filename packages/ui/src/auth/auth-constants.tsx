@@ -12,7 +12,6 @@ export const USER_BUTTON_DEFAULT_PROTECTED_ITEMS = [
         group: "Account",
         items: [
             { icon: <FaRegUser />, link: "/profile", name: "Profile" },
-            { icon: <IoSettingsOutline />, link: "/settings", name: "Settings" },
         ],
     },
 ];

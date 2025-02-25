@@ -20,7 +20,6 @@ export { StoreProvider } from "./src/providers/store-provider";
 export { AuthPage } from "./src/auth/auth-page"
 export { SessionAuthProvider } from "./src/providers/session-auth-provider"
 export { Page } from "./src/components/page"
-export { ProfilePublic } from "./src/profile/profile-public-main";
 export { TripsMain } from "./src/trips/trips-main"
 export { TripDetailed } from "./src/trips/trip-detailed"
 export { ApolloProvider } from '@apollo/client';

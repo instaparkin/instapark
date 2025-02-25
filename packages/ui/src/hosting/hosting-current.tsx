@@ -5,27 +5,18 @@ import { NoResults } from "../components/no-results"
 import { CiCircleCheck } from "react-icons/ci";
 import toast from "react-hot-toast";
 import { gql, useQuery } from "@apollo/client";
-
-const GET_CHECKINGOUT_BOOKINGS = gql`
-query GET_CHECKINGOUT_BOOKINGS {
-  BookingQuery {
-    getBookingsForHost(status: OnGoing) {
-      id
-      listingId
-      userId
-      startDate
-      endDate
-      status
-      lockedAt
-      createdAt
-      updatedAt
-    }
-  }
-}
-`
+import { HOST_BOOKINGS } from "../graphql/host-bookings";
+import { useAuth } from "../hooks/use-auth";
+import { Booking, BookingStatus, HostBooking } from "../__generated__/graphql";
 
 export const HostingCurrent = () => {
-  const { loading, error, data } = useQuery(GET_CHECKINGOUT_BOOKINGS);
+  const { userId } = useAuth();
+  const { loading, error, data } = useQuery(HOST_BOOKINGS, {
+    variables: {
+      userId,
+      status: BookingStatus.OnGoing
+    },
+  });
 
   if (loading) {
     return <div>Loading...</div>
@@ -35,7 +26,9 @@ export const HostingCurrent = () => {
     toast.error(`Error: ${error.message}`);
   }
 
-  const bookings = data.BookingQuery.getBookingsForHost;
+  const bookings = data?.ListingQuery?.hostBookings?.bookings as HostBooking[];
+
+  console.log(bookings);
 
   if (bookings.length === 0) {
     return (
@@ -45,6 +38,7 @@ export const HostingCurrent = () => {
       />
     )
   }
+
 
   /**
    * TODO

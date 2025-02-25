@@ -15,7 +15,7 @@ export const ListingsAddButton = ({ userId }: ListingsAddButtonProps) => {
 
     if (isVendor) {
         return (
-            <Button variant={"outline"} asChild>
+            <Button variant={"outline"} size={"responsive"} asChild>
                 <Link href={`/hosting/listings/add`}>
                     Create Listing
                 </Link>

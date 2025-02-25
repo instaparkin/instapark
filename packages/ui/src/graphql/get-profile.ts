@@ -1,7 +1,7 @@
 import { gql } from "../__generated__";
 
 export const GET_PROFILE = gql(`
-query UserQuery($userId: String) {
+query GET_PROFILE($userId: String!) {
   UserQuery {
     getProfile(userId: $userId) {
       userId
@@ -24,6 +24,8 @@ query UserQuery($userId: String) {
       longitude
       name
       landmark
+      reviews
+      ratings
     }
   }
 }

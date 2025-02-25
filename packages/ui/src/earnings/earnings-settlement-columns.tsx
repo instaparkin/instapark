@@ -3,8 +3,9 @@ import React from "react"
 import { VendorCommission } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { formatPrice } from "../utils/field-name"
+import { ReconData } from "../__generated__/graphql"
 
-export const settlementColumns: ColumnDef<VendorCommission>[] = [
+export const settlementColumns: ColumnDef<ReconData>[] = [
     {
         accessorKey: "merchant_order_id",
         header: "Order Id"

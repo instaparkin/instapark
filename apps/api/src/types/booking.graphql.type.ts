@@ -1,9 +1,62 @@
 import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
-import { ListingType } from "./listing.graphql.type";
-import { OrderType } from "./order.graphql.type";
 import { axios } from "@instapark/utils";
-import { ApiResponse, Payment } from "@instapark/types";
+import { ApiResponse, BookingOTP, Payment, Profile } from "@instapark/types";
 import { fetchOrderById } from "../utils/fetch-order-by-id";
+import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
+import { ProfileType } from "./user.graphql.type";
+import { ListingType } from "./listing.graphql.type";
+
+export const BookingOrderSplitType = new GraphQLObjectType({
+    name: "BookingOrderSplit",
+    fields: {
+        vendor_id: { type: GraphQLString },
+        amount: { type: GraphQLFloat },
+        percentage: { type: GraphQLInt },
+        tags: { type: GraphQLString },
+    },
+});
+
+export const CustomerDetailsType = new GraphQLObjectType({
+    name: "CustomerDetails",
+    fields: {
+        customer_id: { type: GraphQLString },
+        customer_name: { type: GraphQLString },
+        customer_email: { type: GraphQLString },
+        customer_phone: { type: GraphQLString },
+        customer_uid: { type: GraphQLString },
+    },
+});
+
+export const OrderMetaType = new GraphQLObjectType({
+    name: "OrderMeta",
+    fields: {
+        return_url: { type: GraphQLString },
+        notify_url: { type: GraphQLString },
+        payment_methods: { type: GraphQLString },
+    },
+});
+
+export const OrderType = new GraphQLObjectType({
+    name: "Order",
+    fields: {
+        cart_details: { type: GraphQLString },
+        cf_order_id: { type: GraphQLString },
+        created_at: { type: GraphQLString },
+        customer_details: { type: CustomerDetailsType },
+        entity: { type: GraphQLString },
+        order_amount: { type: GraphQLFloat },
+        order_currency: { type: GraphQLString },
+        order_expiry_time: { type: GraphQLString },
+        order_id: { type: GraphQLString },
+        order_meta: { type: OrderMetaType },
+        order_note: { type: GraphQLString },
+        order_splits: { type: new GraphQLList(BookingOrderSplitType) },
+        order_status: { type: GraphQLString },
+        order_tags: { type: GraphQLString },
+        payment_session_id: { type: GraphQLString },
+        terminal_data: { type: GraphQLString },
+    },
+});
 
 export const PaymentTypeEnum = new GraphQLEnumType({
     name: "PaymentType",
@@ -41,6 +94,15 @@ export const BookingStatusEnum = new GraphQLEnumType({
     }
 });
 
+export const BookingOTPType = new GraphQLObjectType({
+    name: "BookingOTP",
+    fields: {
+        bookingId: { type: GraphQLString },
+        otp: { type: GraphQLInt },
+        expiresAt: { type: GraphQLInt }
+    }
+})
+
 export const BookingType = new GraphQLObjectType({
     name: "Booking",
     fields: {
@@ -58,11 +120,36 @@ export const BookingType = new GraphQLObjectType({
         penalty: { type: GraphQLFloat },
         createdAt: { type: GraphQLInt },
         updatedAt: { type: GraphQLInt },
+        user: {
+            type: ProfileType,
+            resolve: async (parent) => {
+                const response = await axios.get<ApiResponse<Profile>>
+                    (API_SERVER_CONSTANTS.ENDPOINTS.USER.PROFILE.GET,
+                        {
+                            params: {
+                                userId: parent.userId
+                            }
+                        })
+                return response.data.data
+            }
+        },
         payments: {
             type: new GraphQLList(PaymentType),
             resolve: async (parent) => {
                 const response = await axios.get<ApiResponse<Payment[]>>
-                    ("http://localhost:8085/payments", {
+                    (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.PAYMENTS.GET, {
+                        params: {
+                            bookingId: parent.id
+                        }
+                    })
+                return response.data.data
+            }
+        },
+        otp: {
+            type: BookingOTPType,
+            resolve: async (parent) => {
+                const response = await axios.get<ApiResponse<BookingOTP>>
+                    (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.BOOKING.OTP, {
                         params: {
                             bookingId: parent.id
                         }
@@ -71,84 +158,4 @@ export const BookingType = new GraphQLObjectType({
             }
         }
     }
-})
-
-export const BookingOTPType = new GraphQLObjectType({
-    name: "BookingOTP",
-    fields: {
-        bookingId: { type: GraphQLString },
-        otp: { type: GraphQLInt },
-        expiresAt: { type: GraphQLInt }
-    }
-})
-
-export const BookingExtendedType = new GraphQLObjectType({
-    name: "BookingExtended",
-    fields: {
-        id: { type: GraphQLString },
-        listingId: { type: GraphQLString },
-        userId: { type: GraphQLString },
-        startDate: { type: GraphQLInt },
-        endDate: { type: GraphQLInt },
-        status: { type: BookingStatusEnum },
-        lockedAt: { type: GraphQLInt },
-        basePrice: { type: GraphQLFloat },
-        parkingPrice: { type: GraphQLFloat },
-        totalPrice: { type: GraphQLFloat },
-        ipFee: { type: GraphQLFloat },
-        penalty: { type: GraphQLFloat },
-        createdAt: { type: GraphQLInt },
-        updatedAt: { type: GraphQLInt },
-        listing: {
-            type: ListingType
-        },
-    }
-})
-
-export const EarningsType = new GraphQLObjectType({
-    name: "Earnings",
-    fields: {
-        currentMonth: {
-            type: new GraphQLObjectType({
-                name: "CurrentMonth",
-                fields: {
-                    totalBookings: { type: GraphQLInt },
-                    totalRevenue: { type: GraphQLFloat },
-                    totalNetProfit: { type: GraphQLFloat },
-                    avgBookingValue: { type: GraphQLFloat },
-                },
-            }),
-        },
-        previousMonth: {
-            type: new GraphQLObjectType({
-                name: "PreviousMonth",
-                fields: {
-                    totalBookings: { type: GraphQLInt },
-                    totalRevenue: { type: GraphQLFloat },
-                    totalNetProfit: { type: GraphQLFloat },
-                    avgBookingValue: { type: GraphQLFloat },
-                },
-            }),
-        },
-        netPL: {
-            type: new GraphQLObjectType({
-                name: "NetPL",
-                fields: {
-                    totalBookingsPLPercent: { type: GraphQLFloat },
-                    totalRevenuePLPercent: { type: GraphQLFloat },
-                    totalNetProfitPLPercent: { type: GraphQLFloat },
-                    avgBookingValuePLPercent: { type: GraphQLFloat },
-                },
-            }),
-        },
-        timeRangeData: {
-            type: new GraphQLList(new GraphQLObjectType({
-                name: "TimeRangeData",
-                fields: {
-                    date: { type: GraphQLString },
-                    totalPrice: { type: GraphQLFloat },
-                },
-            })),
-        },
-    },
 })

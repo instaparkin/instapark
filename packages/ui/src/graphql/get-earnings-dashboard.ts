@@ -1,14 +1,10 @@
 import { gql } from "../__generated__";
 
 export const GET_EARNINGS_DASHBOARD = gql(`
-query GetEarningsDashboard($vendorId: String, $userId: String) {
-  BookingQuery {
-    getEarningsDashboard {
-      vendorBalance(vendorId: $vendorId) {
-        vendor_id
-        vendor_unsettled
-      }
-      earnings(userId: $userId) {
+query GetEarningsDashboard($userId: String!, $vendorId: String!) {
+  VendorQuery {
+    getEarningsDashboard(userId: $userId) {
+      earnings {
         currentMonth {
           totalBookings
           totalRevenue
@@ -27,6 +23,10 @@ query GetEarningsDashboard($vendorId: String, $userId: String) {
           totalNetProfitPLPercent
           avgBookingValuePLPercent
         }
+      }
+      vendorBalance(vendorId: $vendorId) {
+        vendor_id
+        vendor_unsettled
       }
     }
   }

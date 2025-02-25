@@ -1,9 +1,10 @@
-import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
-import { VendorType } from "../types/vendor.graphql.type";
+import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { EarningsType, VendorType, VendorBalanceType, ReconDataType, EntityTypeEnum } from "../types/vendor.graphql.type";
 import { axios } from "@instapark/utils";
-import { ApiResponse, Transaction, Vendor, VendorCommission } from "@instapark/types";
-import { OrderSplitType } from "../types/order.graphql.type";
+import { ApiResponse, Listing, Transaction, Vendor, VendorBalance, VendorCommission } from "@instapark/types";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
+import { Earnings } from "@instapark/types/src/Booking";
+import { ListingType } from "../types/listing.graphql.type";
 
 export const VendorQuery = new GraphQLObjectType({
     name: "VendorQuery",
@@ -11,9 +12,9 @@ export const VendorQuery = new GraphQLObjectType({
         getVendor: {
             type: VendorType,
             args: {
-                vendorId: { type: GraphQLString }
+                vendorId: { type: new GraphQLNonNull(GraphQLString) }
             },
-            resolve: async (_,args) => {
+            resolve: async (_, args) => {
                 const response = (await axios.get<ApiResponse<Vendor>>
                     (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.VENDOR.GET, {
                         params: {
@@ -23,55 +24,16 @@ export const VendorQuery = new GraphQLObjectType({
                 return response
             }
         },
-        getTransactions: {
-            type: new GraphQLList(new GraphQLObjectType({
-                name: "Transaction",
-                fields: {
-                    amount: { type: (GraphQLFloat) },
-                    merchant_order_id: { type: (GraphQLString) },
-                    tx_time: { type: GraphQLString },
-                    settled: { type: GraphQLString },
-                    entity_id: { type: GraphQLString },
-                    currency: { type: GraphQLString },
-                    sale_type: { type: GraphQLString },
-                    customer_email: { type: GraphQLString },
-                    customer_phone: { type: GraphQLString },
-                    added_on: { type: GraphQLString },
-                    entity_type: { type: GraphQLString },
-                    settlement_eligibility_time: { type: GraphQLString },
-                    merchant_settlement_utr: { type: GraphQLString },
-                    payment_utr: { type: GraphQLString },
-                    merchant_vendor_commission: { type: GraphQLString },
-                    split_service_charge: { type: GraphQLString },
-                    split_service_tax: { type: GraphQLString },
-                    pg_service_tax: { type: GraphQLString },
-                    pg_service_charge: { type: GraphQLString },
-                    pg_charge_postpaid: { type: GraphQLString },
-                    merchant_settlement_id: { type: GraphQLString },
-                    tags: { type: GraphQLString },
-                    settlement_initiated_on: { type: GraphQLString },
-                    settlement_time: { type: GraphQLString },
-                    eligible_split_balance: { type: GraphQLString },
-                    order_splits: { type: new GraphQLList(OrderSplitType) },
-                    merchant_vendor_id: { type: GraphQLString },
-                    vendor_settlement_time: { type: GraphQLString },
-                    vendor_settlement_initiated_on: { type: GraphQLString },
-                    vendor_settlement_eligibility_time: { type: GraphQLString },
-                    vendor_settlement_id: { type: GraphQLString },
-                    vendor_commission: { type: GraphQLString },
-                    vendor_pg_service_charge: { type: GraphQLString },
-                    vendor_pg_service_tax: { type: GraphQLString },
-                    status: { type: GraphQLString },
-                }
-            })),
+        getReconData: {
+            type: new GraphQLList(ReconDataType),
             args: {
-                orderIds: { type: new GraphQLList(GraphQLString) },
-                limit: { type: GraphQLInt },
-                entity_type: { type: GraphQLString },
+                orderIds: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))) },
+                limit: { type: new GraphQLNonNull(GraphQLInt) },
+                entity_type: { type: new GraphQLNonNull(EntityTypeEnum) },
             },
-            resolve: async (parent, { orderIds, limit, entity_type }) => {
+            resolve: async (_, { orderIds, limit, entity_type }) => {
                 const response = await axios.get<ApiResponse<Transaction | VendorCommission[]>>
-                    ("http://localhost:8085/settlements", {
+                    (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.SETTLEMENTS.GET, {
                         params: {
                             orderIds,
                             limit,
@@ -79,6 +41,49 @@ export const VendorQuery = new GraphQLObjectType({
                         }
                     })
                 return response.data.data
+            }
+        },
+        getEarningsDashboard: {
+            type: new GraphQLObjectType({
+                name: "EarningsDashboard",
+                fields: {
+                    listings: { type: new GraphQLList(ListingType) },
+                    earnings: {
+                        type: EarningsType,
+                        resolve: async (parent) => {
+                            const response = await axios.get<ApiResponse<Earnings>>(
+                                API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.BOOKING.EARNING_STATS,
+                                { params: { listingIds: parent.listings.map((l: Listing) => l.id) } }
+                            );
+                            return response.data.data;
+                        }
+                    },
+                    vendorBalance: {
+                        type: VendorBalanceType,
+                        args: {
+                            vendorId: { type: new GraphQLNonNull(GraphQLString) }
+                        },
+                        resolve: async (_, { vendorId }) => {
+                            const response = await axios.get<ApiResponse<VendorBalance>>(
+                                API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.VENDOR.BALANCE,
+                                { params: { vendorId } }
+                            );
+                            return response.data.data;
+                        }
+                    }
+                },
+            }),
+            args: {
+                userId: { type: new GraphQLNonNull(GraphQLString) }
+            },
+            resolve: async (_, { userId }) => {
+                const response = await axios.get<ApiResponse<Listing[]>>(
+                    API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.LISTING.GET,
+                    { params: { userId } }
+                );
+                return {
+                    listings: response.data.data
+                }
             }
         },
     }

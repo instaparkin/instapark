@@ -35,6 +35,13 @@
       "eslint": "^8.57.1",
       "@humanwhocodes/config-array": "0.13.0",
       "@humanwhocodes/object-schema": "2.0.3"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@apollo/protobufjs",
+      "@parcel/watcher",
+      "browser-tabs-lock",
+      "esbuild",
+      "sharp"
+    ]
   }
 }

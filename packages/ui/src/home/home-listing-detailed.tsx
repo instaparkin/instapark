@@ -1,18 +1,13 @@
 'use client'
 
 import React from 'react'
-import { Card } from '../components/card'
 import { Button } from '../components/button'
-import { GraduationCap, Grid2X2, Heart, Share, Share2, Shield, X } from 'lucide-react'
-import Link from 'next/link'
-import { Listing, Listing as ListingType } from "@instapark/types"
+import { GraduationCap, Grid2X2, Heart, Share2, Shield, X } from 'lucide-react'
 import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { PricingCalculator } from '../listings/pricing-calculator'
 import { PricingDrawer } from '../listings/pricing-drawer'
-import { useAuth } from '../hooks/use-auth'
-import { timeInInstapark } from '../utils/dayjs'
 import { MapsMain } from '../maps/maps-main'
 import { ListingReserve } from '../listings/listings-reserve'
 import { gql, useQuery } from '@apollo/client'
@@ -20,21 +15,21 @@ import toast from 'react-hot-toast'
 import { ListingLoadingSkeleton } from './home-detailed-loading'
 import { HomeListingRating } from './home-listing-rating'
 import { formatLocation } from '../utils/field-name'
+import { HOST_LISTINGS } from '../graphql/host-listings'
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "../components/sheet"
+import { UserMini } from '../components/user-mini'
+import { Listing } from '../__generated__/graphql'
+
 
 interface ListingProps {
     listingId: string
-}
-
-interface HostInfoProps {
-    userId: string
-    name: string
-    hostingDuration: string
-    reviews: number
-    rating: number
-    school?: string
-    location?: string
-    responseRate?: number
-    responseTime?: string
 }
 
 interface PhotoGridProps {
@@ -52,49 +47,26 @@ const ListingDetailedHeader: React.FC<ListingDetailedHeaderProps> = ({ title, on
     return (
         <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-semibold">{title}</h1>
-            <Button variant="ghost" className="flex items-center gap-2" onClick={onShare}>
-                <Share className="w-4 h-4" />
-                Share
-            </Button>
         </div>
     )
 }
 
 
-export interface PhotoModalProps {
-    photos: ListingType["photos"]
-    onClose: () => void
+interface PhotoModalProps {
+    photos: string[];
 }
 
-
-export function PhotoModal({ photos, onClose }: PhotoModalProps) {
+export function PhotoModal({ photos }: PhotoModalProps) {
     return (
-        <div className="fixed inset-0 bg-background z-50 overflow-y-auto">
-            <div className="sticky top-0 w-full bg-background/80 backdrop-blur-sm z-10 p-4">
-                <div className="flex items-center justify-between max-w-7xl mx-auto">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={onClose}
-                        className="hover:bg-background/60"
-                    >
-                        <X className="h-5 w-5" />
-                    </Button>
-                    <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" className="hover:bg-background/60">
-                            <Share2 className="h-5 w-5" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="hover:bg-background/60">
-                            <Heart className="h-5 w-5" />
-                        </Button>
-                    </div>
-                </div>
-            </div>
-            <div className="max-w-7xl mx-auto px-4 pb-8">
-                <div className="grid gap-4">
+        <Sheet>
+            <SheetTrigger className='flex items-center gap-2'>
+                <Grid2X2 className="w-4 h-4" />
+                Show all photos
+            </SheetTrigger>
+            <SheetContent side="top">
+                <div className="grid gap-4 my-10 max-h-screen overflow-y-auto p-4">
                     {photos.map((photo, index) => {
                         if (index % 3 === 0) {
-                            // First photo in each group of 3 - takes full width
                             return (
                                 <div key={index} className="relative aspect-[3/2] w-full">
                                     <Image
@@ -106,45 +78,41 @@ export function PhotoModal({ photos, onClose }: PhotoModalProps) {
                                         priority={index === 0}
                                     />
                                 </div>
-                            )
-                        } else {
-                            // Second and third photos in each group - side by side
-                            if (index % 3 === 1) {
-                                return (
-                                    <div key={index} className="grid grid-cols-2 gap-4">
+                            );
+                        }
+                        if (index % 3 === 1) {
+                            return (
+                                <div key={index} className="grid grid-cols-2 gap-4">
+                                    <div className="relative aspect-[3/2]">
+                                        <Image
+                                            src={photo}
+                                            alt={`Property photo ${index + 1}`}
+                                            fill
+                                            className="object-cover rounded-lg"
+                                            sizes="(max-width: 1280px) 50vw, 640px"
+                                        />
+                                    </div>
+                                    {index + 1 < photos.length && (
                                         <div className="relative aspect-[3/2]">
                                             <Image
-                                                src={photo}
-                                                alt={`Property photo ${index + 1}`}
+                                                src={photos[index + 1]}
+                                                alt={`Property photo ${index + 2}`}
                                                 fill
                                                 className="object-cover rounded-lg"
                                                 sizes="(max-width: 1280px) 50vw, 640px"
                                             />
                                         </div>
-                                        {photos[index + 1] && (
-                                            <div className="relative aspect-[3/2]">
-                                                <Image
-                                                    src={photos[index + 1] as string}
-                                                    alt={`Property photo ${index + 2}`}
-                                                    fill
-                                                    className="object-cover rounded-lg"
-                                                    sizes="(max-width: 1280px) 50vw, 640px"
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                )
-                            }
-                            // Skip the third photo as it's handled in the previous block
-                            return null
+                                    )}
+                                </div>
+                            );
                         }
+                        return null;
                     })}
                 </div>
-            </div>
-        </div>
-    )
+            </SheetContent>
+        </Sheet>
+    );
 }
-
 
 
 const ListingPhotoGrid: React.FC<PhotoGridProps> = ({ photos, onShowAllPhotos }) => {
@@ -179,161 +147,20 @@ const ListingPhotoGrid: React.FC<PhotoGridProps> = ({ photos, onShowAllPhotos })
                 className="absolute bottom-4 right-4 flex items-center gap-2"
                 onClick={onShowAllPhotos}
             >
-                <Grid2X2 className="w-4 h-4" />
-                Show all photos
+                <PhotoModal photos={photos} />
             </Button>
         </div>
     )
 }
 
-function ListingHostInfo({
-    userId: HostUserId,
-    name,
-    hostingDuration,
-    reviews,
-    rating,
-    school,
-    location,
-    responseRate = 100,
-    responseTime = "within an hour"
-}: HostInfoProps) {
-
-    const { firstName, lastName, timeJoined } = useAuth()
-
-    console.log(timeJoined);
-
-
-    return (
-        <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Meet your Host</h2>
-            <div className="flex gap-8">
-                <Card className="p-6 flex-1">
-                    <div className="flex gap-4">
-                        <div className="relative">
-                            <div className="bg-neutral-900 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-medium">
-                                {name[0]}
-                            </div>
-                            <div className="absolute -bottom-1 -right-1 bg-rose-500 text-white p-1 rounded-full">
-                                <Shield className="w-4 h-4" />
-                            </div>
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-semibold">{firstName}</h3>
-                            <p className="text-sm text-muted-foreground">{lastName}</p>
-                        </div>
-                    </div>
-
-                    <div className="mt-6 space-y-4 border-t pt-4">
-                        <div>
-                            <div className="text-2xl font-semibold">{reviews}</div>
-                            <div className="text-sm text-muted-foreground">Reviews</div>
-                        </div>
-
-                        <div>
-                            <div className="text-2xl font-semibold">{rating.toFixed(1)}★</div>
-                            <div className="text-sm text-muted-foreground">Rating</div>
-                        </div>
-
-                        <div>
-                            <div className="text-2xl font-semibold">{parseInt(hostingDuration)}</div>
-                            <div className="text-sm text-muted-foreground">{timeInInstapark(1739982727)}</div>
-                        </div>
-                    </div>
-                </Card>
-
-                <div className="flex-1">
-                    <h3 className="text-xl font-semibold mb-4">Host details</h3>
-                    <div className="space-y-2 mb-6">
-                        <p>Response rate: {responseRate}%</p>
-                        <p>Responds {responseTime}</p>
-                    </div>
-                    <Button variant="default" className="w-full">
-                        <Link href={`/messages/${HostUserId}`}>
-                            Message Host
-                        </Link>
-                    </Button>
-                </div>
-            </div>
-
-            {school && (
-                <div className="flex items-center gap-2 text-muted-foreground">
-                    <GraduationCap className="w-5 h-5" />
-                    <span>Where I went to school: {school}</span>
-                </div>
-            )}
-
-            {location && (
-                <div>
-                    <p className="text-muted-foreground">{`I'm ${name} from ${location}.`}</p>
-                    <button className="mt-2 font-medium underline">Show more</button>
-                </div>
-            )}
-
-            <div className="flex items-start gap-2 text-sm text-muted-foreground border-t pt-6">
-                <Shield className="w-5 h-5 flex-shrink-0" />
-                <p>To protect your payment, never transfer money or communicate outside of the Airbnb website or app.</p>
-            </div>
-        </div>
-    )
-}
-
-interface ListingDetailedContentProps extends React.HTMLAttributes<HTMLDivElement> {
-
-}
-
-export const ListingDetailedContent: React.FC<ListingDetailedContentProps> = ({ children }) => {
-    return (
-        <div className="max-w-7xl mx-auto px-4 py-8">
-            {children}
-        </div>
-    )
-}
 
 export const HomeListingsDetailed: React.FC<ListingProps> = ({
     listingId
 }) => {
 
-    const GET_LISTING = gql`
-    query GET_LISTINGS($id: String!) {
-  ListingQuery {
-    getListings(id: $id) {
-      allowedVehicles
-      basePrice
-      city
-      country
-      createdAt
-      district
-      id
-      isOpen
-      landmark
-      userId
-      type
-      state
-      street
-      pincode
-      latitude
-      longitude
-      name
-      pphbi
-      pphcy
-      pphcr
-      plph
-      photos
-      rating
-      updatedAt
-    }
-  }
-}
-`
-
-    const { loading, error, data } = useQuery(GET_LISTING, {
+    const { loading, error, data } = useQuery(HOST_LISTINGS, {
         variables: { id: listingId }
     });
-    const { userId } = useAuth()
-
-    console.log(data);
-
-
     if (loading) {
         return <ListingLoadingSkeleton />
     }
@@ -342,16 +169,22 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
         toast.error(`Error: ${error.message}`);
     }
 
-    const listing: Listing = data.ListingQuery.getListings[0]
+    const listing = data?.ListingQuery?.hostListings?.at(0) as Listing
 
     return (
-        <ListingDetailedContent>
+        <div className="max-w-7xl mx-auto px-4 py-8">
             <ListingDetailedHeader
                 title={formatLocation(listing.street, listing.city)}
                 onShare={() => console.log('Share clicked')}
                 onSave={() => console.log('Save clicked')}
             />
-            <ListingPhotoGrid photos={listing.photos} onShowAllPhotos={() => console.log('Show all photos clicked')} />
+            <ListingPhotoGrid
+                photos={listing.photos}
+                onShowAllPhotos={() =>
+                    <PhotoModal photos={listing.photos}
+                        onClose={function (): void {
+                            throw new Error('Function not implemented.')
+                        }} />} />
             <div className="grid grid-cols-3 gap-12">
                 <div className="col-span-2">
                     <div className="border-b pb-4 mb-6">
@@ -359,15 +192,12 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                             {listing.type} {" in "}{listing.city}, {listing.country}
                         </h2>
                     </div>
-                    <ListingHostInfo
-                        userId={listing.userId}
-                        name="Host Name"
-                        hostingDuration="12"
-                        reviews={4}
-                        rating={4.5}
-                        responseRate={100}
-                        responseTime="within an hour"
-                    />
+                    <UserMini
+                        className='border-none'
+                        host={true}
+                        firstName={"host?.firstName as string"}
+                        lastName={"host?.lastName as string"}
+                        timeJoined={listing.user?.timeJoined as number} />
                 </div>
                 <div className="min-h-screen">
                     {/* Desktop View */}
@@ -382,7 +212,7 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                         />
                         <ListingReserve
                             listingId={listing.id}
-                            userId={userId}
+                            userId={listing.userId}
                             startDate={1739503313}
                             endDate={1739589713}
                             basePrice={2200}
@@ -412,7 +242,6 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
             </div>
             <HomeListingRating />
             <MapsMain maxZoom={14} location={{ lat: listing.latitude, lng: listing.longitude }} />
-        </ListingDetailedContent>
+        </div>
     )
 }
-

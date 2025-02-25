@@ -1,4 +1,4 @@
-import { GraphQLBoolean, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
 export const VendorBank = new GraphQLObjectType({
     name: "VendorBank",
@@ -54,7 +54,7 @@ export const VendorType = new GraphQLObjectType({
     }
 })
 
-export const VendorBalance = new GraphQLObjectType({
+export const VendorBalanceType = new GraphQLObjectType({
     name: "VendorBalance",
     fields: {
         vendor_id: { type: new GraphQLNonNull(GraphQLString) },
@@ -62,35 +62,73 @@ export const VendorBalance = new GraphQLObjectType({
     }
 })
 
-const OrderSplitType = new GraphQLObjectType({
-    name: "OrderSplit",
-    fields: () => ({
-        merchant_vendor_id: { type: GraphQLString },
-        percentage: { type: GraphQLInt },
-        tags: { type: GraphQLString },
-    }),
-});
+export const EarningsType = new GraphQLObjectType({
+    name: "Earnings",
+    fields: {
+        currentMonth: {
+            type: new GraphQLObjectType({
+                name: "CurrentMonth",
+                fields: {
+                    totalBookings: { type: GraphQLInt },
+                    totalRevenue: { type: GraphQLFloat },
+                    totalNetProfit: { type: GraphQLFloat },
+                    avgBookingValue: { type: GraphQLFloat },
+                },
+            }),
+        },
+        previousMonth: {
+            type: new GraphQLObjectType({
+                name: "PreviousMonth",
+                fields: {
+                    totalBookings: { type: GraphQLInt },
+                    totalRevenue: { type: GraphQLFloat },
+                    totalNetProfit: { type: GraphQLFloat },
+                    avgBookingValue: { type: GraphQLFloat },
+                },
+            }),
+        },
+        netPL: {
+            type: new GraphQLObjectType({
+                name: "NetPL",
+                fields: {
+                    totalBookingsPLPercent: { type: GraphQLFloat },
+                    totalRevenuePLPercent: { type: GraphQLFloat },
+                    totalNetProfitPLPercent: { type: GraphQLFloat },
+                    avgBookingValuePLPercent: { type: GraphQLFloat },
+                },
+            }),
+        },
+        
+    },
+})
 
-const TransactionBaseType = new GraphQLObjectType({
-    name: "TransactionBase",
-    fields: () => ({
-        amount: { type: (GraphQLFloat) },
-        merchant_order_id: { type: (GraphQLString) },
-        tx_time: { type: GraphQLString },
-        settled: { type: GraphQLString },
-        entity_id: { type: GraphQLString },
-        currency: { type: GraphQLString },
-        sale_type: { type: GraphQLString },
-        customer_email: { type: GraphQLString },
-        customer_phone: { type: GraphQLString },
-        added_on: { type: GraphQLString },
-        entity_type: { type: GraphQLString },
-    }),
-});
+export const EntityTypeEnum = new GraphQLEnumType({
+    name: "EntityType",
+    values: {
+        "TRANSACTION": { value: "transaction" },
+        "VENDOR_COMMISION": { value: "vendor_comission" }
+    }
+})
 
-export const TransactionType = new GraphQLObjectType({
-    name: "Transaction",
+export const VendorOrderSplit = new GraphQLObjectType({
+    name: "VendorOrderSplit",
     fields: () => ({
+        split: {
+            type: new GraphQLList(new GraphQLObjectType({
+                name: "VendorSplit",
+                fields: {
+                    merchant_vendor_id: { type: GraphQLString },
+                    percentage: { type: GraphQLInt },
+                    tags: { type: GraphQLString },
+                }
+            }))
+        }
+    }),
+})
+
+export const ReconDataType = new GraphQLObjectType({
+    name: "ReconData",
+    fields: {
         amount: { type: (GraphQLFloat) },
         merchant_order_id: { type: (GraphQLString) },
         tx_time: { type: GraphQLString },
@@ -116,14 +154,9 @@ export const TransactionType = new GraphQLObjectType({
         settlement_initiated_on: { type: GraphQLString },
         settlement_time: { type: GraphQLString },
         eligible_split_balance: { type: GraphQLString },
-        order_splits: { type: new GraphQLList(OrderSplitType) },
-    }),
-});
-
-export const VendorCommissionType = new GraphQLObjectType({
-    name: "VendorCommission",
-    fields: () => ({
-        ...TransactionBaseType.getFields(),
+        order_splits: {
+            type: new GraphQLList(VendorOrderSplit)
+        },
         merchant_vendor_id: { type: GraphQLString },
         vendor_settlement_time: { type: GraphQLString },
         vendor_settlement_initiated_on: { type: GraphQLString },
@@ -133,5 +166,5 @@ export const VendorCommissionType = new GraphQLObjectType({
         vendor_pg_service_charge: { type: GraphQLString },
         vendor_pg_service_tax: { type: GraphQLString },
         status: { type: GraphQLString },
-    }),
-});
+    }
+})

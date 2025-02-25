@@ -10,7 +10,6 @@ export function ListingLoadingSkeleton() {
                 <Skeleton className="h-8 w-64" />
                 <div className="flex gap-2">
                     <Skeleton className="h-10 w-24" />
-                    <Skeleton className="h-10 w-24" />
                 </div>
             </div>
 

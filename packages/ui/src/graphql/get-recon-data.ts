@@ -1,9 +1,13 @@
 import { gql } from "../__generated__";
 
-export const GET_SETTLEMENTS = gql(`
-query GET_SETTLEMENTS($orderIds: [String], $limit: Int, $entityType: String) {
+export const GET_RECON_DATA = gql(`
+query GET_RECON_DATA(
+  $orderIds: [String!]!
+  $limit: Int!
+  $entityType: EntityType!
+) {
   VendorQuery {
-    getTransactions(orderIds: $orderIds, limit: $limit, entity_type: $entityType) {
+    getReconData(orderIds: $orderIds, limit: $limit, entity_type: $entityType) {
       amount
       merchant_order_id
       tx_time
@@ -30,10 +34,11 @@ query GET_SETTLEMENTS($orderIds: [String], $limit: Int, $entityType: String) {
       settlement_time
       eligible_split_balance
       order_splits {
-        vendor_id
-        amount
-        percentage
-        tags
+        split {
+          merchant_vendor_id
+          percentage
+          tags
+        }
       }
       merchant_vendor_id
       vendor_settlement_time
@@ -47,4 +52,5 @@ query GET_SETTLEMENTS($orderIds: [String], $limit: Int, $entityType: String) {
     }
   }
 }
+
 `)

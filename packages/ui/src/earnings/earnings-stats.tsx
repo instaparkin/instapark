@@ -6,16 +6,21 @@ import { useQuery } from '@apollo/client'
 import { formatPrice } from '../utils/field-name'
 import { Button } from '../components/button'
 import { Table } from 'lucide-react'
-import { GET_EARNINGS_DASHBOARD } from '../graphql/get-earnings'
+import { GET_EARNINGS_DASHBOARD } from '../graphql/get-earnings-dashboard'
 import Link from 'next/link'
 import { EarningsStatsSkeleton } from './earnings-stats-skeleton'
 import toast from 'react-hot-toast'
 
-export const EarningsStats = () => {
+interface EarningsStatsProps {
+    userId: string
+    vendorId: string
+}
+
+export const EarningsStats = ({ userId, vendorId }: EarningsStatsProps) => {
     const { data, loading, error } = useQuery(GET_EARNINGS_DASHBOARD, {
         variables: {
-            userId: "0c9e666f-9416-4979-9393-82e1b9d29884",
-            vendorId: "uniqueSampleVendorId"
+            userId,
+            vendorId
         },
     })
 
@@ -23,13 +28,13 @@ export const EarningsStats = () => {
         return <EarningsStatsSkeleton />
     }
 
-    if (error) {
+if (error) {
         toast.error(`${error}`);
     }
 
-    const vendorBalance = data?.BookingQuery?.getEarningsDashboard?.vendorBalance
+    const vendorBalance = data?.VendorQuery?.getEarningsDashboard?.vendorBalance
 
-    const earnings = data?.BookingQuery?.getEarningsDashboard?.earnings
+    const earnings = data?.VendorQuery?.getEarningsDashboard?.earnings
 
     const EARNINGS_HEADER_CONSTANTS = [
         {
@@ -66,7 +71,7 @@ export const EarningsStats = () => {
                         <p className="text-sm font-medium">Total Balance</p>
                         <div className="flex flex-col gap-6  sm:flex-row sm:items-center justify-between">
                             <h2 className="text-3xl font-bold">
-                                {formatPrice(vendorBalance?.vendor_unsettled as number)}
+                                {formatPrice(parseFloat(vendorBalance?.vendor_unsettled as string))}
                             </h2>
                             <div className="flex flex-col sm:flex-row  justify-between items-center gap-4">
                                 <Button size="lg" asChild>

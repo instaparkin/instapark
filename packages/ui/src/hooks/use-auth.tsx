@@ -1,34 +1,25 @@
 "use client"
 
-import React from "react";
-import { ApiResponse, Profile } from "@instapark/types"
 import { useQuery } from "@apollo/client";
 import { GET_PROFILE } from "../graphql/get-profile";
-import axios from "axios";
+import { Profile } from "../__generated__/graphql";
+import { useSessionContext } from "supertokens-auth-react/recipe/session";
 
 export const useAuth = (): Profile => {
-    const [userId, setUserId] = React.useState("");
+    const session = useSessionContext();
 
-    React.useEffect(() => {
-        axios.get<ApiResponse<{ userId: string }>>
-            ("http://localhost:8081/verify")
-            .then(response => {
-                if (response.status === 401) {
-                    setUserId("")
-                }
-                setUserId(response.data.data?.userId as string)
-            })
-    }, [])
-    console.log(userId);
+    if (session.loading || !session.doesSessionExist) {
+        return {} as Profile
+    }
 
     const { data } = useQuery(GET_PROFILE, {
         variables: {
-            userId: userId,
+            userId: session.userId
         },
-        skip: !userId
     });
 
     return {
-        ...data?.UserQuery?.getProfile,
+        ...data?.UserQuery?.getProfile as Profile,
+        userId: session.userId,
     }
 }

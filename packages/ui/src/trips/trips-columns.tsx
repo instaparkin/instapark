@@ -1,37 +1,43 @@
 "use client"
 
 import React from "react"
-import { Booking, Listing, Payment } from "@instapark/types"
+import { Booking, Payment } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { unixSecToMonthYearTime } from "../utils/dayjs"
-import { formatLocation } from "../utils/field-name"
+import { BookingsBuyer, Listing } from "../__generated__/graphql"
+import Image from "next/image"
+import { formatPrice } from "../utils/field-name"
+import { ListingMini } from "../components/listing-mini"
 
-export const columns: ColumnDef<Booking & { payments: Payment[], listing: Listing }>[] = [
+export const columns: ColumnDef<BookingsBuyer>[] = [
     {
-        accessorKey: "id",
+        id: "bookingId",
+        accessorKey: "booking.id",
         header: "Booking Id",
     },
     {
         accessorKey: "listing",
-        header: "Location",
+        header: "Listing",
         cell: ({ cell }) => {
-            const value: Listing = cell.getValue() as Listing;
+            const value = cell.getValue() as Listing;
             return (
-                <div className="flex items-center gap-4">
-                    {formatLocation(
-                        value.country,
-                        value.state,
-                        value.district,
-                        value.city,
-                        value.street,
-                        value.pincode,
-                        false)}
+                <ListingMini listing={value}/>
+            )
+        }
+    },
+    {
+        accessorKey: "booking.totalPrice",
+        header: "Total",
+        cell: ({ cell }) => {
+            return (
+                <div>
+                    {formatPrice(cell.getValue() as number)}
                 </div>
             )
         }
     },
     {
-        accessorKey: "status",
+        accessorKey: "booking.status",
         header: "Status",
         cell: ({ cell }) => {
             const value = cell.getValue();
@@ -44,13 +50,13 @@ export const columns: ColumnDef<Booking & { payments: Payment[], listing: Listin
                     )
                 case "Completed":
                     return (
-                        <div className="bg-lime-200 p-2 w-fit rounded-sm">
+                        <div className="bg-lime-200 text-lime-700 p-2 w-fit rounded-sm">
                             {value}
                         </div>
                     )
                 case "OnGoing":
                     return (
-                        <div className="bg-yellow-200 p-2 w-fit rounded-sm">
+                        <div className="bg-yellow-200 text-yellow-700 p-2 w-fit rounded-sm">
                             {value}
                         </div>
                     )
@@ -58,7 +64,7 @@ export const columns: ColumnDef<Booking & { payments: Payment[], listing: Listin
         }
     },
     {
-        accessorKey: "startDate",
+        accessorKey: "booking.startDate",
         header: "Start Date",
         cell: ({ cell }) => {
             const value = cell.getValue();
@@ -70,7 +76,7 @@ export const columns: ColumnDef<Booking & { payments: Payment[], listing: Listin
         }
     },
     {
-        accessorKey: "endDate",
+        accessorKey: "booking.endDate",
         header: "End Date ",
         cell: ({ cell }) => {
             const value = cell.getValue();
@@ -81,4 +87,5 @@ export const columns: ColumnDef<Booking & { payments: Payment[], listing: Listin
             )
         }
     },
+
 ]

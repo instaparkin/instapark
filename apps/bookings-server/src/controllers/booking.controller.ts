@@ -137,6 +137,7 @@ export const getBookings = async (req: Request, res: Response) => {
             },
             { _id: 0, __v: 0 }
         );
+        console.log(bookings);
 
         return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
     } catch (error) {
@@ -185,7 +186,6 @@ export const verifyBooking = async (req: Request, res: Response) => {
 export const earningsStats = async (req: Request, res: Response) => {
     try {
         const { listingIds } = req.query as { listingIds: string[] };
-        console.log(listingIds);
 
         if (!listingIds || !Array.isArray(listingIds) || listingIds.length === 0) {
             return sendResponse(res, 400, "Missing or invalid listingIds", "FAILURE", null);
@@ -198,13 +198,12 @@ export const earningsStats = async (req: Request, res: Response) => {
         const startOfPreviousMonth = now.subtract(1, "month").startOf("month").unix();
         const endOfPreviousMonth = now.subtract(1, "month").endOf("month").unix();
 
-        // Monthly earnings comparison
         const result = await BookingModel.aggregate([
             { $match: { listingId: { $in: listingIds } } },
             {
                 $facet: {
                     currentMonth: [
-                        { $match: { createdAt: { $gte: startOfCurrentMonth, $lte: endOfCurrentMonth } } },
+                        { $match: { createdAt: { $gte: startOfCurrentMonth, $lte: endOfCurrentMonth }} },
                         {
                             $group: {
                                 _id: null,

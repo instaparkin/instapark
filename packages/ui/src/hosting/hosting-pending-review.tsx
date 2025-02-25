@@ -12,14 +12,25 @@ import { useQuery } from "@apollo/client"
 import Image from "next/image"
 import type { BookingExtended } from "@instapark/types/src/Booking"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../components/dialog"
-import { GET_REVIEW_BOOKINGS } from "../graphql/get-review-bookings"
 import { OTPInputForm, OTPInputFormType } from "../forms/otp-input-form"
 import { formatLocation, formatPrice } from "../utils/field-name"
 import { Details } from "../components/details"
 import { unixSecToMonthYearTime } from "../utils/dayjs"
+import { HOST_BOOKINGS } from "../graphql/host-bookings"
+import { Booking, BookingStatus, HostBooking } from "../__generated__/graphql"
+import { UserMini } from "../components/user-mini"
 
-export const HostingPendingReview = () => {
-  const { loading, error, data } = useQuery(GET_REVIEW_BOOKINGS)
+interface HostingPendingReviewProps {
+  userId: string
+}
+
+export const HostingPendingReview = ({ userId }: HostingPendingReviewProps) => {
+  const { loading, error, data } = useQuery(HOST_BOOKINGS, {
+    variables: {
+      userId,
+      status: BookingStatus.Booked
+    }
+  })
   const form = OTPInputForm()
 
   if (loading) {
@@ -30,9 +41,9 @@ export const HostingPendingReview = () => {
     toast.error(`Error: ${error.message}`)
   }
 
-  const bookings = data?.BookingQuery?.getBookingsForHost || []
+  const bookings = data?.ListingQuery?.hostBookings?.bookings as HostBooking[]
 
-  if (bookings.length === 0) {
+  if (bookings?.length === 0) {
     return (
       <NoResults text="You don't have any guest reviews to write." icon={<CiCircleCheck className="w-10 h-10" />} />
     )
@@ -54,21 +65,18 @@ export const HostingPendingReview = () => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {bookings.map((b: BookingExtended) => {
-        const listing = b.listing;
-        console.log(listing);
-
+      {bookings?.map((b, i) => {
         return (
-          <Card key={b.id} className="w-full">
+          <Card key={i} className="w-full">
             <CardHeader>
               <CardTitle className="text-lg">
                 {formatLocation(
-                  listing.country,
-                  listing.state,
-                  listing.district,
-                  listing.city,
-                  listing.street,
-                  listing.pincode,
+                  b.listing?.country,
+                  b.listing?.state,
+                  b.listing?.district,
+                  b.listing?.city,
+                  b.listing?.street,
+                  b.listing?.pincode,
                   false)}
               </CardTitle>
             </CardHeader>
@@ -76,19 +84,21 @@ export const HostingPendingReview = () => {
               <div className="relative w-full h-60">
                 <Image
                   fill
-                  src={(b.listing.photos[0] as string) || "/placeholder.svg"}
+                  src={(b.listing?.photos[0] as string) || "/placeholder.svg"}
                   alt={"Listing photo"}
                   className="object-cover rounded-md border"
                 />
               </div>
             </CardContent>
-            <CardFooter className="flex flex-col justify-start bg-muted">
+            <CardFooter className="flex flex-col justify-start">
+              <UserMini className="w-full flex justify-center" firstName={b.booking?.user?.firstName as string} lastName={b.booking?.user?.lastName as string} timeJoined={b.booking?.user?.timeJoined as number} />
               <Details
                 className="py-4"
                 items={[
-                  { field: "Start Date", value: unixSecToMonthYearTime(b.startDate) },
-                  { field: "End Date", value: unixSecToMonthYearTime(b.endDate) },
-                  { field: "Total Price", value: formatPrice(b.totalPrice) },
+                  { field: "Start date", value: unixSecToMonthYearTime(b.booking?.startDate as number) },
+                  { field: "End date", value: unixSecToMonthYearTime(b.booking?.endDate as number) },
+                  { field: "Total price", value: formatPrice(b.booking?.totalPrice as number) },
+                  { field: "Estimated earnings", value: formatPrice(b.booking?.totalPrice as number - (b.booking?.ipFee as number)), className: "text-positive" },
                 ]} />
               <Dialog>
                 <DialogTrigger asChild>
@@ -99,7 +109,7 @@ export const HostingPendingReview = () => {
                     <DialogTitle className="text-center">Enter OTP</DialogTitle>
                   </DialogHeader>
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit((e) => onSubmit(b.id, e))} className="space-y-6 my-6 flex flex-col justify-center items-center">
+                    <form onSubmit={form.handleSubmit((e) => onSubmit(b.booking?.id as string, e))} className="space-y-6 my-6 flex flex-col justify-center items-center">
                       <FormField
                         control={form.control}
                         name="otp"

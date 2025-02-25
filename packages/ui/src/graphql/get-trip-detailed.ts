@@ -1,9 +1,9 @@
 import { gql } from "../__generated__";
 
-export const GET_TRIPS = gql(`
-query GET_TRIPS($userId: String, $buyerBookingsId: String, $status: BookingStatus) {
+export const GET_TRIP_DETAILED = gql(`
+query GET_TRIP_DETAILED($userId: String!, $id: String!) {
   BookingQuery {
-    buyerBookings(userId: $userId, id: $buyerBookingsId, status: $status) {
+    buyerBookings(userId: $userId, id: $id) {
       booking {
         id
         listingId
@@ -87,47 +87,13 @@ query GET_TRIPS($userId: String, $buyerBookingsId: String, $status: BookingStatu
         plph
         photos
         id
-        isOpen
         rating
         createdAt
         updatedAt
         user {
-          userId
           firstName
           lastName
-          emails
           timeJoined
-          phoneNumber
-          kyc {
-            uidai
-            verified
-          }
-          country
-          state
-          district
-          city
-          street
-          pincode
-          latitude
-          longitude
-          name
-          landmark
-          reviews
-          ratings
-        }
-        reviews {
-          id
-          listingId
-          userId
-          rating
-          location
-          cleanliness
-          communication
-          value
-          accuracy
-          description
-          createdAt
-          updatedAt
         }
       }
     }

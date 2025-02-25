@@ -1,9 +1,9 @@
 import { gql } from "../__generated__";
 
 export const GET_VENDOR = gql(`
-query GetVendor($vendorId: String) {
+query GetVendor($vendorId: String!) {
   VendorQuery {
-    getVendor (vendorId: $vendorId){
+    getVendor(vendorId: $vendorId) {
       name
       email
       phone
@@ -34,4 +34,5 @@ query GetVendor($vendorId: String) {
       }
     }
   }
-}`)
+}
+  `)

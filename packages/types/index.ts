@@ -12,7 +12,7 @@ export {
     type ListingRequest,
     type Review,
     type ReviewRequest,
-    type ListingSearch
+    type ListingSearch,
 } from "./src/Listing";
 export {
     type SearchResult,

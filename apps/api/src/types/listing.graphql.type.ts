@@ -1,10 +1,29 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { ProfileType } from "./user.graphql.type";
 import { axios } from "@instapark/utils";
-import { ApiResponse, Profile } from "@instapark/types";
-import { EarningsType } from "./booking.graphql.type";
-import { Earnings } from "@instapark/types/src/Booking";
+import { ApiResponse, Booking, Profile, Review, VendorBalance } from "@instapark/types";
+import { BookingStatusEnum, BookingType } from "./booking.graphql.type";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
+import { EarningsType, VendorBalanceType } from "./vendor.graphql.type";
+import { Earnings } from "@instapark/types/src/Booking";
+
+export const ReviewType = new GraphQLObjectType({
+    name: "Review",
+    fields: {
+        id: { type: GraphQLString },
+        listingId: { type: GraphQLString },
+        userId: { type: GraphQLString },
+        rating: { type: GraphQLFloat },
+        location: { type: GraphQLFloat },
+        cleanliness: { type: GraphQLFloat },
+        communication: { type: GraphQLFloat },
+        value: { type: GraphQLFloat },
+        accuracy: { type: GraphQLFloat },
+        description: { type: GraphQLString },
+        createdAt: { type: GraphQLInt },
+        updatedAt: { type: GraphQLInt }
+    }
+})
 
 export const PlaceTypeEnum = new GraphQLEnumType({
     name: "PlaceType",
@@ -65,23 +84,17 @@ export const ListingType = new GraphQLObjectType({
                 return response.data.data;
             }
         },
+        reviews: {
+            type: new GraphQLList(ReviewType),
+            resolve: async (parent) => {
+                const response = await axios.get<ApiResponse<Review[]>>
+                    (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.BOOKING.GET, {
+                        params: {
+                            listingId: parent.id
+                        }
+                    })
+                return response.data.data
+            }
+        },
     })
 });
-
-export const ReviewType = new GraphQLObjectType({
-    name: "Review",
-    fields: {
-        id: { type: GraphQLString },
-        listingId: { type: GraphQLString },
-        userId: { type: GraphQLString },
-        rating: { type: GraphQLFloat },
-        location: { type: GraphQLFloat },
-        cleanliness: { type: GraphQLFloat },
-        communication: { type: GraphQLFloat },
-        value: { type: GraphQLFloat },
-        accuracy: { type: GraphQLFloat },
-        description: { type: GraphQLString },
-        createdAt: { type: GraphQLInt },
-        updatedAt: { type: GraphQLInt }
-    }
-})

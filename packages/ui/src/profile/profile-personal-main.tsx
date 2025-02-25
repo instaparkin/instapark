@@ -14,6 +14,7 @@ import {
 } from "../components/accordion"
 import { Button } from '../components/button'
 import toast from 'react-hot-toast'
+import { SidebarForm } from '../components/sidebar-form'
 
 interface ProfileField<T extends Record<string, unknown>> {
   name: Path<T>,

@@ -1,12 +1,12 @@
 "use client"
 
 import React from "react"
-import { Booking } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { unixSecToMonthYearTime } from "../utils/dayjs"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/dropdown-menu"
 import { Button } from "../components/button"
 import { MoreHorizontal } from "lucide-react"
+import { Booking } from "../__generated__/graphql"
 
 export const columns: ColumnDef<Booking>[] = [
     {

@@ -133,8 +133,7 @@ export const updateVendor = (req: SessionRequest, res: Response) => {
 
 export const getBalance = (req: SessionRequest, res: Response) => {
     try {
-        const { userId } = req.query;
-        console.log( BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID);
+        const { vendorId } = req.query;
 
         const options = {
             method: 'GET',
@@ -145,7 +144,7 @@ export const getBalance = (req: SessionRequest, res: Response) => {
             }
         };
 
-        fetch(`https://sandbox.cashfree.com/pg/easy-split/vendors/${userId}/balances`, options)
+        fetch(`https://sandbox.cashfree.com/pg/easy-split/vendors/${vendorId}/balances`, options)
             .then(response => response.json())
             .then(response => {
                 sendResponse(res, 200, response.message, "SUCCESS", response);

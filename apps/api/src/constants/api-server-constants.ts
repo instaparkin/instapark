@@ -12,17 +12,30 @@ export const API_SERVER_CONSTANTS = {
     },
     ENDPOINTS: {
         LISTINGS: {
-            CREATE: `${process.env.LISTINGS_SERVER_URL}/listings`,
-            UPDATE: `${process.env.LISTINGS_SERVER_URL}/listings`,
-            GET: `${process.env.LISTINGS_SERVER_URL}/listings`,
+            LISTING: {
+                CREATE: `${process.env.LISTINGS_SERVER_URL}/listings`,
+                UPDATE: `${process.env.LISTINGS_SERVER_URL}/listings`,
+                GET: `${process.env.LISTINGS_SERVER_URL}/listings`,
+            },
+            REVIEW: {
+                GET: `${process.env.LISTINGS_SERVER_URL}/reviews`,
+            }
         },
         BOOKINGS: {
             BOOKING: {
-                EARNING_STATS: `${process.env.BOOKINGS_SERVER_URL}/bookings/earnings-stats`
+                GET: `${process.env.BOOKINGS_SERVER_URL}/bookings`,
+                EARNING_STATS: `${process.env.BOOKINGS_SERVER_URL}/bookings/earnings-stats`,
+                OTP: `${process.env.BOOKINGS_SERVER_URL}/bookings/otp`,
             },
             VENDOR: {
                 BALANCE: `${process.env.BOOKINGS_SERVER_URL}/vendor/balance`,
                 GET: `${process.env.BOOKINGS_SERVER_URL}/vendor`,
+            },
+            PAYMENTS: {
+                GET: `${process.env.BOOKINGS_SERVER_URL}/payments`,
+            },
+            SETTLEMENTS: {
+                GET: `${process.env.BOOKINGS_SERVER_URL}/settlements`,
             }
         },
         USER: {
@@ -31,8 +44,5 @@ export const API_SERVER_CONSTANTS = {
                 UPSERT: `${process.env.USER_SERVER_URL}/profile`,
             }
         },
-        AUTH: {
-
-        }
     }
 }

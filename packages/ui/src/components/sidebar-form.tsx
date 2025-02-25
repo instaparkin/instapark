@@ -1,60 +1,45 @@
-"use client"
+import React, { HTMLInputTypeAttribute } from 'react'
+import { SideBarLayout } from './sidebar-layout'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './form'
+import { Badge } from './badge'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './card'
+import { Input } from './input'
+import { Button } from './button'
+import { Path, UseFormReturn } from 'react-hook-form'
+import { fieldName } from '../utils/field-name'
 
-import React, { useEffect } from 'react'
-import { VendorCreateForm, VendorCreateFormType } from '../forms/vendor-create-form'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../components/form';
-import { Input } from '../components/input';
-import { fieldName } from '../utils/field-name';
-import { Button } from '../components/button';
-import { useMutation } from '@apollo/client';
-import { CREATE_VENDOR } from '../graphql/create-vendor';
-import toast from 'react-hot-toast';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/card';
-import { SideBarLayout } from '../components/sidebar-layout';
-import { Badge } from '../components/badge';
-import { paymentDetailsSteps } from './payment-details-steps';
-import { SidebarForm } from '../components/sidebar-form';
+export type Field<T extends Record<string, unknown>> = {
+    name: Path<T>;
+    disabled?: boolean,
+    description: string
+    type: HTMLInputTypeAttribute
+}
 
-export const PaymentDetailsMain = () => {
-    const { form } = VendorCreateForm();
-    const [createVendor, { data, loading, error }] = useMutation(CREATE_VENDOR);
+export type Group<T extends Record<string, unknown>> = {
+    title: string;
+    href: string;
+    component?: ({ form }: { form: UseFormReturn<T> }) => JSX.Element;
+    fields: Field<T>[]
+}
 
-    useEffect(() => {
-        if (data) {
-            toast.success(data.VendorMutation?.createVendor as string);
-        }
-    }, [data])
+interface SidebarFormProps<T extends Record<string, unknown>> {
+    groups: Group<T>[]
+    form: UseFormReturn<T>
+    onSubmit?: (data: T) => void
+}
 
-    const onSubmit = (data: VendorCreateFormType) => {
-        if (loading) {
-            toast.loading("Submitting Payment details");
-        }
-
-        if (error) {
-            toast.error(`Submission error! ${error.message}`)
-        }
-
-        const request = {
-            ...data,
-        }
-        createVendor({
-            variables: request
-        })
-    }
-
+export const SidebarForm = <T extends Record<string, unknown>>
+    ({ groups, form, onSubmit }: SidebarFormProps<T>) => {
     return (
-        <SideBarLayout sidebarNavItems={paymentDetailsSteps.map(p => p)}>
-            <SidebarForm groups={paymentDetailsSteps} form={form} />
+        <SideBarLayout sidebarNavItems={groups.map(p => p)}>
             <div className='max-w-2xl mx-auto space-y-6'>
                 <Form {...form}>
-                    <form className='space-y-10' onSubmit={form.handleSubmit(onSubmit)}>
+                    <form className='space-y-10' onSubmit={form.handleSubmit((data) => onSubmit?.(data))}>
                         {
-                            paymentDetailsSteps.map((d, i) => (
+                            groups.map((d, i) => (
                                 <div id={d.title.toLowerCase()} className='space-y-6' key={i}>
                                     <div className='flex items-center justify-between'>
                                         <h2 className='text-lg font-semibold'>{d.title}</h2>
-                                        <Badge variant={d.status === "VERIFIED" ? "positive" : "negative"}>
-                                            {d.status}</Badge>
                                     </div>
                                     {
                                         d.fields.map((f, i) => (
@@ -97,18 +82,3 @@ export const PaymentDetailsMain = () => {
         </SideBarLayout>
     )
 }
-
-export const sidebarNavItems = [
-    {
-        title: "Personal",
-        href: "#name",
-    },
-    {
-        title: "Bank",
-        href: "#bank.account_holder",
-    },
-    {
-        title: "KYC",
-        href: "#kyc_details.pan",
-    },
-]

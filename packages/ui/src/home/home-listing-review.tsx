@@ -32,7 +32,7 @@ export const HomeListingReview = ({
         {/**Date */}
         <Text className='text-pretty' text={unixSecToMonthYear(reviewDate)} />
       </div>
-      <div className='line-clamp-3 leading-2'>
+      <div className='line-clamp-4 leading-2'>
         {review}
       </div>
     </div>

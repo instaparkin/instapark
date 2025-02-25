@@ -3,8 +3,9 @@ import React from "react"
 import { Transaction } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { formatPrice } from "../utils/field-name"
+import { ReconData } from "../__generated__/graphql"
 
-export const transactionsColumns: ColumnDef<Transaction>[] = [
+export const transactionsColumns: ColumnDef<ReconData>[] = [
     {
         accessorKey: "merchant_order_id",
         header: "Order Id"

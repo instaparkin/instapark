@@ -10,6 +10,9 @@ export const listingsSearchForm = () => useForm<ListingsSearchFormType>({
     defaultValues: {
         street: "",
         vehicleType: Vehicle.Bike,
-        startDate: new Date().toISOString()
+        startDate: new Date().toISOString().slice(0, 16),
+        endDate: new Date(new Date().getTime() + 5 * 60 * 60 * 1000)
+            .toISOString()
+            .slice(0, 16),
     }
 })

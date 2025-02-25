@@ -32,7 +32,7 @@ export const ListingMutation = new GraphQLObjectType({
             },
             resolve: async (parent, args: ListingRequest) => {
                 const response = await axios.post<ApiResponse<Listing>>
-                    (API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.CREATE,
+                    (API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.LISTING.CREATE,
                         args)
 
                 return response.data.message

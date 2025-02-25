@@ -1,12 +1,12 @@
 "use client"
 
 import React from "react"
-import { Order, Payment } from "@instapark/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { dateToUnixSec, unixSecToMonthYearTime } from "../utils/dayjs";
 import { formatAmount } from "../utils/field-name";
+import { Order, Payment } from "../__generated__/graphql";
 
-export const paymentsColumns: ColumnDef<Payment & { order: Order }>[] = [
+export const paymentsColumns: ColumnDef<Payment>[] = [
     {
         accessorKey: "order.order_id",
         header: "Order Id",

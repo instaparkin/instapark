@@ -1,34 +1,45 @@
 import { gql } from "../__generated__";
 
 export const SEARCH_LISTINGS = gql(`
-query SEARCH_LISTINGS {
+query SearchListings(
+  $street: String
+  $vehicleType: Vehicle
+  $startDate: Int
+  $endDate: Int
+) {
   ListingQuery {
-    searchListings(vehicleType: Bike) {
-      basePrice
-      id
-      isOpen
-      state
-      street
-      allowedVehicles
-      city
-      country
-      createdAt
-      district
-      landmark
+    searchListings(
+      street: $street
+      vehicleType: $vehicleType
+      startDate: $startDate
+      endDate: $endDate
+    ) {
       userId
       type
-      updatedAt
-      rating
-      pphcy
+      country
+      state
+      district
+      city
+      street
+      pincode
       latitude
       longitude
       name
-      photos
-      pincode
-      plph
+      landmark
+      allowedVehicles
+      basePrice
       pphbi
+      pphcy
       pphcr
+      plph
+      photos
+      id
+      isOpen
+      rating
+      createdAt
+      updatedAt
     }
   }
 }
+
 `)

@@ -50,10 +50,9 @@ export type ReviewRequest = Omit<Review, "createdAt" | "updatedAt">
 
 export type ListingRequest = Omit<Listing, "id" | "createdAt" | "updatedAt" | "isOpen" | "availableFrom" | "rating">
 
-export type ListingSearch =  {
-    q: string
-    vehicleType: typeof Vehicle;
-    page: number
-    startDate?: number;
-    endDate?: number;
+export type ListingSearch = {
+    street?: string,
+    startDate?: string,
+    endDate?: string,
+    vehicleType: Vehicle
 }

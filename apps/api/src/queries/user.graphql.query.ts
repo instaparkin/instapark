@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { ProfileType } from "../types/user.graphql.type";
 import { axios } from "@instapark/utils";
 import { ApiResponse, Profile } from "@instapark/types";
@@ -10,7 +10,7 @@ export const UserQuery = new GraphQLObjectType({
         getProfile: {
             type: ProfileType,
             args: {
-                userId: { type: GraphQLString },
+                userId: { type: new GraphQLNonNull(GraphQLString) },
             },
             resolve: async (_, args) => {
                 const response = (await axios.get<ApiResponse<Profile>>

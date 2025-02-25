@@ -90,7 +90,7 @@ interface DataTableLoadingProps {
   rows?: number
 }
 
-export function DataTableLoading({ columns = 5, rows = 5 }: DataTableLoadingProps) {
+export function DataTableLoading({ columns = 5, rows = 10 }: DataTableLoadingProps) {
   return (
     <div className="w-full">
       <div className="rounded-md border">

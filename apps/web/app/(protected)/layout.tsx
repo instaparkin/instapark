@@ -3,8 +3,8 @@ import dynamic from "next/dynamic";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const HeaderMainDynamic = dynamic(() =>
-      import("@instapark/ui").then(mod => mod.HeaderMain), {
-      loading: () => <HeaderSkeleton />
+    import("@instapark/ui").then(mod => mod.HeaderMain), {
+    loading: () => <HeaderSkeleton />
   })
 
   return (
