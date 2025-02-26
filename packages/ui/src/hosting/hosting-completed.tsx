@@ -21,17 +21,13 @@ export const HostingCompleted = () => {
   });
 
   if (loading) {
-    return <DataTableLoading />
+    return <DataTableLoading columns={7} />
   }
 
   if (error) {
     toast.error(`Error: ${error.message}`);
   }
-
   const bookings = data?.ListingQuery?.hostBookings?.bookings
-
-  console.log(bookings);
-
 
   if (bookings?.length === 0) {
     return (
@@ -43,8 +39,6 @@ export const HostingCompleted = () => {
   }
 
   return (
-    <div>
-      <DataTable columns={columns} data={bookings as HostBooking[]} />
-    </div>
+    <DataTable columns={columns} data={bookings as HostBooking[]} />
   )
 }

@@ -57,7 +57,7 @@ export const aadhaarOTP = async (req: Request, res: Response) => {
         await fetch('https://sandbox.cashfree.com/verification/offline-aadhaar/otp', options)
             .then(response => response.json())
             .then(response =>
-                sendResponse(res, 200, "OTP sent to aadhar linked number  Successfully", "SUCCESS", response)
+                sendResponse(res, 200, "OTP sent to aadhar linked number successfully", "SUCCESS", response)
             )
             .catch(error => {
                 sendResponse(res, 400, `Error generating OTP: ${error}`, "FAILURE", null);

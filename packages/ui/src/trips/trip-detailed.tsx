@@ -18,12 +18,6 @@ import { ListingMini } from '../components/listing-mini'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../components/input-otp'
 import { generateGoogleMapsLink } from '@instapark/common'
 import Link from 'next/link'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../components/accordion"
 import { Button } from '../components/button'
 
 export const TripDetailed = ({ id }: { id: string }) => {
@@ -48,7 +42,6 @@ export const TripDetailed = ({ id }: { id: string }) => {
   const listing = data?.BookingQuery?.buyerBookings?.at(0)?.listing
   const host = listing?.user;
   const otp = booking?.otp?.otp;
-  console.log(otp);
 
   const CheckInDetails = [
     {

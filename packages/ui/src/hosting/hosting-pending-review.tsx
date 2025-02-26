@@ -43,6 +43,8 @@ export const HostingPendingReview = ({ userId }: HostingPendingReviewProps) => {
   }
 
   const bookings = data?.ListingQuery?.hostBookings?.bookings as HostBooking[]
+  console.log(bookings);
+
 
   if (bookings?.length === 0) {
     return (

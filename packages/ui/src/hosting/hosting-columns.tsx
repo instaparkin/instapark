@@ -3,11 +3,10 @@
 import React from "react"
 import { ColumnDef } from "@tanstack/react-table"
 import { unixSecToMonthYearTime } from "../utils/dayjs"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/dropdown-menu"
-import { Button } from "../components/button"
-import { MoreHorizontal } from "lucide-react"
-import {  HostBooking } from "../__generated__/graphql"
+import { HostBooking, Vehicle } from "../__generated__/graphql"
 import { formatPrice } from "../utils/field-name"
+import { FaCarAlt, FaMotorcycle } from "react-icons/fa"
+import { PiBicycleDuotone } from "react-icons/pi"
 
 export const columns: ColumnDef<HostBooking>[] = [
     {
@@ -43,7 +42,7 @@ export const columns: ColumnDef<HostBooking>[] = [
         cell: ({ cell }) => {
             const value = cell.getValue() as number;
             return (
-                <div>
+                <div className="truncate">
                     {unixSecToMonthYearTime(value)}
                 </div>
             )
@@ -55,7 +54,7 @@ export const columns: ColumnDef<HostBooking>[] = [
         cell: ({ cell }) => {
             const value = cell.getValue() as number;
             return (
-                <div>
+                <div className="truncate">
                     {unixSecToMonthYearTime(value)}
                 </div>
             )
@@ -97,4 +96,34 @@ export const columns: ColumnDef<HostBooking>[] = [
             )
         }
     },
+    {
+        accessorKey: "booking.vehicle",
+        header: "Vehicle",
+        cell: ({ cell }) => {
+            const value = cell.getValue() as Vehicle
+            switch (value) {
+                case Vehicle.Car:
+                    return (
+                        <div className="flex items-center gap-2">
+                            <FaCarAlt className="w-4 h-4" />
+                            <span>{value}</span>
+                        </div>
+                    )
+                case Vehicle.Bike:
+                    return (
+                        <div className="flex items-center gap-2">
+                            <FaMotorcycle className="w-4 h-4" />
+                            <span>{value}</span>
+                        </div>
+                    )
+                case Vehicle.Cycle:
+                    return (
+                        <div className="flex items-center gap-2">
+                            <PiBicycleDuotone className="w-4 h-4" />
+                            <span>{value}</span>
+                        </div>
+                    )
+            }
+        }
+    }
 ]

@@ -18,6 +18,7 @@ query HostBookings($userId: String, $status: BookingStatus!) {
           totalPrice
           ipFee
           penalty
+          vehicle
           createdAt
           updatedAt
           user {

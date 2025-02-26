@@ -50,11 +50,11 @@ export function OTPDialog({ bookingId }: OTPDialogProps) {
             }
         })
         if (data?.BookingMutation?.verifyOTP === OTP_VERIFIED) {
-            toast.success(`${data?.BookingMutation?.verifyOTP}`)
             setHasGuessed(true)
+            toast.success(`${data?.BookingMutation?.verifyOTP}`)
         }else{
-            toast.error(`${data?.BookingMutation?.verifyOTP}`)
             setHasGuessed(false)
+            toast.error(`${data?.BookingMutation?.verifyOTP}`)
         }
         setValue("");
         setTimeout(() => {

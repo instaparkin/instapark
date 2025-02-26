@@ -39,25 +39,25 @@ if (error) {
     const EARNINGS_HEADER_CONSTANTS = [
         {
             name: "Total Net Profit",
-            value: earnings?.currentMonth?.totalNetProfit,
+            value: earnings?.currentMonth?.totalNetProfit?.toFixed(2),
             previousValue: `vs ${earnings?.previousMonth?.totalNetProfit} last month`,
             growth: earnings?.netPL?.totalNetProfitPLPercent,
         },
         {
             name: "Total Bookings",
-            value: earnings?.currentMonth?.totalBookings,
+            value: earnings?.currentMonth?.totalBookings?.toFixed(2),
             previousValue: ` vs ${earnings?.previousMonth?.totalBookings} last month`,
             growth: earnings?.netPL?.totalBookingsPLPercent,
         },
         {
             name: "Avg Booking Value",
-            value: earnings?.currentMonth?.avgBookingValue,
+            value: earnings?.currentMonth?.avgBookingValue?.toFixed(2),
             previousValue: ` vs ${earnings?.previousMonth?.avgBookingValue} last month`,
             growth: earnings?.netPL?.avgBookingValuePLPercent,
         },
         {
             name: "Total Revenue",
-            value: earnings?.currentMonth?.totalRevenue,
+            value: earnings?.currentMonth?.totalRevenue?.toFixed(2),
             previousValue: `vs ${earnings?.previousMonth?.totalRevenue} last month`,
             growth: earnings?.netPL?.totalRevenuePLPercent,
         },

@@ -134,7 +134,7 @@ export const HomeSearchBar = () => {
                     <SlidersHorizontal className="h-4 w-4" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="bottom" className="h-[80vh]">
+                <SheetContent side="bottom" className="h-full">
                   <div className="pt-6 space-y-4">
                     <SearchFilters />
                     <Button className="w-full" size="lg" type="submit">
@@ -149,7 +149,7 @@ export const HomeSearchBar = () => {
               <div className="w-full flex-1">
                 <SearchFilters />
               </div>
-              <Button size="lg" type="submit" className="w-full md:w-auto h-12">
+              <Button size="lg" type="submit" className="w-full md:w-auto h-12 bg-instapark hover:bg-instapark dark:bg-foreground">
                 Search
               </Button>
             </div>

@@ -24,12 +24,12 @@ const MultiStepNavigation = <T extends Record<string, unknown>>({
     isLastSecondStep
 }: MultiStepNavigationProps<T>) => (
     <div className="flex justify-between">
-        {!isLastStep &&
+        {
             <Button size="lg" onClick={back}>
                 {"Back"}
             </Button>
         }
-        {!isLastStep && !isLastSecondStep && <Button
+        {!isLastStep && <Button
             size="lg"
             className="ml-auto"
             onClick={next}
@@ -37,7 +37,7 @@ const MultiStepNavigation = <T extends Record<string, unknown>>({
             {"Next"}
         </Button>
         }
-        {isLastSecondStep && <Button
+        {isLastStep && <Button
             size="lg"
             type="submit"
         >

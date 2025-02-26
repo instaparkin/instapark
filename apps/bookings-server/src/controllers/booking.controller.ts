@@ -126,8 +126,6 @@ export const getBookings = async (req: Request, res: Response) => {
                 userId: string,
                 status: string
             };
-            console.log(req.query);
-            
         const bookings = await BookingModel.find(
             {
                 ...(startDate ? { startDate } : {}),
@@ -138,7 +136,6 @@ export const getBookings = async (req: Request, res: Response) => {
             },
             { _id: 0, __v: 0 }
         );
-        console.log("Bookings",bookings);
         return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
     } catch (error) {
         sendResponse(res, 500, `Failed to get Bookings: ${error}`, "FAILURE", null);
