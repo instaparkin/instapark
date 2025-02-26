@@ -1,6 +1,7 @@
 import { ApiResponse } from "@instapark/types";
 import { axios } from "@instapark/utils";
 import { GraphQLFloat, GraphQLInputObjectType, GraphQLObjectType, GraphQLString } from "graphql";
+import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 
 export const VendorBankInput = new GraphQLInputObjectType({
     name: "VendorBankInput",
@@ -33,21 +34,9 @@ export const VendorMutation = new GraphQLObjectType({
             },
             resolve: async (parent, args) => {
                 const response = (await axios.post<ApiResponse<null>>
-                    ("http://localhost:8085/vendor", args)).data.message;
+                    (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.VENDOR.CREATE, args)).data.message;
                 return response
             }
         },
-        createTransfer: {
-            type: GraphQLString,
-            args: {
-                vendorId: { type: GraphQLString },
-                transfer_amount: { type: GraphQLFloat },
-            },
-            resolve: async (parent, args) => {
-                const response = await axios.post<ApiResponse<null>>
-                    ("http://localhost:8085/vendor/transfer", args)
-                return response.data.message
-            }
-        }
     }
 })

@@ -65,7 +65,7 @@ export const ListingMutation = new GraphQLObjectType({
 
             resolve: async (parent, args) => {
                 const response = await axios.put<ApiResponse<Listing>>
-                    ("http://localhost:8087/listings/update/" + args.id, args)
+                    (API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.LISTING.UPDATE + args.id, args)
                 return response.data.message
             }
         },

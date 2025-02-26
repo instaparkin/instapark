@@ -50,20 +50,6 @@ export const HostingPendingReview = ({ userId }: HostingPendingReviewProps) => {
     )
   }
 
-  function onSubmit(bookingId: string, data: OTPInputFormType) {
-    axios
-      .post(`http://localhost:8085/bookings/otp/verify`, {
-        bookingId,
-        otp: data.otp,
-      })
-      .then((res) => {
-        toast.success(res.data.message)
-      })
-      .catch((error) => {
-        toast.error(error.message)
-      })
-  }
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {bookings?.map((b, i) => {

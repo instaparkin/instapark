@@ -47,6 +47,7 @@ export type BookingMutation = {
 
 export type BookingMutationLockArgs = {
   basePrice: Scalars['Float']['input'];
+  customer?: InputMaybe<LockCustomer>;
   endDate: Scalars['Int']['input'];
   ipFee: Scalars['Float']['input'];
   listingId: Scalars['String']['input'];
@@ -55,6 +56,7 @@ export type BookingMutationLockArgs = {
   totalPrice: Scalars['Float']['input'];
   userId: Scalars['String']['input'];
   vehicle?: InputMaybe<Vehicle>;
+  vendor_id?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -273,6 +275,12 @@ export type ListingQuerySearchListingsArgs = {
   startDate?: InputMaybe<Scalars['Int']['input']>;
   street?: InputMaybe<Scalars['String']['input']>;
   vehicleType?: InputMaybe<Vehicle>;
+};
+
+export type LockCustomer = {
+  customer_email?: InputMaybe<Scalars['String']['input']>;
+  customer_name?: InputMaybe<Scalars['String']['input']>;
+  customer_phone?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type LockResponse = {
@@ -542,14 +550,7 @@ export type VendorKycInput = {
 
 export type VendorMutation = {
   __typename?: 'VendorMutation';
-  createTransfer?: Maybe<Scalars['String']['output']>;
   createVendor?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type VendorMutationCreateTransferArgs = {
-  transfer_amount?: InputMaybe<Scalars['Float']['input']>;
-  vendorId?: InputMaybe<Scalars['String']['input']>;
 };
 
 

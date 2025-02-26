@@ -34,40 +34,22 @@ export const BookingMutation = new GraphQLObjectType({
                 totalPrice: { type: new GraphQLNonNull(GraphQLFloat) },
                 vehicle: { type: VehicleEnum },
                 ipFee: { type: new GraphQLNonNull(GraphQLFloat) },
+                customer: {
+                    type: new GraphQLInputObjectType({
+                        name: "LockCustomer",
+                        fields: {
+                            customer_email: { type: GraphQLString },
+                            customer_name: { type: GraphQLString },
+                            customer_phone: { type: GraphQLString },
+                        }
+                    })
+                },
+                vendor_id: { type: GraphQLString }
             },
             resolve: async (_parent, args) => {
                 try {
-                    const customerResponse = await axios.get<ApiResponse<Profile>>(
-                        API_SERVER_CONSTANTS.ENDPOINTS.USER.PROFILE.GET,
-                        { params: { userId: args.userId } }
-                    );
-
-                    const customer = customerResponse.data?.data;
-                    if (!customer) {
-                        throw new Error("Customer profile not found");
-                    }
-
-                    const vendorResponse = await axios.get<ApiResponse<Listing>>(
-                        API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.LISTING.GET,
-                        { params: { id: args.listingId } }
-                    );
-
-                    const vendor = vendorResponse.data?.data;
-                    if (!vendor) {
-                        throw new Error("Listing not found");
-                    }
-
                     const bookingResponse = await axios.post<ApiResponse<LockedResponse>>(
-                        "http://localhost:8085/bookings/lock",
-                        {
-                            ...args,
-                            customer: {
-                                customer_name: `${customer.firstName} ${customer.lastName}`,
-                                customer_email: customer.emails?.[0] ?? "",
-                                customer_phone: customer.phoneNumber ?? "",
-                            },
-                            vendor_id: vendor.id
-                        }
+                        API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.BOOKING.LOCK, args
                     );
 
                     return {
@@ -93,7 +75,7 @@ export const BookingMutation = new GraphQLObjectType({
             resolve: async (_, { bookingId, otp }) => {
                 try {
                     const response = await axios.post<ApiResponse<null>>(
-                        `http://localhost:8085/bookings/otp/verify`,
+                        API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.BOOKING.VERIFY,
                         { bookingId, otp }
                     );
                     return response.data.message;

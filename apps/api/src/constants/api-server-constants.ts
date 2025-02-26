@@ -26,10 +26,13 @@ export const API_SERVER_CONSTANTS = {
                 GET: `${process.env.BOOKINGS_SERVER_URL}/bookings`,
                 EARNING_STATS: `${process.env.BOOKINGS_SERVER_URL}/bookings/earnings-stats`,
                 OTP: `${process.env.BOOKINGS_SERVER_URL}/bookings/otp`,
+                VERIFY: `${process.env.BOOKINGS_SERVER_URL}/bookings/otp/verify`,
+                LOCK: `${process.env.BOOKINGS_SERVER_URL}/bookings/lock`,
             },
             VENDOR: {
                 BALANCE: `${process.env.BOOKINGS_SERVER_URL}/vendor/balance`,
                 GET: `${process.env.BOOKINGS_SERVER_URL}/vendor`,
+                CREATE: `${process.env.BOOKINGS_SERVER_URL}/vendor`,
             },
             PAYMENTS: {
                 GET: `${process.env.BOOKINGS_SERVER_URL}/payments`,
