@@ -8,16 +8,16 @@ export function ModeToggle() {
   const { setTheme, theme } = useTheme()
 
   return (
-    <div className="inline-flex items-center border rounded-full p-1">
-      <Toggle className={cn("size-5 w-full h-hull p-1.5", theme === "system" && "border")} onClick={() => setTheme("system")}>
+    <div className="relative inline-grid h-9 grid-cols-[1fr_1fr_1fr] items-center text-sm font-medium">
+      <Toggle className={cn("size-4 w-full h-hull p-1.5", theme === "system" && "border")} onClick={() => setTheme("system")}>
         <Monitor className="size-4" />
         <span className="sr-only">System theme</span>
       </Toggle>
-      <Toggle className={cn("size-5 w-full h-hull p-1.5", theme === "light" && "border")} onClick={() => setTheme("light")}>
+      <Toggle className={cn("size-4 w-full h-hull p-1.5", theme === "light" && "border")} onClick={() => setTheme("light")}>
         <Sun className="size-4" />
         <span className="sr-only">Light theme</span>
       </Toggle>
-      <Toggle className={cn("size-5 w-full h-hull p-1.5", theme === "dark" && "border")} onClick={() => setTheme("dark")}>
+      <Toggle className={cn("size-4 w-full h-hull p-1.5", theme === "dark" && "border")} onClick={() => setTheme("dark")}>
         <Moon className="size-4" />
         <span className="sr-only">Dark theme</span>
       </Toggle>

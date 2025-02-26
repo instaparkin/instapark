@@ -34,7 +34,6 @@ export const TripDetailed = ({ id }: { id: string }) => {
       userId
     }
   })
-
   if (loading) {
     return <DataTableLoading />
   }

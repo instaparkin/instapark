@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 import { DataTable, DataTableLoading } from '../components/data-table'
 import { listingMainColumns } from './listings-main-columns'
 import { Listing } from '../__generated__/graphql'
+import { ListingsDataTable } from './listings-main-data-table'
 
 export const ListingsMain = () => {
   const { userId } = useAuth();
@@ -34,7 +35,7 @@ export const ListingsMain = () => {
       {
         loading ?
           <DataTableLoading /> :
-          <DataTable
+          <ListingsDataTable
             data={data?.ListingQuery?.hostListings as Listing[]}
             columns={listingMainColumns} />
       }

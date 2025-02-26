@@ -10,6 +10,8 @@ import { Badge } from './badge'
 import { PiBicycleDuotone } from "react-icons/pi";
 import { FaCarAlt } from "react-icons/fa";
 import { FaMotorcycle } from "react-icons/fa";
+import { formatPrice } from '../utils/field-name'
+import { Details } from './details'
 
 interface ListingsCard {
     listing: Listing
@@ -57,14 +59,16 @@ const ListingCardDescription: React.FC<ListingCardDescriptionProps> =
                             <span className='text-sm'>{listing.rating}</span>
                         </div>
                     </div>
-                    <ListingCardAllowedVehicles allowedVehicles={listing.allowedVehicles} />
-                    <div className="text-muted-foreground text-sm">
-                    </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0 flex justify-between listings-center">
-                    <div>
-                        <span className="font-semibold">${listing.basePrice.toFixed(2)}</span> / hour
-                    </div>
+                    <Details
+                        className=''
+                        items={[
+                            { field: "Bike", value: formatPrice(listing.pphbi), visible: listing.pphbi != 0 },
+                            { field: "Car", value: formatPrice(listing.pphcr), visible: listing.pphcr != 0 },
+                            { field: "Cycle", value: formatPrice(listing.pphcy), visible: listing.pphcy != 0 },
+                        ]}
+                    />
                 </CardFooter>
             </>
         )

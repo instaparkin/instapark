@@ -1,5 +1,5 @@
 import { Page, TripDetailed } from '@instapark/ui'
-import { Metadata, ResolvingMetadata } from 'next'
+import { Metadata } from 'next'
 import React from 'react'
 
 type Props = {

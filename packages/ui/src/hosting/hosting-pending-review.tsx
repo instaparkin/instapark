@@ -19,6 +19,7 @@ import { unixSecToMonthYearTime } from "../utils/dayjs"
 import { HOST_BOOKINGS } from "../graphql/host-bookings"
 import { Booking, BookingStatus, HostBooking } from "../__generated__/graphql"
 import { UserMini } from "../components/user-mini"
+import { OTPDialog } from "../components/otp-dialog"
 
 interface HostingPendingReviewProps {
   userId: string
@@ -100,43 +101,7 @@ export const HostingPendingReview = ({ userId }: HostingPendingReviewProps) => {
                   { field: "Total price", value: formatPrice(b.booking?.totalPrice as number) },
                   { field: "Estimated earnings", value: formatPrice(b.booking?.totalPrice as number - (b.booking?.ipFee as number)), className: "text-positive" },
                 ]} />
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="w-full py-6" size={"lg"}>Approve</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle className="text-center">Enter OTP</DialogTitle>
-                  </DialogHeader>
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit((e) => onSubmit(b.booking?.id as string, e))} className="space-y-6 my-6 flex flex-col justify-center items-center">
-                      <FormField
-                        control={form.control}
-                        name="otp"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <InputOTP maxLength={6} {...field}>
-                                <InputOTPGroup>
-                                  <InputOTPSlot index={0} />
-                                  <InputOTPSlot index={1} />
-                                  <InputOTPSlot index={2} />
-                                  <InputOTPSlot index={3} />
-                                  <InputOTPSlot index={4} />
-                                  <InputOTPSlot index={5} />
-                                </InputOTPGroup>
-                              </InputOTP>
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </form>
-                  </Form>
-                  <DialogFooter>
-                    <Button size={"lg"} type="submit">Submit</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <OTPDialog bookingId={b.booking?.id as string} otp={b.booking?.otp?.otp?.toString() as string} />
             </CardFooter>
           </Card>
         )

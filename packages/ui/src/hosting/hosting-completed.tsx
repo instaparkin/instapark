@@ -8,7 +8,7 @@ import { DataTable, DataTableLoading } from '../components/data-table'
 import toast from 'react-hot-toast'
 import { useQuery } from '@apollo/client'
 import { HOST_BOOKINGS } from '../graphql/host-bookings'
-import { Booking, BookingStatus } from '../__generated__/graphql'
+import { HostBooking, BookingStatus, HostBookings } from '../__generated__/graphql'
 import { useAuth } from '../hooks/use-auth'
 
 export const HostingCompleted = () => {
@@ -30,6 +30,9 @@ export const HostingCompleted = () => {
 
   const bookings = data?.ListingQuery?.hostBookings?.bookings
 
+  console.log(bookings);
+
+
   if (bookings?.length === 0) {
     return (
       <NoResults
@@ -41,7 +44,7 @@ export const HostingCompleted = () => {
 
   return (
     <div>
-      <DataTable columns={columns} data={bookings as Booking[]} />
+      <DataTable columns={columns} data={bookings as HostBooking[]} />
     </div>
   )
 }

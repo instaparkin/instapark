@@ -13,6 +13,11 @@ export const unixSecToMonthYearTime = (dateInUnixSeconds: number) => {
     return dayjs.unix(dateInUnixSeconds).format("lll")
 }
 
+
+export const dateToMonthYearTime = (date: Date) => {
+    return dayjs(date).format("lll")
+}
+
 export const unixSecToISO = (dateInUnixSeconds: number): Date => {
     return new Date(dayjs.unix(dateInUnixSeconds).toISOString())
 }
@@ -21,7 +26,7 @@ export const dateToUnixSec = (date: Date) => {
     return dayjs(date).unix()
 }
 
-export const timeInInstapark = (dateInUnixSeconds: number) => {
+export const timeInInstapark = (dateInUnixSeconds: number, user: boolean = true) => {
     const date = unixSecToISO(dateInUnixSeconds)
-    return "Joined " + dayjs(date).fromNow()
+    return (user ? "Joined " : "") + dayjs(date).fromNow()
 }

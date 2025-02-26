@@ -5,18 +5,21 @@ import { Label } from "./label";
 import { ClockIcon } from "lucide-react";
 import { useId, useState } from "react";
 import { Calendar } from "./calendar";
-import { dateToUnixSec } from "../utils/dayjs";
+import { dateToUnixSec, unixSecToMonthYearTime } from "../utils/dayjs";
+import { ControllerRenderProps, Path } from "react-hook-form";
 
-export function DateTimePicker() {
+interface DateTimePickerProps<T extends Record<string, unknown>> {
+  field: ControllerRenderProps<T, Path<T>>
+
+}
+
+export function DateTimePicker<T extends Record<string, unknown>>({ field }: DateTimePickerProps<T>) {
   const id = useId();
   const [date, setDate] = useState<Date | undefined>(new Date());
 
-  console.log( dateToUnixSec(date));
-
-
   return (
     <div className="rounded-md border w-fit">
-      <Calendar  mode="single" className="p-2" selected={date}  onSelect={setDate} />
+      <Calendar mode="single" className="p-2" selected={date} onSelect={setDate} />
       <div className="border-t p-3">
         <div className="flex items-center gap-3">
           <Label htmlFor={id} className="text-xs">
@@ -24,6 +27,7 @@ export function DateTimePicker() {
           </Label>
           <div className="relative grow">
             <Input
+              {...field}
               id={id}
               type="time"
               step="1"

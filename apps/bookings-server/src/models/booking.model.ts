@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { Booking, BookingStatus, BookingOTP } from "@instapark/types";
+import { Booking, BookingStatus, BookingOTP, Vehicle } from "@instapark/types";
 import { toUnixTimestamp } from "@instapark/utils";
 
 const bookingSchema = new Schema<Booking>(
@@ -55,9 +55,10 @@ const bookingSchema = new Schema<Booking>(
       required: false,
       default: 0
     },
-    verified: {
-      type: Boolean,
-      default: false
+    vehicle: {
+      type: String,
+      required: true,
+      enum: Vehicle
     },
     createdAt: {
       type: Number,

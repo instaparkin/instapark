@@ -1,4 +1,4 @@
-import { BookingStatus, PaymentType } from "./enums"
+import { BookingStatus, PaymentType, Vehicle } from "./enums"
 import { Listing } from "./Listing"
 
 export interface Booking {
@@ -9,18 +9,18 @@ export interface Booking {
     endDate: number
     status: BookingStatus
     lockedAt: number
+    vehicle: Vehicle
     basePrice: number
     parkingPrice: number
     totalPrice: number
     ipFee: number
     penalty: number
-    verified: boolean
     createdAt: number
     updatedAt: number
 }
 
 export type BookingRequest = Pick<Booking,
-    "listingId" | "userId" | "startDate" | "endDate" | "basePrice" | "totalPrice" | "ipFee" | "parkingPrice"> &
+    "listingId" | "userId" | "startDate" | "endDate" | "basePrice" | "totalPrice" | "ipFee" | "parkingPrice" | "vehicle"> &
 {
     customer: {
         "customer_name": string,

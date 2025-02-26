@@ -48,7 +48,7 @@ export interface Review {
 
 export type ReviewRequest = Omit<Review, "createdAt" | "updatedAt">
 
-export type ListingRequest = Omit<Listing, "id" | "createdAt" | "updatedAt" | "isOpen" | "availableFrom" | "rating">
+export type ListingRequest = Omit<Listing, "id" | "createdAt" | "updatedAt" | "isOpen" | "rating">
 
 export type ListingSearch = {
     street?: string,

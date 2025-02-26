@@ -10,7 +10,7 @@ import { useMutation } from '@apollo/client'
 import { CREATE_LISTING } from '../graphql/create-listing'
 
 export const ListingsAdd = () => {
-  const form = ListingCreateForm();
+  const { form } = ListingCreateForm();
 
   const [createListing, { data: response, loading, error }] = useMutation(CREATE_LISTING);
 

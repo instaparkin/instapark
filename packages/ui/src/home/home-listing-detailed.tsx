@@ -14,7 +14,7 @@ import { gql, useQuery } from '@apollo/client'
 import toast from 'react-hot-toast'
 import { ListingLoadingSkeleton } from './home-detailed-loading'
 import { HomeListingRating } from './home-listing-rating'
-import { formatLocation } from '../utils/field-name'
+import { formatLocation, formatName } from '../utils/field-name'
 import { HOST_LISTINGS } from '../graphql/host-listings'
 import {
     Sheet,
@@ -26,6 +26,10 @@ import {
 } from "../components/sheet"
 import { UserMini } from '../components/user-mini'
 import { Listing } from '../__generated__/graphql'
+import { Card, CardContent } from '../components/card'
+import { Vehicle } from '@instapark/types'
+import { useAuth } from '../hooks/use-auth'
+import { uuidToAlphanumeric } from '../earnings/earnings-main'
 
 
 interface ListingProps {
@@ -114,7 +118,6 @@ export function PhotoModal({ photos }: PhotoModalProps) {
     );
 }
 
-
 const ListingPhotoGrid: React.FC<PhotoGridProps> = ({ photos, onShowAllPhotos }) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-8 relative h-[300px] md:h-[400px]">
@@ -143,6 +146,7 @@ const ListingPhotoGrid: React.FC<PhotoGridProps> = ({ photos, onShowAllPhotos })
                 </div>
             ))}
             <Button
+                asChild
                 variant="secondary"
                 className="absolute bottom-4 right-4 flex items-center gap-2"
                 onClick={onShowAllPhotos}
@@ -157,91 +161,99 @@ const ListingPhotoGrid: React.FC<PhotoGridProps> = ({ photos, onShowAllPhotos })
 export const HomeListingsDetailed: React.FC<ListingProps> = ({
     listingId
 }) => {
-
     const { loading, error, data } = useQuery(HOST_LISTINGS, {
         variables: { id: listingId }
     });
-    if (loading) {
-        return <ListingLoadingSkeleton />
-    }
+    const { firstName, lastName, emails, phoneNumber } = useAuth()
 
-    if (error) {
-        toast.error(`Error: ${error.message}`);
-    }
+    React.useEffect(() => {
+        if (loading) {
+            <ListingLoadingSkeleton />
+        }
+        if (error) {
+            toast.error(`Error: ${error.message}`);
+        }
+    }, [loading, error])
 
     const listing = data?.ListingQuery?.hostListings?.at(0) as Listing
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             <ListingDetailedHeader
-                title={formatLocation(listing.street, listing.city)}
+                title={formatLocation(listing?.street, listing?.city)}
                 onShare={() => console.log('Share clicked')}
                 onSave={() => console.log('Save clicked')}
             />
             <ListingPhotoGrid
-                photos={listing.photos}
+                photos={listing?.photos}
                 onShowAllPhotos={() =>
-                    <PhotoModal photos={listing.photos}
-                        onClose={function (): void {
-                            throw new Error('Function not implemented.')
-                        }} />} />
-            <div className="grid grid-cols-3 gap-12">
-                <div className="col-span-2">
-                    <div className="border-b pb-4 mb-6">
-                        <h2 className="text-xl font-semibold">
-                            {listing.type} {" in "}{listing.city}, {listing.country}
-                        </h2>
-                    </div>
-                    <UserMini
-                        className='border-none'
-                        host={true}
-                        firstName={"host?.firstName as string"}
-                        lastName={"host?.lastName as string"}
-                        timeJoined={listing.user?.timeJoined as number} />
-                </div>
-                <div className="min-h-screen">
-                    {/* Desktop View */}
-                    <div className="hidden md:block max-w-md mx-auto pt-8">
-                        <PricingCalculator
-                            instaparkFeePercentage={30}
-                            pphbi={listing.pphbi}
-                            pphcy={listing.pphcy}
-                            pphcr={listing.pphcr}
-                            plph={listing.plph}
-                            basePrice={listing.basePrice}
-                        />
-                        <ListingReserve
-                            listingId={listing.id}
-                            userId={listing.userId}
-                            startDate={1739503313}
-                            endDate={1739589713}
-                            basePrice={2200}
-                            parkingPrice={170}
-                            totalPrice={3081}
-                            ipFee={711}
-                            customer={{
-                                customer_name: '',
-                                customer_email: '',
-                                customer_phone: ''
-                            }}
-                            vendor_id={''} />
-                    </div>
-
-                    {/* Mobile View with Drawer */}
-                    <PricingDrawer
-                        basePrice={listing.basePrice}
-                        discountedPrice={33818}
-                        startDate="5"
-                        endDate="10 Jan"
-                        pphbi={listing.pphbi}
-                        pphcy={listing.pphcy}
-                        pphcr={listing.pphcr}
-                        plph={listing.plph}
+                    console.log("")
+                }
+            />
+            <div className="space-y-10">
+                <h2 className="text-xl font-semibold">
+                    {listing?.type} {" in "}{listing?.city}, {listing?.country}
+                </h2>
+                <UserMini
+                    host={true}
+                    firstName={listing?.user?.firstName as string}
+                    lastName={listing?.user?.lastName as string}
+                    timeJoined={listing?.user?.timeJoined as number} />
+                <div className='flex flex-col lg:flex-row flex-1 gap-6'>
+                    <PricingCalculator
+                        instaparkFeePercentage={30}
+                        pphbi={listing?.pphbi}
+                        pphcy={listing?.pphcy}
+                        pphcr={listing?.pphcr}
+                        plph={listing?.plph}
+                        basePrice={listing?.basePrice}
                     />
+                    <Card className="p-6 rounded-2xl border">
+                        <CardContent>
+                            <h2 className="text-xl font-semibold text-gray-800 mb-4">How Pricing Works</h2>
+                            <ul className="space-y-3 text-gray-600">
+                                <li>
+                                    <strong>Base Price:</strong> A standard charge that applies to all rentals.
+                                </li>
+                                <li>
+                                    <strong>Hourly Rate:</strong> ₹933.29 per hour, calculated based on your rental duration.
+                                </li>
+                                <li>
+                                    <strong>Instapark Fee (30%):</strong> A service fee added to your total price.
+                                </li>
+                                <li>
+                                    <strong>Penalty Per Hour:</strong> ₹937.45 for exceeding the rental period.
+                                </li>
+                                <li>
+                                    <strong>Total:</strong> Sum of all applicable charges based on the duration and fees.
+                                </li>
+                            </ul>
+                            <p className="text-gray-500 text-sm mt-4">
+                                Prices may vary based on demand and vehicle availability. Always check before confirming your reservation.
+                            </p>
+                        </CardContent>
+                    </Card>
                 </div>
+                {/* Desktop View */}
+                <ListingReserve
+                    listingId={listing?.id}
+                    userId={listing?.userId}
+                    startDate={1739503313}
+                    endDate={1739589713}
+                    basePrice={2200}
+                    parkingPrice={170}
+                    totalPrice={3081}
+                    ipFee={711}
+                    customer={{
+                        customer_name: formatName(firstName, lastName),
+                        customer_email: emails?.at(0) as string,
+                        customer_phone: phoneNumber as string
+                    }}
+                    vendor_id={uuidToAlphanumeric(listing?.userId)}
+                    vehicle={Vehicle.Car} />
             </div>
             <HomeListingRating />
-            <MapsMain maxZoom={14} location={{ lat: listing.latitude, lng: listing.longitude }} />
+            <MapsMain maxZoom={14} location={{ lat: listing?.latitude, lng: listing?.longitude }} />
         </div>
     )
 }

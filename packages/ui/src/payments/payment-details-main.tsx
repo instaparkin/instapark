@@ -44,7 +44,6 @@ export const PaymentDetailsMain = () => {
 
     return (
         <SideBarLayout sidebarNavItems={paymentDetailsSteps.map(p => p)}>
-            <SidebarForm groups={paymentDetailsSteps} form={form} />
             <div className='max-w-2xl mx-auto space-y-6'>
                 <Form {...form}>
                     <form className='space-y-10' onSubmit={form.handleSubmit(onSubmit)}>

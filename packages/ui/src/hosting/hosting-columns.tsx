@@ -6,36 +6,31 @@ import { unixSecToMonthYearTime } from "../utils/dayjs"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/dropdown-menu"
 import { Button } from "../components/button"
 import { MoreHorizontal } from "lucide-react"
-import { Booking } from "../__generated__/graphql"
+import {  HostBooking } from "../__generated__/graphql"
+import { formatPrice } from "../utils/field-name"
 
-export const columns: ColumnDef<Booking>[] = [
+export const columns: ColumnDef<HostBooking>[] = [
     {
-        accessorKey: "status",
+        accessorKey: "booking.status",
         header: "Status",
         cell: ({ cell }) => {
             const value = cell.getValue();
             switch (value) {
                 case "Booked":
                     return (
-                        <div className="bg-blue-200 p-2 w-fit rounded-sm">
+                        <div className="bg-blue-200 text-blue-700  p-2 w-fit rounded-sm">
                             {value}
                         </div>
                     )
                 case "Completed":
                     return (
-                        <div className="bg-lime-200 p-2 w-fit rounded-sm">
-                            {value}
-                        </div>
-                    )
-                case "Locked":
-                    return (
-                        <div className="bg-gray-200 p-2 w-fit rounded-sm">
+                        <div className="bg-lime-200 text-lime-700 p-2 w-fit rounded-sm">
                             {value}
                         </div>
                     )
                 case "OnGoing":
                     return (
-                        <div className="bg-yellow-200 p-2 w-fit rounded-sm">
+                        <div className="bg-yellow-200 text-yellow-700 p-2 w-fit rounded-sm">
                             {value}
                         </div>
                     )
@@ -43,46 +38,63 @@ export const columns: ColumnDef<Booking>[] = [
         }
     },
     {
-        accessorKey: "startDate",
+        accessorKey: "booking.startDate",
         header: "Start Date",
         cell: ({ cell }) => {
-            const value = cell.getValue();
+            const value = cell.getValue() as number;
             return (
                 <div>
-                    {unixSecToMonthYearTime(value as unknown as number)}
+                    {unixSecToMonthYearTime(value)}
                 </div>
             )
         }
     },
     {
-        accessorKey: "endDate",
+        accessorKey: "booking.endDate",
         header: "End Date ",
         cell: ({ cell }) => {
-            const value = cell.getValue();
+            const value = cell.getValue() as number;
             return (
                 <div>
-                    {unixSecToMonthYearTime(value as unknown as number)}
+                    {unixSecToMonthYearTime(value)}
                 </div>
             )
         }
     },
     {
-        id: "actions",
-        cell: () => {
+        accessorKey: "booking.basePrice",
+        header: "Base Price",
+        cell: ({ cell }) => {
+            const value = cell.getValue() as number;
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                            Verify
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div>
+                    {formatPrice(value)}
+                </div>
             )
-        },
+        }
+    },
+    {
+        accessorKey: "booking.totalPrice",
+        header: "Total Price",
+        cell: ({ cell }) => {
+            const value = cell.getValue() as number;
+            return (
+                <div>
+                    {formatPrice(value)}
+                </div>
+            )
+        }
+    },
+    {
+        accessorKey: "booking.parkingPrice",
+        header: "Parking Price",
+        cell: ({ cell }) => {
+            const value = cell.getValue() as number;
+            return (
+                <div>
+                    {formatPrice(value)}
+                </div>
+            )
+        }
     },
 ]

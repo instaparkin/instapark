@@ -1,8 +1,16 @@
+import { ListingHostDetailed, Page } from '@instapark/ui'
 import React from 'react'
 
-const ListingPage = () => {
+type Props = {
+  params: Promise<{ listing: string }>
+}
+
+const ListingPage = async({params}:Props) => {
+  const listingId = (await params).listing
   return (
-    <div>ListingPage</div>
+    <Page>
+      <ListingHostDetailed listingId={listingId} />
+    </Page>
   )
 }
 

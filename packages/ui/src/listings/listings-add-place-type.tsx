@@ -63,7 +63,7 @@ export const ListingsAddPlaceType = ({ form }: { form: UseFormReturn<ListingRequ
                     <RadioGroupItem value={p.type} className='sr-only' />
                   </FormControl>
                   <FormLabel
-                    className={`flex items-center justify-between p-10 rounded-xl border-2 transition-colors cursor-pointer
+                    className={`flex text-foreground items-center justify-between p-10 rounded-xl border-2 transition-colors cursor-pointer
                                                     ${field.value === p.type
                         ? "border-primary bg-muted"
                         : "border-muted hover:border-primary/50"

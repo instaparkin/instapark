@@ -126,7 +126,8 @@ export const getBookings = async (req: Request, res: Response) => {
                 userId: string,
                 status: string
             };
-
+            console.log(req.query);
+            
         const bookings = await BookingModel.find(
             {
                 ...(startDate ? { startDate } : {}),
@@ -137,8 +138,7 @@ export const getBookings = async (req: Request, res: Response) => {
             },
             { _id: 0, __v: 0 }
         );
-        console.log(bookings);
-
+        console.log("Bookings",bookings);
         return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
     } catch (error) {
         sendResponse(res, 500, `Failed to get Bookings: ${error}`, "FAILURE", null);
@@ -158,25 +158,20 @@ export const getOtp = async (req: Request, res: Response) => {
 export const verifyBooking = async (req: Request, res: Response) => {
     try {
         const { otp, bookingId } = req.body;
-
-        console.log(req.body);
-
-
         const bookingOTP = await BookingOTPModel.find({
             bookingId: bookingId,
             otp: otp,
             expiresAt: { $gt: toUnixTimestamp(new Date()) }
         });
-
         if (bookingOTP.length !== 0) {
             await BookingModel.findOneAndUpdate({
                 id: bookingId
             }, {
                 status: "OnGoing"
             })
-            return sendResponse(res, 200, "Booking verified successfully", "SUCCESS", null);
+            return sendResponse(res, 200, "OTP verified successfully", "SUCCESS", null);
         } else {
-            return sendResponse(res, 400, "Failed to verify Booking", "FAILURE", null);
+            return sendResponse(res, 400, "OTP Entered is Wrong. Check again", "FAILURE", null);
         }
     } catch (error) {
         return sendResponse(res, 500, `Failed to verify Booking: ${error}`, "FAILURE", null);

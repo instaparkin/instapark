@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { ApiResponse, Listing, LockedResponse, Profile } from "@instapark/types";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
+import { VehicleEnum } from "../types/listing.graphql.type";
 
 export const BookingMutation = new GraphQLObjectType({
     name: "BookingMutation",
@@ -31,6 +32,7 @@ export const BookingMutation = new GraphQLObjectType({
                 basePrice: { type: new GraphQLNonNull(GraphQLFloat) },
                 parkingPrice: { type: new GraphQLNonNull(GraphQLFloat) },
                 totalPrice: { type: new GraphQLNonNull(GraphQLFloat) },
+                vehicle: { type: VehicleEnum },
                 ipFee: { type: new GraphQLNonNull(GraphQLFloat) },
             },
             resolve: async (_parent, args) => {
@@ -46,7 +48,7 @@ export const BookingMutation = new GraphQLObjectType({
                     }
 
                     const vendorResponse = await axios.get<ApiResponse<Listing>>(
-                        API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.GET,
+                        API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.LISTING.GET,
                         { params: { id: args.listingId } }
                     );
 
@@ -79,6 +81,27 @@ export const BookingMutation = new GraphQLObjectType({
                         payment_session_id: null,
                         message: `Booking failed: ${error instanceof Error ? error.message : "Unknown error"}`
                     };
+                }
+            }
+        },
+        verifyOTP: {
+            type: GraphQLString,
+            args: {
+                bookingId: { type: new GraphQLNonNull(GraphQLString) },
+                otp: { type: new GraphQLNonNull(GraphQLInt) }
+            },
+            resolve: async (_, { bookingId, otp }) => {
+                try {
+                    const response = await axios.post<ApiResponse<null>>(
+                        `http://localhost:8085/bookings/otp/verify`,
+                        { bookingId, otp }
+                    );
+                    return response.data.message;
+                } catch (error) {
+                    if (axios.isAxiosError(error) && error.response) {
+                        return error.response.data.message;
+                    }
+                    return "An unexpected error occurred";
                 }
             }
         }

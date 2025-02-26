@@ -8,6 +8,7 @@ import { Label } from "../components/label"
 import { cn } from "../utils/cn"
 import { BikeIcon, Car } from "lucide-react"
 import { PiCurrencyCircleDollar } from "react-icons/pi"
+import { Button } from "../components/button"
 
 type Vehicle = "Bike" | "Cycle" | "Car"
 
@@ -75,48 +76,51 @@ export function PricingCalculator({
   }
 
   return (
-    <Card className={cn("w-full max-w-md mx-auto", "rounded-none md:rounded-lg", className)}>
+    <Card className={cn("w-full rounded-none md:rounded-lg", className)}>
       <CardContent className="p-6">
         <div className="space-y-4">
           {/* Price Display */}
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold">₹{getHourlyRate(selectedVehicle)}</span>
-            <span className="text-muted-foreground">/hour</span>
+          <div className="flex flex-col sm:flex-row gap-4 justify-between">
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold">₹{getHourlyRate(selectedVehicle)}</span>
+              <span className="text-muted-foreground">/hour</span>
+            </div>
+            <Button size={"responsive"}>Reserve</Button>
           </div>
 
-          {/* Vehicle Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="vehicle-type">Vehicle Type</Label>
-            <Select value={selectedVehicle} onValueChange={(value) => setSelectedVehicle(value as Vehicle)}>
-              <SelectTrigger id="vehicle-type">
-                <SelectValue placeholder="Select vehicle type" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.keys(vehicleIcons).map((vehicle) => (
-                  <SelectItem key={vehicle} value={vehicle}>
-                    {vehicle}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+            {/* Vehicle Selection */}
+            <div className="space-y-2">
+              <Label htmlFor="vehicle-type">Vehicle Type</Label>
+              <Select value={selectedVehicle} onValueChange={(value) => setSelectedVehicle(value as Vehicle)}>
+                <SelectTrigger id="vehicle-type">
+                  <SelectValue placeholder="Select vehicle type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(vehicleIcons).map((vehicle) => (
+                    <SelectItem key={vehicle} value={vehicle}>
+                      {vehicle}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-          {/* Start Date and Time */}
-          <div className="space-y-2">
-            <Label htmlFor="start-date">Start Date and Time</Label>
-            <Input
-              id="start-date"
-              type="datetime-local"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </div>
+            {/* Start Date and Time */}
+            <div className="space-y-2">
+              <Label htmlFor="start-date">Start Date and Time</Label>
+              <Input
+                id="start-date"
+                type="datetime-local"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
 
-          {/* End Date and Time */}
-          <div className="space-y-2">
-            <Label htmlFor="end-date">End Date and Time</Label>
-            <Input id="end-date" type="datetime-local" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-          </div>
+            {/* End Date and Time */}
+            <div className="space-y-2">
+              <Label htmlFor="end-date">End Date and Time</Label>
+              <Input id="end-date" type="datetime-local" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+            </div>
 
           {/* Price Breakdown */}
           <div className="space-y-2 pt-4 border-t">

@@ -28,7 +28,7 @@ export const listingsAddSteps: Step<ListingRequest>[] = [
             },
             {
                 name: "Add your location",
-                fields: [{ name: "city" }, { name: "country" }, { name: "state" }, { name: "district" }, { name: "street" }, { name: "pincode" }, { name: "name" }, { name: "landmark" }, { name: "latitude", disabled: true }, { name: "longitude", disabled: true }],
+                fields: [{ name: "city", disabled: true }, { name: "country", disabled: true }, { name: "state", disabled: true }, { name: "district", disabled: true }, { name: "street" }, { name: "pincode" }, { name: "name" }, { name: "landmark" }, { name: "latitude", disabled: true }, { name: "longitude", disabled: true }],
                 component: ({ form }) => <ListingsAddLocation form={form} />,
             },
         ],

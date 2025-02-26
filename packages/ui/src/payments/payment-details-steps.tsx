@@ -6,7 +6,7 @@ export type Field<T extends Record<string, unknown>> = {
     name: Path<T>;
     disabled?: boolean,
     description: string
-    type: HTMLInputTypeAttribute
+    type?: HTMLInputTypeAttribute
 }
 
 export type Group<T extends Record<string, unknown>> = {

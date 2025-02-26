@@ -9,7 +9,6 @@ const LOCK_INTERVAL = 0.5 * 60;
 export class LockingService {
     private lockingRequest: BookingRequest;
     private existingBooking: Booking | null = null;
-    private order: Order | null = null
 
     constructor(lockingRequest: BookingRequest) {
         if (!lockingRequest.listingId || !lockingRequest.startDate || !lockingRequest.endDate) {
