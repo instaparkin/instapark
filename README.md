@@ -1,7 +1,4 @@
-
----
-
-# 🚗 Instapark – The Smart Way to Find & Share Parking
+# Instapark – The Smart Way to Find & Share Parking
 
 ![Instapark Banner](https://via.placeholder.com/1200x400?text=Instapark+-+Find+Parking+Easily)
 
