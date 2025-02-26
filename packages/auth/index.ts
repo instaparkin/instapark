@@ -1,6 +1,3 @@
-import { config } from "dotenv";
-config(); // Load .env from the root automatically
-
 export * as Session from "supertokens-node/recipe/session";
 export { middleware, errorHandler, type SessionRequest } from "supertokens-node/framework/express";
 export * as supertokens from "supertokens-node";

@@ -1,4 +1,3 @@
-import "dotenv/config"
 import EmailPassword from "supertokens-node/recipe/emailpassword";
 import Session from "supertokens-node/recipe/session";
 import { TypeInput } from "supertokens-node/types";

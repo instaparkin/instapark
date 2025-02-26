@@ -19,13 +19,17 @@
 		"dev": {
 			"cache": false,
 			"persistent": true,
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env.development.local",
-        ".env.local",
-        ".env.development",
-        ".env"
-      ]
+			"env": [
+				"^SUPERTOKENS_CONNECTION_URL",
+				"^SUPERTOKENS_API_KEY"
+			],
+			"inputs": [
+				"$TURBO_DEFAULT$",
+				".env.development.local",
+				".env.local",
+				".env.development",
+				".env"
+			]
 		},
 		"check-types": {
 			"dependsOn": ["^check-types"],
@@ -33,13 +37,13 @@
 		},
 		"test": {
 			"dependsOn": ["^test"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env.development.local",
-        ".env.local",
-        ".env.development",
-        ".env"
-      ]
+			"inputs": [
+				"$TURBO_DEFAULT$",
+				".env.development.local",
+				".env.local",
+				".env.development",
+				".env"
+			]
 		}
 	}
 }
