@@ -21,6 +21,6 @@ export type Profile = {
     landmark?: string;
 }
 
-export type ProfileRequest = Omit<Profile, "userId" | "kyc" | "firstName" | "lastName" | "emails" | "timeJoined" | "reviews" | "ratings"> & {
+export type ProfileRequest = Omit<Profile, "userId" | "kyc" | "firstName" | "lastName" | "emails" | "timeJoined"> & {
     kyc: Pick<Profile["kyc"], "uidai">
 }

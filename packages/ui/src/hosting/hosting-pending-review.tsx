@@ -20,12 +20,11 @@ import { HOST_BOOKINGS } from "../graphql/host-bookings"
 import { Booking, BookingStatus, HostBooking } from "../__generated__/graphql"
 import { UserMini } from "../components/user-mini"
 import { OTPDialog } from "../components/otp-dialog"
+import { useAuth } from "../hooks/use-auth"
 
-interface HostingPendingReviewProps {
-  userId: string
-}
 
-export const HostingPendingReview = ({ userId }: HostingPendingReviewProps) => {
+export const HostingPendingReview = () => {
+  const { userId } = useAuth();
   const { loading, error, data } = useQuery(HOST_BOOKINGS, {
     variables: {
       userId,

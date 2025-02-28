@@ -1,6 +1,6 @@
 import { addUUID, Request, Response, sendResponse } from "@instapark/utils";
 import { ListingModel } from "../models/listing.model";
-import { Booking, ListingRequest } from "@instapark/types";
+import { Booking, Listing, ListingRequest } from "@instapark/types";
 import { listingsCreateSchema } from "@instapark/schemas"
 
 export const createListing = async (req: Request, res: Response) => {
@@ -8,8 +8,6 @@ export const createListing = async (req: Request, res: Response) => {
     try {
         const listing = req.body as ListingRequest;
         const result = listingsCreateSchema.safeParse(listing);
-
-        console.log(result);
 
         if (!result.success) {
             return sendResponse(res, 400, "Some fields are missing", "FAILURE", result.error);
@@ -22,19 +20,18 @@ export const createListing = async (req: Request, res: Response) => {
         if (a) {
             return sendResponse(res, 200, "A Listing already exists on this location", "FAILURE", a);
         }
-        const newListing = await ListingModel.create([addUUID(listing)], { session });
+        const newListing = await ListingModel.create([addUUID(result.data)], { session });
         if (!newListing || !newListing[0]) {
             return sendResponse(res, 400, "Failed to create Listing", "FAILURE");
         }
         const data = newListing[0];
-
         await session.commitTransaction()
             .then(async () => {
                 return sendResponse(res, 201, "Listing created successfully.", "SUCCESS", data);
             });
     } catch (error) {
         await session.abortTransaction();
-        return sendResponse(res, 500, "An unexpected error occurred while creating the listing.", "FAILURE", error);
+        return sendResponse(res, 500, `An unexpected error occurred while creating the listing: ${error} `, "FAILURE", error);
     } finally {
         session.endSession();
     }
@@ -42,10 +39,13 @@ export const createListing = async (req: Request, res: Response) => {
 
 export const updateListing = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const updates = req.body as ListingRequest;
-
-        const updatedListing = await ListingModel.findOneAndUpdate({ id }, updates, { new: true });
+        const body = req.body as Listing;
+        console.log(body);
+        
+        const updatedListing = await ListingModel.findOneAndUpdate(
+            { id: body.id },
+            body,
+            { new: true });
 
         if (!updatedListing) {
             res.status(404).json({ error: "Listing not found." });
@@ -68,7 +68,7 @@ export const getListings = async (req: Request, res: Response) => {
                 userId: string
                 id: string
             }
-            console.log(id);
+        console.log(req.query);
 
         const listings = await ListingModel.find(
             {
@@ -80,7 +80,6 @@ export const getListings = async (req: Request, res: Response) => {
             },
             { _id: 0, __v: 0 }
         );
-        console.log(listings);
         return sendResponse(res, 200, "Listings Fetched Successfully", "SUCCESS", listings);
     } catch (error) {
         return sendResponse(res, 500, "Internal server error " + error, "FAILURE", error);

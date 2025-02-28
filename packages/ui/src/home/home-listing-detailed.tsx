@@ -9,18 +9,47 @@ import { ListingReserve } from '../listings/listings-reserve'
 import { useQuery } from '@apollo/client'
 import toast from 'react-hot-toast'
 import { ListingLoadingSkeleton } from './home-detailed-loading'
-import { HomeListingRating } from './home-listing-rating'
-import { formatLocation, formatName } from '../utils/field-name'
+import { formatLocation, formatName, formatPrice } from '../utils/field-name'
 import { UserMini } from '../components/user-mini'
 import { Listing, PricingCalulator } from '../__generated__/graphql'
-import { Card, CardContent } from '../components/card'
+import { Card, CardContent, CardHeader, CardTitle } from '../components/card'
 import { Vehicle } from '@instapark/types'
 import { useAuth } from '../hooks/use-auth'
 import { ImageSwiper } from '../components/image-swiper'
 import { uuidToAlphanumeric } from '@instapark/common'
 import { HOST_LISTINGS } from '../graphql/host-listings'
 import { RootState, useSelector } from '@instapark/state'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/accordion'
+import { InfoIcon, PlusIcon, ShieldCheck } from 'lucide-react'
 
+
+const items = [
+    {
+        id: "1",
+        title: "What is Base Price?",
+        content:
+            "Base Price is the fixed amount which is applied to all parkings and depends on the host",
+    },
+    {
+        id: "2",
+        title: "What is Parking Price?",
+        content:
+            "Parking price is the actual cost calculated by the Pricing per hour of the vehicle with the number of hours the vehicle was parked",
+    },
+    {
+        id: "3",
+        title: "What is Instapark Fee?",
+        content:
+            "Instapark fee is 30% of base Price and Parking Fee",
+
+    },
+    {
+        id: "4",
+        title: "What is Total Price?",
+        content:
+            "Total Price is the sum of base Price, parking price and instapark fee which the buyer is supposed to pay",
+    },
+];
 interface ListingProps {
     listingId: string
 }
@@ -32,8 +61,6 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
         {
             variables: {
                 id: listingId,
-                startDate: null,
-                endDate: null
             }
         });
     const listing = data?.ListingQuery?.hostListings?.at(0) as Listing;
@@ -58,35 +85,31 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                 firstName={listing?.user?.firstName as string}
                 lastName={listing?.user?.lastName as string}
                 timeJoined={listing?.user?.timeJoined as number} />
-            <div className='flex flex-col lg:flex-row flex-1 gap-6'>
+            <div className='flex flex-col lg:flex-row col-span-2 gap-6'>
                 <PricingCalculator
                     listingId={listing?.id}
                 />
-                <Card className="p-6 rounded-2xl border">
-                    <CardContent>
-                        <h2 className="text-xl font-semibold text-orange-500 mb-4">How Pricing Works</h2>
-                        <ul className="space-y-3 text-gray-600">
-                            <li>
-                                <strong>Base Price:</strong> A standard charge that applies to all rentals.
-                            </li>
-                            <li>
-                                <strong>Hourly Rate:</strong> ₹933.29 per hour, calculated based on your rental duration.
-                            </li>
-                            <li>
-                                <strong>Instapark Fee (30%):</strong> A service fee added to your total price.
-                            </li>
-                            <li>
-                                <strong>Penalty Per Hour:</strong> ₹937.45 for exceeding the rental period.
-                            </li>
-                            <li>
-                                <strong>Total:</strong> Sum of all applicable charges based on the duration and fees.
-                            </li>
-                        </ul>
-                        <p className="text-gray-500 text-sm mt-4">
-                            Prices may vary based on demand and vehicle availability. Always check before confirming your reservation.
-                        </p>
-                    </CardContent>
-                </Card>
+                <div className="w-full lg:w-lg transition-all duration-300">
+                    <h2 className='font-bold'>FAQs</h2>
+                    <Accordion type="single" collapsible defaultValue="3">
+                        {items.map((item) => (
+                            <AccordionItem value={item.id} key={item.id} className="py-2">
+                                <AccordionTrigger className='text-pretty'>
+                                    {item.title}
+                                </AccordionTrigger>
+                                <AccordionContent>
+                                    {item.content}
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
+                    <div className="flex grow gap-3 border bg-primary-foreground p-4 rounded-md my-6">
+                        <ShieldCheck className="mt-0.5 shrink-0 text-blue-500" size={16} aria-hidden="true" />
+                        <div className="flex grow justify-between gap-12">
+                            <p className="text-sm">Always use Instapark for safe and secure payments</p>
+                        </div>
+                    </div>
+                </div>
                 {/* <ListingReserve
                     listingId={listing?.id}
                     userId={listing?.userId}

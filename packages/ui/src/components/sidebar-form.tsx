@@ -34,7 +34,7 @@ export const SidebarForm = <T extends Record<string, unknown>>({ groups, form, o
   return (
     <Tabs defaultValue={groups[0]?.title}>
       <Form {...form}>
-        <form action="" onSubmit={form.handleSubmit((e) => console.log(e.name))}>
+        <form action="" onSubmit={form.handleSubmit((data) => onSubmit?.(data))}>
           <TabsList className='space-x-2 max-w-full overflow-auto overflow-y-hidden'>
             {
               groups.map((g, i) => (

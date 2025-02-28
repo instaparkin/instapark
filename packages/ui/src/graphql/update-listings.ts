@@ -7,7 +7,7 @@ mutation UPDATE_LISTING(
   $pphcr: Float
   $pphcy: Float
   $pphbi: Float
-  $updateListingId: String
+  $id: String!
   $userId: String
   $type: PlaceType
   $country: String
@@ -30,7 +30,7 @@ mutation UPDATE_LISTING(
       pphcr: $pphcr
       pphcy: $pphcy
       pphbi: $pphbi
-      id: $updateListingId
+      id: $id
       userId: $userId
       type: $type
       country: $country

@@ -13,6 +13,8 @@ import { ListingsAddPhotos } from './listings-add-photos'
 import { UPDATE_LISTING } from '../graphql/update-listings'
 import { Listing } from '@instapark/types'
 import { redirect } from 'next/navigation'
+import toast from 'react-hot-toast'
+import { ListingsAddAllowedVehicles } from './listings-add-allowed-vehicles'
 
 interface ListingHostDetailedProps {
     listingId: string
@@ -38,6 +40,12 @@ export const ListingHostDetailed = ({ listingId }: ListingHostDetailedProps) => 
                     description: "Select the type of place (e.g., apartment, house, villa, etc.)."
                 }
             ]
+        },
+        {
+            title: "Vehicles",
+            href: "#",
+            component: ({ form }) => <ListingsAddAllowedVehicles form={form} />,
+            fields: []
         },
         {
             title: "Location",
@@ -117,16 +125,21 @@ export const ListingHostDetailed = ({ listingId }: ListingHostDetailedProps) => 
         }
     ]
 
-    const [updateListing,
-        { data: ULData,
-            loading: ULLoading, error: ULError }] = useMutation(UPDATE_LISTING)
+    const [updateListing] = useMutation(UPDATE_LISTING, {
+        onCompleted: (data) => {
+            toast.success(data?.ListingMutation?.updateListing as string)
+        },
+        onError: (error) => {
+            toast.error(`${error}`)
+        }
+    })
 
     return (
         <SidebarForm
             form={form}
             groups={listingsEditFormSteps}
             onSubmit={(data) => {
-                updateListing({ variables: data });
+                updateListing({ variables: { ...data, id: listingId } });
             }} />
     )
 }

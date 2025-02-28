@@ -88,7 +88,6 @@ query GET_TRIPS($userId: String, $buyerBookingsId: String, $status: BookingStatu
         photos
         id
         isOpen
-        rating
         createdAt
         updatedAt
         user {
@@ -112,22 +111,6 @@ query GET_TRIPS($userId: String, $buyerBookingsId: String, $status: BookingStatu
           longitude
           name
           landmark
-          reviews
-          ratings
-        }
-        reviews {
-          id
-          listingId
-          userId
-          rating
-          location
-          cleanliness
-          communication
-          value
-          accuracy
-          description
-          createdAt
-          updatedAt
         }
       }
     }

@@ -45,10 +45,10 @@ export const ListingCreateForm = ({ defaultValues }: ListingCreateFormProps) => 
             allowedVehicles: [],
             photos: [],
             basePrice: 10.00,
-            pphbi: 0,
-            pphcy: 0,
-            pphcr: 0,
-            plph: 0,
+            pphbi: 10.00,
+            pphcy: 5.00,
+            pphcr: 20.00,
+            plph: 60.00,
         },
     });
 

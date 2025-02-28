@@ -87,7 +87,6 @@ query GET_TRIP_DETAILED($userId: String!, $id: String!) {
         plph
         photos
         id
-        rating
         createdAt
         updatedAt
         user {

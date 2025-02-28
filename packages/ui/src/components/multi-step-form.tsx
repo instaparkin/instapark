@@ -85,28 +85,34 @@ export const MultiStepForm = <T extends Record<string, unknown>>({
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}>
-                {currentSubStepIndex === 0 ? null :
-                    <div className="text-center text-3xl font-semibold mb-6">{currentSubStep.name}</div>}
-                {currentSubStep.component ?
-                    <currentSubStep.component form={form} /> : (
-                        currentSubStep.fields?.map((field) => (
-                            <FormField
-                                key={field.name}
-                                control={form.control}
-                                name={field.name}
-                                render={({ field: formField }) => (
-                                    <FormItem>
-                                        <FormLabel>{fieldName(field.name)}</FormLabel>
-                                        <FormControl>
-                                            <Input {...formField} value={formField.value as string} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        ))
-                    )}
-                <div className="fixed z-10 bg-background py-6 bottom-0 border-t left-0 w-full">
+                <div className="mb-32">
+                    {currentSubStepIndex === 0 ? null :
+                        <div className="text-center text-3xl font-semibold mb-6">{currentSubStep.name}</div>}
+                    {currentSubStep.component ?
+                        <currentSubStep.component form={form} /> : (
+                            <div className="max-w-[630px] mx-auto">
+                                {
+                                    currentSubStep.fields?.map((field) => (
+                                        <FormField
+                                            key={field.name}
+                                            control={form.control}
+                                            name={field.name}
+                                            render={({ field: formField }) => (
+                                                <FormItem>
+                                                    <FormLabel>{fieldName(field.name)}</FormLabel>
+                                                    <FormControl>
+                                                        <Input {...formField} value={formField.value as string} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    ))
+                                }
+                            </div>
+                        )}
+                </div>
+                <div className="fixed z-10 py-6 bottom-0 border-t left-0 w-full bg-background">
                     <div className="container flex flex-col">
                         <MultiStepProgress calculateProgress={() => calculateProgress()} />
                         <MultiStepNavigation

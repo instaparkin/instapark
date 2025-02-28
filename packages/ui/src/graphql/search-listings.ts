@@ -35,7 +35,6 @@ query SearchListings(
       photos
       id
       isOpen
-      rating
       createdAt
       updatedAt
     }

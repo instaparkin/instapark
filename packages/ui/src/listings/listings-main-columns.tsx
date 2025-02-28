@@ -1,17 +1,7 @@
 import React from "react"
 import { ColumnDef } from "@tanstack/react-table";
-import { Host_ListingsQuery, Listing } from "../__generated__/graphql";
+import { Listing } from "../__generated__/graphql";
 import { cn } from "../utils/cn";
-import { MoreHorizontal } from "lucide-react"
-import { Button } from "../components/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "../components/dropdown-menu"
 import { timeInInstapark } from "../utils/dayjs";
 import Image from "next/image";
 import { formatPrice } from "../utils/field-name";
@@ -24,12 +14,12 @@ export const listingMainColumns: ColumnDef<Listing>[] = [
             const value = cell.getValue() as string[]
             return (
                 <div className="relative w-20 h-20 flex-shrink-0 sm:w-24 sm:h-24">
-                    <Image
+                    {/* <Image
                         fill
                         src={value.at(0) as string}
                         alt={`Listing Photo`}
                         className="object-cover rounded-lg border"
-                    />
+                    /> */}
                 </div>
             )
         }

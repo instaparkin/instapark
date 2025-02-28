@@ -4,9 +4,6 @@ export const HOST_LISTINGS = gql(`
 query HOST_LISTINGS(
   $userId: String
   $id: String
-  $startDate: Int
-  $endDate: Int
-  $vehicle: Vehicle
 ) {
   ListingQuery {
     hostListings(userId: $userId, id: $id) {
@@ -31,7 +28,6 @@ query HOST_LISTINGS(
       photos
       id
       isOpen
-      rating
       createdAt
       updatedAt
       user {
@@ -55,34 +51,8 @@ query HOST_LISTINGS(
         longitude
         name
         landmark
-        reviews
-        ratings
-      }
-      reviews {
-        id
-        listingId
-        userId
-        rating
-        location
-        cleanliness
-        communication
-        value
-        accuracy
-        description
-        createdAt
-        updatedAt
-      }
-      calulator(startDate: $startDate, endDate: $endDate, vehicle: $vehicle) {
-        items {
-          field
-          value
-          separator
-        }
-        vehicles
-        hourly
       }
     }
   }
 }
-
 `)

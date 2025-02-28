@@ -17,7 +17,8 @@ export const useAuth = (): Profile => {
             userId: session.userId
         },
     });
-
+    console.log(session.userId);
+    
     return {
         ...data?.UserQuery?.getProfile as Profile,
         userId: session.userId,

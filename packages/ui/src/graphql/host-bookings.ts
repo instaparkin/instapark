@@ -42,8 +42,6 @@ query HostBookings($userId: String, $status: BookingStatus!) {
             longitude
             name
             landmark
-            reviews
-            ratings
           }
           payments {
             bookingId
@@ -114,7 +112,6 @@ query HostBookings($userId: String, $status: BookingStatus!) {
           photos
           id
           isOpen
-          rating
           createdAt
           updatedAt
           user {
@@ -138,22 +135,6 @@ query HostBookings($userId: String, $status: BookingStatus!) {
             longitude
             name
             landmark
-            reviews
-            ratings
-          }
-          reviews {
-            id
-            listingId
-            userId
-            rating
-            location
-            cleanliness
-            communication
-            value
-            accuracy
-            description
-            createdAt
-            updatedAt
           }
         }
       }

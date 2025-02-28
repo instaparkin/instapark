@@ -28,8 +28,6 @@ export const ProfileType = new GraphQLObjectType({
         longitude: { type: GraphQLFloat },
         name: { type: GraphQLString },
         landmark: { type: GraphQLString },
-        reviews: { type: GraphQLInt },
-        ratings: { type: GraphQLFloat }
     },
 })
 

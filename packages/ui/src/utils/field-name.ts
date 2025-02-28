@@ -31,16 +31,6 @@ export const formatAmount = (
     return `₹ ${amount}`
 }
 
-export const rating = (
-    rating: number,
-    text?: boolean
-) => {
-    if (text) {
-        return `${rating} ratings`
-    }
-    return `★ ${rating}`
-}
-
 export const formatName = (firstName: string, lastName: string) => {
     return `${firstName} ${lastName}`
 }

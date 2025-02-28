@@ -30,18 +30,25 @@ export const ListingMutation = new GraphQLObjectType({
                 plph: { type: new GraphQLNonNull(GraphQLFloat) },
                 photos: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))) },
             },
-            resolve: async (parent, args: ListingRequest) => {
-                const response = await axios.post<ApiResponse<Listing>>
-                    (API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.LISTING.CREATE,
-                        args)
+            resolve: async (_, args: ListingRequest) => {
+                try {
+                    const response = await axios.post<ApiResponse<Listing>>
+                        (API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.LISTING.CREATE,
+                            args)
 
-                return response.data.message
+                    return response.data.message
+                } catch (error) {
+                    if (axios.isAxiosError(error) && error.response) {
+                        return error.response.data.message
+                    }
+                    return "An unexpected error occurred";
+                }
             }
         },
         updateListing: {
             type: GraphQLString,
             args: {
-                id: { type: GraphQLString },
+                id: { type: new GraphQLNonNull(GraphQLString)},
                 userId: { type: GraphQLString },
                 type: { type: PlaceTypeEnum },
                 country: { type: GraphQLString },
@@ -63,10 +70,19 @@ export const ListingMutation = new GraphQLObjectType({
                 photos: { type: new GraphQLList(GraphQLString) },
             },
 
-            resolve: async (parent, args) => {
-                const response = await axios.put<ApiResponse<Listing>>
-                    (API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.LISTING.UPDATE + args.id, args)
-                return response.data.message
+            resolve: async (_, args) => {
+                try {
+                    const response = await axios.put<ApiResponse<Listing>>(
+                        API_SERVER_CONSTANTS.ENDPOINTS.LISTINGS.LISTING.UPDATE,
+                        { id: args.id, ...args }
+                    );
+                    return response.data.message
+                } catch (error) {
+                    if (axios.isAxiosError(error) && error.response) {
+                        return error.response.data.message
+                    }
+                    return "An Unknown error occured"
+                }
             }
         },
     }

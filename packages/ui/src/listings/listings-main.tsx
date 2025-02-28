@@ -10,24 +10,19 @@ import { DataTable, DataTableLoading } from '../components/data-table'
 import { listingMainColumns } from './listings-main-columns'
 import { Listing } from '../__generated__/graphql'
 import { ListingsDataTable } from './listings-main-data-table'
+import { NoResults } from '../components/no-results'
 
 export const ListingsMain = () => {
   const { userId } = useAuth();
-
-  const { data, loading, error } = useQuery(HOST_LISTINGS, {
+  const { data, loading } = useQuery(HOST_LISTINGS, {
     variables: {
       userId,
-      startDate: null,
-      endDate: null
+      id: null
     }
   });
-
-  React.useEffect(() => {
-    if (error) {
-      toast.error(`${error}`)
-    }
-  }, [loading, error])
-
+  if (data?.ListingQuery?.hostListings?.length === 0 || undefined) {
+    return <NoResults text={'Add Your First Listing'} />
+  }
   return (
     <div>
       <div className='flex items-center justify-between mb-4'>
@@ -37,9 +32,12 @@ export const ListingsMain = () => {
       {
         loading ?
           <DataTableLoading /> :
-          <ListingsDataTable
-            data={data?.ListingQuery?.hostListings as Listing[]}
-            columns={listingMainColumns} />
+          (
+            data &&
+            <ListingsDataTable
+              data={data?.ListingQuery?.hostListings as Listing[]}
+              columns={listingMainColumns} />
+          )
       }
     </div>
   )

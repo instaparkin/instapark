@@ -30,24 +30,7 @@ export interface Listing {
     updatedAt: number;
 }
 
-export interface Review {
-    id: string
-    listingId: string;
-    userId: string;
-    rating: number;
-    location: number;
-    cleanliness: number;
-    communication: number;
-    value: number;
-    accuracy: number;
-    description?: string;
-    createdAt: number;
-    updatedAt: number;
-}
-
-export type ReviewRequest = Omit<Review, "createdAt" | "updatedAt">
-
-export type ListingRequest = Omit<Listing, "id" | "createdAt" | "updatedAt" | "isOpen" | "rating">
+export type ListingRequest = Omit<Listing, "id" | "createdAt" | "updatedAt" | "isOpen">
 
 export type ListingSearch = {
     street?: string,

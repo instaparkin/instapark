@@ -21,5 +21,4 @@ query PRICING_CALCULATOR(
     }
   }
 }
-
-    `)
+`)

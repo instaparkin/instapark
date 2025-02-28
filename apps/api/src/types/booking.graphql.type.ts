@@ -4,7 +4,7 @@ import { ApiResponse, BookingOTP, Payment, Profile } from "@instapark/types";
 import { fetchOrderById } from "../utils/fetch-order-by-id";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 import { ProfileType } from "./user.graphql.type";
-import { ListingType, VehicleEnum } from "./listing.graphql.type";
+import { VehicleEnum } from "./listing.graphql.type";
 
 export const BookingOrderSplitType = new GraphQLObjectType({
     name: "BookingOrderSplit",

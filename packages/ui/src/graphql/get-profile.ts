@@ -24,8 +24,6 @@ query GET_PROFILE($userId: String!) {
       longitude
       name
       landmark
-      reviews
-      ratings
     }
   }
 }
