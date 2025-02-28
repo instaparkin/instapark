@@ -43,57 +43,7 @@ export const PaymentDetailsMain = () => {
     }
 
     return (
-        <SideBarLayout sidebarNavItems={paymentDetailsSteps.map(p => p)}>
-            <div className='max-w-2xl mx-auto space-y-6'>
-                <Form {...form}>
-                    <form className='space-y-10' onSubmit={form.handleSubmit(onSubmit)}>
-                        {
-                            paymentDetailsSteps.map((d, i) => (
-                                <div id={d.title.toLowerCase()} className='space-y-6' key={i}>
-                                    <div className='flex items-center justify-between'>
-                                        <h2 className='text-lg font-semibold'>{d.title}</h2>
-                                        <Badge variant={d.status === "VERIFIED" ? "positive" : "negative"}>
-                                            {d.status}</Badge>
-                                    </div>
-                                    {
-                                        d.fields.map((f, i) => (
-                                            <Card key={i} id={f.name} className='rounded-sm'>
-                                                <FormField
-                                                    key={i}
-                                                    control={form.control}
-                                                    name={f.name}
-                                                    render={({ field }) => (
-                                                        <FormItem>
-                                                            <CardHeader>
-                                                                <FormLabel>
-                                                                    <CardTitle className='text-xl'>
-                                                                        {fieldName(f.name)}
-                                                                    </CardTitle>
-                                                                </FormLabel>
-                                                                <CardDescription>
-                                                                    {f.description}
-                                                                </CardDescription>
-                                                            </CardHeader>
-                                                            <CardContent>
-                                                                <FormControl>
-                                                                    <Input className='max-w-xs' type={f.type} {...field} value={field.value as string} />
-                                                                </FormControl>
-                                                                <FormMessage />
-                                                            </CardContent>
-                                                        </FormItem>
-                                                    )}
-                                                />
-                                            </Card>
-                                        ))
-                                    }
-                                </div>
-                            ))
-                        }
-                        <Button type="submit">Request Approval</Button>
-                    </form>
-                </Form>
-            </div >
-        </SideBarLayout>
+       <SidebarForm groups={paymentDetailsSteps} form={form} />
     )
 }
 

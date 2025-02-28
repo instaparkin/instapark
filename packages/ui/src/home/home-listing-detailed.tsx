@@ -5,23 +5,16 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { PricingCalculator } from '../listings/pricing-calculator'
 import { MapsMain } from '../maps/maps-main'
-import { ListingReserve } from '../listings/listings-reserve'
 import { useQuery } from '@apollo/client'
 import toast from 'react-hot-toast'
-import { ListingLoadingSkeleton } from './home-detailed-loading'
 import { formatLocation, formatName, formatPrice } from '../utils/field-name'
 import { UserMini } from '../components/user-mini'
 import { Listing, PricingCalulator } from '../__generated__/graphql'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/card'
-import { Vehicle } from '@instapark/types'
-import { useAuth } from '../hooks/use-auth'
 import { ImageSwiper } from '../components/image-swiper'
-import { uuidToAlphanumeric } from '@instapark/common'
 import { HOST_LISTINGS } from '../graphql/host-listings'
-import { RootState, useSelector } from '@instapark/state'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/accordion'
-import { InfoIcon, PlusIcon, ShieldCheck } from 'lucide-react'
-
+import { ShieldCheck } from 'lucide-react'
+import { HomeListingsDetailedSkeleton } from './home-listing-detailed-skeleton'
 
 const items = [
     {
@@ -66,7 +59,7 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
     const listing = data?.ListingQuery?.hostListings?.at(0) as Listing;
 
     if (loading) {
-        return <div>Loading</div>
+        return <HomeListingsDetailedSkeleton />
     }
 
     if (error) {
