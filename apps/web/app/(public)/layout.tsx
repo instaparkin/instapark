@@ -1,6 +1,6 @@
 "use client"
 
-import { AuthProvider, HeaderSkeleton, StoreProvider } from "@instapark/ui";
+import { AuthProvider, FooterMain, HeaderSkeleton, StoreProvider } from "@instapark/ui";
 import dynamic from "next/dynamic";
 
 const HeaderMainDynamic = dynamic(() =>
@@ -14,6 +14,7 @@ const PublicLayout = ({ children }: { children: React.ReactNode }): JSX.Element 
             <AuthProvider>
                 <HeaderMainDynamic />
                 {children}
+                <FooterMain />
             </AuthProvider>
         </StoreProvider>
     );

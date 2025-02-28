@@ -31,7 +31,6 @@ export default function RootLayout({
               }
               position="top-right" />
             {children}
-            <FooterMain />
           </ThemeProvider>
         </GraphQLProvider>
       </body>
