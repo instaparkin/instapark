@@ -28,6 +28,7 @@ export const API_SERVER_CONSTANTS = {
                 OTP: `${process.env.BOOKINGS_SERVER_URL}/bookings/otp`,
                 VERIFY: `${process.env.BOOKINGS_SERVER_URL}/bookings/otp/verify`,
                 LOCK: `${process.env.BOOKINGS_SERVER_URL}/bookings/lock`,
+                COMPLETE: `${process.env.BOOKINGS_SERVER_URL}/bookings/complete`,
             },
             VENDOR: {
                 BALANCE: `${process.env.BOOKINGS_SERVER_URL}/vendor/balance`,
@@ -39,12 +40,16 @@ export const API_SERVER_CONSTANTS = {
             },
             SETTLEMENTS: {
                 GET: `${process.env.BOOKINGS_SERVER_URL}/settlements`,
-            }
+            },
         },
         USER: {
             PROFILE: {
                 GET: `${process.env.USER_SERVER_URL}/profile`,
                 UPSERT: `${process.env.USER_SERVER_URL}/profile`,
+            },
+            AADHAR: {
+                OTP: `${process.env.USER_SERVER_URL}/aadhar/otp`,
+                VERIFY: `${process.env.USER_SERVER_URL}/aadhar/verify`,
             }
         },
     }

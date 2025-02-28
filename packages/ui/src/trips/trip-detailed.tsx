@@ -97,6 +97,10 @@ export const TripDetailed = ({ id }: { id: string }) => {
   ]
   return (
     <div className="max-w-5xl mx-auto space-y-6 ">
+      <div className='flex items-center justify-between border bg-white dark:bg-black p-6 rounded-sm'>
+        <h2 className='text-xl font-semibold'>Final Payment</h2>
+        <Button>Complete</Button>
+      </div>
       <div className="flex flex-col lg:flex-row justify-between gap-6">
         <Card className="w-full">
           <CardHeader>

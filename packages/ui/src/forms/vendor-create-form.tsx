@@ -17,11 +17,11 @@ export const VendorCreateForm = () => {
             defaultValues: {
                 vendor_id: userId,
                 name: formatName(firstName, lastName),
-                email: emails?.at(0),
-                phone: phoneNumber,
+                email: emails?.at(0) as string,
+                phone: phoneNumber as string,
                 bank: {
                     account_number: getEnv() === "production" ? "" : "026291800001191",
-                    account_holder: getEnv() === "production" ? formatName(firstName, lastName) : "Jhon Doe",
+                    account_holder: getEnv() === "production" ? formatName(firstName, lastName) : "JOHN DOE",
                     ifsc: getEnv() === "production" ? "" : "YESB0000262"
                 },
                 kyc_details: {

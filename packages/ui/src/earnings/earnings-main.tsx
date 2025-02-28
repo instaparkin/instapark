@@ -21,8 +21,6 @@ export const EarningsMain = () => {
    * TODO:
    * 1. Pass the props from here with proper type definitions
    */
-  console.log(userId);
-  
   return (
     <div className='space-y-6'>
       <EarningsStats userId={userId} vendorId={uuidToAlphanumeric(userId)} />

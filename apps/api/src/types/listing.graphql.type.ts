@@ -1,7 +1,7 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { ProfileType } from "./user.graphql.type";
-import { axios } from "@instapark/utils";
-import { ApiResponse, Booking, Profile, Review, VendorBalance } from "@instapark/types";
+import { axios, toUnixTimestamp } from "@instapark/utils";
+import { ApiResponse, Booking, Profile, Review, Vehicle, VendorBalance } from "@instapark/types";
 import { BookingStatusEnum, BookingType } from "./booking.graphql.type";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 import { EarningsType, VendorBalanceType } from "./vendor.graphql.type";
@@ -45,6 +45,7 @@ export const VehicleEnum = new GraphQLEnumType({
         Cycle: { value: "Cycle" },
     }
 })
+
 export const ListingType = new GraphQLObjectType({
     name: "Listing",
     fields: () => ({
@@ -62,9 +63,9 @@ export const ListingType = new GraphQLObjectType({
         landmark: { type: new GraphQLNonNull(GraphQLString) },
         allowedVehicles: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(VehicleEnum))) },
         basePrice: { type: new GraphQLNonNull(GraphQLFloat) },
-        pphbi: { type: new GraphQLNonNull(GraphQLFloat) },
-        pphcy: { type: new GraphQLNonNull(GraphQLFloat) },
-        pphcr: { type: new GraphQLNonNull(GraphQLFloat) },
+        pphbi: { type: GraphQLFloat },
+        pphcy: { type: GraphQLFloat },
+        pphcr: { type: GraphQLFloat },
         plph: { type: new GraphQLNonNull(GraphQLFloat) },
         photos: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))) },
         id: { type: new GraphQLNonNull(GraphQLString) },
@@ -72,6 +73,77 @@ export const ListingType = new GraphQLObjectType({
         rating: { type: new GraphQLNonNull(GraphQLFloat) },
         createdAt: { type: new GraphQLNonNull(GraphQLInt) },
         updatedAt: { type: new GraphQLNonNull(GraphQLInt) },
+        calulator: {
+            type: new GraphQLObjectType({
+                name: "PricingCalulator",
+                fields: {
+                    hourly: { type: new GraphQLNonNull(GraphQLFloat) },
+                    vehicles: {
+                        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(VehicleEnum))),
+                    },
+                    items: {
+                        type: new GraphQLNonNull(new GraphQLList(new GraphQLObjectType({
+                            name: "PricingItems",
+                            fields: {
+                                field: { type: GraphQLString },
+                                value: { type: GraphQLString }, // Ensure all values are strings
+                                separator: { type: GraphQLBoolean }
+                            }
+                        })))
+                    }
+                },
+            }),
+            args: {
+                startDate: { type: GraphQLInt }, // Unix timestamp in SECONDS
+                endDate: { type: GraphQLInt },
+                vehicle: { type: VehicleEnum }
+            },
+            resolve: async (parent, { startDate, endDate, vehicle }) => {
+
+                const hourlyRate = () => {
+                    switch (vehicle) {
+                        case "Bike":
+                            return parent.pphbi ?? 0;
+                        case "Cycle":
+                            return parent.pphcy ?? 0;
+                        case "Car":
+                            return parent.pphcr ?? 0;
+                        default:
+                            return 0;
+                    }
+                };
+
+                const hours = () => {
+                    const start = new Date(startDate * 1000); // Convert seconds to milliseconds
+                    const end = new Date(endDate * 1000);     // Convert seconds to milliseconds
+                    return (end.getTime() - start.getTime()) / 3600000; // Convert ms to hours
+                };
+
+                const parkingPrice = () => {
+                    return hourlyRate() * hours();
+                };
+
+                const ipFee = () => {
+                    return (parent.basePrice ?? 0 + parkingPrice()) * 0.3;
+                };
+
+                const totalPrice = () => {
+                    return (parent.basePrice ?? 0) + parkingPrice() + ipFee();
+                };
+
+                return {
+                    vehicles: parent.allowedVehicles ?? [],
+                    hourly: hourlyRate(),
+                    items: [
+                        { field: "Base Price", value: (parent.basePrice ?? 0).toFixed(2) },
+                        { field: `${hours().toFixed(2)} hours x ${hourlyRate()}`, value: parkingPrice().toFixed(2) },
+                        { field: "Instapark Fee (30%)", value: ipFee().toFixed(2) },
+                        { field: "Penalty Per Hour", value: (parent.plph ?? 0).toFixed(2) },
+                        { field: "Total", value: totalPrice().toFixed(2), separator: true },
+                    ]
+                };
+            }
+        },
         user: {
             type: ProfileType,
             resolve: async (parent) => {

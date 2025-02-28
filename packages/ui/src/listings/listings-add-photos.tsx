@@ -33,7 +33,7 @@ export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest
                     toast.error(`${error.message}`);
                 }}
             />
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {form.getValues("photos").map((photo, index) => (
                     <div key={index} className="relative group">
                         <Image
@@ -54,7 +54,7 @@ export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest
                         </Button>
                     </div>
                 ))}
-            </div>
+            </div> */}
         </div>
     );
 };

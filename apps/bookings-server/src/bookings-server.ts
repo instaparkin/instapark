@@ -4,7 +4,6 @@ import { errorHandler, middleware, supertokens, ensureSuperTokensInit } from "@i
 import mongoose from "mongoose";
 import { BOOKINGS_SERVER_CONSTANTS } from "./constants/bookings-server-constants";
 import { BookingRouter } from "./routes/booking.route";
-import { AadharRouter } from "./routes/aadhar.route";
 import express from "express";
 import cors from "cors";
 import path from 'path';
@@ -52,8 +51,6 @@ async function init() {
     app.use("/bookings", BookingRouter);
 
     app.use("/settlements", SettlementRouter)
-
-    app.use("/aadhar", AadharRouter);
 
     app.use("/vendor", VendorRouter)
 

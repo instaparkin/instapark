@@ -13,7 +13,11 @@ import { useEffect } from "react";
 
 export type ListingsAddType = z.infer<typeof listingsCreateSchema>;
 
-export const ListingCreateForm = () => {
+interface ListingCreateFormProps {
+    defaultValues: boolean
+}
+
+export const ListingCreateForm = ({ defaultValues }: ListingCreateFormProps) => {
     const { userId } = useAuth();
     const { listing } = useParams();
     const { data } = useQuery(HOST_LISTINGS, {
@@ -40,7 +44,7 @@ export const ListingCreateForm = () => {
             landmark: "",
             allowedVehicles: [],
             photos: [],
-            basePrice: 0,
+            basePrice: 10.00,
             pphbi: 0,
             pphcy: 0,
             pphcr: 0,
@@ -49,7 +53,7 @@ export const ListingCreateForm = () => {
     });
 
     useEffect(() => {
-        if (listingFromDB) {
+        if (defaultValues && listingFromDB) {
             form.reset({
                 ...listingFromDB,
             });

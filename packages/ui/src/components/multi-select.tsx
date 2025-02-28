@@ -28,7 +28,7 @@ interface MultiSelectorProps
 
 interface MultiSelectContextProps {
   value: string[];
-  onValueChange: (value: string) => void;
+  onValueChange: (value: any) => void;
   open: boolean;
   setOpen: (value: boolean) => void;
   inputValue: string;
@@ -73,18 +73,16 @@ const MultiSelector = ({
 
   const onValueChangeHandler = useCallback(
     (val: string) => {
-        if (Array.isArray(value)) {
-            if (value.includes(val)) {
-                onValueChange(value.filter((item) => item !== val));
-            } else {
-                onValueChange([...value, val]);
-            }
-        } else {
-            console.error("Expected 'value' to be an array, got:", value);
-        }
+      if (value.includes(val)) {
+        onValueChange(value.filter((item) => item !== val));
+      } else {
+        onValueChange([...value, val]);
+      }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [value],
-);
+  );
+
   const handleSelect = React.useCallback(
     (e: React.SyntheticEvent<HTMLInputElement>) => {
       e.preventDefault();
@@ -158,12 +156,12 @@ const MultiSelector = ({
         case "Delete":
           if (value.length > 0) {
             if (activeIndex !== -1 && activeIndex < value.length) {
-              onValueChangeHandler(value[activeIndex] as string);
+              onValueChangeHandler(value[activeIndex]);
               moveCurrent();
-          } else {
+            } else {
               if (target.selectionStart === 0) {
                 if (selectedValue === inputValue || isValueSelected) {
-                  onValueChangeHandler(value[value.length - 1] as string);
+                  onValueChangeHandler(value[value.length - 1]);
                 }
               }
             }
@@ -183,6 +181,7 @@ const MultiSelector = ({
           break;
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [value, inputValue, activeIndex, loop],
   );
 
@@ -239,7 +238,7 @@ const MultiSelectorTrigger = forwardRef<
       )}
       {...props}
     >
-      {value?.map((item, index) => (
+      {value.map((item, index) => (
         <Badge
           key={item}
           className={cn(
@@ -271,7 +270,7 @@ MultiSelectorTrigger.displayName = "MultiSelectorTrigger";
 const MultiSelectorInput = forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }) => {
+>(({ className, ...props }, ref) => {
   const {
     setOpen,
     inputValue,
@@ -353,7 +352,7 @@ const MultiSelectorItem = forwardRef<
     e.stopPropagation();
   }, []);
 
-  const isIncluded = Options?.includes(value);
+  const isIncluded = Options.includes(value);
   return (
     <CommandItem
       ref={ref}

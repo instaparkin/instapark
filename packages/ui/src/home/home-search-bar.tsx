@@ -20,11 +20,10 @@ import { cn } from "../utils/cn"
 import { listingsSearchForm } from "../forms/listings-search-form"
 import { useIsMobile } from "../hooks/use-mobile"
 import { AppDispatch, setSearch, useDispatch } from "@instapark/state"
-import { Home, SlidersHorizontal } from "lucide-react"
-import { dateToUnixSec } from "../utils/dayjs"
+import { SlidersHorizontal } from "lucide-react"
+import { formatDateTime } from "../utils/dayjs"
 import { ListingSearch } from "@instapark/types"
 import { Vehicle } from "../__generated__/graphql"
-import { Separator } from "../components/separator"
 
 export const HomeSearchBar = () => {
   const form = listingsSearchForm()
@@ -102,8 +101,8 @@ export const HomeSearchBar = () => {
       setSearch({
         street: value.street,
         vehicleType: value.vehicleType,
-        startDate: value.startDate ? dateToUnixSec(new Date(value.startDate)) : undefined,
-        endDate: value.endDate ? dateToUnixSec(new Date(value.endDate)) : undefined,
+        startDate: formatDateTime(new Date(value?.startDate as string)),
+        endDate: formatDateTime(new Date(value.endDate as string)),
       }),
     )
   }

@@ -2,6 +2,9 @@ import { ProfileRequest } from "@instapark/types";
 import { z, ZodType } from "zod";
 
 export const profileSchema = z.object({
+    firstName: z.string(),
+    lastName: z.string(),
+    emails: z.string(),
     phoneNumber: z.string(),
     kyc: z.object({
         uidai: z.string(),

@@ -16,7 +16,9 @@ export const ListingsMain = () => {
 
   const { data, loading, error } = useQuery(HOST_LISTINGS, {
     variables: {
-      userId
+      userId,
+      startDate: null,
+      endDate: null
     }
   });
 

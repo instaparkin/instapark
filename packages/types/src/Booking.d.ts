@@ -30,6 +30,17 @@ export type BookingRequest = Pick<Booking,
     "vendor_id": string
 }
 
+export type BookingPaymentRequest = Pick<Booking,
+    "listingId" | "userId" | "startDate" | "endDate" | "basePrice" | "totalPrice" | "ipFee" | "parkingPrice" | "vehicle"> &
+{
+    customer: {
+        "customer_name": string,
+        "customer_email": string,
+        "customer_phone": string,
+    }
+    "vendor_id": string
+}
+
 export type BookingOTP = {
     bookingId: string
     otp: number

@@ -8,9 +8,7 @@ import { Listing } from "@instapark/types";
 import { HomeListingsSkeleton } from "./home-listings-skeleton";
 import { SEARCH_LISTINGS } from "../graphql/search-listings";
 import { RootState, useSelector } from "@instapark/state";
-import { listingsCreateSchema } from "@instapark/schemas";
-import { ListingCreateForm, ListingsAddType } from "../forms/listing-create-form";
-import { ListingsAddPlaceType } from "../listings/listings-add-place-type";
+import { dateToUnixSec } from "../utils/dayjs";
 
 export const HomeMain = () => {
   const { street, startDate, endDate, vehicleType } = useSelector((state: RootState) => state.search)
@@ -18,8 +16,8 @@ export const HomeMain = () => {
   const { loading, data } = useQuery(SEARCH_LISTINGS, {
     variables: {
       street,
-      startDate,
-      endDate,
+      startDate: dateToUnixSec(new Date(startDate as string)),
+      endDate: dateToUnixSec(new Date(endDate as string)),
       vehicleType
     }
   });

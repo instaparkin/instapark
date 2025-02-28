@@ -23,7 +23,7 @@ export const ProfileType = new GraphQLObjectType({
         district: { type: GraphQLString },
         city: { type: GraphQLString },
         street: { type: GraphQLString },
-        pincode: { type: GraphQLString },
+        pincode: { type: GraphQLInt },
         latitude: { type: GraphQLFloat },
         longitude: { type: GraphQLFloat },
         name: { type: GraphQLString },
@@ -32,3 +32,41 @@ export const ProfileType = new GraphQLObjectType({
         ratings: { type: GraphQLFloat }
     },
 })
+
+export const SplitAddressType = new GraphQLObjectType({
+    name: "AadharVerifySplitAddress",
+    fields: {
+        country: { type: GraphQLString },
+        dist: { type: GraphQLString },
+        house: { type: GraphQLString },
+        landmark: { type: GraphQLString },
+        pincode: { type: GraphQLInt },
+        po: { type: GraphQLString },
+        state: { type: GraphQLString },
+        street: { type: GraphQLString },
+        subdist: { type: GraphQLString },
+        vtc: { type: GraphQLString },
+        locality: { type: GraphQLString },
+    },
+});
+
+export const AadhaarResponseType = new GraphQLObjectType({
+    name: "AadhaarVerifyResponse",
+    fields: {
+        ref_id: { type: GraphQLString },
+        status: { type: GraphQLString },
+        message: { type: GraphQLString },
+        care_of: { type: GraphQLString },
+        address: { type: GraphQLString },
+        dob: { type: GraphQLString },
+        email: { type: GraphQLString },
+        gender: { type: GraphQLString },
+        name: { type: GraphQLString },
+        split_address: { type: SplitAddressType },
+        year_of_birth: { type: GraphQLInt },
+        mobile_hash: { type: GraphQLString },
+        photo_link: { type: GraphQLString },
+        share_code: { type: GraphQLString },
+        xml_file: { type: GraphQLString },
+    },
+});

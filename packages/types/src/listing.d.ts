@@ -17,16 +17,15 @@ export interface Listing {
     landmark?: string;
     allowedVehicles: Vehicle[];
     basePrice: number;
-    pphbi: number;
-    pphcy: number;
-    pphcr: number;
+    pphbi?: number;
+    pphcy?: number;
+    pphcr?: number;
     plph: number;
     photos: string[];
 
     /**Fields Not required During form submission */
     id: string;
     isOpen: boolean;
-    rating: number;
     createdAt: number;
     updatedAt: number;
 }

@@ -1,7 +1,13 @@
 import { gql } from "../__generated__";
 
 export const HOST_LISTINGS = gql(`
-query HOST_LISTINGS($userId: String, $id: String) {
+query HOST_LISTINGS(
+  $userId: String
+  $id: String
+  $startDate: Int
+  $endDate: Int
+  $vehicle: Vehicle
+) {
   ListingQuery {
     hostListings(userId: $userId, id: $id) {
       userId
@@ -65,6 +71,15 @@ query HOST_LISTINGS($userId: String, $id: String) {
         description
         createdAt
         updatedAt
+      }
+      calulator(startDate: $startDate, endDate: $endDate, vehicle: $vehicle) {
+        items {
+          field
+          value
+          separator
+        }
+        vehicles
+        hourly
       }
     }
   }

@@ -5,8 +5,6 @@ import React from 'react'
 import { DataTable, DataTableLoading } from '../components/data-table'
 import toast from 'react-hot-toast'
 import { settlementColumns } from './earnings-settlement-columns'
-import { VendorCommission } from '@instapark/types'
-import { ColumnDef } from '@tanstack/react-table'
 import { GET_RECON_DATA } from '../graphql/get-recon-data'
 import { EntityType, ReconData } from '../__generated__/graphql'
 

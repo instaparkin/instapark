@@ -155,3 +155,41 @@ export interface VendorCommission {
     vendor_pg_service_tax: string;
     status: string;
 }
+
+export type AadharOTPResponse = {
+    status: string
+    message: string
+    ref_id: number
+}
+
+export type AadharVerifySplitAddress = {
+    country: string;
+    dist: string;
+    house: string;
+    landmark: string;
+    pincode: number;
+    po: string;
+    state: string;
+    street: string;
+    subdist: string;
+    vtc: string;
+    locality: string;
+};
+
+export type AadhaarVerifyResponse = {
+    ref_id: string;
+    status: string;
+    message: string;
+    care_of: string;
+    address: string;
+    dob: string;
+    email: string;
+    gender: string;
+    name: string;
+    split_address: SplitAddress;
+    year_of_birth: number;
+    mobile_hash: string;
+    photo_link: string;
+    share_code: string;
+    xml_file: string;
+};

@@ -1,7 +1,23 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { OlaMapsApiResponse } from "@instapark/types";
 
+export interface OlaMapsPrediction extends Record<string, unknown> {
+    description: string;
+    geometry: {
+        location: {
+            lat: number;
+            lng: number;
+        };
+    };
+}
+
+export interface OlaMapsApiResponse {
+    predictions: OlaMapsPrediction[];
+}
+
+export interface OlaMapsGeocodingResult {
+    formatted_address: string
+}
 const apiKey = "4txhcXV6VGU9Onf5RCWGlAr8Gru7grfrIrsRvE36";
 
 export type CodeLocationType = {

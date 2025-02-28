@@ -2,15 +2,20 @@ import { Vehicle } from "@instapark/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ListingSearch {
-    startDate: number | null;
-    endDate: number | null;
+    startDate: string;
+    endDate: string;
     street: string | null;
     vehicleType: Vehicle;
 }
+/**
+ * Utils to convert the date to the format of Date-Time input Field
+ */
+const formatDateTime = (date: Date) => date.toISOString().slice(0, 16);
+const now = new Date();
 
 const initialState: ListingSearch = {
-    startDate: null,
-    endDate: null,
+    startDate: formatDateTime(now),
+    endDate: formatDateTime(new Date(now.getTime() + 5 * 3600 * 1000)),
     street: null,
     vehicleType: Vehicle.Bike,
 };

@@ -94,7 +94,7 @@ export class LockingService {
                 },
                 "order_splits": [
                     {
-                        "vendor_id": "uniqueSampleVendorId",
+                        "vendor_id": this.lockingRequest.vendor_id,
                         "percentage": 70
                     }
                 ]

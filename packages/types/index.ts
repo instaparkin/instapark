@@ -15,17 +15,6 @@ export {
     type ListingSearch,
 } from "./src/Listing";
 export {
-    type SearchResult,
-    type TypesenseResponse,
-    type Query,
-    type Hit,
-    type UseSearchProps,
-    type OlaMapsPrediction,
-    type OlaMapsApiResponse,
-    type OlaMapsGeocodingResult,
-    type CollectionType
-} from "./src/Search"
-export {
     type Profile,
     type ProfileRequest,
 } from "./src/profile"
@@ -38,12 +27,9 @@ export {
     type BookingRequest,
     type BookingOTP,
     type BookedResponse,
-    type LockedResponse
+    type LockedResponse,
+    type BookingPaymentRequest
 } from "./src/Booking"
-export {
-    type ProducerType,
-    type ConsumerType
-} from "./src/Kafka"
 export {
     type PaymentRequest,
     type Payment,
@@ -53,7 +39,9 @@ export {
     type PaymentExtended,
     type VendorBalance,
     type Transaction,
-    type VendorCommission
+    type VendorCommission,
+    type AadharOTPResponse,
+    type AadhaarVerifyResponse
 } from "./src/Payment"
 export {
     type User

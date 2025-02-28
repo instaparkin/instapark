@@ -24,7 +24,7 @@ export const HeaderMain = () => {
                         <AvatarImage width={200} height={200} src="/instapark.svg" />
                         <AvatarFallback>P</AvatarFallback>
                     </Avatar>
-                    <div className="hidden sm:flex text-lg font-semibold text-[#010080] dark:text-white">Instapark</div>
+                    <div className="hidden sm:flex text-lg font-semibold text-instapark dark:text-white">Instapark</div>
                 </Link>
                 <NavigationMenu>
                     <NavigationMenuList className="hidden lg:flex space-x-3">

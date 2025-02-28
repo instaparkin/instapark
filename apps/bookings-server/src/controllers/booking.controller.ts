@@ -1,5 +1,5 @@
 import { sendResponse, toUnixTimestamp } from "@instapark/utils";
-import { BookingRequest, Payment, PaymentRequest } from "@instapark/types";
+import { BookingPaymentRequest, BookingRequest, Order, Payment, PaymentRequest } from "@instapark/types";
 import { LockingService } from "../services/locking.service";
 import { BookingService } from "../services/booking.service";
 import { BookingModel, BookingOTPModel } from "../models/booking.model";
@@ -9,6 +9,7 @@ import timezone from "dayjs/plugin/timezone";
 import { Request, Response } from "express";
 import { PaymentModel } from "../models/payment.model";
 import mongoose from "mongoose";
+import { BOOKINGS_SERVER_CONSTANTS } from "../constants/bookings-server-constants";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -51,6 +52,50 @@ export const book = async (req: Request, res: Response) => {
 
     } catch (error) {
         sendResponse(res, 500, `Error creating Booking: ${error}`, "FAILURE", null);
+    }
+}
+
+export const CompleteBookingOrder = async (req: Request, res: Response) => {
+    try {
+        const completeOrderRequest = req.body as BookingPaymentRequest
+        async function createOrder(): Promise<Order> {
+            const options = {
+                method: 'POST',
+                headers: {
+                    'x-api-version': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_API_VERSION,
+                    'x-client-id': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID,
+                    'x-client-secret': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_SECRET,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "order_amount": (completeOrderRequest.totalPrice - completeOrderRequest.basePrice),
+                    "order_currency": "INR",
+                    "customer_details": {
+                        "customer_id": completeOrderRequest.userId,
+                        "customer_name": completeOrderRequest.customer.customer_name,
+                        "customer_email": completeOrderRequest.customer.customer_email,
+                        "customer_phone": completeOrderRequest.customer.customer_phone
+                    },
+                    "order_splits": [
+                        {
+                            "vendor_id": completeOrderRequest.vendor_id,
+                            "amount": completeOrderRequest.parkingPrice * 0.7,
+                        },
+                    ]
+                })
+            };
+
+            return fetch('https://sandbox.cashfree.com/pg/orders', options)
+                .then(response => response.json())
+                .then((response: Order) => {
+                    return response
+                })
+                .catch(error => {
+                    return error
+                });
+        }
+    } catch (error) {
+
     }
 }
 
@@ -195,7 +240,7 @@ export const earningsStats = async (req: Request, res: Response) => {
             {
                 $facet: {
                     currentMonth: [
-                        { $match: { createdAt: { $gte: startOfCurrentMonth, $lte: endOfCurrentMonth }} },
+                        { $match: { createdAt: { $gte: startOfCurrentMonth, $lte: endOfCurrentMonth } } },
                         {
                             $group: {
                                 _id: null,

@@ -54,10 +54,6 @@ const ListingCardDescription: React.FC<ListingCardDescriptionProps> =
                         <div className="font-semibold mb-1 truncate">
                             {listing.street}, {listing.city}
                         </div>
-                        <div className='flex gap-1 items-center'>
-                            <Star className='w-4 h-4 fill-current' />
-                            <span className='text-sm'>{listing.rating}</span>
-                        </div>
                     </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0 flex justify-between listings-center">
@@ -73,29 +69,6 @@ const ListingCardDescription: React.FC<ListingCardDescriptionProps> =
             </>
         )
     }
-
-
-const ListingCardAllowedVehicles = ({ allowedVehicles }: { allowedVehicles: Vehicle[] }) => {
-    const vehicleIcons: Record<Vehicle, React.ReactNode> = {
-        "Car": <FaCarAlt className="w-4 h-4" />,
-        "Bike": <FaMotorcycle className="w-4 h-4" />,
-        "Cycle": <PiBicycleDuotone className="w-4 h-4" />,
-    };
-
-    return (
-        <div className='flex gap-2'>
-            {
-
-                allowedVehicles.map((a, index) => (
-                    <Badge variant={"outline"} key={index} className="rounded-sm p-2 flex items-center gap-2">
-                        {vehicleIcons[a]}
-                        {a}
-                    </Badge>
-                ))
-            }
-        </div>
-    )
-}
 
 export const ListingCard: React.FC<ListingsCard> = ({ listing }) => {
     return (

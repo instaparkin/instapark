@@ -19,8 +19,6 @@ export type Profile = {
     longitude: number;
     name?: string;
     landmark?: string;
-    reviews: number
-    ratings: number
 }
 
 export type ProfileRequest = Omit<Profile, "userId" | "kyc" | "firstName" | "lastName" | "emails" | "timeJoined" | "reviews" | "ratings"> & {

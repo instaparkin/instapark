@@ -18,7 +18,7 @@ import {
 } from "../components/dialog";
 
 export const ListingsAdd = () => {
-  const { form } = ListingCreateForm();
+  const { form } = ListingCreateForm({ defaultValues: false });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
@@ -34,9 +34,9 @@ export const ListingsAdd = () => {
   });
 
   const handleSubmit = async (data: ListingsAddType) => {
-    toast.loading("Submitting...");
-    await createListing({ variables: { data } });
-    toast.dismiss();
+    setDialogMessage("Submitting");
+    setIsDialogOpen(true);
+    await createListing({ variables: data });
   };
 
   return (

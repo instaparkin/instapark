@@ -1,9 +1,9 @@
-import { z, ZodType } from "zod";
-import { ListingRequest, PlaceType, Vehicle } from "@instapark/types"
+import { z } from "zod";
+import { ListingRequest, PlaceType, Vehicle } from "@instapark/types";
 
-export const listingsCreateSchema = z.object({
+export const listingsCreateSchema: z.ZodType<ListingRequest> = z.object({
     userId: z.string(),
-    type: z.custom<PlaceType>(),
+    type: z.nativeEnum(PlaceType),
     country: z.string({ message: "Country is required" }),
     state: z.string({ message: "State is required" }),
     district: z.string({ message: "District is required" }),
@@ -14,11 +14,27 @@ export const listingsCreateSchema = z.object({
     longitude: z.coerce.number(),
     name: z.string().optional(),
     landmark: z.string().optional(),
-    allowedVehicles: z.array(z.custom<Vehicle>()).max(3),
+    allowedVehicles: z.array(z.nativeEnum(Vehicle)).max(3),
     basePrice: z.coerce.number().min(10.00),
-    pphbi: z.coerce.number().min(10.00),
-    pphcy: z.coerce.number().min(5.00),
-    pphcr: z.coerce.number().min(20.00),
+    pphbi: z.coerce.number().min(10.00).optional(),  // Optional here
+    pphcy: z.coerce.number().min(5.00).optional(),
+    pphcr: z.coerce.number().min(20.00).optional(),
     plph: z.coerce.number().min(60.00),
     photos: z.array(z.string()).min(4).max(8),
-}) satisfies ZodType<ListingRequest>;
+}).superRefine((data, ctx) => {
+    const pricingFields: Record<Vehicle, keyof ListingRequest> = {
+        Bike: "pphbi",
+        Cycle: "pphcy",
+        Car: "pphcr",
+    };
+    data.allowedVehicles.forEach((vehicle) => {
+        const priceField = pricingFields[vehicle];
+        if (priceField && (data[priceField] === undefined)) {
+            ctx.addIssue({
+                path: [priceField],
+                code: z.ZodIssueCode.custom,
+                message: `Pricing per hour for ${vehicle.toLowerCase()} is required.`,
+            });
+        }
+    });
+});

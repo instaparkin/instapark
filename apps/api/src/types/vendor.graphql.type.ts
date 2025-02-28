@@ -98,7 +98,7 @@ export const EarningsType = new GraphQLObjectType({
                 },
             }),
         },
-        
+
     },
 })
 

@@ -26,7 +26,7 @@ export const ListingHostDetailed = ({ listingId }: ListingHostDetailedProps) => 
             id: listingId
         }
     });
-    const { form } = ListingCreateForm()
+    const { form } = ListingCreateForm({ defaultValues: true })
     const listingsEditFormSteps: Group<ListingsAddType>[] = [
         {
             title: "Place Type",

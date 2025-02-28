@@ -86,6 +86,26 @@ export const BookingMutation = new GraphQLObjectType({
                     return "An unexpected error occurred";
                 }
             }
+        },
+        complete: {
+            type: GraphQLString,
+            args: {
+                bookingId: { type: GraphQLString },
+                orderId: { type: GraphQLString },
+                userId: { type: GraphQLString },
+            },
+            resolve: async (_, args) => {
+                try {
+                    const response = await axios.post<ApiResponse<null>>
+                        (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.BOOKING.COMPLETE, args);
+                    return response.data.message
+                } catch (error) {
+                    if (axios.isAxiosError(error) && error.response) {
+                        return error.response.data.message;
+                    }
+                    return "An unexpected error occurred";
+                }
+            }
         }
     }
 });

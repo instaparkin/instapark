@@ -14,9 +14,9 @@ mutation CreateListing(
   $longitude: Float!
   $allowedVehicles: [Vehicle!]!
   $basePrice: Float!
-  $pphbi: Float!
-  $pphcy: Float!
-  $pphcr: Float!
+  $pphbi: Float
+  $pphcy: Float
+  $pphcr: Float
   $plph: Float!
   $photos: [String!]!
   $name: String

@@ -6,6 +6,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { fieldName } from '../utils/field-name';
 import { Input } from '../components/input';
 import { Button } from './button';
+import { Badge } from './badge';
+import { CheckIcon } from 'lucide-react';
 
 export type Field<T extends Record<string, unknown>> = {
   name: Path<T>;
@@ -18,7 +20,8 @@ export type Group<T extends Record<string, unknown>> = {
   title: string;
   href: string;
   component?: ({ form }: { form: UseFormReturn<T> }) => JSX.Element;
-  fields: Field<T>[]
+  fields: Field<T>[];
+  verified?: boolean
 }
 
 export interface SidebarFormProps<T extends Record<string, unknown>> {
@@ -42,6 +45,14 @@ export const SidebarForm = <T extends Record<string, unknown>>({ groups, form, o
           {
             groups.map((g, i) => (
               <TabsContent key={i} value={g.title} className='max-w-2xl mx-auto space-y-6'>
+                {
+                  g.verified &&
+                  <div className='flex justify-end'>
+                    <Badge variant="outline" className="gap-1 bg-positive p-1.5">
+                      {"Verified"}
+                    </Badge>
+                  </div>
+                }
                 {
                   g.component ? <g.component form={form} /> : g.fields.map((f, i) => (
                     <Card key={i} id={f.name} className='rounded-sm'>

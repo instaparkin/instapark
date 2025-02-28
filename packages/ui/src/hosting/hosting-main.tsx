@@ -9,7 +9,7 @@ export const HostingMain = () => {
     const { firstName } = useAuth()
     return (
         <div className="space-y-8">
-            <div className="font-semibold text-lg md:text-xl lg:text-3xl">Welcome, {firstName}!</div>
+            <div className="font-semibold text-2xl lg:text-3xl">Welcome, {firstName}!</div>
             <Tabs defaultValue={HOSTING_MAIN_TABS_LIST.data[0]?.value} className="">
                 <TabsList className='space-x-2 mb-6 w-full overflow-y-hidden'>
                     {

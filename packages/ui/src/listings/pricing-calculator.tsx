@@ -6,75 +6,38 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Input } from "../components/input"
 import { Label } from "../components/label"
 import { cn } from "../utils/cn"
-import { BikeIcon, Car } from "lucide-react"
-import { PiCurrencyCircleDollar } from "react-icons/pi"
 import { Button } from "../components/button"
-
-type Vehicle = "Bike" | "Cycle" | "Car"
+import { Details, Item } from "../components/details"
+import { AppDispatch, RootState, setSearch, useDispatch, useSelector } from "@instapark/state"
+import { dateToUnixSec, getStartAndEndDates, unixSecToISO } from "../utils/dayjs"
+import { useQuery } from "@apollo/client"
+import { PRICING_CALCULATOR } from "../graphql/pricing-calculator"
+import { PricingCalculatorSkeleton } from "./pricing-calculator-skeleton"
+import { Vehicle } from "../__generated__/graphql"
 
 interface PricingCalculatorProps {
-  pphbi: number
-  pphcy: number
-  pphcr: number
-  plph: number
-  basePrice: number
-  instaparkFeePercentage: number
+  listingId: string
   className?: string
 }
 
-export function PricingCalculator({
-  pphbi,
-  pphcy,
-  pphcr,
-  plph,
-  basePrice,
-  instaparkFeePercentage,
-  className,
-}: PricingCalculatorProps) {
-  const [startDate, setStartDate] = React.useState<string>(new Date().toISOString().slice(0, 16))
-  const [endDate, setEndDate] = React.useState<string>(new Date(Date.now() + 3600000).toISOString().slice(0, 16))
-  const [selectedVehicle, setSelectedVehicle] = React.useState<Vehicle>("Bike")
+export function PricingCalculator({ listingId, className }: PricingCalculatorProps) {
+  const { startDate, endDate, vehicleType } = useSelector((state: RootState) => state.search)
+  const dispatch = useDispatch<AppDispatch>();
 
-  const getHourlyRate = (vehicleType: Vehicle) => {
-    switch (vehicleType) {
-      case "Bike":
-        return pphbi
-      case "Cycle":
-        return pphcy
-      case "Car":
-        return pphcr
-      default:
-        return 0
+  const { data, loading } = useQuery(PRICING_CALCULATOR, {
+    variables: {
+      startDate: dateToUnixSec(new Date(startDate as string)),
+      endDate: dateToUnixSec(new Date(endDate as string)),
+      vehicle: vehicleType,
+      id: listingId
     }
+  });
+
+  if (loading) {
+    return <PricingCalculatorSkeleton />
   }
 
-  const calculateDuration = () => {
-    const start = new Date(startDate)
-    const end = new Date(endDate)
-    return (end.getTime() - start.getTime()) / 3600000 // Convert to hours
-  }
-
-  const calculateParkingCost = () => {
-    const hourlyRate = getHourlyRate(selectedVehicle)
-    const hours = calculateDuration()
-    return basePrice + hourlyRate * hours
-  }
-
-  const calculateInstaparkFee = () => {
-    const parkingCost = calculateParkingCost()
-    return parkingCost * (instaparkFeePercentage / 100)
-  }
-
-  const calculateTotal = () => {
-    return calculateParkingCost() + calculateInstaparkFee()
-  }
-
-  const vehicleIcons = {
-    Car: Car,
-    Bike: BikeIcon,
-    Cycle: PiCurrencyCircleDollar,
-  }
-
+  const calculator = data?.ListingQuery?.hostListings?.at(0)?.calulator
   return (
     <Card className={cn("w-full rounded-none md:rounded-lg", className)}>
       <CardContent className="p-6">
@@ -82,71 +45,61 @@ export function PricingCalculator({
           {/* Price Display */}
           <div className="flex flex-col sm:flex-row gap-4 justify-between">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold">₹{getHourlyRate(selectedVehicle)}</span>
+              <span className="text-2xl font-bold">₹{calculator?.hourly}</span>
               <span className="text-muted-foreground">/hour</span>
             </div>
             <Button size={"responsive"}>Reserve</Button>
           </div>
 
-            {/* Vehicle Selection */}
-            <div className="space-y-2">
-              <Label htmlFor="vehicle-type">Vehicle Type</Label>
-              <Select value={selectedVehicle} onValueChange={(value) => setSelectedVehicle(value as Vehicle)}>
-                <SelectTrigger id="vehicle-type">
-                  <SelectValue placeholder="Select vehicle type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.keys(vehicleIcons).map((vehicle) => (
-                    <SelectItem key={vehicle} value={vehicle}>
-                      {vehicle}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          {/* Vehicle Selection */}
+          <div className="space-y-2">
+            <Label htmlFor="vehicle-type">Vehicle Type</Label>
+            <Select value={vehicleType} onValueChange={(value) => {
+              if (["Bike", "Cycle", "Car"].includes(value)) {
+                dispatch(setSearch({ vehicleType: value as Vehicle }))
+              }
+            }}
+            >
+              <SelectTrigger id="vehicle-type">
+                <SelectValue placeholder="Select vehicle type" />
+              </SelectTrigger>
+              <SelectContent>
+                {calculator?.vehicles?.map((vehicle) => (
+                  <SelectItem key={vehicle} value={vehicle}>
+                    {vehicle}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-            {/* Start Date and Time */}
-            <div className="space-y-2">
-              <Label htmlFor="start-date">Start Date and Time</Label>
-              <Input
-                id="start-date"
-                type="datetime-local"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </div>
+          {/* Start Date and Time */}
+          <div className="space-y-2">
+            <Label htmlFor="start-date">Start Date and Time</Label>
+            <Input
+              id="start-date"
+              type="datetime-local"
+              value={startDate as string}
+              onChange={(e) => {
+                dispatch(setSearch({ startDate: e.target.value }));
+              }}
+            />
 
-            {/* End Date and Time */}
-            <div className="space-y-2">
-              <Label htmlFor="end-date">End Date and Time</Label>
-              <Input id="end-date" type="datetime-local" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-            </div>
+          </div>
+
+          {/* End Date and Time */}
+          <div className="space-y-2">
+            <Label htmlFor="end-date">End Date and Time</Label>
+            <Input
+              id="end-date"
+              type="datetime-local"
+              value={endDate as string}
+              onChange={(e) => dispatch(setSearch({ endDate: e.target.value }))}
+            />
+          </div>
 
           {/* Price Breakdown */}
-          <div className="space-y-2 pt-4 border-t">
-            <div className="flex justify-between">
-              <span>Base price</span>
-              <span>₹{basePrice.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>
-                {calculateDuration().toFixed(2)} hours x ₹{getHourlyRate(selectedVehicle)}
-              </span>
-              <span>₹{(getHourlyRate(selectedVehicle) * calculateDuration()).toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Instapark fee ({instaparkFeePercentage}%)</span>
-              <span>₹{calculateInstaparkFee().toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-negative">
-              <span>Penalty Per Hour</span>
-              <span>₹{plph}</span>
-            </div>
-            <div className="flex justify-between font-bold pt-2 border-t">
-              <span>Total</span>
-              <span>₹{calculateTotal().toFixed(2)}</span>
-            </div>
-          </div>
+          <Details items={calculator?.items as Item[]} />
         </div>
       </CardContent>
     </Card>

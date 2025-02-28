@@ -10,7 +10,6 @@ export const upsertProfile = async (req: Request, res: Response) => {
         if (!profileRequest.userId) {
             return sendResponse(res, 400, "User ID is required", "FAILURE", null);
         }
-
         const updateFields: Partial<Profile> = {
             ...(profileRequest.userId && { userId: profileRequest.userId }),
             ...(profileRequest.firstName && { firstName: profileRequest.firstName }),
@@ -29,8 +28,6 @@ export const upsertProfile = async (req: Request, res: Response) => {
             ...(profileRequest.longitude && { longitude: profileRequest.longitude }),
             ...(profileRequest.name && { name: profileRequest.name }),
             ...(profileRequest.landmark && { landmark: profileRequest.landmark }),
-            ...(profileRequest.reviews && { reviews: profileRequest.reviews }),
-            ...(profileRequest.ratings && { ratings: profileRequest.ratings }),
         };
 
         await ProfileModel.updateOne(
@@ -49,7 +46,8 @@ export const upsertProfile = async (req: Request, res: Response) => {
 export const getProfile = async (req: Request, res: Response) => {
     try {
         const { userId } = req.query;
-
+        console.log(userId);
+        
         if (!userId) {
             return sendResponse(res, 400, "User ID is required", "FAILURE", null);
         }

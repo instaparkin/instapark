@@ -25,7 +25,6 @@ const ListingSchema: Schema = new Schema<Listing>({
 
   id: { type: String, required: true, default: uuid() },
   isOpen: { type: Boolean, required: true, default: true },
-  rating: { type: Number, required: true, default: 0.00 },
   createdAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) },
   updatedAt: { type: Number, required: true, default: toUnixTimestamp(new Date()) }
 })

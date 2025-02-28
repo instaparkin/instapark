@@ -13,12 +13,16 @@ const nextConfig = {
 			},
 			{
 				protocol: 'https',
+				hostname: 'cdn.simpleicons.org',
+			},
+			{
+				protocol: 'https',
 				hostname: 'loremflickr.com',
 			},
 			{
-				protocol: "https",
-				hostname: "picsum.photos"
-			}
+				protocol: 'https',
+				hostname: 'picsum.photos',
+			},
 		],
 	},
 };

@@ -35,15 +35,19 @@ const profileSchema = new mongoose.Schema<Profile>({
     },
     country: {
         type: String,
+        default: "India"
     },
     state: {
         type: String,
+        default: "Karnataka"
     },
     district: {
         type: String,
+        default: "Bengaluru"
     },
     city: {
         type: String,
+        default: "Bengaluru"
     },
     street: {
         type: String,
@@ -63,14 +67,6 @@ const profileSchema = new mongoose.Schema<Profile>({
     landmark: {
         type: String,
     },
-    reviews: {
-        type: Number,
-        default: 0
-    },
-    ratings: {
-        type: Number,
-        default: 0
-    }
 }, { timestamps: true });
 
 const ProfileModel = mongoose.model('Profile', profileSchema);

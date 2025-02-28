@@ -30,3 +30,16 @@ export const timeInInstapark = (dateInUnixSeconds: number, user: boolean = true)
     const date = unixSecToISO(dateInUnixSeconds)
     return (user ? "Joined " : "") + dayjs(date).fromNow()
 }
+
+export const getStartAndEndDates = (selectedDate: Date) => {
+    const startOfDay = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate()
+    );
+    const startUnix = dateToUnixSec(startOfDay);
+    const endUnix = dateToUnixSec(new Date(startOfDay.getTime() + 5 * 60 * 60 * 1000));
+    return { startDate: startUnix, endDate: endUnix };
+}
+
+export const formatDateTime = (date: Date) => date.toISOString().slice(0, 16);

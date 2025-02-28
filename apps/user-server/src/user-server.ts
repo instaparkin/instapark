@@ -5,6 +5,7 @@ import { USER_SERVER_CONSTANTS } from "./constants/user-server-constants";
 import { ProfileRouter } from "./routes/profile.route";
 import express from "express"
 import cors from "cors"
+import { AadharRouter } from "./routes/aadhar.route";
 
 /**
  * TODO:
@@ -43,6 +44,8 @@ async function init() {
     })
 
     app.use("/profile", ProfileRouter)
+
+    app.use("/aadhar", AadharRouter);
 
     app.use(errorHandler());
 

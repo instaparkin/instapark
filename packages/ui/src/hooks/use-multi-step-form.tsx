@@ -77,7 +77,8 @@ export const useMultiStepForm = <T extends Record<string, unknown>>({
   const currentStep = steps[currentStepIndex] as Step<T>;
 
   const currentSubStep = currentStep.substeps[currentSubStepIndex] as SubStep<T>;
-
+  console.log(form.getValues());
+  
   return {
     currentStepIndex,
     currentSubStepIndex,
