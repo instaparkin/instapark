@@ -18,7 +18,7 @@ export const createVendor = (req: SessionRequest, res: Response) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "vendor_id": uuidToAlphanumeric(vendorRequest.vendor_id),
+                "vendor_id": vendorRequest.vendor_id,
                 "status": "ACTIVE",
                 "name": vendorRequest.name,
                 "email": vendorRequest.email,

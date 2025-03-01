@@ -31,7 +31,7 @@ export type BookingRequest = Pick<Booking,
 }
 
 export type BookingPaymentRequest = Pick<Booking,
-    "listingId" | "userId" | "startDate" | "endDate" | "basePrice" | "totalPrice" | "ipFee" | "parkingPrice" | "vehicle"> &
+    "listingId" | "userId" | "startDate" | "endDate" | "basePrice" | "totalPrice" | "ipFee" | "parkingPrice" | "vehicle" | "id"> &
 {
     customer: {
         "customer_name": string,

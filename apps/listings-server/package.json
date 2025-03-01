@@ -7,13 +7,12 @@
     "build": "rm -rf dist && tsc",
     "lint": "eslint .",
     "check-types": "tsc --noEmit --pretty",
-    "seed" : "tsc src/seed/seed-listings.ts --noEmit"
+    "seed": "tsc src/seed/seed-listings.ts --noEmit"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.34.0",
     "@instapark/auth": "workspace:^",
     "@instapark/constants": "workspace:^",
-    "@instapark/kafka": "workspace:^",
     "@instapark/schemas": "workspace:^",
     "@instapark/utils": "workspace:^",
     "axios": "^1.7.9",

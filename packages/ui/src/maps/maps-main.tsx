@@ -43,7 +43,7 @@ export const MapsMain = ({ location, maxZoom }: MapProps) => {
         borderRadius: "12px",
       }}
       mapStyle={
-        "https://utfs.io/f/UMgDcGP2ujLzttNyuH0RaI6hWs0JoQclYfXvnANMEm9LGjzy"
+        process.env.NEXT_PUBLIC_MAP_STYLE_URL!
       }
     >
       <GeolocateControl

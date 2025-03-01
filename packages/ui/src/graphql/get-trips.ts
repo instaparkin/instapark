@@ -1,9 +1,9 @@
 import { gql } from "../__generated__";
 
 export const GET_TRIPS = gql(`
-query GET_TRIPS($userId: String, $buyerBookingsId: String, $status: BookingStatus) {
+query GET_TRIPS($userId: String, $status: BookingStatus, $id: String) {
   BookingQuery {
-    buyerBookings(userId: $userId, id: $buyerBookingsId, status: $status) {
+    buyerBookings(userId: $userId, status: $status, id: $id) {
       booking {
         id
         listingId

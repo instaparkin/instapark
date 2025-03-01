@@ -4,13 +4,6 @@
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
-			"inputs": [
-				"$TURBO_DEFAULT$",
-				".env.production.local",
-				".env.local",
-				".env.production",
-				".env"
-			],
 			"outputs": [".next/**", "!.next/cache/**"]
 		},
 		"lint": {
@@ -18,32 +11,14 @@
 		},
 		"dev": {
 			"cache": false,
-			"persistent": true,
-			"env": [
-				"^SUPERTOKENS_CONNECTION_URL",
-				"^SUPERTOKENS_API_KEY"
-			],
-			"inputs": [
-				"$TURBO_DEFAULT$",
-				".env.development.local",
-				".env.local",
-				".env.development",
-				".env"
-			]
+			"persistent": true
 		},
 		"check-types": {
 			"dependsOn": ["^check-types"],
 			"cache": false
 		},
 		"test": {
-			"dependsOn": ["^test"],
-			"inputs": [
-				"$TURBO_DEFAULT$",
-				".env.development.local",
-				".env.local",
-				".env.development",
-				".env"
-			]
+			"dependsOn": ["^test"]
 		}
 	}
 }

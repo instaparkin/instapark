@@ -92,9 +92,9 @@ export const ListingType = new GraphQLObjectType({
                 };
 
                 const hours = () => {
-                    const start = new Date(startDate * 1000); // Convert seconds to milliseconds
-                    const end = new Date(endDate * 1000);     // Convert seconds to milliseconds
-                    return (end.getTime() - start.getTime()) / 3600000; // Convert ms to hours
+                    const start = new Date(startDate * 1000);
+                    const end = new Date(endDate * 1000);
+                    return (end.getTime() - start.getTime()) / 3600000;
                 };
 
                 const parkingPrice = () => {

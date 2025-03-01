@@ -49,7 +49,7 @@ const backendConfig = (): TypeInput => {
                                     const lastName = formFields.find(f => f.id === "lastName")?.value || "";
 
                                     /**Fetching other required details from the session */
-                                    axios.post("http://localhost:8088/profile", {
+                                    axios.post(process.env.PROFILE_ENDPOINT!, {
                                         userId: response.user.id,
                                         firstName,
                                         lastName,

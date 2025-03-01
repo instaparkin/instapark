@@ -14,7 +14,10 @@ export const TripsMain = () => {
   const { userId } = useAuth();
 
   const { loading, error, data } = useQuery(GET_TRIPS, {
-    variables: { userId },
+    variables: {
+      userId,
+      id: null,
+    },
   });
 
   if (loading) {

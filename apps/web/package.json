@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@instapark/auth": "workspace:^",
+    "@instapark/common": "workspace:^",
     "@instapark/state": "workspace:^",
     "@instapark/ui": "workspace:*",
     "autoprefixer": "^10.4.20",

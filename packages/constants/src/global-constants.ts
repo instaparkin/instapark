@@ -1,9 +1,9 @@
 export const GLOBAL_CONSTANTS = {
     SUPERTOKENS: {
-        APP_NAME: "instapark",
-        API_DOMAIN: "http://localhost:8081",
-        WEBSITE_DOMAIN: "http://localhost:3000",
-        API_BASE_PATH: "/auth",
-        WEBSITE_BASE_PATH: '/auth'
+        APP_NAME: process.env.SUPERTOKENS_APP_NAME,
+        API_DOMAIN: process.env.SUPERTOKENS_API_DOMAIN,
+        WEBSITE_DOMAIN: process.env.SUPERTOKENS_WEBSITE_DOMAIN,
+        API_BASE_PATH: process.env.SUPERTOKENS_API_BASE_PATH,
+        WEBSITE_BASE_PATH: process.env.SUPERTOKENS_WEBSITE_BASE_PATH
     },
 };

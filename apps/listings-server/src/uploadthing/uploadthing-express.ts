@@ -3,7 +3,4 @@ import { uploadRouter } from "./upload-router";
 
 export const uploadthingExpress = createRouteHandler({
     router: uploadRouter,
-    config : {
-        callbackUrl : "http://localhost:3000/hosting/listings/add",
-    }
 })

@@ -1,8 +1,8 @@
 export const API_SERVER_CONSTANTS = {
     CASHFREE: {
-        CASHFREE_API_VERSION: process.env.CASHFREE_API_VERSION,
-        CASHFREE_CLIENT_ID: process.env.CASHFREE_CLIENT_ID,
-        CASHFREE_CLIENT_SECRET: process.env.CASHFREE_CLIENT_SECRET,
+        CASHFREE_API_VERSION: process.env.CASHFREE_API_VERSION!,
+        CASHFREE_CLIENT_ID: process.env.CASHFREE_CLIENT_ID!,
+        CASHFREE_CLIENT_SECRET: process.env.CASHFREE_CLIENT_SECRET!,
     },
     SERVERS: {
         AUTH_SERVER_URL: process.env.AUTH_SERVER_URL,
@@ -26,9 +26,11 @@ export const API_SERVER_CONSTANTS = {
                 GET: `${process.env.BOOKINGS_SERVER_URL}/bookings`,
                 EARNING_STATS: `${process.env.BOOKINGS_SERVER_URL}/bookings/earnings-stats`,
                 OTP: `${process.env.BOOKINGS_SERVER_URL}/bookings/otp`,
-                VERIFY: `${process.env.BOOKINGS_SERVER_URL}/bookings/otp/verify`,
                 LOCK: `${process.env.BOOKINGS_SERVER_URL}/bookings/lock`,
+                BOOK: `${process.env.BOOKINGS_SERVER_URL}/bookings/book`,
+                VERIFY: `${process.env.BOOKINGS_SERVER_URL}/bookings/otp/verify`,
                 COMPLETE: `${process.env.BOOKINGS_SERVER_URL}/bookings/complete`,
+                COMPLETE_ORDER: `${process.env.BOOKINGS_SERVER_URL}/bookings/complete/order`,
             },
             VENDOR: {
                 BALANCE: `${process.env.BOOKINGS_SERVER_URL}/vendor/balance`,

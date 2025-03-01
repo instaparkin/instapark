@@ -1,9 +1,11 @@
-import { book, completeBooking, earningsStats, getBookings, getOtp, lock, verifyBooking } from "../controllers/booking.controller";
+import { book, completeBooking, CompleteBookingOrder, earningsStats, getBookings, getOtp, lock, verifyBooking } from "../controllers/booking.controller";
 import { Router } from "express"
 
 const BookingRouter = Router();
 
 BookingRouter.post("/complete", completeBooking);
+
+BookingRouter.post("/complete/order", CompleteBookingOrder);
 
 BookingRouter.post("/book", book)
 

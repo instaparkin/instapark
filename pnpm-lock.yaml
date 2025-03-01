@@ -161,9 +161,6 @@ importers:
       '@instapark/constants':
         specifier: workspace:^
         version: link:../../packages/constants
-      '@instapark/kafka':
-        specifier: workspace:^
-        version: link:../../packages/kafka
       '@instapark/utils':
         specifier: workspace:^
         version: link:../../packages/utils
@@ -292,9 +289,6 @@ importers:
       '@instapark/constants':
         specifier: workspace:^
         version: link:../../packages/constants
-      '@instapark/kafka':
-        specifier: workspace:^
-        version: link:../../packages/kafka
       '@instapark/schemas':
         specifier: workspace:^
         version: link:../../packages/schemas
@@ -321,7 +315,7 @@ importers:
         version: 3.4.5
       uploadthing:
         specifier: ^7.3.0
-        version: 7.5.2(express@4.21.2)(next@15.1.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwindcss@3.4.17)
+        version: 7.5.2(express@4.21.2)(next@15.1.7(@babel/core@7.26.9)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@3.4.17)
       uuid:
         specifier: ^11.0.3
         version: 11.1.0
@@ -457,6 +451,9 @@ importers:
       '@instapark/auth':
         specifier: workspace:^
         version: link:../../packages/auth
+      '@instapark/common':
+        specifier: workspace:^
+        version: link:../../packages/common
       '@instapark/state':
         specifier: workspace:^
         version: link:../../packages/state
@@ -833,7 +830,7 @@ importers:
         version: 7.3.0(next@15.1.7(@babel/core@7.26.9)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(uploadthing@7.5.2(express@4.21.2)(next@15.1.7(@babel/core@7.26.9)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@3.4.17))
       axios:
         specifier: ^1.7.9
-        version: 1.7.9
+        version: 1.7.9(debug@4.4.0)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -11753,14 +11750,6 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  axios@1.7.9:
-    dependencies:
-      follow-redirects: 1.15.9
-      form-data: 4.0.2
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - debug
-
   axios@1.7.9(debug@4.4.0):
     dependencies:
       follow-redirects: 1.15.9(debug@4.4.0)
@@ -12638,7 +12627,7 @@ snapshots:
       stable-hash: 0.0.4
       tinyglobby: 0.2.12
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.3)(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.5.4))(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -13274,8 +13263,6 @@ snapshots:
       keyv: 4.5.4
 
   flatted@3.3.3: {}
-
-  follow-redirects@1.15.9: {}
 
   follow-redirects@1.15.9(debug@4.4.0):
     optionalDependencies:

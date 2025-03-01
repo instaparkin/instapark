@@ -39,10 +39,12 @@ export const lock = async (req: Request, res: Response) => {
 export const book = async (req: Request, res: Response) => {
     try {
         const bookingRequest = req.body as PaymentRequest;
+        console.log(bookingRequest);
 
         const bookingService = new BookingService(bookingRequest);
 
         const result = await bookingService.book();
+        console.log(result);
 
         if (result.status == "SUCCESS") {
             return sendResponse(res, 200, result.message, "SUCCESS", result.data);
@@ -58,44 +60,52 @@ export const book = async (req: Request, res: Response) => {
 export const CompleteBookingOrder = async (req: Request, res: Response) => {
     try {
         const completeOrderRequest = req.body as BookingPaymentRequest
-        async function createOrder(): Promise<Order> {
-            const options = {
-                method: 'POST',
-                headers: {
-                    'x-api-version': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_API_VERSION,
-                    'x-client-id': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID,
-                    'x-client-secret': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_SECRET,
-                    'Content-Type': 'application/json'
+        console.log(completeOrderRequest);
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'x-api-version': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_API_VERSION,
+                'x-client-id': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID,
+                'x-client-secret': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_SECRET,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "order_amount": (completeOrderRequest.totalPrice - completeOrderRequest.basePrice),
+                "order_currency": "INR",
+                "customer_details": {
+                    "customer_id": completeOrderRequest.userId,
+                    "customer_name": completeOrderRequest.customer.customer_name,
+                    "customer_email": completeOrderRequest.customer.customer_email,
+                    "customer_phone": completeOrderRequest.customer.customer_phone
                 },
-                body: JSON.stringify({
-                    "order_amount": (completeOrderRequest.totalPrice - completeOrderRequest.basePrice),
-                    "order_currency": "INR",
-                    "customer_details": {
-                        "customer_id": completeOrderRequest.userId,
-                        "customer_name": completeOrderRequest.customer.customer_name,
-                        "customer_email": completeOrderRequest.customer.customer_email,
-                        "customer_phone": completeOrderRequest.customer.customer_phone
+                "order_splits": [
+                    {
+                        "vendor_id": completeOrderRequest.vendor_id,
+                        "amount": completeOrderRequest.parkingPrice * 0.7,
                     },
-                    "order_splits": [
-                        {
-                            "vendor_id": completeOrderRequest.vendor_id,
-                            "amount": completeOrderRequest.parkingPrice * 0.7,
-                        },
-                    ]
-                })
-            };
+                ]
+            })
+        };
 
-            return fetch('https://sandbox.cashfree.com/pg/orders', options)
-                .then(response => response.json())
-                .then((response: Order) => {
-                    return response
-                })
-                .catch(error => {
-                    return error
-                });
-        }
+        fetch('https://sandbox.cashfree.com/pg/orders', options)
+            .then(response => response.json())
+            .then((response: Order) => {
+                console.log(response);
+
+                return sendResponse(res, 200, "Order Created Successfully", "FAILURE",
+                    {
+                        bookingId: completeOrderRequest.id,
+                        orderId: response.order_id,
+                        payment_session_id: response.payment_session_id
+                    }
+                );
+            })
+            .catch(error => {
+                return sendResponse(res, 500, `Error creating Order: ${error}`, "FAILURE", null);
+            });
     } catch (error) {
-
+        return sendResponse(res, 500, `Internal server error: ${error}`, "FAILURE", null);
     }
 }
 
@@ -181,6 +191,8 @@ export const getBookings = async (req: Request, res: Response) => {
             },
             { _id: 0, __v: 0 }
         );
+        console.log(bookings);
+
         return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
     } catch (error) {
         sendResponse(res, 500, `Failed to get Bookings: ${error}`, "FAILURE", null);

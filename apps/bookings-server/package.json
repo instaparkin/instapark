@@ -12,7 +12,6 @@
     "@instapark/auth": "workspace:^",
     "@instapark/common": "workspace:^",
     "@instapark/constants": "workspace:^",
-    "@instapark/kafka": "workspace:^",
     "@instapark/utils": "workspace:^",
     "axios": "^1.7.9",
     "cashfree-pg": "^4.3.10",

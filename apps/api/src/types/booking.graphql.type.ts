@@ -1,4 +1,4 @@
-import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { axios } from "@instapark/utils";
 import { ApiResponse, BookingOTP, Payment, Profile } from "@instapark/types";
 import { fetchOrderById } from "../utils/fetch-order-by-id";
@@ -158,5 +158,12 @@ export const BookingType = new GraphQLObjectType({
                 return response.data.data
             }
         }
+    }
+})
+
+export const BookedResponseType = new GraphQLObjectType({
+    name: "BookedResponse",
+    fields: {
+        otp: { type: new GraphQLNonNull(GraphQLInt) }
     }
 })

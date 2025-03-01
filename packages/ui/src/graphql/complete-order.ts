@@ -1,29 +1,25 @@
 import { gql } from "../__generated__";
 
-export const CREATE_LOCK = gql(`
-mutation LOCK(
+export const COMPLETE_ORDER = gql(`
+mutation COMPLETE_ORDER(
+  $bookingId: String!
   $listingId: String!
   $userId: String!
-  $startDate: Int!
-  $endDate: Int!
   $basePrice: Float!
   $parkingPrice: Float!
   $totalPrice: Float!
-  $vehicle: Vehicle!
   $ipFee: Float!
-  $customer: LockCustomer!
+  $customer: CompleteOrderCustomer!
   $vendorId: String!
 ) {
   BookingMutation {
-    lock(
+    completeOrder(
+      id: $bookingId
       listingId: $listingId
       userId: $userId
-      startDate: $startDate
-      endDate: $endDate
       basePrice: $basePrice
       parkingPrice: $parkingPrice
       totalPrice: $totalPrice
-      vehicle: $vehicle
       ipFee: $ipFee
       customer: $customer
       vendor_id: $vendorId
@@ -35,4 +31,5 @@ mutation LOCK(
     }
   }
 }
+
 `)

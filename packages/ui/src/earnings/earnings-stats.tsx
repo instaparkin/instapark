@@ -40,26 +40,26 @@ if (error) {
         {
             name: "Total Net Profit",
             value: earnings?.currentMonth?.totalNetProfit?.toFixed(2),
-            previousValue: `vs ${earnings?.previousMonth?.totalNetProfit} last month`,
-            growth: earnings?.netPL?.totalNetProfitPLPercent,
+            previousValue: `vs ${earnings?.previousMonth?.totalNetProfit?.toFixed(2)} last month`,
+            growth: earnings?.netPL?.totalNetProfitPLPercent?.toFixed(2),
         },
         {
             name: "Total Bookings",
             value: earnings?.currentMonth?.totalBookings?.toFixed(2),
-            previousValue: ` vs ${earnings?.previousMonth?.totalBookings} last month`,
-            growth: earnings?.netPL?.totalBookingsPLPercent,
+            previousValue: ` vs ${earnings?.previousMonth?.totalBookings?.toFixed(2)} last month`,
+            growth: earnings?.netPL?.totalBookingsPLPercent?.toFixed(2),
         },
         {
             name: "Avg Booking Value",
             value: earnings?.currentMonth?.avgBookingValue?.toFixed(2),
-            previousValue: ` vs ${earnings?.previousMonth?.avgBookingValue} last month`,
-            growth: earnings?.netPL?.avgBookingValuePLPercent,
+            previousValue: ` vs ${earnings?.previousMonth?.avgBookingValue?.toFixed(2)} last month`,
+            growth: earnings?.netPL?.avgBookingValuePLPercent?.toFixed(2),
         },
         {
             name: "Total Revenue",
             value: earnings?.currentMonth?.totalRevenue?.toFixed(2),
-            previousValue: `vs ${earnings?.previousMonth?.totalRevenue} last month`,
-            growth: earnings?.netPL?.totalRevenuePLPercent,
+            previousValue: `vs ${earnings?.previousMonth?.totalRevenue?.toFixed(2)} last month`,
+            growth: earnings?.netPL?.totalRevenuePLPercent?.toFixed(2),
         },
     ]
 

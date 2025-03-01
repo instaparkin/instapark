@@ -15,6 +15,7 @@ import { HOST_LISTINGS } from '../graphql/host-listings'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/accordion'
 import { ShieldCheck } from 'lucide-react'
 import { HomeListingsDetailedSkeleton } from './home-listing-detailed-skeleton'
+import { ListingReserveButton } from '../listings/listings-reserve-button'
 
 const items = [
     {
@@ -80,6 +81,7 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                 timeJoined={listing?.user?.timeJoined as number} />
             <div className='flex flex-col lg:flex-row col-span-2 gap-6'>
                 <PricingCalculator
+                    hostId={listing?.userId}
                     listingId={listing?.id}
                 />
                 <div className="w-full lg:w-lg transition-all duration-300">
@@ -103,22 +105,6 @@ export const HomeListingsDetailed: React.FC<ListingProps> = ({
                         </div>
                     </div>
                 </div>
-                {/* <ListingReserve
-                    listingId={listing?.id}
-                    userId={listing?.userId}
-                    startDate={1739503313}
-                    endDate={1739589713}
-                    basePrice={2200}
-                    parkingPrice={170}
-                    totalPrice={3081}
-                    ipFee={711}
-                    customer={{
-                        customer_name: formatName(firstName, lastName),
-                        customer_email: emails?.at(0) as string,
-                        customer_phone: phoneNumber as string
-                    }}
-                    vendor_id={uuidToAlphanumeric(listing?.userId)}
-                    vehicle={Vehicle.Car} /> */}
             </div>
             <MapsMain maxZoom={14} location={{ lat: listing?.latitude, lng: listing?.longitude }} />
         </div>

@@ -1,7 +1,6 @@
 import React from "react";
 import type { Listing } from "@instapark/types"
 import Image from "next/image"
-import { Star } from "lucide-react"
 import { formatLocation } from "../utils/field-name";
 
 export const ListingMini = ({ listing }: { listing: Listing }) => {

@@ -5,9 +5,8 @@ import { Button } from '../components/button'
 import toast from 'react-hot-toast'
 import Link from 'next/link'
 import { useVendor } from '../hooks/use-vendor'
-import { uuidToAlphanumeric } from '../earnings/earnings-main'
-import { LoaderCircleIcon } from 'lucide-react'
 import { Skeleton } from '../components/skeleton'
+import { uuidToAlphanumeric } from '@instapark/common'
 
 interface ListingsAddButtonProps {
     userId: string

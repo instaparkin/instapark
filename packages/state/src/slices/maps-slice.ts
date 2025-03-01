@@ -18,7 +18,7 @@ export interface OlaMapsApiResponse {
 export interface OlaMapsGeocodingResult {
     formatted_address: string
 }
-const apiKey = "4txhcXV6VGU9Onf5RCWGlAr8Gru7grfrIrsRvE36";
+const apiKey = process.env.NEXT_PUBLIC_OLA_MAPS_API_KEY!;
 
 export type CodeLocationType = {
     formatted_address: string,

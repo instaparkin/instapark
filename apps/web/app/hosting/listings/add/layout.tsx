@@ -4,7 +4,7 @@ import React from "react";
 import { useVendor } from "@instapark/ui";
 import { redirect } from "next/navigation";
 import { useAuth } from "@instapark/ui/src/hooks/use-auth";
-import { uuidToAlphanumeric } from "@instapark/ui/src/earnings/earnings-main";
+import { uuidToAlphanumeric } from "@instapark/common";
 
 const ListingsAddLayout = ({ children }: { children: React.ReactNode }) => {
     const { userId } = useAuth();

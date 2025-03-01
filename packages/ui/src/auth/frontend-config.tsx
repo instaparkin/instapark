@@ -21,11 +21,11 @@ export function setRouter(
 export const frontendConfig = (): SuperTokensConfig => {
     return {
         appInfo: {
-            appName: GLOBAL_CONSTANTS.SUPERTOKENS.APP_NAME,
-            apiDomain: GLOBAL_CONSTANTS.SUPERTOKENS.API_DOMAIN,
-            websiteDomain: GLOBAL_CONSTANTS.SUPERTOKENS.WEBSITE_DOMAIN,
-            apiBasePath: GLOBAL_CONSTANTS.SUPERTOKENS.API_BASE_PATH,
-            websiteBasePath: GLOBAL_CONSTANTS.SUPERTOKENS.WEBSITE_BASE_PATH,
+            appName: process.env.NEXT_PUBLIC_SUPERTOKENS_APP_NAME!,
+            apiDomain: process.env.NEXT_PUBLIC_SUPERTOKENS_API_DOMAIN!,
+            websiteDomain: process.env.NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN!,
+            apiBasePath: process.env.NEXT_PUBLIC_SUPERTOKENS_API_BASE_PATH!,
+            websiteBasePath: process.env.NEXT_PUBLIC_SUPERTOKENS_WEBSITE_BASE_PATH!,
         },
         style: `
          [data-supertokens~=container] {

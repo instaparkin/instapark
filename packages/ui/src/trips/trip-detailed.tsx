@@ -12,32 +12,37 @@ import { useAuth } from '../hooks/use-auth'
 import toast from 'react-hot-toast'
 import { redirect } from 'next/navigation'
 import { GET_TRIP_DETAILED } from '../graphql/get-trip-detailed'
-import { Listing, Payment } from '../__generated__/graphql'
+import { BookingStatus, Listing, Payment } from '../__generated__/graphql'
 import { UserMini } from '../components/user-mini'
 import { ListingMini } from '../components/listing-mini'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../components/input-otp'
 import { generateGoogleMapsLink } from '@instapark/common'
 import Link from 'next/link'
 import { Button } from '../components/button'
+import { CompleteOrderButton } from './complete-order-button'
+import { CompleteMain } from '../checkouts/complete-main'
 
 export const TripDetailed = ({ id }: { id: string }) => {
   const { userId } = useAuth();
+  console.log(userId);
+
   const { data, loading, error } = useQuery(GET_TRIP_DETAILED, {
     variables: {
       id,
-      userId
+      userId,
     }
   })
   if (loading) {
-    return <DataTableLoading />
+    return <div>Loading...</div>
   }
 
   if (error) {
     toast.error(`${error}`)
-    redirect("/trips")
   }
 
   const booking = data?.BookingQuery?.buyerBookings?.at(0)?.booking;
+  console.log(booking?.status);
+
   const orders = booking?.payments
   const listing = data?.BookingQuery?.buyerBookings?.at(0)?.listing
   const host = listing?.user;
@@ -99,7 +104,16 @@ export const TripDetailed = ({ id }: { id: string }) => {
     <div className="max-w-5xl mx-auto space-y-6 ">
       <div className='flex items-center justify-between border bg-white dark:bg-black p-6 rounded-sm'>
         <h2 className='text-xl font-semibold'>Final Payment</h2>
-        <Button>Complete</Button>
+        {booking?.status === BookingStatus.Completed ? null :
+          <CompleteOrderButton
+            bookingId={booking?.id as string}
+            hostId={listing?.userId as string}
+            listingId={listing?.id as string}
+            basePrice={booking?.basePrice as number}
+            parkingPrice={booking?.parkingPrice as number}
+            totalPrice={booking?.totalPrice as number}
+            ipFee={booking?.ipFee as number} />
+        }
       </div>
       <div className="flex flex-col lg:flex-row justify-between gap-6">
         <Card className="w-full">

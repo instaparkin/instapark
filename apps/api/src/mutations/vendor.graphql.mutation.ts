@@ -33,10 +33,17 @@ export const VendorMutation = new GraphQLObjectType({
                 kyc_details: { type: VendorKYCInput },
                 vendor_id: { type: GraphQLString },
             },
-            resolve: async (parent, args) => {
-                const response = (await axios.post<ApiResponse<null>>
-                    (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.VENDOR.CREATE, args)).data.message;
-                return response
+            resolve: async (_, args) => {
+                try {
+                    const response = await axios.post<ApiResponse<null>>
+                        (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.VENDOR.CREATE, args)
+                    return response.data.message
+                } catch (error) {
+                    if (axios.isAxiosError(error) && error.response) {
+                        return error.response.data.message
+                    }
+                    return "An Unknown error occured"
+                }
             }
         },
     }

@@ -11,7 +11,6 @@ export type Field<T extends Record<string, unknown>> = {
 
 export type Group<T extends Record<string, unknown>> = {
     title: string;
-    href: string;
     component?: ({ form }: { form: UseFormReturn<T> }) => JSX.Element;
     fields: Field<T>[]
     status: "VERIFIED" | "ACTION_REQUIRED" | "BANK_VALIDATION_FAILED"
@@ -20,7 +19,6 @@ export type Group<T extends Record<string, unknown>> = {
 export const paymentDetailsSteps: Group<VendorCreateFormType>[] = [
     {
         title: "Personal",
-        href: "#personal",
         status: "VERIFIED",
         fields: [
             {
@@ -42,7 +40,6 @@ export const paymentDetailsSteps: Group<VendorCreateFormType>[] = [
     },
     {
         title: "Bank",
-        href: "#bank",
         status: "VERIFIED",
         fields: [
             {
@@ -64,7 +61,6 @@ export const paymentDetailsSteps: Group<VendorCreateFormType>[] = [
     },
     {
         title: "KYC",
-        href: "#kyc",
         status: "VERIFIED",
         fields: [
             {

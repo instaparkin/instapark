@@ -14,13 +14,15 @@ import { useQuery } from "@apollo/client"
 import { PRICING_CALCULATOR } from "../graphql/pricing-calculator"
 import { PricingCalculatorSkeleton } from "./pricing-calculator-skeleton"
 import { Vehicle } from "../__generated__/graphql"
+import { ListingReserveButton } from "./listings-reserve-button"
 
 interface PricingCalculatorProps {
+  hostId: string
   listingId: string
   className?: string
 }
 
-export function PricingCalculator({ listingId, className }: PricingCalculatorProps) {
+export function PricingCalculator({ listingId, hostId, className }: PricingCalculatorProps) {
   const { startDate, endDate, vehicleType } = useSelector((state: RootState) => state.search)
   const dispatch = useDispatch<AppDispatch>();
 
@@ -43,14 +45,20 @@ export function PricingCalculator({ listingId, className }: PricingCalculatorPro
       <CardContent className="p-6">
         <div className="space-y-4">
           {/* Price Display */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-between">
+          <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold">₹{calculator?.hourly}</span>
               <span className="text-muted-foreground">/hour</span>
             </div>
-            <Button size={"responsive"}>Reserve</Button>
+            <ListingReserveButton
+              hostId={hostId}
+              listingId={listingId}
+              basePrice={Number(calculator?.items.find((e) => e?.field === "Base Price")?.value)}
+              parkingPrice={Number(calculator?.items.find((e) => e?.field?.includes("hours"))?.value)}
+              totalPrice={Number(calculator?.items.find((e) => e?.field === "Total")?.value)}
+              ipFee={Number(calculator?.items.find((e) => e?.field === "Instapark Fee (30%)")?.value)}
+            />
           </div>
-
           {/* Vehicle Selection */}
           <div className="space-y-2">
             <Label htmlFor="vehicle-type">Vehicle Type</Label>
