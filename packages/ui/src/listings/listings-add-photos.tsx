@@ -5,6 +5,9 @@ import { generateUploadDropzone } from "@uploadthing/react";
 import { UseFormReturn } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { ListingRequest } from "@instapark/types";
+import Image from "next/image";
+import { Button } from "../components/button";
+import { X } from "lucide-react";
 
 export const UploadDropzone = generateUploadDropzone({
     url: process.env.NEXT_PUBLIC_UPLOADTHING_ENDPOINT
@@ -30,7 +33,7 @@ export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest
                     toast.error(`${error.message}`);
                 }}
             />
-            {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {form.getValues("photos").map((photo, index) => (
                     <div key={index} className="relative group">
                         <Image
@@ -51,7 +54,7 @@ export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest
                         </Button>
                     </div>
                 ))}
-            </div> */}
+            </div>
         </div>
     );
 };

@@ -4,7 +4,7 @@ export function fieldName(name: string) {
         name.split(".").slice(-1)[0]?.slice(1))
 }
 
-export function formatPrice(value: number) {
+export function formatPrice(value: number | string) {
     return `₹${value}`
 }
 

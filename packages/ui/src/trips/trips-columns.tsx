@@ -1,13 +1,12 @@
 "use client"
 
 import React from "react"
-import { Booking, Payment } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { unixSecToMonthYearTime } from "../utils/dayjs"
-import { BookingsBuyer, Listing } from "../__generated__/graphql"
-import Image from "next/image"
+import { BookingsBuyer } from "../__generated__/graphql"
 import { formatPrice } from "../utils/field-name"
 import { ListingMini } from "../components/listing-mini"
+import { Listing } from "@instapark/types"
 
 export const columns: ColumnDef<BookingsBuyer>[] = [
     {

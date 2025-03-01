@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { BOOKINGS_SERVER_CONSTANTS } from "../constants/bookings-server-constants";
 import { VendorRequest } from "@instapark/types";
 import { SessionRequest } from "@instapark/auth";
-import { uuidToAlphanumeric } from "@instapark/common";
 
 export const createVendor = (req: SessionRequest, res: Response) => {
     try {

@@ -8,7 +8,7 @@ import { DataTable, DataTableLoading } from '../components/data-table'
 import toast from 'react-hot-toast'
 import { useQuery } from '@apollo/client'
 import { HOST_BOOKINGS } from '../graphql/host-bookings'
-import { HostBooking, BookingStatus, HostBookings } from '../__generated__/graphql'
+import { HostBooking, BookingStatus } from '../__generated__/graphql'
 import { useAuth } from '../hooks/use-auth'
 
 export const HostingCompleted = () => {

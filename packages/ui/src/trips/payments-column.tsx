@@ -4,7 +4,7 @@ import React from "react"
 import { ColumnDef } from "@tanstack/react-table";
 import { dateToUnixSec, unixSecToMonthYearTime } from "../utils/dayjs";
 import { formatAmount } from "../utils/field-name";
-import { Order, Payment } from "../__generated__/graphql";
+import { Payment } from "../__generated__/graphql";
 
 export const paymentsColumns: ColumnDef<Payment>[] = [
     {
@@ -14,6 +14,23 @@ export const paymentsColumns: ColumnDef<Payment>[] = [
     {
         accessorKey: "paymentType",
         header: "Status",
+        cell: ({ cell }) => {
+            const value = cell.getValue();
+            switch (value) {
+                case "Booking":
+                    return (
+                        <div className="bg-blue-200 text-blue-700  p-2 w-fit rounded-sm">
+                            {value}
+                        </div>
+                    )
+                case "Completed":
+                    return (
+                        <div className="bg-lime-200 text-lime-700 p-2 w-fit rounded-sm">
+                            {value}
+                        </div>
+                    )
+            }
+        }
     },
     {
         accessorKey: "order.order_amount",
@@ -31,17 +48,17 @@ export const paymentsColumns: ColumnDef<Payment>[] = [
         accessorKey: "order.created_at",
         header: "Date & Time",
         cell: ({ cell }) => {
-            const value = cell.getValue() as Order;
+            const value = cell.getValue();
             return (
                 <div className="truncate">
-                    {unixSecToMonthYearTime(dateToUnixSec(value.created_at as unknown as Date))}
+                    {unixSecToMonthYearTime(dateToUnixSec(value as unknown as Date))}
                 </div>
             )
         }
     },
     {
         accessorKey: "order.order_status",
-        header: "Status",
+        header: "Payment Status",
         cell: ({ cell }) => {
             const value = cell.getValue();
             return (

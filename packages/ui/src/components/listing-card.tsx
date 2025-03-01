@@ -1,17 +1,15 @@
 "use client"
 
-import { Listing, Vehicle } from '@instapark/types'
+import { Listing } from '@instapark/types'
 import React from 'react'
 import { Card, CardContent, CardFooter } from '../components/card'
 import { ImageSwiper } from '../components/image-swiper'
-import { Star } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from './badge'
 import { PiBicycleDuotone } from "react-icons/pi";
 import { FaCarAlt } from "react-icons/fa";
 import { FaMotorcycle } from "react-icons/fa";
 import { formatPrice } from '../utils/field-name'
-import { Details } from './details'
 
 interface ListingsCard {
     listing: Listing
@@ -56,16 +54,26 @@ const ListingCardDescription: React.FC<ListingCardDescriptionProps> =
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter className="p-4 pt-0 flex justify-between listings-center">
-                    <Details
-                        className=''
-                        items={[
-                            { field: "Bike", value: formatPrice(listing.pphbi), visible: listing.pphbi != 0 },
-                            { field: "Car", value: formatPrice(listing.pphcr), visible: listing.pphcr != 0 },
-                            { field: "Cycle", value: formatPrice(listing.pphcy), visible: listing.pphcy != 0 },
-                        ]}
-                    />
-                </CardFooter>
+                <CardFooter className="p-4 pt-0 flex flex-wrap items-center gap-4">
+                    {listing.pphcr ?
+                        <Badge variant="outline" className="gap-2">
+                            <FaCarAlt size={16} />
+                            {formatPrice(listing.pphcr)}
+                        </Badge> : null
+                    }
+                    {listing.pphbi ?
+                        <Badge variant="outline" className="gap-2">
+                            <FaMotorcycle size={16} />
+                            {formatPrice(listing.pphbi)}
+                        </Badge> : null
+                    }
+                    {listing.pphcy ?
+                        <Badge variant="outline" className="gap-2">
+                            <PiBicycleDuotone size={16} />
+                            {formatPrice(listing.pphcy)}
+                        </Badge> : null
+                    }
+                </CardFooter >
             </>
         )
     }

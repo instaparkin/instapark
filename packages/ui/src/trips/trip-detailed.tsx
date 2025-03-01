@@ -2,15 +2,13 @@
 
 import { useQuery } from '@apollo/client'
 import React from 'react'
-import { DataTable, DataTableLoading } from '../components/data-table'
+import { DataTable } from '../components/data-table'
 import { paymentsColumns } from './payments-column'
 import { Details } from '../components/details'
 import { unixSecToMonthYearTime } from '../utils/dayjs'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/card'
 import { formatPrice } from '../utils/field-name'
 import { useAuth } from '../hooks/use-auth'
-import toast from 'react-hot-toast'
-import { redirect } from 'next/navigation'
 import { GET_TRIP_DETAILED } from '../graphql/get-trip-detailed'
 import { BookingStatus, Listing, Payment } from '../__generated__/graphql'
 import { UserMini } from '../components/user-mini'
@@ -20,29 +18,22 @@ import { generateGoogleMapsLink } from '@instapark/common'
 import Link from 'next/link'
 import { Button } from '../components/button'
 import { CompleteOrderButton } from './complete-order-button'
-import { CompleteMain } from '../checkouts/complete-main'
+import { Verified } from 'lucide-react'
 
 export const TripDetailed = ({ id }: { id: string }) => {
   const { userId } = useAuth();
-  console.log(userId);
-
-  const { data, loading, error } = useQuery(GET_TRIP_DETAILED, {
+  const { data, loading } = useQuery(GET_TRIP_DETAILED, {
     variables: {
       id,
       userId,
     }
-  })
+  });
+
   if (loading) {
     return <div>Loading...</div>
   }
 
-  if (error) {
-    toast.error(`${error}`)
-  }
-
   const booking = data?.BookingQuery?.buyerBookings?.at(0)?.booking;
-  console.log(booking?.status);
-
   const orders = booking?.payments
   const listing = data?.BookingQuery?.buyerBookings?.at(0)?.listing
   const host = listing?.user;
@@ -62,22 +53,28 @@ export const TripDetailed = ({ id }: { id: string }) => {
     },
     {
       name: "OTP",
-      content: () => (
-        <InputOTP maxLength={6} defaultValue={otp?.toString()} readOnly
-          className='flex flex-col'>
-          <InputOTPGroup>
-            <InputOTPSlot defaultValue={otp?.toString().at(0)} index={0} />
-            <InputOTPSlot index={1} />
-            <InputOTPSlot index={2} />
-          </InputOTPGroup>
-          <InputOTPSeparator />
-          <InputOTPGroup>
-            <InputOTPSlot index={3} />
-            <InputOTPSlot index={4} />
-            <InputOTPSlot index={5} />
-          </InputOTPGroup>
-        </InputOTP>
-      )
+      content: () => booking?.status === "OnGoing" || "Completed" ?
+        <div className="flex grow gap-3 border bg-primary-foreground p-4 rounded-md my-6">
+          <div className="flex grow gap-10 text-positive">
+            <Verified size={20} />
+            <p className="text-sm">Trips was approved by the host</p>
+          </div>
+        </div> : (
+          <InputOTP maxLength={6} defaultValue={otp?.toString()} readOnly
+            className='flex flex-col'>
+            <InputOTPGroup>
+              <InputOTPSlot defaultValue={otp?.toString().at(0)} index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+            </InputOTPGroup>
+            <InputOTPSeparator />
+            <InputOTPGroup>
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+        )
     },
     {
       name: "Location",
@@ -102,9 +99,9 @@ export const TripDetailed = ({ id }: { id: string }) => {
   ]
   return (
     <div className="max-w-5xl mx-auto space-y-6 ">
-      <div className='flex items-center justify-between border bg-white dark:bg-black p-6 rounded-sm'>
-        <h2 className='text-xl font-semibold'>Final Payment</h2>
-        {booking?.status === BookingStatus.Completed ? null :
+      {booking?.status === BookingStatus.Completed ? null :
+        <div className='flex items-center justify-between border bg-white dark:bg-black p-6 rounded-sm'>
+          <h2 className='text-xl font-semibold'>Final Payment</h2>
           <CompleteOrderButton
             bookingId={booking?.id as string}
             hostId={listing?.userId as string}
@@ -113,8 +110,8 @@ export const TripDetailed = ({ id }: { id: string }) => {
             parkingPrice={booking?.parkingPrice as number}
             totalPrice={booking?.totalPrice as number}
             ipFee={booking?.ipFee as number} />
-        }
-      </div>
+        </div>
+      }
       <div className="flex flex-col lg:flex-row justify-between gap-6">
         <Card className="w-full">
           <CardHeader>

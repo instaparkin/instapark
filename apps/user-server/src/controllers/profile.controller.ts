@@ -14,7 +14,7 @@ export const upsertProfile = async (req: Request, res: Response) => {
             ...(profileRequest.userId && { userId: profileRequest.userId }),
             ...(profileRequest.firstName && { firstName: profileRequest.firstName }),
             ...(profileRequest.lastName && { lastName: profileRequest.lastName }),
-            ...(profileRequest.emails && { emails: profileRequest.emails }),
+            ...(profileRequest.email && { email: profileRequest.email }),
             ...(profileRequest.timeJoined && { timeJoined: profileRequest.timeJoined }),
             ...(profileRequest.phoneNumber && { phoneNumber: profileRequest.phoneNumber }),
             ...(profileRequest.kyc?.uidai && { kyc: { uidai: profileRequest.kyc.uidai, verified: profileRequest.kyc.verified ?? false } }),
@@ -24,8 +24,6 @@ export const upsertProfile = async (req: Request, res: Response) => {
             ...(profileRequest.city && { city: profileRequest.city }),
             ...(profileRequest.street && { street: profileRequest.street }),
             ...(profileRequest.pincode && { pincode: profileRequest.pincode }),
-            ...(profileRequest.latitude && { latitude: profileRequest.latitude }),
-            ...(profileRequest.longitude && { longitude: profileRequest.longitude }),
             ...(profileRequest.name && { name: profileRequest.name }),
             ...(profileRequest.landmark && { landmark: profileRequest.landmark }),
         };
@@ -47,7 +45,7 @@ export const getProfile = async (req: Request, res: Response) => {
     try {
         const { userId } = req.query;
         console.log(userId);
-        
+
         if (!userId) {
             return sendResponse(res, 400, "User ID is required", "FAILURE", null);
         }

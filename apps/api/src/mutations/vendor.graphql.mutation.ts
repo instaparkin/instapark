@@ -1,8 +1,7 @@
-import { AadhaarVerifyResponse, AadharOTPResponse, ApiResponse } from "@instapark/types";
+import { ApiResponse } from "@instapark/types";
 import { axios } from "@instapark/utils";
-import { GraphQLFloat, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLInputObjectType, GraphQLObjectType, GraphQLString } from "graphql";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
-import { AadhaarResponseType } from "../types/vendor.graphql.type";
 
 export const VendorBankInput = new GraphQLInputObjectType({
     name: "VendorBankInput",

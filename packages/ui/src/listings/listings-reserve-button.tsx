@@ -6,7 +6,6 @@ import toast from 'react-hot-toast'
 import { redirect } from 'next/navigation'
 import { useAuth } from '../hooks/use-auth'
 import { formatName } from '../utils/field-name'
-import { Listing } from '../__generated__/graphql'
 import { useMutation } from '@apollo/client'
 import { CREATE_LOCK } from '../graphql/create-lock'
 import { RootState, useSelector } from '@instapark/state'
@@ -23,7 +22,7 @@ interface ListingReserveButtonProps {
 }
 
 export const ListingReserveButton = ({ listingId, basePrice, parkingPrice, totalPrice, ipFee, hostId }: ListingReserveButtonProps) => {
-    const { firstName, lastName, phoneNumber, userId, emails } = useAuth();
+    const { firstName, lastName, phoneNumber, userId, email } = useAuth();
     const { startDate, endDate, vehicleType } = useSelector((state: RootState) => state.search);
     const [createLock] = useMutation(CREATE_LOCK, {
         onCompleted: (data) => {
@@ -48,7 +47,7 @@ export const ListingReserveButton = ({ listingId, basePrice, parkingPrice, total
                 ipFee,
                 vehicle: vehicleType,
                 customer: {
-                    customer_email: emails?.at(0),
+                    customer_email: email,
                     customer_name: formatName(firstName, lastName),
                     customer_phone: phoneNumber
                 },

@@ -1,4 +1,4 @@
-import { MapsProvider, StoreProvider, SessionAuthProvider, HeaderMain, HeaderSkeleton } from "@instapark/ui";
+import { MapsProvider, StoreProvider, SessionAuthProvider, HeaderSkeleton } from "@instapark/ui";
 import dynamic from "next/dynamic";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {

@@ -1,6 +1,6 @@
-import { ApiResponse, Booking, BookingStatus, Listing } from "@instapark/types";
+import { ApiResponse, Booking, Listing } from "@instapark/types";
 import { axios } from "@instapark/utils";
-import { graphql, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { ListingType, VehicleEnum } from "../types/listing.graphql.type";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 import { BookingStatusEnum, BookingType } from "../types/booking.graphql.type";

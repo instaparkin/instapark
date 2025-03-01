@@ -7,15 +7,14 @@ import { PricingCalculator } from '../listings/pricing-calculator'
 import { MapsMain } from '../maps/maps-main'
 import { useQuery } from '@apollo/client'
 import toast from 'react-hot-toast'
-import { formatLocation, formatName, formatPrice } from '../utils/field-name'
+import { formatLocation } from '../utils/field-name'
 import { UserMini } from '../components/user-mini'
-import { Listing, PricingCalulator } from '../__generated__/graphql'
+import { Listing } from '../__generated__/graphql'
 import { ImageSwiper } from '../components/image-swiper'
 import { HOST_LISTINGS } from '../graphql/host-listings'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/accordion'
 import { ShieldCheck } from 'lucide-react'
 import { HomeListingsDetailedSkeleton } from './home-listing-detailed-skeleton'
-import { ListingReserveButton } from '../listings/listings-reserve-button'
 
 const items = [
     {

@@ -1,10 +1,11 @@
 import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { axios } from "@instapark/utils";
-import { ApiResponse, BookingOTP, Payment, Profile } from "@instapark/types";
+import { ApiResponse, BookingOTP, Payment, Profile, Transaction, VendorCommission } from "@instapark/types";
 import { fetchOrderById } from "../utils/fetch-order-by-id";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 import { ProfileType } from "./user.graphql.type";
 import { VehicleEnum } from "./listing.graphql.type";
+import { EntityTypeEnum, ReconDataType } from "./vendor.graphql.type";
 
 export const BookingOrderSplitType = new GraphQLObjectType({
     name: "BookingOrderSplit",
@@ -78,7 +79,40 @@ export const PaymentType = new GraphQLObjectType({
         order: {
             type: OrderType,
             resolve: async (parent) => {
-                return await fetchOrderById(parent.orderId)
+                try {
+                    return await fetchOrderById(parent.orderId)
+                } catch (error) {
+                    if (axios.isAxiosError(error) && error.response) {
+                        return error.response.data.message
+                    }
+                    return `An unknown error occured: ${error}`
+                }
+            }
+        },
+        reconData: {
+            type: new GraphQLList(ReconDataType),
+            args: {
+                limit: { type: new GraphQLNonNull(GraphQLInt) },
+                entity_type: { type: new GraphQLNonNull(EntityTypeEnum) }
+            },
+            resolve: async (parent, { limit, entity_type }) => {
+                try {
+                    const response = await axios.get<ApiResponse<Transaction | VendorCommission[]>>(
+                        API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.SETTLEMENTS.GET,
+                        {
+                            params: {
+                                orderIds: [parent.orderId],
+                                limit,
+                                entity_type,
+                            }
+                        }
+                    );
+                    return response.data.data || [];
+                } catch (error) {
+                    if (axios.isAxiosError(error) && error.response) {
+                        return error.response.data.message
+                    }
+                }
             }
         }
     }
@@ -157,7 +191,7 @@ export const BookingType = new GraphQLObjectType({
                     })
                 return response.data.data
             }
-        }
+        },
     }
 })
 

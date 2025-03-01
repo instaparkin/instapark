@@ -4,10 +4,10 @@ import React from "react";
 import { NoResults } from "../components/no-results"
 import { CiCircleCheck } from "react-icons/ci";
 import toast from "react-hot-toast";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { HOST_BOOKINGS } from "../graphql/host-bookings";
 import { useAuth } from "../hooks/use-auth";
-import { Booking, BookingStatus, HostBooking, Listing, Payment } from "../__generated__/graphql";
+import { BookingStatus, HostBooking, Listing, Payment } from "../__generated__/graphql";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/card";
 import { ListingMini } from "../components/listing-mini";
 import { unixSecToMonthYearTime } from "../utils/dayjs";
@@ -15,7 +15,6 @@ import { formatPrice } from "../utils/field-name";
 import { Details } from "../components/details";
 import { DataTable, DataTableLoading } from "../components/data-table";
 import { paymentsColumns } from "../trips/payments-column";
-import { Button } from "../components/button";
 import { UserMini } from "../components/user-mini";
 
 export const HostingCurrent = () => {

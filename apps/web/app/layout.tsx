@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@instapark/ui/src/styles/globals.css";
-import { FooterMain, GraphQLProvider, ThemeProvider, Toaster } from "@instapark/ui";
+import { GraphQLProvider, ThemeProvider, Toaster } from "@instapark/ui";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

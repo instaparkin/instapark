@@ -25,6 +25,10 @@ export const VehicleEnum = new GraphQLEnumType({
     }
 })
 
+export function formatPrice(value: number | string) {
+    return `₹${value}`
+}
+
 export const ListingType = new GraphQLObjectType({
     name: "Listing",
     fields: () => ({
@@ -108,7 +112,9 @@ export const ListingType = new GraphQLObjectType({
                 const totalPrice = () => {
                     return (parent.basePrice ?? 0) + parkingPrice() + ipFee();
                 };
-
+                /**
+                 * This is of the type of Details Component
+                 */
                 return {
                     vehicles: parent.allowedVehicles ?? [],
                     hourly: hourlyRate(),

@@ -80,9 +80,9 @@ export const HostingPendingReview = () => {
                   { field: "Start date", value: unixSecToMonthYearTime(b.booking?.startDate as number) },
                   { field: "End date", value: unixSecToMonthYearTime(b.booking?.endDate as number) },
                   { field: "Total price", value: formatPrice(b.booking?.totalPrice as number) },
-                  { field: "Estimated earnings", value: formatPrice(b.booking?.totalPrice as number - (b.booking?.ipFee as number)), className: "text-positive" },
+                  { field: "Estimated earnings", value: formatPrice(((b.booking?.totalPrice as number) - (b.booking?.ipFee as number)).toFixed(2)), className: "text-positive" },
                 ]} />
-              <OTPDialog bookingId={b.booking?.id as string} otp={b.booking?.otp?.otp?.toString() as string} />
+              <OTPDialog bookingId={b.booking?.id as string} form={form} />
             </CardFooter>
           </Card>
         )

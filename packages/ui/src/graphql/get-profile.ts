@@ -7,7 +7,7 @@ query GET_PROFILE($userId: String!) {
       userId
       firstName
       lastName
-      emails
+      email
       timeJoined
       phoneNumber
       kyc {
@@ -20,8 +20,6 @@ query GET_PROFILE($userId: String!) {
       city
       street
       pincode
-      latitude
-      longitude
       name
       landmark
     }

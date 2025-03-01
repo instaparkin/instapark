@@ -15,21 +15,26 @@ const backendConfig = (): TypeInput => {
             apiKey: AUTH_CONSTANTS.SUPERTOKENS_API_KEY as string
         },
         appInfo: {
-            appName: GLOBAL_CONSTANTS.SUPERTOKENS.APP_NAME,
-            apiDomain: GLOBAL_CONSTANTS.SUPERTOKENS.API_DOMAIN,
-            websiteDomain: GLOBAL_CONSTANTS.SUPERTOKENS.WEBSITE_DOMAIN,
-            apiBasePath: GLOBAL_CONSTANTS.SUPERTOKENS.API_BASE_PATH,
-            websiteBasePath: GLOBAL_CONSTANTS.SUPERTOKENS.WEBSITE_BASE_PATH,
+            appName: GLOBAL_CONSTANTS.SUPERTOKENS.APP_NAME!,
+            apiDomain: GLOBAL_CONSTANTS.SUPERTOKENS.API_DOMAIN!,
+            websiteDomain: GLOBAL_CONSTANTS.SUPERTOKENS.WEBSITE_DOMAIN!,
+            apiBasePath: GLOBAL_CONSTANTS.SUPERTOKENS.API_BASE_PATH!,
+            websiteBasePath: GLOBAL_CONSTANTS.SUPERTOKENS.WEBSITE_BASE_PATH!,
         },
         recipeList: [
             EmailPassword.init({
                 signUpFeature: {
                     formFields: [{
                         id: "firstName"
-                    }, {
+                    },
+                    {
                         id: "lastName",
                         optional: true
-                    }, {
+                    },
+                    {
+                        id: "phoneNumber",
+                    },
+                    {
                         id: "terms"
                     }]
                 },
@@ -47,13 +52,14 @@ const backendConfig = (): TypeInput => {
                                     const formFields = input.formFields;
                                     const firstName = formFields.find(f => f.id === "firstName")?.value || "";
                                     const lastName = formFields.find(f => f.id === "lastName")?.value || "";
-
+                                    const phoneNumber = formFields.find(f => f.id === "phoneNumber")?.value || ""
                                     /**Fetching other required details from the session */
                                     axios.post(process.env.PROFILE_ENDPOINT!, {
                                         userId: response.user.id,
                                         firstName,
                                         lastName,
-                                        emails: response.user.emails,
+                                        phoneNumber,
+                                        email: response.user.emails?.at(0),
                                         timeJoined: Math.floor(response.user.timeJoined / 1000)
                                     })
                                 }

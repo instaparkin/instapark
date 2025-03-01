@@ -1,4 +1,4 @@
-import { sendResponse, toUnixTimestamp } from "@instapark/utils";
+import { sendResponse } from "@instapark/utils";
 import { BookingPaymentRequest, BookingRequest, Order, Payment, PaymentRequest } from "@instapark/types";
 import { LockingService } from "../services/locking.service";
 import { BookingService } from "../services/booking.service";
@@ -39,15 +39,13 @@ export const lock = async (req: Request, res: Response) => {
 export const book = async (req: Request, res: Response) => {
     try {
         const bookingRequest = req.body as PaymentRequest;
-        console.log(bookingRequest);
 
         const bookingService = new BookingService(bookingRequest);
 
         const result = await bookingService.book();
-        console.log(result);
 
         if (result.status == "SUCCESS") {
-            return sendResponse(res, 200, result.message, "SUCCESS", result.data);
+            return sendResponse(res, 200, result.message, "SUCCESS", null);
         } else {
             return sendResponse(res, 200, result.message, "FAILURE", result);
         }
@@ -60,8 +58,7 @@ export const book = async (req: Request, res: Response) => {
 export const CompleteBookingOrder = async (req: Request, res: Response) => {
     try {
         const completeOrderRequest = req.body as BookingPaymentRequest
-        console.log(completeOrderRequest);
-
+        const orderAmount = Number((completeOrderRequest.totalPrice - completeOrderRequest.basePrice).toFixed(2));
         const options = {
             method: 'POST',
             headers: {
@@ -71,7 +68,7 @@ export const CompleteBookingOrder = async (req: Request, res: Response) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "order_amount": (completeOrderRequest.totalPrice - completeOrderRequest.basePrice),
+                "order_amount": orderAmount,
                 "order_currency": "INR",
                 "customer_details": {
                     "customer_id": completeOrderRequest.userId,
@@ -114,6 +111,8 @@ export const completeBooking = async (req: Request, res: Response) => {
     session.startTransaction();
     try {
         const payment = req.body as Pick<Payment, "bookingId" | "userId" | "orderId">;
+        console.log(payment);
+
         if (!payment) {
             return sendResponse(
                 res,
@@ -124,7 +123,7 @@ export const completeBooking = async (req: Request, res: Response) => {
         }
 
         const bookingUpdate = await BookingModel.findOneAndUpdate(
-            { id: payment.bookingId, userId: payment.userId, status: "Booked" },
+            { id: payment.bookingId, userId: payment.userId, status: "OnGoing" },
             { status: "Completed" },
             { session, new: true }
         );
@@ -153,8 +152,8 @@ export const completeBooking = async (req: Request, res: Response) => {
         session.endSession();
         sendResponse(
             res,
-            201,
-            "Booking and payment created successfully",
+            200,
+            "Trip completed Successfully",
             "SUCCESS",
             newPayment
         );
@@ -173,16 +172,18 @@ export const completeBooking = async (req: Request, res: Response) => {
 
 export const getBookings = async (req: Request, res: Response) => {
     try {
-        const { startDate, endDate, listingId, userId, status } =
+        const { startDate, endDate, listingId, userId, status, id } =
             req.query as unknown as {
                 startDate: number,
                 endDate: number,
                 listingId: string,
                 userId: string,
                 status: string
+                id: string
             };
         const bookings = await BookingModel.find(
             {
+                ...(id ? { id } : {}),
                 ...(startDate ? { startDate } : {}),
                 ...(endDate ? { endDate } : {}),
                 ...(listingId ? { listingId } : {}),
@@ -191,8 +192,6 @@ export const getBookings = async (req: Request, res: Response) => {
             },
             { _id: 0, __v: 0 }
         );
-        console.log(bookings);
-
         return sendResponse(res, 200, "Bookings fetched successfully", "SUCCESS", bookings);
     } catch (error) {
         sendResponse(res, 500, `Failed to get Bookings: ${error}`, "FAILURE", null);
@@ -212,11 +211,13 @@ export const getOtp = async (req: Request, res: Response) => {
 export const verifyBooking = async (req: Request, res: Response) => {
     try {
         const { otp, bookingId } = req.body;
+        console.log(req.body);
+
         const bookingOTP = await BookingOTPModel.find({
             bookingId: bookingId,
             otp: otp,
-            expiresAt: { $gt: toUnixTimestamp(new Date()) }
-        });
+        }
+        );
         if (bookingOTP.length !== 0) {
             await BookingModel.findOneAndUpdate({
                 id: bookingId

@@ -75,7 +75,7 @@ if (error) {
                             </h2>
                             <div className="flex flex-col sm:flex-row  justify-between items-center gap-4">
                                 <Button size="lg" asChild>
-                                    <Link href={"/hosting/settlements"} className='w-full'>
+                                    <Link href={"/hosting/earnings/settlements"} className='w-full'>
                                         <Table className="mr-2 h-4 w-4" />
                                         Settlements
                                     </Link>
@@ -98,9 +98,9 @@ if (error) {
                         <CardContent className=''>
                             <div className="text-2xl font-bold">{metric.value}</div>
                             <p className="text-xs text-muted-foreground mt-1">{metric.previousValue}</p>
-                            <div className={`text-sm mt-1 ${(metric?.growth) as number > 0 ? 'text-green-500' : 'text-red-500'
+                            <div className={`text-sm mt-1 ${(metric?.growth) as unknown as number > 0 ? 'text-green-500' : 'text-red-500'
                                 }`}>
-                                {(metric?.growth) as number > 0 ? '+' : ''}{metric.growth}%
+                                {(metric?.growth) as unknown as number > 0 ? '+' : ''}{metric.growth}%
                             </div>
                         </CardContent>
                     </Card>

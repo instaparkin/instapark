@@ -16,8 +16,6 @@ const TripDetailedPage = async (
     }: Props
 ) => {
     const id = (await params).id;
-    if (id === "undefined" || !id) {
-    }
     return (
         <Page>
             <TripDetailed id={id} />

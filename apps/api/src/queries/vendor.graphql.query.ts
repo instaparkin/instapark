@@ -1,7 +1,7 @@
-import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
-import { EarningsType, VendorType, VendorBalanceType, ReconDataType, EntityTypeEnum } from "../types/vendor.graphql.type";
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { EarningsType, VendorType, VendorBalanceType } from "../types/vendor.graphql.type";
 import { axios } from "@instapark/utils";
-import { ApiResponse, Listing, Transaction, Vendor, VendorBalance, VendorCommission } from "@instapark/types";
+import { ApiResponse, Listing, Vendor, VendorBalance } from "@instapark/types";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
 import { Earnings } from "@instapark/types/src/Booking";
 import { ListingType } from "../types/listing.graphql.type";
@@ -22,25 +22,6 @@ export const VendorQuery = new GraphQLObjectType({
                         }
                     })).data.data
                 return response
-            }
-        },
-        getReconData: {
-            type: new GraphQLList(ReconDataType),
-            args: {
-                orderIds: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))) },
-                limit: { type: new GraphQLNonNull(GraphQLInt) },
-                entity_type: { type: new GraphQLNonNull(EntityTypeEnum) },
-            },
-            resolve: async (_, { orderIds, limit, entity_type }) => {
-                const response = await axios.get<ApiResponse<Transaction | VendorCommission[]>>
-                    (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.SETTLEMENTS.GET, {
-                        params: {
-                            orderIds,
-                            limit,
-                            entity_type
-                        }
-                    })
-                return response.data.data
             }
         },
         getEarningsDashboard: {

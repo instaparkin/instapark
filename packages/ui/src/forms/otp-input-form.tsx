@@ -6,8 +6,5 @@ import { z } from "zod";
 export type OTPInputFormType = z.infer<typeof OTPInputSchema>
 
 export const OTPInputForm = () => useForm<OTPInputFormType>({
-    resolver: zodResolver(OTPInputSchema),
-    defaultValues: {
-        otp: "",
-    },
+    resolver: zodResolver(OTPInputSchema)
 })

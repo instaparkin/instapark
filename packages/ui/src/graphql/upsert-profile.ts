@@ -5,8 +5,6 @@ export const UPSERT_PROFILE = gql(`
   $userId: String!
   $landmark: String
   $name: String
-  $longitude: Float
-  $latitude: Float
   $pincode: Int
   $street: String
   $city: String
@@ -16,7 +14,7 @@ export const UPSERT_PROFILE = gql(`
   $kyc: KYCInput
   $firstName: String
   $lastName: String
-  $emails: [String]
+  $email: String
   $timeJoined: Int
   $phoneNumber: String
 ) {
@@ -25,8 +23,6 @@ export const UPSERT_PROFILE = gql(`
       userId: $userId
       landmark: $landmark
       name: $name
-      longitude: $longitude
-      latitude: $latitude
       pincode: $pincode
       street: $street
       city: $city
@@ -36,7 +32,7 @@ export const UPSERT_PROFILE = gql(`
       kyc: $kyc
       firstName: $firstName
       lastName: $lastName
-      emails: $emails
+      email: $email
       timeJoined: $timeJoined
       phoneNumber: $phoneNumber
     )

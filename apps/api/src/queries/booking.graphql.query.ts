@@ -1,4 +1,4 @@
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
 import { axios } from "@instapark/utils";
 import { ApiResponse, Booking, BookingStatus, Listing } from "@instapark/types";
 import { ListingType } from "../types/listing.graphql.type";

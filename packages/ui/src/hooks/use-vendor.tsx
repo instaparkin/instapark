@@ -1,7 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { GET_VENDOR } from "../graphql/get-vendor";
 import { Vendor } from "@instapark/types";
-import { uuidToAlphanumeric } from "@instapark/common";
 
 type UseVendorProps = {
     userId: string
@@ -9,7 +8,7 @@ type UseVendorProps = {
 
 export const useVendor = ({ userId }: UseVendorProps) => {
     console.log(userId);
-    
+
     const { data, loading, error } = useQuery(GET_VENDOR, {
         variables: {
             vendorId: userId

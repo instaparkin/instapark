@@ -21,7 +21,6 @@ const MultiStepNavigation = <T extends Record<string, unknown>>({
     isLastStep,
     back,
     next,
-    isLastSecondStep
 }: MultiStepNavigationProps<T>) => (
     <div className="flex justify-between">
         {

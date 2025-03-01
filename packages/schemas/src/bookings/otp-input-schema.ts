@@ -1,8 +1,7 @@
 import z from "zod";
 
 export const OTPInputSchema = z.object({
-    otp: z.string().min(6, {
+    otp: z.coerce.number().min(6, {
       message: "Your one-time password must be 6 characters.",
     }),
   })
-   

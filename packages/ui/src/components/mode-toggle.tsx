@@ -25,9 +25,7 @@ export function ModeToggle() {
   )
 }
 
-interface ToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> { }
-
-function Toggle({ className, ...props }: ToggleProps) {
+function Toggle({ className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return <Button variant="ghost" size="icon" className={cn(className)} {...props} />
 }
 

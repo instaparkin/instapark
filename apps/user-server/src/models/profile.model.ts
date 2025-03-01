@@ -14,8 +14,8 @@ const profileSchema = new mongoose.Schema<Profile>({
         type: String,
         required: true
     },
-    emails: {
-        type: [String],
+    email: {
+        type: String,
         required: true
     },
     timeJoined: {
@@ -53,12 +53,6 @@ const profileSchema = new mongoose.Schema<Profile>({
         type: String,
     },
     pincode: {
-        type: Number,
-    },
-    latitude: {
-        type: Number,
-    },
-    longitude: {
         type: Number,
     },
     name: {

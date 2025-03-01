@@ -4,15 +4,12 @@ import React from 'react'
 import { useAuth } from '../hooks/use-auth'
 import { useMutation, useQuery } from '@apollo/client'
 import { HOST_LISTINGS } from '../graphql/host-listings'
-import { Group, SidebarForm, SidebarFormProps } from '../components/sidebar-form'
+import { Group, SidebarForm } from '../components/sidebar-form'
 import { ListingCreateForm, ListingsAddType } from '../forms/listing-create-form'
-import { listingsCreateSchema } from '@instapark/schemas'
 import { ListingsAddPlaceType } from './listings-add-place-type'
 import { ListingsAddLocation } from './listings-add-location'
 import { ListingsAddPhotos } from './listings-add-photos'
 import { UPDATE_LISTING } from '../graphql/update-listings'
-import { Listing } from '@instapark/types'
-import { redirect } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { ListingsAddAllowedVehicles } from './listings-add-allowed-vehicles'
 
@@ -22,17 +19,10 @@ interface ListingHostDetailedProps {
 
 export const ListingHostDetailed = ({ listingId }: ListingHostDetailedProps) => {
     const { userId } = useAuth();
-    const { data, loading, error } = useQuery(HOST_LISTINGS, {
-        variables: {
-            userId,
-            id: listingId
-        }
-    });
     const { form } = ListingCreateForm({ defaultValues: true })
     const listingsEditFormSteps: Group<ListingsAddType>[] = [
         {
             title: "Place Type",
-            href: "#type",
             component: ({ form }) => <ListingsAddPlaceType form={form} />,
             fields: [
                 {
@@ -43,13 +33,11 @@ export const ListingHostDetailed = ({ listingId }: ListingHostDetailedProps) => 
         },
         {
             title: "Vehicles",
-            href: "#",
             component: ({ form }) => <ListingsAddAllowedVehicles form={form} />,
             fields: []
         },
         {
             title: "Location",
-            href: "#location",
             component: ({ form }) => <ListingsAddLocation form={form} />,
             fields: [
                 {
@@ -88,7 +76,6 @@ export const ListingHostDetailed = ({ listingId }: ListingHostDetailedProps) => 
         },
         {
             title: "Photos",
-            href: "#photos",
             component: ({ form }) => <ListingsAddPhotos form={form} />,
             fields: [
                 {
@@ -99,7 +86,6 @@ export const ListingHostDetailed = ({ listingId }: ListingHostDetailedProps) => 
         },
         {
             title: "Pricing",
-            href: "#pricing",
             fields: [
                 {
                     name: "basePrice",

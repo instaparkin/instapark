@@ -9,7 +9,7 @@ export const getSettlements = async (req: Request, res: Response) => {
             orderIds: string[]
             entity_type: "vendor_commision" | "transaction"
         }
-
+        console.log(req.query);
         if (!entity_type) {
             return sendResponse(res, 400, "Entity Type is required", "FAILURE", null)
         }

@@ -106,7 +106,7 @@ export const EntityTypeEnum = new GraphQLEnumType({
     name: "EntityType",
     values: {
         "TRANSACTION": { value: "transaction" },
-        "VENDOR_COMMISION": { value: "vendor_comission" }
+        "VENDOR_COMMISION": { value: "vendor_commision" }
     }
 })
 

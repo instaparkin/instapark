@@ -108,7 +108,7 @@ export const HomeSearchBar = () => {
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto my-10">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}

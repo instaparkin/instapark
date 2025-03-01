@@ -14,12 +14,12 @@ export const listingMainColumns: ColumnDef<Listing>[] = [
             const value = cell.getValue() as string[]
             return (
                 <div className="relative w-20 h-20 flex-shrink-0 sm:w-24 sm:h-24">
-                    {/* <Image
+                    <Image
                         fill
                         src={value.at(0) as string}
                         alt={`Listing Photo`}
                         className="object-cover rounded-lg border"
-                    /> */}
+                    />
                 </div>
             )
         }

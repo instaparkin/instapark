@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { VendorCreateForm, VendorCreateFormType } from '../forms/vendor-create-form'
 import { useMutation } from '@apollo/client';
 import { CREATE_VENDOR } from '../graphql/create-vendor';

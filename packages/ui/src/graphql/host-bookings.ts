@@ -25,7 +25,7 @@ query HostBookings($userId: String, $status: BookingStatus!) {
             userId
             firstName
             lastName
-            emails
+            email
             timeJoined
             phoneNumber
             kyc {
@@ -38,8 +38,6 @@ query HostBookings($userId: String, $status: BookingStatus!) {
             city
             street
             pincode
-            latitude
-            longitude
             name
             landmark
           }
@@ -118,7 +116,7 @@ query HostBookings($userId: String, $status: BookingStatus!) {
             userId
             firstName
             lastName
-            emails
+            email
             timeJoined
             phoneNumber
             kyc {
@@ -131,8 +129,6 @@ query HostBookings($userId: String, $status: BookingStatus!) {
             city
             street
             pincode
-            latitude
-            longitude
             name
             landmark
           }

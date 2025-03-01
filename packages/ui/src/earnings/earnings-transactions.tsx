@@ -7,15 +7,13 @@ import toast from 'react-hot-toast'
 import { transactionsColumns } from './earnings-transactions-columns'
 import { GET_RECON_DATA } from '../graphql/get-recon-data'
 import { EntityType, ReconData } from '../__generated__/graphql'
+import { useAuth } from '../hooks/use-auth'
 
 export const EarningsTransactions = () => {
-
+    const { userId } = useAuth();
     const { data, loading, error } = useQuery(GET_RECON_DATA, {
         variables: {
-            "orderIds": [
-                "order_101803242tGu8koMyd1r0HSPi0wfib8yRvk",
-                "order_101803242tGuWkgo10Md19M43rk79IMYsPO"
-            ],
+            userId,
             "limit": 10,
             "entityType": EntityType.Transaction
         }
@@ -29,7 +27,10 @@ export const EarningsTransactions = () => {
         return toast.error(`${error}`)
     }
 
-    const transactions = data?.VendorQuery?.getReconData
+    const transactions = data?.BookingQuery?.buyerBookings
+        ?.flatMap(b =>
+            b?.booking?.payments?.flatMap(p => p?.reconData || [])
+        ) || [];
 
     return (
         <DataTable data={transactions as ReconData[]} columns={transactionsColumns} />

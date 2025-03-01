@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { VendorCreateSchema, z } from '@instapark/schemas'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../hooks/use-auth'
-import { formatName } from '../utils/field-name'
 import { getEnv, uuidToAlphanumeric } from "@instapark/common";
 import { useQuery } from '@apollo/client'
 import { GET_VENDOR } from '../graphql/get-vendor'

@@ -34,7 +34,7 @@ query HOST_LISTINGS(
         userId
         firstName
         lastName
-        emails
+        email
         timeJoined
         phoneNumber
         kyc {
@@ -47,8 +47,6 @@ query HOST_LISTINGS(
         city
         street
         pincode
-        latitude
-        longitude
         name
         landmark
       }

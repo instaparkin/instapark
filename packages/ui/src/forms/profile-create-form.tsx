@@ -19,14 +19,21 @@ export const ProfileForm = () => {
         }
     });
     const profile = data?.UserQuery?.getProfile as Profile
+
     const form = useForm<ProfileFormType>({
         resolver: zodResolver(profileSchema),
-        defaultValues: { ...profile, emails: profile?.emails?.at(0) as string }
     })
 
     React.useEffect(() => {
         if (data) {
-            form.reset(profile)
+            form.reset(
+                {
+                    firstName: profile?.firstName,
+                    lastName: profile?.lastName,
+                    email: profile?.email as string,
+                    phoneNumber: profile?.phoneNumber as string
+                }
+            )
         }
     }, [data]);
 

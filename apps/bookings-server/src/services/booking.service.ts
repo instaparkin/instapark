@@ -1,4 +1,4 @@
-import { ApiResponse, BookedResponse, PaymentRequest } from "@instapark/types";
+import { Order, PaymentRequest } from "@instapark/types";
 import mongoose from "mongoose";
 import { BookingModel, BookingOTPModel } from "../models/booking.model";
 import { PaymentModel } from "../models/payment.model";
@@ -11,7 +11,7 @@ export class BookingService {
         this.paymentRequest = paymentRequest
     }
 
-    private async createBooking(): Promise<ApiResponse<BookedResponse>> {
+    private async createBooking() {
         const session = await mongoose.startSession();
         session.startTransaction();
         /**
@@ -20,12 +20,9 @@ export class BookingService {
         try {
             const bookingUpdate = await BookingModel.findOneAndUpdate(
                 { id: this.paymentRequest.bookingId, userId: this.paymentRequest.userId, status: "Locked" },
-                { status: "Booked" },
+                { $set: { status: "Booked" } },
                 { session, new: true }
             );
-
-            console.log(bookingUpdate);
-
 
             if (!bookingUpdate) {
                 await session.abortTransaction();
@@ -60,10 +57,11 @@ export class BookingService {
                 }
             };
 
-            fetch(`https://sandbox.cashfree.com/pg/orders/${this.paymentRequest.orderId}`, options)
+            await fetch(`https://sandbox.cashfree.com/pg/orders/${this.paymentRequest.orderId}`, options)
                 .then(response => response.json())
-                .then(async response => {
-                    if (response.data.order_status === "PAID") {
+                .then(async (response: Order) => {
+                    console.log(response);
+                    if (response.order_status === "PAID") {
                         await BookingOTPModel.create([
                             {
                                 bookingId: this.paymentRequest.bookingId,
@@ -83,9 +81,6 @@ export class BookingService {
             return {
                 message: "Booking and payment created successfully",
                 status: "SUCCESS",
-                data: {
-                    otp
-                }
             }
         } catch (error) {
             await session.abortTransaction();
@@ -94,7 +89,7 @@ export class BookingService {
         }
     };
 
-    async book(): Promise<ApiResponse<BookedResponse>> {
+    async book() {
         if (!this.paymentRequest) {
             return {
                 message: "Invalid input",

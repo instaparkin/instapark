@@ -9,7 +9,6 @@ interface PaymentButtonProps {
     amount: string;
     orderId: string;
     paymentSessionId: string;
-    buttonText?: string;
     onPayment: (result: PaymentResult, orderId: string) => void;
     className?: string;
 }
@@ -19,7 +18,7 @@ interface PaymentResult {
 }
 
 interface DoPaymentProps {
-    cashfree: any;
+    cashfree: unknown;
     orderId: string;
     paymentSessionId: string;
     onPayment: (result: PaymentResult, orderId: string) => void;
@@ -33,18 +32,18 @@ const doPayment = async ({ cashfree, orderId, paymentSessionId, onPayment }: DoP
         redirectTarget: "_modal",
     };
 
-    cashfree.checkout(checkoutOptions).then((result: PaymentResult) => {
+    cashfree?.checkout(checkoutOptions).then((result: PaymentResult) => {
         if (result.paymentDetails) {
             onPayment(result, orderId);
         }
     });
 };
 
-export function PaymentButton({ orderId, paymentSessionId, buttonText, onPayment, className, amount }: PaymentButtonProps) {
+export function PaymentButton({ orderId, paymentSessionId, onPayment, className, amount }: PaymentButtonProps) {
     /**
      * TODO: Try to remove the any type
      */
-    const [cashfree, setCashfree] = React.useState<any>(null);
+    const [cashfree, setCashfree] = React.useState<unknown>(null);
 
     React.useEffect(() => {
         const initializeSDK = async () => {

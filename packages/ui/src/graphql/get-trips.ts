@@ -94,7 +94,7 @@ query GET_TRIPS($userId: String, $status: BookingStatus, $id: String) {
           userId
           firstName
           lastName
-          emails
+          email
           timeJoined
           phoneNumber
           kyc {
@@ -107,8 +107,6 @@ query GET_TRIPS($userId: String, $status: BookingStatus, $id: String) {
           city
           street
           pincode
-          latitude
-          longitude
           name
           landmark
         }

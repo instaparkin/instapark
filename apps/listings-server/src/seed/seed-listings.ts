@@ -1,4 +1,4 @@
-import { ApiResponse, Listing, ListingRequest, PlaceType, Vehicle } from "@instapark/types";
+import { ApiResponse, Listing, PlaceType, Vehicle } from "@instapark/types";
 import { faker } from "@faker-js/faker";
 import axios from "axios";
 import { v4 as uuid } from "uuid";

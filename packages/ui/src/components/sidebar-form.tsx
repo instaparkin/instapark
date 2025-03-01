@@ -1,24 +1,23 @@
-import React, { HTMLInputTypeAttribute } from 'react'
+import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/tabs"
-import { Path, UseFormReturn } from 'react-hook-form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../components/form';
-import { fieldName } from '../utils/field-name';
+import { ControllerRenderProps, Path, UseFormReturn } from 'react-hook-form';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/card';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '../components/form';
 import { Input } from '../components/input';
 import { Button } from './button';
 import { Badge } from './badge';
-import { CheckIcon } from 'lucide-react';
 
 export type Field<T extends Record<string, unknown>> = {
   name: Path<T>;
-  disabled?: boolean,
+  label?: string
+  readonly?: boolean,
   description: string
-  type?: HTMLInputTypeAttribute
+  type?: React.HTMLInputTypeAttribute
+  component?: ({ field }: { field: ControllerRenderProps<T, Path<T>> }) => JSX.Element;
 }
 
 export type Group<T extends Record<string, unknown>> = {
   title: string;
-  href: string;
   component?: ({ form }: { form: UseFormReturn<T> }) => JSX.Element;
   fields: Field<T>[];
   verified?: boolean
@@ -55,38 +54,41 @@ export const SidebarForm = <T extends Record<string, unknown>>({ groups, form, o
                 }
                 {
                   g.component ? <g.component form={form} /> : g.fields.map((f, i) => (
-                    <Card key={i} id={f.name} className='rounded-sm'>
-                      <FormField
-                        key={i}
-                        control={form.control}
-                        name={f.name}
-                        render={({ field }) => (
-                          <FormItem>
-                            <CardHeader>
-                              <FormLabel>
+                    <>
+                      <Card key={i} id={f.name} className='rounded-sm'>
+                        <FormField
+                          key={i}
+                          control={form.control}
+                          name={f.name}
+                          render={({ field }) => (
+                            <FormItem>
+                              <CardHeader className='pb-2'>
                                 <CardTitle className='text-xl'>
-                                  {fieldName(f.name)}
+                                  {f.label}
                                 </CardTitle>
-                              </FormLabel>
-                              <CardDescription>
-                                {f.description}
-                              </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                              <FormControl>
-                                <Input className='max-w-xs' type={f.type} {...field} value={field.value as string} />
-                              </FormControl>
-                              <FormMessage />
-                            </CardContent>
-                          </FormItem>
-                        )}
-                      />
-                    </Card>
+                                <CardDescription>
+                                  {f.description}
+                                </CardDescription>
+                              </CardHeader>
+                              <CardContent className=''>
+                                <FormControl>
+                                  {
+                                    f.component ? <f.component field={field} /> :
+                                      <Input className='max-w-xs' type={f.type} {...field} value={field.value as string} readOnly={f.readonly} />
+                                  }
+                                </FormControl>
+                                <FormMessage />
+                              </CardContent>
+                            </FormItem>
+                          )}
+                        />
+                        <CardFooter className='flex justify-end border-t py-3 px-4'>
+                          <Button type="submit">Save</Button>
+                        </CardFooter>
+                      </Card>
+                    </>
                   ))
                 }
-                <div className='flex justify-end'>
-                  <Button size={"responsive"} type="submit">Edit</Button>
-                </div>
               </TabsContent>
             ))
           }

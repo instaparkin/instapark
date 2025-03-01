@@ -157,7 +157,6 @@ export class LockingService {
         }
 
         try {
-
             const updatedLock = await this.updateLock();
             if (updatedLock) {
                 /**

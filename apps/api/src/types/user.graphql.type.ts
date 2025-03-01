@@ -1,4 +1,4 @@
-import { GraphQLBoolean, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLBoolean, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
 export const KYCType = new GraphQLObjectType({
     name: "kyc",
@@ -14,7 +14,7 @@ export const ProfileType = new GraphQLObjectType({
         userId: { type: new GraphQLNonNull(GraphQLString) },
         firstName: { type: new GraphQLNonNull(GraphQLString) },
         lastName: { type: new GraphQLNonNull(GraphQLString) },
-        emails: { type: new GraphQLList(GraphQLString) },
+        email: { type: GraphQLString },
         timeJoined: { type: GraphQLInt },
         phoneNumber: { type: GraphQLString },
         kyc: { type: KYCType },
@@ -24,8 +24,6 @@ export const ProfileType = new GraphQLObjectType({
         city: { type: GraphQLString },
         street: { type: GraphQLString },
         pincode: { type: GraphQLInt },
-        latitude: { type: GraphQLFloat },
-        longitude: { type: GraphQLFloat },
         name: { type: GraphQLString },
         landmark: { type: GraphQLString },
     },

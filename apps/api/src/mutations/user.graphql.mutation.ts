@@ -1,4 +1,4 @@
-import { GraphQLBoolean, GraphQLFloat, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLBoolean, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 import { axios } from "@instapark/utils";
 import { AadhaarVerifyResponse, AadharOTPResponse, ApiResponse } from "@instapark/types";
 import { API_SERVER_CONSTANTS } from "../constants/api-server-constants";
@@ -21,7 +21,7 @@ export const UserMutation = new GraphQLObjectType({
                 userId: { type: new GraphQLNonNull(GraphQLString) },
                 firstName: { type: GraphQLString },
                 lastName: { type: GraphQLString },
-                emails: { type: new GraphQLList(GraphQLString) },
+                email: { type: GraphQLString },
                 timeJoined: { type: GraphQLInt },
                 phoneNumber: { type: GraphQLString },
                 kyc: { type: KYCInputType },
@@ -31,8 +31,6 @@ export const UserMutation = new GraphQLObjectType({
                 city: { type: GraphQLString },
                 street: { type: GraphQLString },
                 pincode: { type: GraphQLInt },
-                latitude: { type: GraphQLFloat },
-                longitude: { type: GraphQLFloat },
                 name: { type: GraphQLString },
                 landmark: { type: GraphQLString },
             },

@@ -1,14 +1,30 @@
 "use client"
 import React from "react"
-import { Transaction } from "@instapark/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { formatPrice } from "../utils/field-name"
 import { ReconData } from "../__generated__/graphql"
+import { dateToUnixSec, unixSecToMonthYearTime } from "../utils/dayjs"
 
 export const transactionsColumns: ColumnDef<ReconData>[] = [
     {
         accessorKey: "merchant_order_id",
         header: "Order Id"
+    },
+    {
+        accessorKey: "tx_time",
+        header: "Transaction Time",
+        cell: ({ cell }) => {
+            const value = cell.getValue() as string
+            return (
+                <div className="truncate">
+                    {unixSecToMonthYearTime(dateToUnixSec(new Date(value)))}
+                </div>
+            )
+        }
+    },
+    {
+        accessorKey: "payment_utr",
+        header: "Payment UTR"
     },
     {
         accessorKey: "amount",
