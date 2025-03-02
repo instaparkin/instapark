@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { MultiStepForm } from '../components/multi-step-form';
 import { listingsAddSteps } from './listings-add-steps';
 import {
@@ -22,8 +22,10 @@ import { redirect } from 'next/navigation';
 
 export const ListingsAdd = () => {
 	const { form } = ListingCreateForm({ defaultValues: false });
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const [dialogMessage, setDialogMessage] = useState<JSX.Element | null>(null);
+	const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+	const [dialogMessage, setDialogMessage] = React.useState<JSX.Element | null>(
+		null,
+	);
 
 	const [createListing] = useMutation(CREATE_LISTING, {
 		onCompleted: () => {

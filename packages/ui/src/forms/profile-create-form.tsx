@@ -12,34 +12,35 @@ import { Profile } from '../__generated__/graphql';
 export type ProfileFormType = z.infer<typeof profileSchema>;
 
 export const ProfileForm = () => {
-    const { userId } = useAuth();
-    const { data } = useQuery(GET_PROFILE, {
-        variables: {
-            userId,
-        },
-    });
-    const profile = data?.UserQuery?.getProfile as Profile;
+	const { userId } = useAuth();
+	const { data } = useQuery(GET_PROFILE, {
+		variables: {
+			userId,
+		},
+	});
+	const profile = data?.UserQuery?.getProfile as Profile;
 
-    const form = useForm<ProfileFormType>({
-        resolver: zodResolver(profileSchema),
-    });
-    React.useEffect(() => {
-        if (data?.UserQuery?.getProfile) {
-            const profile = data.UserQuery.getProfile as Profile;
-            const updatedValues = Object.fromEntries(
-                Object.entries(profile).filter(
-                    ([_, value]) => // eslint-disable-line @typescript-eslint/no-unused-vars
-                        value !== null && value !== '',
-                ),
-            );
-            if (Object.keys(updatedValues).length > 0) {
-                form.reset(updatedValues);
-            }
-        }
-    }, [data]);
+	const form = useForm<ProfileFormType>({
+		resolver: zodResolver(profileSchema),
+	});
+	React.useEffect(() => {
+		if (data?.UserQuery?.getProfile) {
+			const profile = data.UserQuery.getProfile as Profile;
+			const updatedValues = Object.fromEntries(
+				Object.entries(profile).filter(
+					(
+						[_, value], // eslint-disable-line @typescript-eslint/no-unused-vars
+					) => value !== null && value !== '',
+				),
+			);
+			if (Object.keys(updatedValues).length > 0) {
+				form.reset(updatedValues);
+			}
+		}
+	}, [data]);
 
-    return {
-        form,
-        verified: profile?.kyc?.verified as boolean,
-    };
+	return {
+		form,
+		verified: profile?.kyc?.verified as boolean,
+	};
 };

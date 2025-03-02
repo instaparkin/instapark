@@ -1,3 +1,3 @@
 module.exports = {
-	'*.{ts,tsx}': ['pnpm validate'],
+	'*.{js,json,ts,tsx}': (filenames) => ['pnpm validate'],
 };
