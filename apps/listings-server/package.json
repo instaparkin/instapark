@@ -2,8 +2,8 @@
   "name": "@instapark/listings-server",
   "version": "1.0.0",
   "scripts": {
-    "start": "node dist/src/listings-server",
-    "dev": "tsx watch src/listings-server.ts",
+    "start": "node dist/api/index.js",
+    "dev": "tsx watch api/index.ts",
     "build": "rm -rf dist && tsc",
     "lint": "eslint .",
     "check-types": "tsc --noEmit --pretty",

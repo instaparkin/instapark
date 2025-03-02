@@ -2,9 +2,9 @@
 	"name": "@instapark/api",
 	"version": "1.0.0",
 	"scripts": {
-		"dev": "tsx watch src/api-server.ts",
+		"dev": "tsx watch api/index.ts",
 		"build": "rm -rf dist && tsc",
-		"start": "pnpm build && node dist/src/api-server.js",
+		"start": "pnpm build && node dist/api/index.js",
 		"check-types": "tsc --pretty --noEmit",
 		"lint": "eslint ."
 	},

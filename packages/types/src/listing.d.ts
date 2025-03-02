@@ -1,4 +1,3 @@
-import { BookingRequest } from './Booking';
 import { Vehicle, PlaceType } from './enums';
 
 export interface Listing {

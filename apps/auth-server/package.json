@@ -2,9 +2,9 @@
   "name": "@instapark/auth-server",
   "version": "1.0.0",
   "scripts": {
-    "dev": "tsx watch src/auth-server.ts",
+    "dev": "tsx watch api/index.ts",
     "build": "rm -rf dist && tsc",
-    "start": "node dist/src/auth-server.js",
+    "start": "node dist/api/index.js",
     "lint": "eslint .",
     "check-types": "tsc --noEmit --pretty",
     "test": "vitest"

@@ -10,7 +10,7 @@ import cors from 'cors';
 import { AUTH_SERVER_CONSTANTS } from './constants/auth-server-constants';
 import { rateLimiter } from '@instapark/utils';
 
-async function init() {
+export async function init() {
 	ensureSuperTokensInit();
 
 	const app = express();
@@ -42,5 +42,3 @@ async function init() {
 		console.log(`Server running on http://localhost:${port}`);
 	});
 }
-
-init();

@@ -22,7 +22,7 @@ const schema = new GraphQLSchema({
 	mutation: RootMutation,
 });
 
-async function init() {
+export async function init() {
 	ensureSuperTokensInit();
 
 	const app = express();
@@ -63,5 +63,3 @@ async function init() {
 		console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 	});
 }
-
-init();

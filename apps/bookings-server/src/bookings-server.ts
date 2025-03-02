@@ -29,7 +29,7 @@ async function connectDB() {
 	}
 }
 
-async function init() {
+export async function init() {
 	ensureSuperTokensInit();
 
 	const app = express();
@@ -70,5 +70,3 @@ async function init() {
 		console.log(`🚀 Server running at http://localhost:${PORT}`);
 	});
 }
-
-init();

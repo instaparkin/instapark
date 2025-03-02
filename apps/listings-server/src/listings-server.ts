@@ -19,7 +19,7 @@ import { rateLimiter } from '@instapark/utils';
  * 3. GraphQL Integration
  */
 
-async function connectDB() {
+export async function connectDB() {
 	try {
 		await mongoose.connect(LISTINGS_SERVER_CONSTANTS.MONGODB.URI);
 		console.log('✅ MongoDB Connected');
@@ -29,7 +29,7 @@ async function connectDB() {
 	}
 }
 
-async function init() {
+export async function init() {
 	ensureSuperTokensInit();
 
 	const app = express();
@@ -70,5 +70,3 @@ async function init() {
 		console.log(`Server running on http://localhost:${process.env.PORT}`);
 	});
 }
-
-init();

@@ -16,7 +16,7 @@ import { AadharRouter } from './routes/aadhar.route';
  * 2. VerifySession()
  * 3. GraphQL Integration
  */
-async function connectDB() {
+export async function connectDB() {
 	try {
 		await mongoose.connect(USER_SERVER_CONSTANTS.MONGODB.URI);
 		console.log('✅ MongoDB Connected');
@@ -26,7 +26,7 @@ async function connectDB() {
 	}
 }
 
-async function init() {
+export async function init() {
 	ensureSuperTokensInit();
 
 	const app = express();
@@ -59,5 +59,3 @@ async function init() {
 		console.log(`Server running on http://localhost:${process.env.PORT}`);
 	});
 }
-
-init();
