@@ -1,4 +1,4 @@
-import { BookingStatus, PaymentType, Vehicle } from './enums';
+import { BookingStatus, Vehicle } from './enums';
 import { Listing } from './Listing';
 
 export interface Booking {

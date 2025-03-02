@@ -20,8 +20,8 @@ export declare type User = {
 					id: string;
 					userId: string;
 				}) => boolean;
-				toJson: () => any;
+				toJson: () => unknown;
 		  })
 	)[];
-	toJson: () => any;
+	toJson: () => unknown;
 };

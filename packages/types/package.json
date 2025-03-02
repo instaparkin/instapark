@@ -1,13 +1,21 @@
 {
   "name": "@instapark/types",
   "version": "1.0.0",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit --pretty"
   },
   "dependencies": {
     "react": "^18.3.1"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12"
+    "@eslint/js": "^9.21.0",
+    "@instapark/typescript-config": "workspace:^",
+    "@types/react": "^18.3.12",
+    "eslint": "^9.21.0",
+    "globals": "^15.14.0",
+    "typescript-eslint": "^8.19.0"
   }
 }

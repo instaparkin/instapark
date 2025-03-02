@@ -1,4 +1,4 @@
-import { AccountType, BusinessType, PaymentType, VendorStatus } from './enums';
+import { PaymentType } from './enums';
 
 export interface Payment {
 	bookingId: string;
@@ -191,7 +191,7 @@ export type AadhaarVerifyResponse = {
 	email: string;
 	gender: string;
 	name: string;
-	split_address: SplitAddress;
+	split_address: AadharVerifySplitAddress;
 	year_of_birth: number;
 	mobile_hash: string;
 	photo_link: string;
