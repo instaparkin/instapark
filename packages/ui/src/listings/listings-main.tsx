@@ -10,18 +10,20 @@ import { listingMainColumns } from './listings-main-columns';
 import { Listing } from '../__generated__/graphql';
 import { ListingsDataTable } from './listings-main-data-table';
 import { NoResults } from '../components/no-results';
+import toast from 'react-hot-toast';
 
 export const ListingsMain = () => {
 	const { userId } = useAuth();
-	const { data, loading } = useQuery(HOST_LISTINGS, {
-		variables: {
-			userId,
-			id: null,
-		},
+	const { data, loading, error } = useQuery(HOST_LISTINGS, {
+		variables: { userId, id: null },
 	});
-	if (data?.ListingQuery?.hostListings?.length === 0 || undefined) {
-		return <NoResults text={'Add Your First Listing'} />;
+
+	const listings = data?.ListingQuery?.hostListings ?? [];
+
+	if (error) {
+		toast.error(`${error}`);
 	}
+
 	return (
 		<div>
 			<div className="mb-4 flex items-center justify-between">
@@ -30,13 +32,13 @@ export const ListingsMain = () => {
 			</div>
 			{loading ? (
 				<DataTableLoading />
+			) : listings.length === 0 ? (
+				<NoResults text="Add Your First Listing" />
 			) : (
-				data && (
-					<ListingsDataTable
-						data={data?.ListingQuery?.hostListings as Listing[]}
-						columns={listingMainColumns}
-					/>
-				)
+				<ListingsDataTable
+					data={listings as Listing[]}
+					columns={listingMainColumns}
+				/>
 			)}
 		</div>
 	);

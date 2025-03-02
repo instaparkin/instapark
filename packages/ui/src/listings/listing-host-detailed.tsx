@@ -29,8 +29,9 @@ export const ListingHostDetailed = ({
 			fields: [
 				{
 					name: 'type',
+					label: 'Property Type',
 					description:
-						'Select the type of place (e.g., apartment, house, villa, etc.).',
+						'Select the type of parking space (e.g., open lot, covered parking, garage, etc.).',
 				},
 			],
 		},
@@ -45,38 +46,47 @@ export const ListingHostDetailed = ({
 			fields: [
 				{
 					name: 'country',
-					description: 'Enter the country where the property is located.',
+					label: 'Country',
+					description: 'Select the country where the parking space is located.',
 				},
 				{
 					name: 'state',
-					description: 'Specify the state or region of the property.',
+					label: 'State/Region',
+					description: 'Specify the state or region of the parking space.',
 				},
 				{
 					name: 'district',
+					label: 'District',
 					description:
 						'Provide the district name for more precise location details.',
 				},
 				{
 					name: 'city',
-					description: 'Enter the city where the property is situated.',
+					label: 'City',
+					description: 'Enter the city where the parking space is situated.',
 				},
 				{
 					name: 'street',
-					description: 'Provide the street name and number (if applicable).',
+					label: 'Street Address',
+					description:
+						'Provide the street name and exact location of the parking space.',
 				},
 				{
 					name: 'pincode',
+					label: 'Postal Code',
 					description: 'Enter the postal or ZIP code of the location.',
 				},
 				{
 					name: 'name',
+					label: 'Parking Lot Name',
 					description:
-						'Specify the name of the place, such as a building or community name.',
+						'Specify the name of the parking facility, if applicable.',
 				},
 				{
 					name: 'landmark',
+					label: 'Nearby Landmark',
 					description:
-						'Mention a nearby landmark to help identify the location.',
+						'Mention a well-known nearby landmark to help identify the parking location.',
 				},
 			],
 		},
@@ -86,8 +96,9 @@ export const ListingHostDetailed = ({
 			fields: [
 				{
 					name: 'photos',
+					label: 'Upload Photos',
 					description:
-						'Upload images of the property to showcase its features.',
+						'Upload clear images of the parking space to give users a better view.',
 				},
 			],
 		},
@@ -96,24 +107,31 @@ export const ListingHostDetailed = ({
 			fields: [
 				{
 					name: 'basePrice',
-					description:
-						'Set the base price for renting or selling the property.',
+					label: 'Base Price',
+					description: 'Set the base hourly rate for parking at this location.',
 				},
 				{
 					name: 'pphbi',
-					description: 'Price per hour for business inquiries (if applicable).',
+					label: 'Bike Parking (Per Hour)',
+					description:
+						'Specify the hourly parking fee for two-wheelers like motorcycles and scooters.',
 				},
 				{
 					name: 'pphcr',
-					description: 'Price per hour for corporate rentals.',
+					label: 'Car Parking (Per Hour)',
+					description:
+						'Specify the hourly parking fee for cars and other four-wheelers.',
 				},
 				{
 					name: 'pphcy',
-					description: 'Price per hour for casual stays or short-term rentals.',
+					label: 'Cycle Parking (Per Hour)',
+					description: 'Specify the hourly parking fee for bicycles.',
 				},
 				{
 					name: 'plph',
-					description: 'Long-term lease price per hour (if available).',
+					label: 'Late Fee (Per Hour)',
+					description:
+						'Specify the penalty charge per hour for overstaying beyond the booked duration.',
 				},
 			],
 		},

@@ -4,12 +4,10 @@ import {
 	middleware,
 	supertokens,
 	ensureSuperTokensInit,
-	verifySession,
 } from '@instapark/auth';
 import express from 'express';
 import cors from 'cors';
 import { AUTH_SERVER_CONSTANTS } from './constants/auth-server-constants';
-import { VerificationRouter } from './routes/verification.route';
 import { rateLimiter } from '@instapark/utils';
 
 async function init() {
@@ -35,8 +33,6 @@ async function init() {
 	app.get('/', (req, res) => {
 		res.send('Auth Server is up and running');
 	});
-
-	app.use('/verify', verifySession(), VerificationRouter);
 
 	app.use(errorHandler());
 

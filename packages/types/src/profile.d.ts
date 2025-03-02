@@ -1,7 +1,7 @@
 export type Profile = {
 	userId: string;
 	firstName: string;
-	lastName: string;
+	lastName?: string;
 	email: string;
 	timeJoined: number;
 	phoneNumber: string;
@@ -23,5 +23,5 @@ export type ProfileRequest = Omit<
 	Profile,
 	'userId' | 'kyc' | 'firstName' | 'lastName' | 'email' | 'timeJoined'
 > & {
-	kyc: Pick<Profile['kyc'], 'uidai'>;
+	kyc?: Pick<Profile['kyc'], 'uidai'>;
 };

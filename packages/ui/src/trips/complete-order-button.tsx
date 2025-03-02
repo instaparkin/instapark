@@ -54,7 +54,7 @@ export const CompleteOrderButton = ({
 				ipFee,
 				customer: {
 					customer_email: email,
-					customer_name: formatName(firstName, lastName),
+					customer_name: formatName(firstName, lastName ?? ''),
 					customer_phone: phoneNumber,
 				},
 				vendorId: uuidToAlphanumeric(hostId),

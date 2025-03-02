@@ -17,9 +17,9 @@ const ListingSchema: Schema = new Schema<Listing>({
 	landmark: { type: String },
 	allowedVehicles: { type: [String] },
 	basePrice: { type: Number, required: true },
-	pphbi: { type: Number, required: true },
-	pphcy: { type: Number, required: true },
-	pphcr: { type: Number, required: true },
+	pphbi: { type: Number },
+	pphcy: { type: Number },
+	pphcr: { type: Number },
 	plph: { type: Number, required: true },
 	photos: { type: [String], required: true },
 

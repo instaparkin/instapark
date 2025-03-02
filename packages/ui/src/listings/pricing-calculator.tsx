@@ -91,7 +91,7 @@ export function PricingCalculator({
 					<div className="space-y-2">
 						<Label htmlFor="vehicle-type">Vehicle Type</Label>
 						<Select
-							value={vehicleType}
+							value={vehicleType as Vehicle}
 							onValueChange={(value) => {
 								if (['Bike', 'Cycle', 'Car'].includes(value)) {
 									dispatch(setSearch({ vehicleType: value as Vehicle }));

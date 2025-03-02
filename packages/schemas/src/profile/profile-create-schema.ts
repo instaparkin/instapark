@@ -3,12 +3,14 @@ import { z, ZodType } from 'zod';
 
 export const profileSchema = z.object({
 	firstName: z.string(),
-	lastName: z.string(),
+	lastName: z.string().optional(),
 	email: z.string(),
 	phoneNumber: z.string(),
-	kyc: z.object({
-		uidai: z.string().optional(),
-	}),
+	kyc: z
+		.object({
+			uidai: z.string().optional(),
+		})
+		.optional(),
 	country: z.string().optional(),
 	state: z.string().optional(),
 	district: z.string().optional(),

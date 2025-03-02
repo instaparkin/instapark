@@ -35,7 +35,7 @@ export const VendorCreateForm = () => {
 							? (vendor?.related_docs?.at(1)?.doc_value as string)
 							: 'ABCPV1234D',
 				},
-				name: formatName(firstName, lastName),
+				name: formatName(firstName, lastName ?? ''),
 				email: email as string,
 				phone: phoneNumber as string,
 				bank: {

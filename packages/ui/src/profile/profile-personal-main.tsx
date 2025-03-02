@@ -123,6 +123,8 @@ export function ProfilePersonalMain() {
 		},
 	});
 
+	console.log(form.formState.errors);
+
 	return (
 		<SidebarForm
 			form={form}

@@ -19,7 +19,7 @@ export const ProfileType = new GraphQLObjectType({
 	fields: {
 		userId: { type: new GraphQLNonNull(GraphQLString) },
 		firstName: { type: new GraphQLNonNull(GraphQLString) },
-		lastName: { type: new GraphQLNonNull(GraphQLString) },
+		lastName: { type: GraphQLString },
 		email: { type: GraphQLString },
 		timeJoined: { type: GraphQLInt },
 		phoneNumber: { type: GraphQLString },

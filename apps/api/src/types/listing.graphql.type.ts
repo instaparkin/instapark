@@ -51,8 +51,8 @@ export const ListingType = new GraphQLObjectType({
 		pincode: { type: new GraphQLNonNull(GraphQLInt) },
 		latitude: { type: new GraphQLNonNull(GraphQLFloat) },
 		longitude: { type: new GraphQLNonNull(GraphQLFloat) },
-		name: { type: new GraphQLNonNull(GraphQLString) },
-		landmark: { type: new GraphQLNonNull(GraphQLString) },
+		name: { type: GraphQLString },
+		landmark: { type: GraphQLString },
 		allowedVehicles: {
 			type: new GraphQLNonNull(
 				new GraphQLList(new GraphQLNonNull(VehicleEnum)),

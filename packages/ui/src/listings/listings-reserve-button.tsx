@@ -11,6 +11,7 @@ import { CREATE_LOCK } from '../graphql/create-lock';
 import { RootState, useSelector } from '@instapark/state';
 import { dateToUnixSec } from '../utils/dayjs';
 import { uuidToAlphanumeric } from '@instapark/common';
+import { Vehicle } from '@instapark/types';
 
 interface ListingReserveButtonProps {
 	hostId: string;
@@ -56,10 +57,10 @@ export const ListingReserveButton = ({
 				parkingPrice,
 				totalPrice,
 				ipFee,
-				vehicle: vehicleType,
+				vehicle: vehicleType as Vehicle,
 				customer: {
 					customer_email: email,
-					customer_name: formatName(firstName, lastName),
+					customer_name: formatName(firstName, lastName ?? ''),
 					customer_phone: phoneNumber,
 				},
 				vendorId: uuidToAlphanumeric(hostId),

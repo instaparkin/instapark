@@ -269,10 +269,10 @@ export type Listing = {
 	district: Scalars['String']['output'];
 	id: Scalars['String']['output'];
 	isOpen: Scalars['Boolean']['output'];
-	landmark: Scalars['String']['output'];
+	landmark?: Maybe<Scalars['String']['output']>;
 	latitude: Scalars['Float']['output'];
 	longitude: Scalars['Float']['output'];
-	name: Scalars['String']['output'];
+	name?: Maybe<Scalars['String']['output']>;
 	photos: Array<Scalars['String']['output']>;
 	pincode: Scalars['Int']['output'];
 	plph: Scalars['Float']['output'];
@@ -478,7 +478,7 @@ export type Profile = {
 	firstName: Scalars['String']['output'];
 	kyc?: Maybe<Kyc>;
 	landmark?: Maybe<Scalars['String']['output']>;
-	lastName: Scalars['String']['output'];
+	lastName?: Maybe<Scalars['String']['output']>;
 	name?: Maybe<Scalars['String']['output']>;
 	phoneNumber?: Maybe<Scalars['String']['output']>;
 	pincode?: Maybe<Scalars['Int']['output']>;
@@ -955,7 +955,7 @@ export type Get_ProfileQuery = {
 			__typename?: 'Profile';
 			userId: string;
 			firstName: string;
-			lastName: string;
+			lastName?: string | null;
 			email?: string | null;
 			timeJoined?: number | null;
 			phoneNumber?: string | null;
@@ -1136,8 +1136,8 @@ export type Get_Trip_DetailedQuery = {
 				pincode: number;
 				latitude: number;
 				longitude: number;
-				name: string;
-				landmark: string;
+				name?: string | null;
+				landmark?: string | null;
 				allowedVehicles: Array<Vehicle>;
 				basePrice: number;
 				pphbi?: number | null;
@@ -1151,7 +1151,7 @@ export type Get_Trip_DetailedQuery = {
 				user?: {
 					__typename?: 'Profile';
 					firstName: string;
-					lastName: string;
+					lastName?: string | null;
 					timeJoined?: number | null;
 					phoneNumber?: string | null;
 				} | null;
@@ -1253,8 +1253,8 @@ export type Get_TripsQuery = {
 				pincode: number;
 				latitude: number;
 				longitude: number;
-				name: string;
-				landmark: string;
+				name?: string | null;
+				landmark?: string | null;
 				allowedVehicles: Array<Vehicle>;
 				basePrice: number;
 				pphbi?: number | null;
@@ -1270,7 +1270,7 @@ export type Get_TripsQuery = {
 					__typename?: 'Profile';
 					userId: string;
 					firstName: string;
-					lastName: string;
+					lastName?: string | null;
 					email?: string | null;
 					timeJoined?: number | null;
 					phoneNumber?: string | null;
@@ -1373,7 +1373,7 @@ export type HostBookingsQuery = {
 						__typename?: 'Profile';
 						userId: string;
 						firstName: string;
-						lastName: string;
+						lastName?: string | null;
 						email?: string | null;
 						timeJoined?: number | null;
 						phoneNumber?: string | null;
@@ -1456,8 +1456,8 @@ export type HostBookingsQuery = {
 					pincode: number;
 					latitude: number;
 					longitude: number;
-					name: string;
-					landmark: string;
+					name?: string | null;
+					landmark?: string | null;
 					allowedVehicles: Array<Vehicle>;
 					basePrice: number;
 					pphbi?: number | null;
@@ -1473,7 +1473,7 @@ export type HostBookingsQuery = {
 						__typename?: 'Profile';
 						userId: string;
 						firstName: string;
-						lastName: string;
+						lastName?: string | null;
 						email?: string | null;
 						timeJoined?: number | null;
 						phoneNumber?: string | null;
@@ -1518,8 +1518,8 @@ export type Host_ListingsQuery = {
 			pincode: number;
 			latitude: number;
 			longitude: number;
-			name: string;
-			landmark: string;
+			name?: string | null;
+			landmark?: string | null;
 			allowedVehicles: Array<Vehicle>;
 			basePrice: number;
 			pphbi?: number | null;
@@ -1535,7 +1535,7 @@ export type Host_ListingsQuery = {
 				__typename?: 'Profile';
 				userId: string;
 				firstName: string;
-				lastName: string;
+				lastName?: string | null;
 				email?: string | null;
 				timeJoined?: number | null;
 				phoneNumber?: string | null;
@@ -1608,8 +1608,8 @@ export type SearchListingsQuery = {
 			pincode: number;
 			latitude: number;
 			longitude: number;
-			name: string;
-			landmark: string;
+			name?: string | null;
+			landmark?: string | null;
 			allowedVehicles: Array<Vehicle>;
 			basePrice: number;
 			pphbi?: number | null;

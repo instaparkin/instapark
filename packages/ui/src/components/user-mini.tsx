@@ -29,7 +29,7 @@ export function UserMini({
 				</Avatar>
 				<div className="flex flex-col">
 					<h2 className="text-base font-medium">
-						{host && 'Hosted by '} {formatName(firstName, lastName)}
+						{host && 'Hosted by '} {formatName(firstName, lastName ?? '')}
 					</h2>
 					<p className="text-muted-foreground text-sm">
 						{timeInInstapark(timeJoined)}

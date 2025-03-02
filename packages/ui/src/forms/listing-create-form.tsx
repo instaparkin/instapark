@@ -32,14 +32,25 @@ export const ListingCreateForm = ({
 
 	const form = useForm<ListingsAddType>({
 		resolver: zodResolver(listingsCreateSchema),
+		defaultValues: {
+			basePrice: 10,
+			plph: 60,
+		},
 	});
 
 	useEffect(() => {
 		form.setValue('userId', userId);
 		if (defaultValues && listingFromDB) {
-			form.reset({
-				...(listingFromDB as Listing),
-			});
+			const updatedValues = Object.fromEntries(
+				Object.entries(listingFromDB).filter(
+					(
+						[_, value], // eslint-disable-line @typescript-eslint/no-unused-vars
+					) => value !== null && value !== '',
+				),
+			);
+			if (Object.keys(updatedValues).length > 0) {
+				form.reset(updatedValues);
+			}
 		}
 	}, [listingFromDB]);
 

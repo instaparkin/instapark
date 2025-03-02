@@ -5,7 +5,7 @@ interface ListingSearch {
 	startDate: string;
 	endDate: string;
 	street: string | null;
-	vehicleType: Vehicle;
+	vehicleType: Vehicle | null;
 }
 /**
  * Utils to convert the date to the format of Date-Time input Field
@@ -17,7 +17,7 @@ const initialState: ListingSearch = {
 	startDate: formatDateTime(now),
 	endDate: formatDateTime(new Date(now.getTime() + 5 * 3600 * 1000)),
 	street: null,
-	vehicleType: Vehicle.Bike,
+	vehicleType: null,
 };
 
 const searchSlice = createSlice({

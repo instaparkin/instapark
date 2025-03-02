@@ -7,11 +7,11 @@ export const createListing = async (req: Request, res: Response) => {
 	const session = await ListingModel.startSession();
 	try {
 		const listing = req.body as ListingRequest;
-		console.log(listing);
 
 		const result = listingsCreateSchema.safeParse(listing);
 
 		if (!result.success) {
+			session.endSession();
 			return sendResponse(
 				res,
 				400,
@@ -22,46 +22,55 @@ export const createListing = async (req: Request, res: Response) => {
 		}
 
 		session.startTransaction();
-		const a = await ListingModel.findOne({
+
+		const existingListing = await ListingModel.findOne({
 			latitude: listing.latitude,
 			longitude: listing.longitude,
-		}).select('-_id -__v');
-		if (a) {
+		})
+			.select('-_id -__v')
+			.session(session);
+
+		if (existingListing) {
+			await session.abortTransaction();
+			session.endSession();
 			return sendResponse(
 				res,
 				200,
 				'A Listing already exists on this location',
 				'FAILURE',
-				a,
+				existingListing,
 			);
 		}
+
 		const newListing = await ListingModel.create([addUUID(result.data)], {
 			session,
 		});
+
 		if (!newListing || !newListing[0]) {
+			await session.abortTransaction();
+			session.endSession();
 			return sendResponse(res, 400, 'Failed to create Listing', 'FAILURE');
 		}
-		const data = newListing[0];
-		await session.commitTransaction().then(async () => {
-			return sendResponse(
-				res,
-				201,
-				'Listing created successfully.',
-				'SUCCESS',
-				data,
-			);
-		});
+
+		await session.commitTransaction();
+		session.endSession();
+		return sendResponse(
+			res,
+			201,
+			'Listing created successfully.',
+			'SUCCESS',
+			newListing[0],
+		);
 	} catch (error) {
 		await session.abortTransaction();
+		session.endSession();
 		return sendResponse(
 			res,
 			500,
-			`An unexpected error occurred while creating the listing: ${error} `,
+			`An unexpected error occurred while creating the listing: ${error}`,
 			'FAILURE',
 			error,
 		);
-	} finally {
-		session.endSession();
 	}
 };
 
