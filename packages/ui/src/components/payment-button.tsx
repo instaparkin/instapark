@@ -3,7 +3,6 @@
 import React from 'react';
 import { load } from '@cashfreepayments/cashfree-js';
 import { Button } from '../components/button';
-import { getEnv } from '@instapark/common';
 
 interface PaymentButtonProps {
 	amount: string;
@@ -60,7 +59,7 @@ export function PaymentButton({
 		const initializeSDK = async () => {
 			try {
 				const cashfreeInstance = await load({
-					mode: getEnv() === 'development' ? 'sandbox' : 'production',
+					mode: 'sandbox',
 				});
 				setCashfree(cashfreeInstance);
 			} catch (error) {
