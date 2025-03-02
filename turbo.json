@@ -2,6 +2,9 @@
 	"$schema": "https://turbo.build/schema.json",
 	"ui": "tui",
 	"tasks": {
+		"@instapark/web#build": {
+			"env": ["NEXT_PUBLIC_MAP_STYLE_URL", "NEXT_PUBLIC_UPLOADTHING_ENDPOINT"]
+		},
 		"build": {
 			"dependsOn": ["^build"],
 			"outputs": [".next/**", "!.next/cache/**", "dist"]

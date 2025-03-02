@@ -10,7 +10,7 @@ import { Button } from '../components/button';
 import { X } from 'lucide-react';
 
 export const UploadDropzone = generateUploadDropzone({
-	url: process.env.NEXT_PUBLIC_UPLOADTHING_ENDPOINT,
+	url: process.env.NEXT_PUBLIC_UPLOADTHING_ENDPOINT!,
 });
 
 export const ListingsAddPhotos = ({
