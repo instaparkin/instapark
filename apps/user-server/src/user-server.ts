@@ -26,36 +26,37 @@ export async function connectDB() {
 	}
 }
 
+ensureSuperTokensInit();
+
+const app = express();
+
+app.use(express.json());
+
+app.use(
+	cors({
+		origin: process.env.FRONTEND_URL,
+		methods: ['GET', 'PUT', 'POST', 'DELETE'],
+		credentials: true,
+	}),
+);
+
+app.use(middleware());
+
+app.get('/', (req, res) => {
+	res.send('User Server is Up and Running');
+});
+
+app.use('/profile', ProfileRouter);
+
+app.use('/aadhar', AadharRouter);
+
+app.use(errorHandler());
+
 export async function init() {
-	ensureSuperTokensInit();
-
-	const app = express();
-
-	app.use(express.json());
-
-	app.use(
-		cors({
-			origin: process.env.FRONTEND_URL,
-			methods: ['GET', 'PUT', 'POST', 'DELETE'],
-			credentials: true,
-		}),
-	);
-
-	app.use(middleware());
-
 	await connectDB();
-
-	app.get('/', (req, res) => {
-		res.send('User Server is Up and Running');
-	});
-
-	app.use('/profile', ProfileRouter);
-
-	app.use('/aadhar', AadharRouter);
-
-	app.use(errorHandler());
-
 	app.listen(process.env.PORT, () => {
 		console.log(`Server running on http://localhost:${process.env.PORT}`);
 	});
 }
+
+export default app;

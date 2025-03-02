@@ -1,3 +1,3 @@
-import { init } from '../src/listings-server';
+import app from '../src/listings-server';
 
-init();
+export default app;

@@ -29,44 +29,48 @@ export async function connectDB() {
 	}
 }
 
-export async function init() {
-	ensureSuperTokensInit();
+ensureSuperTokensInit();
 
-	const app = express();
+const app = express();
 
-	app.use(express.json());
+app.use(express.json());
 
-	app.use(
-		cors({
-			origin: [process.env.FRONTEND_URL!],
-			allowedHeaders: [
-				'content-type',
-				...supertokens.getAllCORSHeaders(),
-				'x-uploadthing-package',
-				'x-uploadthing-version',
-			],
-			methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-			credentials: true,
-		}),
-	);
+app.use(
+	cors({
+		origin: [process.env.FRONTEND_URL!],
+		allowedHeaders: [
+			'content-type',
+			...supertokens.getAllCORSHeaders(),
+			'x-uploadthing-package',
+			'x-uploadthing-version',
+		],
+		methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+		credentials: true,
+	}),
+);
 
-	app.use(middleware());
+app.use(middleware());
 
-	app.use(rateLimiter);
+app.use(rateLimiter);
 
+async function init() {
 	await connectDB();
-
-	app.get('/', (req, res) => {
-		res.send('Listings server is up and Running');
-	});
-
-	app.use('/listings', ListingsRouter);
-
-	app.use('/uploadthing', uploadthingExpress);
-
-	app.use(errorHandler());
-
-	app.listen(process.env.PORT, () => {
-		console.log(`Server running on http://localhost:${process.env.PORT}`);
-	});
 }
+
+init();
+
+app.get('/', (req, res) => {
+	res.send('Listings server is up and Running');
+});
+
+app.use('/listings', ListingsRouter);
+
+app.use('/uploadthing', uploadthingExpress);
+
+app.use(errorHandler());
+
+app.listen(process.env.PORT, () => {
+	console.log(`Server running on http://localhost:${process.env.PORT}`);
+});
+
+export default app;

@@ -1,3 +1,3 @@
-import { init } from '../src/bookings-server';
+import app from '../src/bookings-server';
 
-init();
+export default app;

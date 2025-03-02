@@ -29,44 +29,48 @@ async function connectDB() {
 	}
 }
 
-export async function init() {
-	ensureSuperTokensInit();
+ensureSuperTokensInit();
 
-	const app = express();
+const app = express();
 
-	app.use(express.json());
+app.use(express.json());
 
-	app.use(
-		cors({
-			origin: process.env.FRONTEND_URL,
-			allowedHeaders: ['content-type', ...supertokens.getAllCORSHeaders()],
-			methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-			credentials: true,
-		}),
-	);
+app.use(
+	cors({
+		origin: process.env.FRONTEND_URL,
+		allowedHeaders: ['content-type', ...supertokens.getAllCORSHeaders()],
+		methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+		credentials: true,
+	}),
+);
 
-	app.use(middleware());
+app.use(middleware());
 
-	app.use(rateLimiter);
+app.use(rateLimiter);
 
+async function init() {
 	await connectDB();
-
-	app.get('/', (req, res) => {
-		res.send('🚀 Booking Server is up and running');
-	});
-
-	app.use('/bookings', BookingRouter);
-
-	app.use('/settlements', SettlementRouter);
-
-	app.use('/vendor', VendorRouter);
-
-	app.use('/payments', PaymentRouter);
-
-	app.use(errorHandler());
-
-	const PORT = process.env.PORT || 4000;
-	app.listen(PORT, () => {
-		console.log(`🚀 Server running at http://localhost:${PORT}`);
-	});
 }
+
+init();
+
+app.get('/', (req, res) => {
+	res.send('🚀 Booking Server is up and running');
+});
+
+app.use('/bookings', BookingRouter);
+
+app.use('/settlements', SettlementRouter);
+
+app.use('/vendor', VendorRouter);
+
+app.use('/payments', PaymentRouter);
+
+app.use(errorHandler());
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+	console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
+
+export default app;

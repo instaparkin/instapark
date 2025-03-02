@@ -1,3 +1,3 @@
-import { init } from '../src/auth-server';
+import app from '../src/auth-server';
 
-init();
+export default app;

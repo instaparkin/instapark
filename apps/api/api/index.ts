@@ -1,3 +1,3 @@
-import { init } from '../src/api-server';
+import app from '../src/api-server';
 
-init();
+export default app;
