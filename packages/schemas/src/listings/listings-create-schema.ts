@@ -16,7 +16,7 @@ export const listingsCreateSchema: z.ZodType<ListingRequest> = z.object({
     landmark: z.string().optional(),
     allowedVehicles: z.array(z.nativeEnum(Vehicle)).max(3),
     basePrice: z.coerce.number().min(10.00),
-    pphbi: z.coerce.number().min(10.00).optional(),  // Optional here
+    pphbi: z.coerce.number().min(10.00).optional(),
     pphcy: z.coerce.number().min(5.00).optional(),
     pphcr: z.coerce.number().min(20.00).optional(),
     plph: z.coerce.number().min(60.00),

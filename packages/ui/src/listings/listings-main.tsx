@@ -26,7 +26,7 @@ export const ListingsMain = () => {
     <div>
       <div className='flex items-center justify-between mb-4'>
         <h2 className='text-lg md:text-2xl font-semibold'>Your Listings</h2>
-        <ListingsAddButton userId={userId} />
+        <ListingsAddButton />
       </div>
       {
         loading ?

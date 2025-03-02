@@ -34,7 +34,7 @@ export const ListingsAddPhotos = ({ form }: { form: UseFormReturn<ListingRequest
                 }}
             />
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {form.getValues("photos").map((photo, index) => (
+                {form.getValues("photos")?.map((photo, index) => (
                     <div key={index} className="relative group">
                         <Image
                             src={photo}

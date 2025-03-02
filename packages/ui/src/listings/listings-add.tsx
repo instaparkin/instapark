@@ -16,6 +16,7 @@ import {
 } from "../components/dialog";
 import { useAuth } from "../hooks/use-auth";
 import { Checkmark } from "../components/checkmark";
+import { redirect } from "next/navigation";
 
 export const ListingsAdd = () => {
   const { form } = ListingCreateForm({ defaultValues: false });
@@ -50,7 +51,7 @@ export const ListingsAdd = () => {
       <DialogDescription className="text-center">Submitting...</DialogDescription>
     );
     setIsDialogOpen(true);
-    await createListing({ variables: { ...data, userId } });
+    await createListing({ variables: { ...data } });
   };
 
   return (
@@ -58,7 +59,10 @@ export const ListingsAdd = () => {
       <MultiStepForm form={form} steps={listingsAddSteps} onSubmit={({ data }) => handleSubmit(data)} />
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger className="hidden">Open</DialogTrigger>
-        <DialogContent className="flex flex-col items-center gap-4">
+        <DialogContent
+          onClose={() => {
+            redirect("/hosting/listings")
+          }} className="flex flex-col items-center gap-4">
           <DialogHeader className="text-center">
             <DialogTitle className="text-center mb-4">Status</DialogTitle>
             {dialogMessage}

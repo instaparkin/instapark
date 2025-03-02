@@ -7,6 +7,8 @@ export const createListing = async (req: Request, res: Response) => {
     const session = await ListingModel.startSession();
     try {
         const listing = req.body as ListingRequest;
+        console.log(listing);
+        
         const result = listingsCreateSchema.safeParse(listing);
 
         if (!result.success) {
@@ -41,7 +43,7 @@ export const updateListing = async (req: Request, res: Response) => {
     try {
         const body = req.body as Listing;
         console.log(body);
-        
+
         const updatedListing = await ListingModel.findOneAndUpdate(
             { id: body.id },
             body,
