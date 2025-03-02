@@ -28,4 +28,4 @@ BookingRouter.post('/otp/verify', verifyBooking);
 
 BookingRouter.get('/earnings-stats', earningsStats);
 
-export { BookingRouter };
+export default BookingRouter;

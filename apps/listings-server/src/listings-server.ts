@@ -5,7 +5,7 @@ import {
 	supertokens,
 	ensureSuperTokensInit,
 } from '@instapark/auth';
-import { ListingsRouter } from './routes/listings.route';
+import ListingsRouter from './routes/listings.route';
 import { uploadthingExpress } from './uploadthing/uploadthing-express';
 import mongoose from 'mongoose';
 import express from 'express';

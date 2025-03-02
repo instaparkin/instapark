@@ -5,4 +5,4 @@ const PaymentRouter = Router();
 
 PaymentRouter.get('/', getPayments);
 
-export { PaymentRouter };
+export default PaymentRouter;

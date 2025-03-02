@@ -8,13 +8,13 @@ import {
 } from '@instapark/auth';
 import mongoose from 'mongoose';
 import { BOOKINGS_SERVER_CONSTANTS } from './constants/bookings-server-constants';
-import { BookingRouter } from './routes/booking.route';
+import BookingRouter from './routes/booking.route';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import { VendorRouter } from './routes/vendor.route';
-import { SettlementRouter } from './routes/settlements.route';
-import { PaymentRouter } from './routes/payment.route';
+import VendorRouter from './routes/vendor.route';
+import SettlementRouter from './routes/settlements.route';
+import PaymentRouter from './routes/payment.route';
 import { rateLimiter } from '@instapark/utils';
 
 config({ path: path.resolve(__dirname, '../', '.env.local') });

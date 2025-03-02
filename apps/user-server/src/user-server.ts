@@ -6,10 +6,10 @@ import {
 } from '@instapark/auth';
 import mongoose from 'mongoose';
 import { USER_SERVER_CONSTANTS } from './constants/user-server-constants';
-import { ProfileRouter } from './routes/profile.route';
+import ProfileRouter from './routes/profile.route';
 import express from 'express';
 import cors from 'cors';
-import { AadharRouter } from './routes/aadhar.route';
+import AadharRouter from './routes/aadhar.route';
 
 /**
  * TODO:

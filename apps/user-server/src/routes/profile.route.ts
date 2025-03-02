@@ -7,4 +7,4 @@ ProfileRouter.post('/', upsertProfile);
 
 ProfileRouter.get('/', getProfile);
 
-export { ProfileRouter };
+export default ProfileRouter;

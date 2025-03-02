@@ -13,4 +13,4 @@ ListingsRouter.put('/', updateListing);
 
 ListingsRouter.get('/', getListings);
 
-export { ListingsRouter };
+export default ListingsRouter;

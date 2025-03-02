@@ -7,4 +7,4 @@ AadharRouter.post('/verify', verifyAadhar);
 
 AadharRouter.post('/otp', aadhaarOTP);
 
-export { AadharRouter };
+export default AadharRouter;

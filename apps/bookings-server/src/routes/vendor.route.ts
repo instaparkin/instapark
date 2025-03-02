@@ -16,4 +16,4 @@ VendorRouter.patch('/', updateVendor);
 
 VendorRouter.get('/balance', getBalance);
 
-export { VendorRouter };
+export default VendorRouter;

@@ -4,4 +4,5 @@ import { getSettlements } from '../controllers/settlements.controller';
 const SettlementRouter = Router();
 
 SettlementRouter.get('/', getSettlements);
-export { SettlementRouter };
+
+export default SettlementRouter;
