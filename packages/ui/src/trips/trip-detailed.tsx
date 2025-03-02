@@ -18,7 +18,7 @@ import { generateGoogleMapsLink } from '@instapark/common'
 import Link from 'next/link'
 import { Button } from '../components/button'
 import { CompleteOrderButton } from './complete-order-button'
-import { Verified } from 'lucide-react'
+import { Phone, Verified } from 'lucide-react'
 
 export const TripDetailed = ({ id }: { id: string }) => {
   const { userId } = useAuth();
@@ -52,13 +52,11 @@ export const TripDetailed = ({ id }: { id: string }) => {
       )
     },
     {
-      name: "OTP",
+      name: booking?.status === "OnGoing" || "Completed" ? "Contact" : "OTP",
       content: () => booking?.status === "OnGoing" || "Completed" ?
-        <div className="flex grow gap-3 border bg-primary-foreground p-4 rounded-md my-6">
-          <div className="flex grow gap-10 text-positive">
-            <Verified size={20} />
-            <p className="text-sm">Trips was approved by the host</p>
-          </div>
+        <div className="flex grow gap-6 border p-4 rounded-md my-6 items-center">
+          <Phone size={20} />
+          {listing?.user?.phoneNumber}
         </div> : (
           <InputOTP maxLength={6} defaultValue={otp?.toString()} readOnly
             className='flex flex-col'>

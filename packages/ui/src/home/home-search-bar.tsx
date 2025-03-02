@@ -108,11 +108,11 @@ export const HomeSearchBar = () => {
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto my-10">
+    <div className="w-full max-w-6xl mx-auto md:my-10">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="bg-white dark:bg-black rounded-sm border p-2 sm:p-4 mb-10"
+          className="md:bg-white md:dark:bg-black rounded-sm md:border p-2 sm:p-4 mb-10"
         >
           {isMobile ? (
             <div className="flex items-center gap-2">

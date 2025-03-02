@@ -83,11 +83,10 @@ export const getVendor = (req: Request, res: Response) => {
 
 export const updateVendor = (req: SessionRequest, res: Response) => {
     try {
-        const { userId } = req.query;
 
         const vendorRequest: VendorRequest = req.body;
         const options = {
-            method: 'POST',
+            method: 'PATCH',
             headers: {
                 'x-api-version': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_API_VERSION,
                 'x-client-id': BOOKINGS_SERVER_CONSTANTS.CASHFREE.CASHFREE_CLIENT_ID,
@@ -95,7 +94,7 @@ export const updateVendor = (req: SessionRequest, res: Response) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "vendor_id": userId,
+                "vendor_id": vendorRequest.vendor_id,
                 "status": "ACTIVE",
                 "name": vendorRequest.name,
                 "email": vendorRequest.email,
@@ -116,13 +115,13 @@ export const updateVendor = (req: SessionRequest, res: Response) => {
             })
         };
 
-        fetch(`https://sandbox.cashfree.com/pg/easy-split/vendors/${userId}`, options)
+        fetch(`https://sandbox.cashfree.com/pg/easy-split/vendors/${vendorRequest.vendor_id}`, options)
             .then(response => response.json())
             .then(response => {
                 sendResponse(res, 200, response.message, "SUCCESS", response);
             })
             .catch(error => {
-                sendResponse(res, 500, `Error Creating vendor: ${error}`, "FAILURE", null);
+                sendResponse(res, 500, `Error updating payment details: ${error}`, "FAILURE", null);
             });
 
     } catch (error) {

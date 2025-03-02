@@ -45,5 +45,32 @@ export const VendorMutation = new GraphQLObjectType({
                 }
             }
         },
+        updateVendor: {
+            type: GraphQLString,
+            args: {
+                name: { type: GraphQLString },
+                email: { type: GraphQLString },
+                phone: { type: GraphQLString },
+                bank: { type: VendorBankInput },
+                kyc_details: { type: VendorKYCInput },
+                vendor_id: { type: GraphQLString },
+            },
+            resolve: async (_, args) => {
+                try {
+                    const response = await axios.patch<ApiResponse<null>>
+                        (API_SERVER_CONSTANTS.ENDPOINTS.BOOKINGS.VENDOR.UPDATE, args, {
+                            params: {
+                                
+                            }
+                        })
+                    return response.data.message
+                } catch (error) {
+                    if (axios.isAxiosError(error) && error.response) {
+                        return error.response.data.message
+                    }
+                    return "An Unknown error occured"
+                }
+            }
+        },
     }
 })

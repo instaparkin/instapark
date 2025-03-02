@@ -7,7 +7,6 @@ import { Group, SidebarForm } from '../components/sidebar-form'
 import { useMutation } from '@apollo/client'
 import { UPSERT_PROFILE } from '../graphql/upsert-profile'
 import { useAuth } from '../hooks/use-auth'
-import { AadharVerification } from './aadhar-verification'
 
 export function ProfilePersonalMain() {
   const { form, verified } = ProfileForm();
@@ -25,9 +24,8 @@ export function ProfilePersonalMain() {
     {
       verified: verified,
       title: "UIDAI",
-      component: ({ form }) => <AadharVerification verified={verified} form={form} />,
       fields: [
-        { name: "kyc.uidai", type: "text", description: "Enter your Aadhaar number for identity verification as per UIDAI guidelines." },
+        { name: "kyc.uidai",label: "Aadhar Number", type: "text", description: "Enter your Aadhaar number for identity verification as per UIDAI guidelines. This will be used in future for verification" },
       ]
     },
     {

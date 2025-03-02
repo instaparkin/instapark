@@ -1,73 +1,62 @@
-import { Path, UseFormReturn } from "react-hook-form";
 import { VendorCreateFormType } from "../forms/vendor-create-form";
-import { HTMLInputTypeAttribute } from "react";
-
-export type Field<T extends Record<string, unknown>> = {
-    name: Path<T>;
-    disabled?: boolean,
-    description: string
-    type?: HTMLInputTypeAttribute
-}
-
-export type Group<T extends Record<string, unknown>> = {
-    title: string;
-    component?: ({ form }: { form: UseFormReturn<T> }) => JSX.Element;
-    fields: Field<T>[]
-    status: "VERIFIED" | "ACTION_REQUIRED" | "BANK_VALIDATION_FAILED"
-}
+import { Group } from "../components/sidebar-form";
 
 export const paymentDetailsSteps: Group<VendorCreateFormType>[] = [
     {
         title: "Personal",
-        status: "VERIFIED",
+        description: "You can change these details in the PROFILE section",
         fields: [
             {
                 name: "name",
                 description: "Please enter your full legal name as per your official documents. This will be used for identification and verification purposes.",
-                type: "text"
+                type: "text",
+                label: "Name",
+                readonly: true
             },
             {
                 name: "phone",
                 description: "Provide your active mobile number. Ensure that the number is valid and reachable, as it may be used for verification or future communication.",
-                type: "text"
+                type: "text",
+                label: "Phone Number",
+                readonly: true
             },
             {
                 name: "email",
                 description: "Enter your primary email address. This email will be used for important updates, notifications, and future correspondence regarding your account.",
-                type: "email"
+                type: "email",
+                label: "Email",
+                readonly: true
             }
         ]
     },
     {
         title: "Bank",
-        status: "VERIFIED",
+        singleSubmit: true,
         fields: [
             {
                 name: "bank.account_holder",
                 description: "Enter the full name of the account holder exactly as it appears in the bank records. Discrepancies may lead to transaction failures.",
-                type: "text"
+                type: "text",
+                label: "Account Holder Name",
             },
             {
                 name: "bank.account_number",
                 description: "Provide your complete bank account number. Double-check the number to avoid any errors, as incorrect details may result in failed transactions.",
-                type: "text"
+                type: "text",
+                label: "Account Number",
             },
             {
                 name: "bank.ifsc",
                 description: "Enter the IFSC (Indian Financial System Code) of your bank branch. This is an 11-character alphanumeric code used to identify your specific bank branch for electronic transactions.",
-                type: "text"
-            }
-        ]
-    },
-    {
-        title: "KYC",
-        status: "VERIFIED",
-        fields: [
+                type: "text",
+                label: "IFSC Code",
+            },
             {
                 name: "kyc_details.pan",
                 description: "Provide your Permanent Account Number (PAN) issued by the Government of India. This is a mandatory requirement for financial transactions and identity verification.",
-                type: "text"
+                type: "text",
+                label: "Permanent Account Number (PAN)",
             }
         ]
-    }
+    },
 ];

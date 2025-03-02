@@ -9,24 +9,54 @@ export function getEnv() {
 /**
 * Converts a UUID to an alphanumeric string.
 */
+const BASE62_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+function base62Encode(buffer: Uint8Array): string {
+  let value = BigInt("0x" + Buffer.from(buffer).toString("hex"));
+  let encoded = "";
+  const base = BigInt(62);
+
+  while (value > 0) {
+    encoded = BASE62_CHARS[Number(value % base)] + encoded;
+    value /= base;
+  }
+
+  return encoded.padStart(22, "0"); // Ensure consistent length
+}
+
 export function uuidToAlphanumeric(uuid: string): string {
   if (!/^[0-9a-fA-F-]{36}$/.test(uuid)) throw new Error("Invalid UUID format");
 
   const hex = uuid.replace(/-/g, ""); // Remove hyphens
-  const binary = String.fromCharCode(...hex.match(/.{1,2}/g)!.map((b) => parseInt(b, 16)));
+  const bytes = Buffer.from(hex, "hex"); // Convert hex to bytes
 
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); // Base64 URL encoding
+  return base62Encode(bytes); // Base62 encoding
 }
 
 
 /**
  * Converts an alphanumeric string back to a UUID.
  */
+function base62Decode(encoded: string): Uint8Array {
+  let value = BigInt(0);
+  const base = BigInt(62);
+
+  for (let char of encoded) {
+    value = value * base + BigInt(BASE62_CHARS.indexOf(char));
+  }
+
+  const hex = value.toString(16).padStart(32, "0"); // Ensure full 32 hex characters
+  return Buffer.from(hex, "hex");
+}
+
 export function alphanumericToUuid(alphanumeric: string): string {
-  if (!/^[A-Za-z0-9_-]{22,24}$/.test(alphanumeric)) {
+  if (!/^[A-Za-z0-9]{22}$/.test(alphanumeric)) {
     throw new Error("Invalid alphanumeric format");
   }
-  const hex = Buffer.from(alphanumeric, "base64url").toString("hex");
+
+  const bytes = base62Decode(alphanumeric);
+  const hex = bytes.toString();
+
   return (
     hex.slice(0, 8) +
     "-" +
@@ -39,6 +69,7 @@ export function alphanumericToUuid(alphanumeric: string): string {
     hex.slice(20)
   );
 }
+
 
 /**
  * Function to generate the google maps link

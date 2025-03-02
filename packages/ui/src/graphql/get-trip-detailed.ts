@@ -93,6 +93,7 @@ query GET_TRIP_DETAILED($userId: String!, $id: String!) {
           firstName
           lastName
           timeJoined
+          phoneNumber
         }
       }
     }

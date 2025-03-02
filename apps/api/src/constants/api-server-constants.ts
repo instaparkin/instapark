@@ -36,6 +36,7 @@ export const API_SERVER_CONSTANTS = {
                 BALANCE: `${process.env.BOOKINGS_SERVER_URL}/vendor/balance`,
                 GET: `${process.env.BOOKINGS_SERVER_URL}/vendor`,
                 CREATE: `${process.env.BOOKINGS_SERVER_URL}/vendor`,
+                UPDATE: `${process.env.BOOKINGS_SERVER_URL}/vendor`,
             },
             PAYMENTS: {
                 GET: `${process.env.BOOKINGS_SERVER_URL}/payments`,

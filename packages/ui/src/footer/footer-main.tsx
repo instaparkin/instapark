@@ -10,8 +10,8 @@ const legalLinks = [
 ];
 
 const socialLinks = [
-    { href: "#", label: "LinkedIn", icon: <FaLinkedinIn size={18} /> },
-    { href: "#", label: "Twitter", icon: <FaXTwitter size={18} /> }
+    { href: "https://www.linkedin.com/in/insta-park-b74178351/", label: "LinkedIn", icon: <FaLinkedinIn size={18} /> },
+    { href: "https://x.com/Instapark2024", label: "Twitter", icon: <FaXTwitter size={18} /> }
 ];
 
 export function FooterMain() {

@@ -23,17 +23,18 @@ export const ProfileForm = () => {
     const form = useForm<ProfileFormType>({
         resolver: zodResolver(profileSchema),
     })
-
     React.useEffect(() => {
-        if (data) {
-            form.reset(
-                {
-                    firstName: profile?.firstName,
-                    lastName: profile?.lastName,
-                    email: profile?.email as string,
-                    phoneNumber: profile?.phoneNumber as string
-                }
-            )
+        if (data?.UserQuery?.getProfile) {
+            const profile = data.UserQuery.getProfile as Profile;
+
+            // Remove null or empty values dynamically
+            const updatedValues = Object.fromEntries(
+                Object.entries(profile).filter(([_, value]) => value !== null && value !== "")
+            );
+
+            if (Object.keys(updatedValues).length > 0) {
+                form.reset(updatedValues);
+            }
         }
     }, [data]);
 

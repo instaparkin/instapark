@@ -8,12 +8,12 @@ import { useAuth } from '../hooks/use-auth'
 import { getEnv, uuidToAlphanumeric } from "@instapark/common";
 import { useQuery } from '@apollo/client'
 import { GET_VENDOR } from '../graphql/get-vendor'
-import { Vendor } from '@instapark/types'
+import { formatName } from '../utils/field-name'
 
 export type VendorCreateFormType = z.infer<typeof VendorCreateSchema>
 
 export const VendorCreateForm = () => {
-    const { userId } = useAuth();
+    const { userId, firstName, lastName, email, phoneNumber } = useAuth();
     const { data } = useQuery(GET_VENDOR, {
         variables: {
             vendorId: uuidToAlphanumeric(userId)
@@ -22,26 +22,25 @@ export const VendorCreateForm = () => {
     const vendor = data?.VendorQuery?.getVendor;
 
     const form = useForm<VendorCreateFormType>({
-        resolver: zodResolver(VendorCreateSchema),
-        defaultValues: {
-            vendor_id: vendor?.vendor_id as string,
-            name: vendor?.name as string,
-            email: vendor?.email as string,
-            phone: vendor?.phone as string,
-            bank: {
-                account_number: getEnv() === "production" ? "" : "026291800001191",
-                account_holder: getEnv() === "production" ? vendor?.name as string : "JOHN DOE",
-                ifsc: getEnv() === "production" ? "" : "YESB0000262"
-            },
-            kyc_details: {
-                pan: getEnv() === "production" ? vendor?.kyc_details?.pan as string : "ABCPV1234D"
-            }
-        }
+        resolver: zodResolver(VendorCreateSchema)
     });
 
     React.useEffect(() => {
         if (data?.VendorQuery?.getVendor) {
-            form.reset({ ...data.VendorQuery.getVendor as Vendor })
+            form.reset({
+                vendor_id: uuidToAlphanumeric(userId),
+                kyc_details: {
+                    pan: getEnv() === "production" ? vendor?.related_docs?.at(1)?.doc_value as string : "ABCPV1234D"
+                },
+                name: formatName(firstName, lastName),
+                email: email as string,
+                phone: phoneNumber as string,
+                bank: {
+                    account_number: getEnv() === "production" ? vendor?.bank?.account_number as string : "026291800001191",
+                    account_holder: getEnv() === "production" ? vendor?.bank?.account_holder as string: "JOHN DOE",
+                    ifsc: getEnv() === "production" ? vendor?.bank?.ifsc as string : "YESB0000262"
+                },
+            })
         }
     }, [data])
 
