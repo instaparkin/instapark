@@ -16,7 +16,7 @@ import toast from "react-hot-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { UseFormReturn } from "react-hook-form";
 import { OTPInputFormType } from "../forms/otp-input-form";
-import { Form, FormControl, FormField, FormItem,FormMessage } from "./form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./form";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "./input-otp";
 import { redirect } from "next/navigation";
 
@@ -77,7 +77,7 @@ export function OTPDialog({ bookingId, form }: OTPDialogProps) {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <InputOTP type="number" maxLength={6} {...field}>
+                                                <InputOTP maxLength={6} {...field}>
                                                     <InputOTPGroup>
                                                         <InputOTPSlot index={0} />
                                                         <InputOTPSlot index={1} />

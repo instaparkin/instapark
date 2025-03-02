@@ -41,7 +41,7 @@ function base62Decode(encoded: string): Uint8Array {
   let value = BigInt(0);
   const base = BigInt(62);
 
-  for (let char of encoded) {
+  for (const char of encoded) {
     value = value * base + BigInt(BASE62_CHARS.indexOf(char));
   }
 

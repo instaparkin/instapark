@@ -1,7 +1,7 @@
 import React from "react";
-import type { Listing } from "@instapark/types"
 import Image from "next/image"
 import { formatLocation } from "../utils/field-name";
+import { Listing } from "../__generated__/graphql";
 
 export const ListingMini = ({ listing }: { listing: Listing }) => {
     return (

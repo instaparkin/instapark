@@ -8,12 +8,10 @@ import toast from 'react-hot-toast';
 import { paymentDetailsSteps } from './payment-details-steps';
 import { SidebarForm } from '../components/sidebar-form';
 import { useVendor } from '../hooks/use-vendor';
-import { uuidToAlphanumeric } from '@instapark/common';
-import { useAuth } from '../hooks/use-auth';
 
 export const PaymentDetailsMain = () => {
     const { form } = VendorCreateForm();
-    const { isVendor, vendorInfo } = useVendor();
+    const { isVendor } = useVendor();
 
     const [createVendor] = useMutation(CREATE_VENDOR, {
         onCompleted: (data) => {

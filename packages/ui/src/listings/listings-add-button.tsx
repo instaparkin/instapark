@@ -6,14 +6,9 @@ import toast from 'react-hot-toast'
 import Link from 'next/link'
 import { useVendor } from '../hooks/use-vendor'
 import { Skeleton } from '../components/skeleton'
-import { uuidToAlphanumeric } from '@instapark/common'
 
-interface ListingsAddButtonProps {
-    userId: string
-}
-
-export const ListingsAddButton = ({ userId }: ListingsAddButtonProps) => {
-    const { isVendor, loading } = useVendor({ userId: uuidToAlphanumeric(userId) })
+export const ListingsAddButton = () => {
+    const { isVendor, loading } = useVendor()
 
     if (loading) {
         return (

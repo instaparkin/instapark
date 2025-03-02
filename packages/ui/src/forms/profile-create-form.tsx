@@ -26,12 +26,9 @@ export const ProfileForm = () => {
     React.useEffect(() => {
         if (data?.UserQuery?.getProfile) {
             const profile = data.UserQuery.getProfile as Profile;
-
-            // Remove null or empty values dynamically
             const updatedValues = Object.fromEntries(
                 Object.entries(profile).filter(([_, value]) => value !== null && value !== "")
             );
-
             if (Object.keys(updatedValues).length > 0) {
                 form.reset(updatedValues);
             }

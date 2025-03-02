@@ -18,39 +18,38 @@ interface PaymentResult {
 }
 
 interface DoPaymentProps {
-    cashfree: unknown;
+    cashfree: Awaited<ReturnType<typeof load>>;
     orderId: string;
     paymentSessionId: string;
     onPayment: (result: PaymentResult, orderId: string) => void;
 }
 
 const doPayment = async ({ cashfree, orderId, paymentSessionId, onPayment }: DoPaymentProps) => {
-    if (!cashfree) return;
+    if (!cashfree || !cashfree.checkout) return;
 
-    const checkoutOptions = {
-        paymentSessionId,
-        redirectTarget: "_modal",
-    };
-
-    cashfree?.checkout(checkoutOptions).then((result: PaymentResult) => {
+    try {
+        const result = await cashfree.checkout({ paymentSessionId, redirectTarget: "_modal" });
         if (result.paymentDetails) {
             onPayment(result, orderId);
         }
-    });
+    } catch (error) {
+        console.error("Payment failed:", error);
+    }
 };
 
 export function PaymentButton({ orderId, paymentSessionId, onPayment, className, amount }: PaymentButtonProps) {
-    /**
-     * TODO: Try to remove the any type
-     */
-    const [cashfree, setCashfree] = React.useState<unknown>(null);
+    const [cashfree, setCashfree] = React.useState<Awaited<ReturnType<typeof load>> | null>(null);
 
     React.useEffect(() => {
         const initializeSDK = async () => {
-            const cashfreeInstance = await load({
-                mode: getEnv() === "development" ? "sandbox" : "production",
-            });
-            setCashfree(cashfreeInstance);
+            try {
+                const cashfreeInstance = await load({
+                    mode: getEnv() === "development" ? "sandbox" : "production",
+                });
+                setCashfree(cashfreeInstance);
+            } catch (error) {
+                console.error("Cashfree SDK failed to load:", error);
+            }
         };
         initializeSDK();
     }, []);
@@ -61,9 +60,9 @@ export function PaymentButton({ orderId, paymentSessionId, onPayment, className,
             className={`w-full sm:w-fit my-4 ${className}`}
             type="button"
             id="renderBtn"
-            onClick={() => doPayment({ cashfree, orderId, paymentSessionId, onPayment })}
+            onClick={() => cashfree && doPayment({ cashfree, orderId, paymentSessionId, onPayment })}
             disabled={!cashfree}>
-            {`Pay  ${amount}`}
+            {`Pay ${amount}`}
         </Button>
     );
 }

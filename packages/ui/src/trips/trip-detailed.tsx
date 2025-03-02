@@ -18,7 +18,7 @@ import { generateGoogleMapsLink } from '@instapark/common'
 import Link from 'next/link'
 import { Button } from '../components/button'
 import { CompleteOrderButton } from './complete-order-button'
-import { Phone, Verified } from 'lucide-react'
+import { Phone } from 'lucide-react'
 
 export const TripDetailed = ({ id }: { id: string }) => {
   const { userId } = useAuth();
@@ -38,6 +38,7 @@ export const TripDetailed = ({ id }: { id: string }) => {
   const listing = data?.BookingQuery?.buyerBookings?.at(0)?.listing
   const host = listing?.user;
   const otp = booking?.otp?.otp;
+  console.log(booking?.status);
 
   const CheckInDetails = [
     {
@@ -52,12 +53,9 @@ export const TripDetailed = ({ id }: { id: string }) => {
       )
     },
     {
-      name: booking?.status === "OnGoing" || "Completed" ? "Contact" : "OTP",
-      content: () => booking?.status === "OnGoing" || "Completed" ?
-        <div className="flex grow gap-6 border p-4 rounded-md my-6 items-center">
-          <Phone size={20} />
-          {listing?.user?.phoneNumber}
-        </div> : (
+      name: booking?.status === "Booked" ? "OTP" : "Contact",
+      content: () => booking?.status === "Booked" ?
+        (
           <InputOTP maxLength={6} defaultValue={otp?.toString()} readOnly
             className='flex flex-col'>
             <InputOTPGroup>
@@ -72,7 +70,10 @@ export const TripDetailed = ({ id }: { id: string }) => {
               <InputOTPSlot index={5} />
             </InputOTPGroup>
           </InputOTP>
-        )
+        ) : <div className="flex grow gap-6 border p-4 rounded-md my-6 items-center">
+          <Phone size={20} />
+          {listing?.user?.phoneNumber}
+        </div>
     },
     {
       name: "Location",

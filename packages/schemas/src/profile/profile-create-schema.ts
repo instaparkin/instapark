@@ -8,7 +8,7 @@ export const profileSchema = z.object({
     phoneNumber: z.string(),
     kyc: z.object({
         uidai: z.string().optional(),
-    }).optional(),
+    }),
     country: z.string().optional(),
     state: z.string().optional(),
     district: z.string().optional(),

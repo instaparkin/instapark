@@ -2,8 +2,7 @@
 
 import React from 'react'
 import { useAuth } from '../hooks/use-auth'
-import { useMutation, useQuery } from '@apollo/client'
-import { HOST_LISTINGS } from '../graphql/host-listings'
+import { useMutation } from '@apollo/client'
 import { Group, SidebarForm } from '../components/sidebar-form'
 import { ListingCreateForm, ListingsAddType } from '../forms/listing-create-form'
 import { ListingsAddPlaceType } from './listings-add-place-type'
