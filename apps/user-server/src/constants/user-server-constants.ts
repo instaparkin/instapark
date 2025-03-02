@@ -1,6 +1,6 @@
 export const USER_SERVER_CONSTANTS = {
 	MONGODB: {
-		URI: 'mongodb://localhost:27017/instapark-user',
+		URI: process.env.MONGODB_URI!,
 	},
 	CASHFREE: {
 		CASHFREE_SECURE_CLIENT_ID: process.env.CASHFREE_SECURE_CLIENT_ID!,
