@@ -15,6 +15,7 @@ import { useVendor } from '../hooks/use-vendor';
 export const PaymentDetailsMain = () => {
 	const { form } = VendorCreateForm();
 	const { isVendor } = useVendor();
+	const { steps } = paymentDetailsSteps();
 
 	const [createVendor] = useMutation(CREATE_VENDOR, {
 		onCompleted: (data) => {
@@ -24,7 +25,6 @@ export const PaymentDetailsMain = () => {
 			toast.error(`Error: ${error.message}`);
 		},
 	});
-	console.log(form.getValues());
 
 	const onSubmit = (data: VendorCreateFormType) => {
 		const request: VendorCreateFormType = { ...data };
@@ -33,7 +33,7 @@ export const PaymentDetailsMain = () => {
 	return (
 		<SidebarForm
 			diableForm={isVendor}
-			groups={paymentDetailsSteps}
+			groups={steps}
 			form={form}
 			onSubmit={onSubmit}
 		/>

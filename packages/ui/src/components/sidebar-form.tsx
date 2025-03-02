@@ -23,6 +23,7 @@ import { InfoIcon } from 'lucide-react';
 
 export type Field<T extends Record<string, unknown>> = {
 	name: Path<T>;
+	verified?: boolean;
 	label?: string;
 	readonly?: boolean;
 	description: string;
@@ -123,7 +124,21 @@ export const SidebarForm = <T extends Record<string, unknown>>({
 											render={({ field }) => (
 												<FormItem>
 													<CardHeader className="pb-2">
-														<CardTitle className="text-xl">{f.label}</CardTitle>
+														<CardTitle className="flex items-center justify-between text-xl">
+															<div>{f.label}</div>
+															<div>
+																{f.verified && (
+																	<div className="flex justify-end">
+																		<Badge
+																			variant="outline"
+																			className="bg-positive gap-1 p-1.5"
+																		>
+																			{'Verified'}
+																		</Badge>
+																	</div>
+																)}
+															</div>
+														</CardTitle>
 														<CardDescription>{f.description}</CardDescription>
 													</CardHeader>
 													<CardContent>
