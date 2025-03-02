@@ -1,13 +1,13 @@
-"use client"
+'use client';
 
-import { HomeMain, Page } from '@instapark/ui'
+import { HomeMain, Page } from '@instapark/ui';
 
 const HomePage = () => {
-  return (
-    <Page>
-      <HomeMain />
-    </Page>
-  )
-}
+	return (
+		<Page>
+			<HomeMain />
+		</Page>
+	);
+};
 
-export default HomePage
+export default HomePage;

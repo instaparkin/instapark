@@ -1,10 +1,7 @@
-import { Router } from "express";
-import { getSettlements } from "../controllers/settlements.controller";
+import { Router } from 'express';
+import { getSettlements } from '../controllers/settlements.controller';
 
 const SettlementRouter = Router();
 
-SettlementRouter.get(
-    "/",
-    getSettlements
-)
+SettlementRouter.get('/', getSettlements);
 export { SettlementRouter };

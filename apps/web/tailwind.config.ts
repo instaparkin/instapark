@@ -1,1 +1,1 @@
-export * from "@instapark/ui/tailwind.config"
+export * from '@instapark/ui/tailwind.config';

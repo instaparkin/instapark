@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const AADHAR_VERIFY = gql(`
     mutation AADHAR_VERIFY($otp: String!, $refId: String!, $userId: String!) {
@@ -35,4 +35,4 @@ export const AADHAR_VERIFY = gql(`
   }
 }
 
-    `)
+    `);

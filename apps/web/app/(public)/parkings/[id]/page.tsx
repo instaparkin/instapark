@@ -1,18 +1,18 @@
-import { HomeListingsDetailed, Page } from '@instapark/ui'
-import React from 'react'
+import { HomeListingsDetailed, Page } from '@instapark/ui';
+import React from 'react';
 
 interface ParkingInterface {
-  params: Promise<{ id: string }>
+	params: Promise<{ id: string }>;
 }
 
 const ParkingsPage = async ({ params }: ParkingInterface) => {
-  const listingId = (await params).id;
+	const listingId = (await params).id;
 
-  return (
-    <Page>
-      <HomeListingsDetailed listingId={listingId} />
-    </Page>
-  )
-}
+	return (
+		<Page>
+			<HomeListingsDetailed listingId={listingId} />
+		</Page>
+	);
+};
 
-export default ParkingsPage
+export default ParkingsPage;

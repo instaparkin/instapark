@@ -14,7 +14,6 @@
 		"@instapark/typescript-config": "workspace:^",
 		"@types/cors": "^2.8.17",
 		"@types/express": "^5.0.0",
-		"@types/express-serve-static-core": "^5.0.6",
 		"eslint": "^9.20.1",
 		"globals": "^15.14.0",
 		"tsx": "^4.19.2",

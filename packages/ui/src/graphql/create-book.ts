@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const CREATE_BOOK = gql(`
   mutation CREATE_BOOK($bookingId: String, $orderId: String, $userId: String) {
@@ -7,4 +7,4 @@ export const CREATE_BOOK = gql(`
   }
 }
 
-  `)
+  `);

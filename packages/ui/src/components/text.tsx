@@ -1,17 +1,13 @@
-import React from 'react'
-import { cn } from '../utils/cn'
+import React from 'react';
+import { cn } from '../utils/cn';
 
 interface TextProps {
-    text: string
-    className?: string
+	text: string;
+	className?: string;
 }
 
 const Text = ({ text, className }: TextProps) => {
-    return (
-        <div className={cn(className)}>
-            {text}
-        </div>
-    )
-}
+	return <div className={cn(className)}>{text}</div>;
+};
 
-export { Text }
+export { Text };

@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const PRICING_CALCULATOR = gql(`
 query PRICING_CALCULATOR(
@@ -21,4 +21,4 @@ query PRICING_CALCULATOR(
     }
   }
 }
-`)
+`);

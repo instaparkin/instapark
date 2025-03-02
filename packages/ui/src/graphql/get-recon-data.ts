@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const GET_RECON_DATA = gql(`
 query GET_RECON_DATA(
@@ -58,4 +58,4 @@ query GET_RECON_DATA(
     }
   }
 }
-`)
+`);

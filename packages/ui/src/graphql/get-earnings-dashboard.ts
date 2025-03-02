@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const GET_EARNINGS_DASHBOARD = gql(`
 query GetEarningsDashboard($userId: String!, $vendorId: String!) {
@@ -31,4 +31,4 @@ query GetEarningsDashboard($userId: String!, $vendorId: String!) {
     }
   }
 }
-`)
+`);

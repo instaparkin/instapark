@@ -1,12 +1,12 @@
-import { CompleteMain, Page } from '@instapark/ui'
-import React from 'react'
+import { CompleteMain, Page } from '@instapark/ui';
+import React from 'react';
 
 const CompletePage = () => {
-    return (
-        <Page title='Complete Payment'>
-            <CompleteMain />
-        </Page>
-    )
-}
+	return (
+		<Page title="Complete Payment">
+			<CompleteMain />
+		</Page>
+	);
+};
 
-export default CompletePage
+export default CompletePage;

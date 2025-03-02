@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const GET_VENDOR = gql(`
 query GetVendor($vendorId: String!) {
@@ -35,4 +35,4 @@ query GetVendor($vendorId: String!) {
     }
   }
 }
-  `)
+  `);

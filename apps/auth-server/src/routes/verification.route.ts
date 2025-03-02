@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { verifyUser } from "../controllers/verification.controller";
+import { Router } from 'express';
+import { verifyUser } from '../controllers/verification.controller';
 
 const VerificationRouter = Router();
 
-VerificationRouter.get("/", verifyUser)
+VerificationRouter.get('/', verifyUser);
 
-export { VerificationRouter }
+export { VerificationRouter };

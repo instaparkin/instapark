@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const UPSERT_PROFILE = gql(`
     mutation UpsertProfile(
@@ -38,4 +38,4 @@ export const UPSERT_PROFILE = gql(`
     )
   }
 }
-`)
+`);

@@ -6,13 +6,17 @@ import { frontendConfig, setRouter } from '../auth/frontend-config';
 import { init, SuperTokensWrapper } from 'supertokens-auth-react';
 
 if (typeof window !== 'undefined') {
-    init(frontendConfig());
+	init(frontendConfig());
 }
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({
-    children,
+	children,
 }) => {
-    setRouter(useRouter(), usePathname() || window.location.pathname);
+	setRouter(useRouter(), usePathname() || window.location.pathname);
 
-    return <SuperTokensWrapper><>{children}</></SuperTokensWrapper>;
+	return (
+		<SuperTokensWrapper>
+			<>{children}</>
+		</SuperTokensWrapper>
+	);
 };

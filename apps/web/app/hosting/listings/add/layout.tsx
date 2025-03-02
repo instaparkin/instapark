@@ -1,23 +1,16 @@
-"use client"
+'use client';
 
-import React from "react";
-import { useVendor } from "@instapark/ui";
-import { redirect } from "next/navigation";
-import { useAuth } from "@instapark/ui/src/hooks/use-auth";
-import { uuidToAlphanumeric } from "@instapark/common";
+import React from 'react';
+import { useVendor } from '@instapark/ui';
+import { redirect } from 'next/navigation';
 
 const ListingsAddLayout = ({ children }: { children: React.ReactNode }) => {
-    const { userId } = useAuth();
-    const { isVendor } = useVendor({ userId: uuidToAlphanumeric(userId) })
+	const { isVendor } = useVendor();
 
-    if (isVendor) {
-        return (
-            <div>
-                {children}
-            </div>
-        )
-    }
+	if (isVendor) {
+		return <div>{children}</div>;
+	}
 
-    redirect("/hosting/listings")
-}
-export default ListingsAddLayout
+	redirect('/hosting/listings');
+};
+export default ListingsAddLayout;

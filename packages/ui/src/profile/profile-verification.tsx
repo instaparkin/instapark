@@ -1,17 +1,13 @@
-"use client"
+'use client';
 
-import React from 'react'
-import { Card, CardContent, CardHeader } from '../components/card'
+import React from 'react';
+import { Card, CardContent, CardHeader } from '../components/card';
 
 export const ProfileVerification = () => {
-
-    return (
-        <Card>
-            <CardHeader>
-                Confirmed Details
-            </CardHeader>
-            <CardContent>
-            </CardContent>
-        </Card>
-    )
-}
+	return (
+		<Card>
+			<CardHeader>Confirmed Details</CardHeader>
+			<CardContent></CardContent>
+		</Card>
+	);
+};

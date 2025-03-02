@@ -1,18 +1,16 @@
-import { Router } from "@instapark/utils";
-import { createListing, updateListing, getListings } from "../controllers/listings.controller";
+import { Router } from '@instapark/utils';
+import {
+	createListing,
+	updateListing,
+	getListings,
+} from '../controllers/listings.controller';
 
 const ListingsRouter = Router();
 
-ListingsRouter.post(
-    "/",
-    createListing);
+ListingsRouter.post('/', createListing);
 
-ListingsRouter.put(
-    "/",
-    updateListing);
+ListingsRouter.put('/', updateListing);
 
-ListingsRouter.get(
-    "/",
-    getListings)
+ListingsRouter.get('/', getListings);
 
-export { ListingsRouter }
+export { ListingsRouter };

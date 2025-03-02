@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const HOST_LISTINGS = gql(`
 query HOST_LISTINGS(
@@ -53,4 +53,4 @@ query HOST_LISTINGS(
     }
   }
 }
-`)
+`);

@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const GET_PROFILE = gql(`
 query GET_PROFILE($userId: String!) {
@@ -25,4 +25,4 @@ query GET_PROFILE($userId: String!) {
     }
   }
 }
-`)
+`);

@@ -1,17 +1,17 @@
-import { Page, ProfilePersonalMain } from '@instapark/ui'
-import { Metadata } from 'next'
-import React from 'react'
+import { Page, ProfilePersonalMain } from '@instapark/ui';
+import { Metadata } from 'next';
+import React from 'react';
 
 export const metadata: Metadata = {
-    title : 'Profile Information'
-}
+	title: 'Profile Information',
+};
 
 const UserProfilePage = () => {
-    return (
-        <Page className='pt-8'>
-            <ProfilePersonalMain />
-        </Page>
-    )
-}
+	return (
+		<Page className="pt-8">
+			<ProfilePersonalMain />
+		</Page>
+	);
+};
 
-export default UserProfilePage
+export default UserProfilePage;

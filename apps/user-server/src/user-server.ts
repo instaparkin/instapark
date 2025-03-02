@@ -1,11 +1,15 @@
-import "dotenv/config"
-import { errorHandler, middleware, ensureSuperTokensInit } from "@instapark/auth";
-import mongoose from "mongoose";
-import { USER_SERVER_CONSTANTS } from "./constants/user-server-constants";
-import { ProfileRouter } from "./routes/profile.route";
-import express from "express"
-import cors from "cors"
-import { AadharRouter } from "./routes/aadhar.route";
+import 'dotenv/config';
+import {
+	errorHandler,
+	middleware,
+	ensureSuperTokensInit,
+} from '@instapark/auth';
+import mongoose from 'mongoose';
+import { USER_SERVER_CONSTANTS } from './constants/user-server-constants';
+import { ProfileRouter } from './routes/profile.route';
+import express from 'express';
+import cors from 'cors';
+import { AadharRouter } from './routes/aadhar.route';
 
 /**
  * TODO:
@@ -13,45 +17,47 @@ import { AadharRouter } from "./routes/aadhar.route";
  * 3. GraphQL Integration
  */
 async function connectDB() {
-    try {
-        await mongoose.connect(USER_SERVER_CONSTANTS.MONGODB.URI);
-        console.log("✅ MongoDB Connected");
-    } catch (error) {
-        console.error("❌ MongoDB connection error:", error);
-        process.exit(1);
-    }
+	try {
+		await mongoose.connect(USER_SERVER_CONSTANTS.MONGODB.URI);
+		console.log('✅ MongoDB Connected');
+	} catch (error) {
+		console.error('❌ MongoDB connection error:', error);
+		process.exit(1);
+	}
 }
 
 async function init() {
-    ensureSuperTokensInit();
+	ensureSuperTokensInit();
 
-    const app = express();
+	const app = express();
 
-    app.use(express.json());
+	app.use(express.json());
 
-    app.use(cors({
-        origin: process.env.FRONTEND_URL,
-        methods: ["GET", "PUT", "POST", "DELETE"],
-        credentials: true,
-    }));
+	app.use(
+		cors({
+			origin: process.env.FRONTEND_URL,
+			methods: ['GET', 'PUT', 'POST', 'DELETE'],
+			credentials: true,
+		}),
+	);
 
-    app.use(middleware());
+	app.use(middleware());
 
-    await connectDB();
+	await connectDB();
 
-    app.get("/", (req, res) => {
-        res.send("User Server is Up and Running")
-    })
+	app.get('/', (req, res) => {
+		res.send('User Server is Up and Running');
+	});
 
-    app.use("/profile", ProfileRouter)
+	app.use('/profile', ProfileRouter);
 
-    app.use("/aadhar", AadharRouter);
+	app.use('/aadhar', AadharRouter);
 
-    app.use(errorHandler());
+	app.use(errorHandler());
 
-    app.listen(process.env.PORT, () => {
-        console.log(`Server running on http://localhost:${process.env.PORT}`);
-    })
+	app.listen(process.env.PORT, () => {
+		console.log(`Server running on http://localhost:${process.env.PORT}`);
+	});
 }
 
-init()
+init();

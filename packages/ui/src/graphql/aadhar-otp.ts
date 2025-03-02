@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const AADHAR_OTP = gql(`
 mutation AADHAR_OTP($uidai: String!) {
@@ -10,4 +10,4 @@ mutation AADHAR_OTP($uidai: String!) {
     }
   }
 }
-    `)
+    `);

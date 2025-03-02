@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const HOST_BOOKINGS = gql(`
 query HostBookings($userId: String, $status: BookingStatus!) {
@@ -137,4 +137,4 @@ query HostBookings($userId: String, $status: BookingStatus!) {
     }
   }
 }
-`)
+`);

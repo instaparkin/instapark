@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const GET_TRIP_DETAILED = gql(`
 query GET_TRIP_DETAILED($userId: String!, $id: String!) {
@@ -99,4 +99,4 @@ query GET_TRIP_DETAILED($userId: String!, $id: String!) {
     }
   }
 }
-    `)
+    `);

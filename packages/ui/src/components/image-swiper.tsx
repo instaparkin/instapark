@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -8,33 +8,32 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 interface SwiperMainProps {
-  content: string[]
+	content: string[];
 }
 
 export function ImageSwiper({ content }: SwiperMainProps) {
-  return (
-    <Swiper
-      pagination={{
-        dynamicBullets: true,
-        hideOnClick: true,
-        clickable: true
-      }}
-      modules={[Pagination]}
-      className="w-full h-full"
-    >
-      {content?.map((photo, index) => (
-        <SwiperSlide key={index}>
-          <div className="relative w-full h-full">
-            <Image
-              src={photo}
-              alt={`Parking space image ${index + 1}`}
-              fill
-              className="object-cover"
-            />
-          </div>
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  );
+	return (
+		<Swiper
+			pagination={{
+				dynamicBullets: true,
+				hideOnClick: true,
+				clickable: true,
+			}}
+			modules={[Pagination]}
+			className="h-full w-full"
+		>
+			{content?.map((photo, index) => (
+				<SwiperSlide key={index}>
+					<div className="relative h-full w-full">
+						<Image
+							src={photo}
+							alt={`Parking space image ${index + 1}`}
+							fill
+							className="object-cover"
+						/>
+					</div>
+				</SwiperSlide>
+			))}
+		</Swiper>
+	);
 }
-

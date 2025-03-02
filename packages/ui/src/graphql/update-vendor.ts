@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const UPDATE_VENDOR = gql(`
 mutation UPDATE_VENDOR(
@@ -20,4 +20,4 @@ mutation UPDATE_VENDOR(
     )
   }
 }
-`)
+`);

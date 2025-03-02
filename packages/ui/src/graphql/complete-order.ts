@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const COMPLETE_ORDER = gql(`
 mutation COMPLETE_ORDER(
@@ -32,4 +32,4 @@ mutation COMPLETE_ORDER(
   }
 }
 
-`)
+`);

@@ -1,14 +1,14 @@
-"use client"
+'use client';
 
-import { ListingsMain, Page } from '@instapark/ui'
-import React from 'react'
+import { ListingsMain, Page } from '@instapark/ui';
+import React from 'react';
 
 const ListingsPage = () => {
-    return (
-        <Page>
-            <ListingsMain />
-        </Page>
-    )
-}
+	return (
+		<Page>
+			<ListingsMain />
+		</Page>
+	);
+};
 
-export default ListingsPage
+export default ListingsPage;

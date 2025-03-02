@@ -1,17 +1,17 @@
-import { Page, PaymentDetailsMain } from '@instapark/ui'
-import { Metadata } from 'next'
-import React from 'react'
+import { Page, PaymentDetailsMain } from '@instapark/ui';
+import { Metadata } from 'next';
+import React from 'react';
 
 export const metadata: Metadata = {
-    title: "Payment Details - Instapark"
-}
+	title: 'Payment Details - Instapark',
+};
 
 const PaymentsPage = () => {
-    return (
-        <Page title='Payment Details'>
-            <PaymentDetailsMain />
-        </Page>
-    )
-}
+	return (
+		<Page title="Payment Details">
+			<PaymentDetailsMain />
+		</Page>
+	);
+};
 
-export default PaymentsPage
+export default PaymentsPage;

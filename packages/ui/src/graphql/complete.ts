@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const COMPLETE = gql(`
 mutation COMPLETE($bookingId: String, $orderId: String, $userId: String) {
@@ -6,4 +6,4 @@ mutation COMPLETE($bookingId: String, $orderId: String, $userId: String) {
     complete(bookingId: $bookingId, orderId: $orderId, userId: $userId)
   }
 }
-    `)
+    `);

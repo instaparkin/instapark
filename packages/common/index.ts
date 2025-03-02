@@ -1,6 +1,6 @@
 export {
-    getEnv,
-    uuidToAlphanumeric,
-    alphanumericToUuid,
-    generateGoogleMapsLink
-} from "./src/utils";
+	getEnv,
+	uuidToAlphanumeric,
+	alphanumericToUuid,
+	generateGoogleMapsLink,
+} from './src/utils';

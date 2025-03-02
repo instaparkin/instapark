@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { getPayments } from "../controllers/payment.controller";
+import { Router } from 'express';
+import { getPayments } from '../controllers/payment.controller';
 
 const PaymentRouter = Router();
 
-PaymentRouter.get("/", getPayments)
+PaymentRouter.get('/', getPayments);
 
-export { PaymentRouter }
+export { PaymentRouter };

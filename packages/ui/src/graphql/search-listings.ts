@@ -1,4 +1,4 @@
-import { gql } from "../__generated__";
+import { gql } from '../__generated__';
 
 export const SEARCH_LISTINGS = gql(`
 query SearchListings(
@@ -41,4 +41,4 @@ query SearchListings(
   }
 }
 
-`)
+`);
