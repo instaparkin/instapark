@@ -52,11 +52,13 @@ app.use('/aadhar', AadharRouter);
 
 app.use(errorHandler());
 
-export async function init() {
+async function init() {
 	await connectDB();
 	app.listen(process.env.PORT, () => {
 		console.log(`Server running on http://localhost:${process.env.PORT}`);
 	});
 }
+
+init();
 
 export default app;
