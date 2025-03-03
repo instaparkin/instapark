@@ -11,7 +11,7 @@ export const NoResults = ({ text, icon }: INoResults) => {
 	return (
 		<Skeleton className="flex h-96 w-full animate-none flex-col items-center justify-center space-y-2 text-wrap rounded-md border">
 			<Icon>{icon}</Icon>
-			<span className="font-light">{text}</span>
+			<span className="mx-4 flex flex-wrap text-center font-light">{text}</span>
 		</Skeleton>
 	);
 };
