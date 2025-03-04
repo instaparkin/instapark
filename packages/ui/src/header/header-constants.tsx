@@ -11,6 +11,8 @@ export const HEADER_NAVIGATION_ITEMS = {
 			items: [
 				{ icon: <TiThListOutline />, link: '/', name: 'Home' },
 				{ icon: <IoTodayOutline />, link: '/trips', name: 'Trips' },
+				{ icon: <IoTodayOutline />, link: '/contact-us', name: 'Contact' },
+				{ icon: <IoTodayOutline />, link: '/about-us', name: 'About' },
 			],
 		},
 	],

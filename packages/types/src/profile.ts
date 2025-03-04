@@ -25,3 +25,14 @@ export type ProfileRequest = Omit<
 > & {
 	kyc?: Pick<Profile['kyc'], 'uidai'>;
 };
+
+export type ContactUs = {
+	firstName: string;
+	lastName: string;
+	email: string;
+	message: string;
+	createdAt: number;
+	updatedAt: number;
+};
+
+export type ContactUsRequest = Omit<ContactUs, 'createdAt' | 'updatedAt'>;

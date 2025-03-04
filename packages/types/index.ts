@@ -12,7 +12,12 @@ export {
 	type ListingRequest,
 	type ListingSearch,
 } from './src/Listing';
-export { type Profile, type ProfileRequest } from './src/profile';
+export {
+	type Profile,
+	type ProfileRequest,
+	type ContactUsRequest,
+	type ContactUs,
+} from './src/profile';
 export { type ApiResponse, type EventType } from './src/Api';
 export {
 	type Booking,

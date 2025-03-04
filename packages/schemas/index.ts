@@ -4,3 +4,7 @@ export { z } from 'zod';
 export { listingsSearchSchema } from './src/listings/listings-search-schema';
 export { OTPInputSchema } from './src/bookings/otp-input-schema';
 export { VendorCreateSchema } from './src/vendor/vendor-create-schema';
+export {
+	ContactUsSchema,
+	type ContactUsFormType,
+} from './src/contact-us/contact-us-schema';

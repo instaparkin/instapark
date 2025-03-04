@@ -10,6 +10,7 @@ import ProfileRouter from './routes/profile.route';
 import express from 'express';
 import cors from 'cors';
 import AadharRouter from './routes/aadhar.route';
+import ContactUsRouter from './routes/contact-us.route';
 
 /**
  * TODO:
@@ -49,6 +50,8 @@ app.get('/', (req, res) => {
 app.use('/profile', ProfileRouter);
 
 app.use('/aadhar', AadharRouter);
+
+app.use('/contact-us', ContactUsRouter);
 
 app.use(errorHandler());
 

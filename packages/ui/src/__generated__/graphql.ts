@@ -547,6 +547,7 @@ export type UserMutation = {
 	__typename?: 'UserMutation';
 	aadharOTP?: Maybe<AadharOtpResponse>;
 	aadharVerify?: Maybe<AadhaarVerifyResponse>;
+	contactUs?: Maybe<Scalars['String']['output']>;
 	upsertProfile?: Maybe<Scalars['String']['output']>;
 };
 
@@ -558,6 +559,13 @@ export type UserMutationAadharVerifyArgs = {
 	otp: Scalars['String']['input'];
 	ref_id: Scalars['String']['input'];
 	userId: Scalars['String']['input'];
+};
+
+export type UserMutationContactUsArgs = {
+	email: Scalars['String']['input'];
+	firstName: Scalars['String']['input'];
+	lastName: Scalars['String']['input'];
+	message: Scalars['String']['input'];
 };
 
 export type UserMutationUpsertProfileArgs = {
@@ -807,6 +815,21 @@ export type CompleteMutation = {
 	BookingMutation?: {
 		__typename?: 'BookingMutation';
 		complete?: string | null;
+	} | null;
+};
+
+export type Contact_UsMutationVariables = Exact<{
+	firstName: Scalars['String']['input'];
+	lastName: Scalars['String']['input'];
+	email: Scalars['String']['input'];
+	message: Scalars['String']['input'];
+}>;
+
+export type Contact_UsMutation = {
+	__typename?: 'RootMutation';
+	UserMutation?: {
+		__typename?: 'UserMutation';
+		contactUs?: string | null;
 	} | null;
 };
 
@@ -2313,6 +2336,126 @@ export const CompleteDocument = {
 		},
 	],
 } as unknown as DocumentNode<CompleteMutation, CompleteMutationVariables>;
+export const Contact_UsDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'CONTACT_US' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'firstName' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'String' },
+						},
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'lastName' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'String' },
+						},
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'email' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'String' },
+						},
+					},
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: {
+						kind: 'Variable',
+						name: { kind: 'Name', value: 'message' },
+					},
+					type: {
+						kind: 'NonNullType',
+						type: {
+							kind: 'NamedType',
+							name: { kind: 'Name', value: 'String' },
+						},
+					},
+				},
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'UserMutation' },
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{
+									kind: 'Field',
+									name: { kind: 'Name', value: 'contactUs' },
+									arguments: [
+										{
+											kind: 'Argument',
+											name: { kind: 'Name', value: 'firstName' },
+											value: {
+												kind: 'Variable',
+												name: { kind: 'Name', value: 'firstName' },
+											},
+										},
+										{
+											kind: 'Argument',
+											name: { kind: 'Name', value: 'lastName' },
+											value: {
+												kind: 'Variable',
+												name: { kind: 'Name', value: 'lastName' },
+											},
+										},
+										{
+											kind: 'Argument',
+											name: { kind: 'Name', value: 'email' },
+											value: {
+												kind: 'Variable',
+												name: { kind: 'Name', value: 'email' },
+											},
+										},
+										{
+											kind: 'Argument',
+											name: { kind: 'Name', value: 'message' },
+											value: {
+												kind: 'Variable',
+												name: { kind: 'Name', value: 'message' },
+											},
+										},
+									],
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+} as unknown as DocumentNode<Contact_UsMutation, Contact_UsMutationVariables>;
 export const Create_BookDocument = {
 	kind: 'Document',
 	definitions: [

@@ -18,7 +18,7 @@ export const listingsAddSteps: Step<ListingRequest>[] = [
 						stepNumber={1}
 						title={'Tell us about your property'}
 						description={
-							"In this step, we'll ask you which type of property you have and if guests will book the entire place or just a room. Then let us know the location and how many guests can stay."
+							"In this step, we'll ask you which type of property you have and it's location"
 						}
 					/>
 				),
@@ -56,7 +56,7 @@ export const listingsAddSteps: Step<ListingRequest>[] = [
 						stepNumber={2}
 						title={'Add photos'}
 						description={
-							"In this step, we'll ask you which type of property you have and if guests will book the entire place or just a room. Then let us know the location and how many guests can stay."
+							"In this step, we'll ask you which type of vehicles you decide to allow and also you will need to upload your location photos"
 						}
 					/>
 				),
@@ -83,7 +83,7 @@ export const listingsAddSteps: Step<ListingRequest>[] = [
 						stepNumber={3}
 						title={'Tell us about your property'}
 						description={
-							"In this step, we'll ask you which type of property you have and if guests will book the entire place or just a room. Then let us know the location and how many guests can stay."
+							"In this step, we'll ask you to provide a pricing for the vehicles which you decided to allow in the previous step"
 						}
 					/>
 				),

@@ -54,6 +54,9 @@ export const API_SERVER_CONSTANTS = {
 				OTP: `${process.env.USER_SERVER_URL}/aadhar/otp`,
 				VERIFY: `${process.env.USER_SERVER_URL}/aadhar/verify`,
 			},
+			CONTACTUS: {
+				POST: `${process.env.USER_SERVER_URL}/contact-us`,
+			},
 		},
 	},
 };

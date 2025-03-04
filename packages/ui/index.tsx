@@ -35,3 +35,4 @@ export { ListingHostDetailed } from './src/listings/listing-host-detailed';
 export { FooterMain } from './src/footer/footer-main';
 export { CompleteMain } from './src/checkouts/complete-main';
 export { EarningsSettlements } from './src/earnings/earnings-settlements';
+export { ContactUs } from './src/instapark/contact-us';

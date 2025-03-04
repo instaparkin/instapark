@@ -23,6 +23,16 @@ export const KYCInputType = new GraphQLInputObjectType({
 	},
 });
 
+export const ContactUsRequestType = new GraphQLInputObjectType({
+	name: 'ContactUsRequest',
+	fields: {
+		firstName: { type: new GraphQLNonNull(GraphQLString) },
+		lastName: { type: new GraphQLNonNull(GraphQLString) },
+		email: { type: new GraphQLNonNull(GraphQLString) },
+		message: { type: new GraphQLNonNull(GraphQLString) },
+	},
+});
+
 export const UserMutation = new GraphQLObjectType({
 	name: 'UserMutation',
 	fields: {
@@ -90,6 +100,29 @@ export const UserMutation = new GraphQLObjectType({
 				);
 
 				return response.data.data;
+			},
+		},
+		contactUs: {
+			type: GraphQLString,
+			args: {
+				firstName: { type: new GraphQLNonNull(GraphQLString) },
+				lastName: { type: new GraphQLNonNull(GraphQLString) },
+				email: { type: new GraphQLNonNull(GraphQLString) },
+				message: { type: new GraphQLNonNull(GraphQLString) },
+			},
+			resolve: async (_, args) => {
+				try {
+					const response = await axios.post<ApiResponse<null>>(
+						API_SERVER_CONSTANTS.ENDPOINTS.USER.CONTACTUS.POST,
+						args,
+					);
+					return response.data.message;
+				} catch (error) {
+					if (axios.isAxiosError(error) && error.response) {
+						return error.response.data.message;
+					}
+					return 'An Unknown error occured';
+				}
 			},
 		},
 	},
